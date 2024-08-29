@@ -9,7 +9,7 @@ new Client(
                   GatewayIntentBits.GuildMembers, 
                   GatewayIntentBits.GuildMessages, 
                   GatewayIntentBits.GuildIntegrations, 
-                  GatewayIntentBits.MessageContent
+                  GatewayIntentBits.MessageContent,
                 ] 
     }
 );
@@ -26,6 +26,9 @@ client.on("messageCreate", async (message) => {
 
 
 client.on('interactionCreate', async (interaction) => {
+
+  await doButtonRoleAction(interaction);
+
   if (!interaction.isChatInputCommand()) return;
 
   if (interaction.commandName === 'hey') {
@@ -44,7 +47,7 @@ client.on('interactionCreate', async (interaction) => {
   }
 });
 
-client.on('messageCreate', message => {
+client.on('messageCreate', async message => {
   if(message.content?.includes('$$')) {
 
     // replies the matched message
@@ -67,6 +70,37 @@ return new EmbedBuilder()
   .addFields({name: 'Field title', value: 'Some random value', inline: true}, {name: '2nd Field title', value: 'Some random value', inline: true})
   .setThumbnail(bannerURL)
   .setImage(imgURL);
+}
+
+async function doButtonRoleAction(interaction)
+{
+  try {
+    if(!interaction.isButton()) return;
+
+    await interaction.deferReply({ ephemeral: true }) ;
+
+    const role = interaction.guild.roles.cache.get(interaction.customId);
+
+    if(!role)
+    {
+      await interaction.editReply({ content: "I couldn't find that role!"   });
+      return;
+    }
+
+    const hasRole = interaction.member.roles.cache.has(role.id);
+
+    if(hasRole){
+      await interaction.member.roles.remove(role);
+      await interaction.editReply(`The role ${role} has been removed.`);
+      return;
+    }
+
+    await interaction.member.roles.add(role);
+    await interaction.editReply(`The role ${role} has been added.`);
+
+  } catch (err) {
+      console.log(err);
+  }
 }
 
 client.login(process.env.DISCORD_TOKEN);
