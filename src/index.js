@@ -1,5 +1,6 @@
 require('dotenv').config();
-const { Client, GatewayIntentBits, EmbedBuilder, ActivityType } = require("discord.js");
+const { Client, GatewayIntentBits, EmbedBuilder } = require("discord.js");
+const eventHandler = require('./handlers/eventHandler');
 
 const client = 
 new Client(
@@ -14,28 +15,7 @@ new Client(
     }
 );
 
-let status = [
-  {
-    name: 'Under Ctrl',
-    type: ActivityType.Streaming,
-    url: 'https://www.youtube.com/watch?v=0UFLPJAp_Cw'
-  },
-  {
-    name: 'Under Ctrl 2',
-    type: ActivityType.Streaming,
-    url: 'https://www.youtube.com/watch?v=QeN2Iv00qDo'
-  }
-];
-
-client.on("ready", (c) => {
-  console.log(`Logged in as ${c.user.tag}!`);
-  let random = Math.floor(Math.random() * status.length);
-  
-  setInterval(() => {
-    client.user.setActivity(status[random]);
-  }, 10000);
-
-});
+eventHandler(client);
 /*
 client.on("messageCreate", async (message) => {
   if(message.author.bot) return;
