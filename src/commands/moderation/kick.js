@@ -24,7 +24,7 @@ module.exports =  {
 
     if(targetUser.id === interaction.guild.ownerId)
     {
-      await interaction.editReply("You can't ban that user because they're the server owner.");
+      await interaction.editReply("You can't kick that user because they're the server owner.");
       return;
     }
 
@@ -34,44 +34,44 @@ module.exports =  {
 
     if(targetUserRolePosition >= requestUserRolePosition)
     {
-      await interaction.editReply("You can't ban that user because they have same / higher role than you.");
+      await interaction.editReply("You can't kick that user because they have same / higher role than you.");
       return;
     }
 
     if(targetUserRolePosition >= botRolePosition)
     {
-      await interaction.editReply("You can't ban that user because they have the same / higher role than me.");
+      await interaction.editReply("You can't kick that user because they have the same / higher role than me.");
       return;
     }
 
     //Ban the targetUser
     try{
-      await targetUser.ban({reason});
+      await targetUser.kick(reason);
       //console.log('gotcha');
-      await interaction.editReply(`User ${targetUser} was banned\nReason: ${reason}`);
+      await interaction.editReply(`User ${targetUser} was kicked\nReason: ${reason}`);
     }catch(e)
     {
-      console.log(`There was an error when banning: ${e}`);
+      console.log(`There was an error when kicking: ${e}`);
     }
   },
 
-  name: 'ban',
-  description: 'bans a member from this server.',
+  name: 'kick',
+  description: 'kicks a member from this server..',
   // devOnly: Boolean,
   // testOnly: Boolean,
   options: [
     {
       name: 'target-user',
-      description: 'The user you want to ban.',
+      description: 'The user you want to kick.',
       required: true,
       type: ApplicationCommandOptionType.Mentionable
     },    
     {
       name: 'reason',
-      description: 'The reason you want for ban1',
+      description: 'The reason you want for kick.',
       type: ApplicationCommandOptionType.String
     }
   ],
-  permissionsRequired: [PermissionFlagsBits.BanMembers],
-  botPermissions: [PermissionFlagsBits.BanMembers],
+  permissionsRequired: [PermissionFlagsBits.KickMembers],
+  botPermissions: [PermissionFlagsBits.KickMembers],
 }
