@@ -40,7 +40,7 @@ module.exports =  {
 
     if(targetUserRolePosition >= botRolePosition)
     {
-      await interaction.editReply("You can't kick that user because they have the same / higher role than me.");
+      await interaction.editReply("I can't kick that user because they have the same / higher role than me.");
       return;
     }
 
