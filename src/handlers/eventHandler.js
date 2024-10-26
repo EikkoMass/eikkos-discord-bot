@@ -1,4 +1,5 @@
 const getAllFiles = require('../utils/getAllFiles');
+const functionEvents = require('../utils/getFunctionEvents');
 const path = require('path');
 
 module.exports = (client) => {
@@ -11,14 +12,6 @@ module.exports = (client) => {
     eventFiles.sort((a,b) => a > b);
 
     const eventName = eventFolder.replace(/\\/g, '/').split('/').pop();
-
-    client.on(eventName, async (interaction) => {
-      for(const eventFile of eventFiles)
-      {
-        const eventFunction  = require(eventFile);
-        await eventFunction(client, interaction);
-      }
-    });
+    client.on(eventName, functionEvents[eventName](client, eventFiles));
   }
-
 };

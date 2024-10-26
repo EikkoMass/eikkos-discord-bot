@@ -5,8 +5,8 @@ module.exports =  {
   try{
     await interaction.deferReply();
 
-    const num1 = interaction.options.get('first-number')?.value;
-    const num2 = interaction.options.get('second-number')?.value;
+    const num1 = await interaction.options.get('first-number')?.value;
+    const num2 = await interaction.options.get('second-number')?.value;
     await interaction.editReply(`sum: ${num1 + num2}`);
   }
   catch(e)
@@ -15,7 +15,7 @@ module.exports =  {
   }
   },
   name: 'add',
-  description: 'sum the   values',
+  description: 'sum the values',
   options: [
     {
       name: 'first-number',
