@@ -25,6 +25,7 @@ try{
 }
 
 eventHandler(client);
+client.login(process.env.DISCORD_TOKEN);
 })();
 
 /*
@@ -38,10 +39,6 @@ client.on("messageCreate", async (message) => {
 client.on('interactionCreate', async (interaction) => {
 
   await doButtonRoleAction(interaction);
-});
-
-client.on('messageCreate', async message => {
-
 });
 
 async function doButtonRoleAction(interaction)
@@ -75,4 +72,3 @@ async function doButtonRoleAction(interaction)
   }
 }
 
-client.login(process.env.DISCORD_TOKEN);
