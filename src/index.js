@@ -10,6 +10,7 @@ new Client(
                   GatewayIntentBits.Guilds,
                   GatewayIntentBits.GuildMembers, 
                   GatewayIntentBits.GuildMessages, 
+                  GatewayIntentBits.GuildPresences, 
                   GatewayIntentBits.GuildIntegrations, 
                   GatewayIntentBits.MessageContent,
                 ] 
