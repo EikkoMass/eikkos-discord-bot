@@ -12,6 +12,6 @@ module.exports = (client) => {
     eventFiles.sort((a,b) => a > b);
 
     const eventName = eventFolder.replace(/\\/g, '/').split('/').pop();
-    client.on(eventName, functionEvents[eventName](client, eventFiles));
+    client.on(eventName, (functionEvents[eventName] || functionEvents.default)(client, eventFiles));
   }
 };

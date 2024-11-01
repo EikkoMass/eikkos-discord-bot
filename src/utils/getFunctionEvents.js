@@ -1,5 +1,5 @@
 module.exports = {
-  "interactionCreate": (client, eventFiles) => {
+  default: (client, eventFiles) => {
       return async (interaction) => {
         for(const eventFile of eventFiles)
         {
@@ -8,7 +8,7 @@ module.exports = {
         }
       }
     },
-    "messageCreate": (client, eventFiles) => {
+    messageCreate: (client, eventFiles) => {
       return async message => {
         for(const eventFile of eventFiles)
           {
@@ -16,14 +16,6 @@ module.exports = {
             await eventFunction(client, message);
           }
       }
-    },
-    "ready": (client, eventFiles) => {
-      return async interaction => {
-        for(const eventFile of eventFiles)
-          {
-            const eventFunction  = require(eventFile);
-            await eventFunction(client, interaction);
-          }
-      }
     }
   };
+  
