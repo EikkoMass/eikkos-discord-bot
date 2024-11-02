@@ -1,18 +1,5 @@
+const {Client, Interaction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require('discord.js');
 require('dotenv').config();
-const { Client, GatewayIntentBits, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-
-const client = 
-new Client(
-  { 
-    intents: [
-                  GatewayIntentBits.Guilds,
-                  GatewayIntentBits.GuildMembers, 
-                  GatewayIntentBits.GuildMessages, 
-                  GatewayIntentBits.GuildIntegrations, 
-                  GatewayIntentBits.MessageContent
-                ] 
-    }
-);
 
 const roles = [
   {
@@ -29,8 +16,14 @@ const roles = [
   }
 ];
 
-client.on("ready", async (c) => {
-  
+module.exports = {
+
+  /**
+   *  @param {Client} client
+   *  @param {Interaction} interaction
+  */
+  callback: async (client, interaction) => {
+
     try {
       const channel = await client.channels.cache.get(process.env.CHANNEL_ID);
       if(!channel) return;
@@ -38,18 +31,17 @@ client.on("ready", async (c) => {
       const row = new ActionRowBuilder();
 
       roles.forEach(role => row.components.push( new ButtonBuilder().setCustomId(role.id).setLabel(role.label).setStyle(ButtonStyle.Primary) ));
-      await channel.send(
+      await interaction.reply(
         {
           content: 'Claim of remove a role below',
           components: [row],
       });
 
-      process.exit();
-
     } catch (error) {
       console.log(error);
-    }
+    } 
+  },
 
-});
-
-client.login(process.env.DISCORD_TOKEN);
+  name: 'set-role',
+  description: 'Set a new role.',
+}
