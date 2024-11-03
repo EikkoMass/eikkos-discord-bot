@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, GatewayIntentBits, EmbedBuilder } = require("discord.js");
+const { Client, GatewayIntentBits } = require("discord.js");
 const eventHandler = require('./handlers/eventHandler');
 const mongoose = require('mongoose');
 
@@ -10,6 +10,7 @@ new Client(
                   GatewayIntentBits.Guilds,
                   GatewayIntentBits.GuildMembers, 
                   GatewayIntentBits.GuildMessages, 
+                  GatewayIntentBits.GuildMessagePolls, 
                   GatewayIntentBits.GuildPresences, 
                   GatewayIntentBits.GuildIntegrations, 
                   GatewayIntentBits.MessageContent,
