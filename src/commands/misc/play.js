@@ -37,7 +37,7 @@ module.exports =  {
       .setThumbnail(song.thumbnail)
       .setFooter({text: `Duration ${song.duration}`});
 
-      if (!queue.isPlaying()) await queue.play(song)
+      if (!queue.isPlaying()) await queue.play(song);
       
       await interaction.editReply({embeds: [embed]});
   },
