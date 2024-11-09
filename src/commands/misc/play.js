@@ -18,6 +18,16 @@ module.exports =  {
 
     const channel = interaction.member?.voice?.channel;
     const player = useMainPlayer();
+    const embed = new EmbedBuilder();
+
+    if(!channel)
+    {
+      await interaction.editReply({
+        ephemeral: true,
+        embeds: [embed.setDescription("You need to be in a voice channel!")],
+      });
+      return;
+    }
 
     const result = await player.search(link, {
       requestedBy: interaction.user,
@@ -29,7 +39,6 @@ module.exports =  {
       await interaction.editReply("No results found");
       return;
     }
-    const embed = new EmbedBuilder();
 
     try {
         const { queue, track, searchResult } = await player.play(channel, result, {
