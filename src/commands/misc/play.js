@@ -1,5 +1,5 @@
 const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder} = require('discord.js');
-
+const playerConfigs = require('../../configs/player.json');
 const { QueryType, useMainPlayer } = require('discord-player')
 
 module.exports =  {
@@ -45,12 +45,7 @@ module.exports =  {
           nodeOptions: {
             metadata: { channel: interaction.channel },
             volume,
-            leaveOnStop: false,
-            pauseOnEmpty: true,
-            leaveOnEmpty: false,
-            leaveOnEmptyCooldown: 60000,
-            leaveOnEnd: false,
-            leaveOnEndCooldown: 60000,
+            ...playerConfigs
           },
           requestedBy: interaction.user,
           connectionOptions: { deaf: true },

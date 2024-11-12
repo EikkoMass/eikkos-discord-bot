@@ -1,0 +1,8 @@
+{
+  "leaveOnStop": false,
+  "pauseOnEmpty": true,
+  "leaveOnEmpty": false,
+  "leaveOnEmptyCooldown": 60000,
+  "leaveOnEnd": false,
+  "leaveOnEndCooldown": 60000
+}
