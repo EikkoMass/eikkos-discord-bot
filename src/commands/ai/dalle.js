@@ -3,7 +3,7 @@ const OpenAI = require('openai');
 require('dotenv').config();
 
 module.exports =  {
-  name: 'sd',
+  name: 'dalle',
   description: 'send a prompt to openai\'s dalle',
   /**
    *  @param {Client} client
@@ -13,7 +13,6 @@ module.exports =  {
 
     const px = 1024;
     const prompt = interaction.options.get('prompt')?.value;
-    const scale = interaction.options.get('scale')?.value || 1;
 
     if(!prompt)
     {
@@ -38,21 +37,17 @@ module.exports =  {
       content: `Generating the image, please wait!`
     });
     
-    const size = px * scale;
-
     const response = await (new OpenAI({ OPENAI_API_KEY: process.env.OPENAI_API_KEY })).images.generate({
       model: "dall-e-3",
       prompt,
       n: 1,
-      size: `${size}x${size}`,
+      size: `${px}x${px}`,
     });
     
-    console.log(response.status);
-
-    if(response.status === 200) {
+    if(response.data) {
       interaction.channel.send(response.data[0].url);
     } else {
-      throw new Error(`${response.status}: ${response.data.toString()}`);
+      throw new Error(response);
     }
 
   },
@@ -62,11 +57,6 @@ module.exports =  {
       description: 'the prompt you want to generate',
       type: ApplicationCommandOptionType.String,
       required: true
-    },
-    {
-      name: 'scale',
-      description: 'scale size',
-      type: ApplicationCommandOptionType.Integer,
     }
   ]
 }
