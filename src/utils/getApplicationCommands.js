@@ -2,10 +2,11 @@ module.exports = async (client, guildId) => {
   let applicationCommands;
 
   if(guildId)
-  {
+  { // register the commands only in a specific guild
     const guild = await client.guilds.fetch(guildId);
     applicationCommands = guild.commands;
-  } else {
+  } else 
+  { // register the commands in all included guilds
     applicationCommands = await client.application.commands;
   }
 

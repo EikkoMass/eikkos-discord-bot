@@ -6,7 +6,8 @@ const areCommandsDifferent = require('../../utils/areCommandsDifferent');
 module.exports = async (client) => { 
   try {
     const localCommands = getLocalCommands();
-    const applicationCommands = await getApplicationCommands(client, testServer);
+    // Add testServer as a second parameter if you want to register only on a specific guild
+    const applicationCommands = await getApplicationCommands(client);
 
     for(const localCommand  of localCommands)
     {
