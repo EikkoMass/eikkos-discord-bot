@@ -11,7 +11,7 @@ module.exports =  {
   */
   callback: async (client, interaction) => {
     await interaction.deferReply();
-    const link = interaction.options.get('query')?.value;
+    const link = interaction.options.get('song')?.value;
     let volume = interaction.options.get('volume')?.value || 100;
 
     if(volume > 100 || volume < 0) volume = 100;
@@ -76,8 +76,8 @@ module.exports =  {
 
   options: [
     {
-      name: 'query',
-      description: 'link to the song',
+      name: 'song',
+      description: 'link / name to the song',
       type: ApplicationCommandOptionType.String,
       required: true,
       autocomplete: true
