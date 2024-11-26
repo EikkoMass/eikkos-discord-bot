@@ -44,7 +44,8 @@ module.exports =  {
       size: `${px}x${px}`,
     });
     
-    if(response.data) {
+    
+    if(response) {
       interaction.channel.send(response.data[0].url);
     } else {
       throw new Error(response);

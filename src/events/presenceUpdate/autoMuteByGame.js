@@ -8,11 +8,16 @@ const MuteByGame = require('../../models/muteByGame');
 */
 module.exports = async (client, oldPresence, newPresence) => {
   try{
-    //TODO testes
-    if(true) return;
-
     // tentar verificar apenas mudancas de atividade relacionadas a jogo
-    if(newPresence.user.bot || !newPresence.activities.find(activity => activity.type === ActivityType.Playing)) return;
+    if(newPresence.user.bot || 
+      (!(newPresence?.activities || []).find(activity => activity.type === ActivityType.Playing) 
+        && !(oldPresence?.activities || []).find(activity => activity.type === ActivityType.Playing))) return;
+
+    const oldActivities = oldPresence.activities.filter(a => a.type === ActivityType.Playing);
+    const newActivities = newPresence.activities.filter(a => a.type === ActivityType.Playing);
+
+    const startedActivities = newActivities.filter(n => !oldActivities.some(o => o.name === n.name));
+    const stoppedActivities = oldActivities.filter(o => !newActivities.some(n => n.name === o.name));
 
     let channel = newPresence.member?.voice?.channel;
     if(channel && oldPresence.activities !== newPresence.activities)
@@ -22,12 +27,11 @@ module.exports = async (client, oldPresence, newPresence) => {
       // mutar os users que possuirem registro
 
       // se presenceUpdate disparar quando algum user fechar o jogo, verificar se ainda nao possui ninguem com o jogo aberto na call
-      console.log(channel.members);
-      newPresence.activities.filter(newP => !oldPresence.activities.some(oldP => oldP.name === newP.name)).forEach(n => {
+      startedActivities.forEach(n => {
         console.log(`${newPresence.user.username} started playing ${n.name}`);
       });
-
-      oldPresence.activities.filter(oldP => !newPresence.activities.some(newP => newP.name === oldP.name)).forEach(o => {
+      
+      stoppedActivities.forEach(o => {
         console.log(`${newPresence.user.username} stopped playing ${o.name}`);
       });
 
@@ -43,30 +47,30 @@ module.exports = async (client, oldPresence, newPresence) => {
           for(let mutedMember of mutedMembers)
           {
             // started playing
-            newPresence.activities.filter(newP => !oldPresence.activities.some(oldP => oldP.name === newP.name)).forEach(activity => {
+            startedActivities.forEach(activity => {
               if(mutedMember.gameName === activity.name)
               {
                 //mute
                 let currentMember = members.find(m => m.user.id === mutedMember.userId);
                 
-                if(!currentMember.activities.find(ac => ac.name === mutedMember.gameName))
+                if(!currentMember.presence.activities.find(ac => ac.name === mutedMember.gameName))
                 {
-                  currentMember.voice.setDeaf(true);
-                  currentMember.voice.setMute(true);
+                  currentMember.voice.setDeaf(true).catch(() => console.log('could not deaf the user'));
+                  currentMember.voice.setMute(true).catch(() => console.log('could not mute the user'));
                 }
 
               }
             });
 
             // stopped playing
-            oldPresence.activities.filter(oldP => !newPresence.activities.some(newP => newP.name === oldP.name)).forEach(activity => {
+            stoppedActivities.forEach(activity => {
               if(mutedMember.gameName === activity.name)
               {
                 //check if has more people playing this game, if not, unmute
-                if(!members.filter(m => m.activities.find(ac => ac.name === activity.name) && m.user.id !== newPresence.member.user.id))
+                if(!members.filter(m => m.presence?.activities?.find(ac => ac.name === activity.name))?.size)
                 {
                   let currentMember = members.find(m => m.user.id === mutedMember.userId);
-                
+
                   currentMember.voice.setDeaf(false);
                   currentMember.voice.setMute(false);
                 }

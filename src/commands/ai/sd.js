@@ -38,7 +38,7 @@ module.exports =  {
     });
 
     const formData = new FormData();
-
+    
     formData.append("prompt", prompt);
     formData.append("output_format", imgFormat);
     
@@ -57,7 +57,7 @@ module.exports =  {
         files: [{attachment: Buffer.from(await response.arrayBuffer()), name: `generated-img.${imgFormat}`}]
       });
     } else {
-      throw new Error(`${response.status}: ${response.data.toString()}`);
+      throw new Error(`${response.status}: ${response.text}`);
     }
 
   },
