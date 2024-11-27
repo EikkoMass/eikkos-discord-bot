@@ -8,6 +8,8 @@ const MuteByGame = require('../../models/muteByGame');
 */
 module.exports = async (client, oldPresence, newPresence) => {
   try{
+    // TODO refatorar / inverter logica (buscar por user -> loop de atividades (inverter))
+
     // tentar verificar apenas mudancas de atividade relacionadas a jogo
     if(newPresence.user.bot || 
       (!(newPresence?.activities || []).find(activity => activity.type === ActivityType.Playing) 
@@ -50,10 +52,11 @@ module.exports = async (client, oldPresence, newPresence) => {
             startedActivities.forEach(activity => {
               if(mutedMember.gameName === activity.name)
               {
+
                 //mute
                 let currentMember = members.find(m => m.user.id === mutedMember.userId);
                 
-                if(!currentMember.presence.activities.find(ac => ac.name === mutedMember.gameName))
+                if(!currentMember.presence?.activities?.find(ac => ac.name === mutedMember.gameName))
                 {
                   currentMember.voice.setDeaf(true).catch(() => console.log('could not deaf the user'));
                   currentMember.voice.setMute(true).catch(() => console.log('could not mute the user'));

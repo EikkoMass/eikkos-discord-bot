@@ -4,7 +4,7 @@ const MuteByGame = require('../../models/muteByGame');
 module.exports =  {
   name: 'mute-by-game',
   description: 'play a song on the voice channel',
-  testOnly: true,
+
   /**
    *  @param {Client} client
    *  @param {Interaction} interaction
