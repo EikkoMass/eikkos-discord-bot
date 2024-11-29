@@ -1,23 +1,28 @@
 const { ActivityType } = require("discord.js");
+const Stream = require('../../models/stream');
 
-module.exports = (client) => {
+module.exports = async (client) => {
 
-  let status = [
+  let stream = await Stream.findOne({ priority: true });
+
+  if(stream)
+  {
+    stream.priority = false;
+    await stream.save();
+  } else {
+    let streams = await Stream.find();
+
+    if(streams)
     {
-      name: 'Evt1',
-      type: ActivityType.Streaming,
-      url: 'https://www.youtube.com/watch?v=0UFLPJAp_Cw'
-    },
-    {
-      name: 'Evt2',
-      type: ActivityType.Streaming,
-      url: 'https://www.youtube.com/watch?v=QeN2Iv00qDo'
+      stream = streams[Math.floor(Math.random() * streams.length)];
     }
-  ];
-
-  let random = Math.floor(Math.random() * status.length);
+  }
 
   setInterval(() => {
-    client.user.setActivity(status[random]);
+    client.user.setActivity({
+      name: stream?.title || 'Evt1',
+      type: ActivityType.Streaming,
+      url: stream?.link || 'https://www.youtube.com/watch?v=0UFLPJAp_Cw'
+    });
   }, 10000);
 }
