@@ -15,8 +15,8 @@ module.exports = async (client, oldPresence, newPresence) => {
       (!(newPresence?.activities || []).find(activity => activity.type === ActivityType.Playing) 
         && !(oldPresence?.activities || []).find(activity => activity.type === ActivityType.Playing))) return;
 
-    const oldActivities = oldPresence.activities.filter(a => a.type === ActivityType.Playing);
-    const newActivities = newPresence.activities.filter(a => a.type === ActivityType.Playing);
+    const oldActivities = oldPresence.activities?.filter(a => a.type === ActivityType.Playing);
+    const newActivities = newPresence.activities?.filter(a => a.type === ActivityType.Playing);
 
     const startedActivities = newActivities.filter(n => !oldActivities.some(o => o.name === n.name));
     const stoppedActivities = oldActivities.filter(o => !newActivities.some(n => n.name === o.name));
