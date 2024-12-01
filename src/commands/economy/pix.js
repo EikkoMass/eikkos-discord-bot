@@ -1,4 +1,4 @@
-const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder, AttachmentBuilder} = require('discord.js');
+const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder} = require('discord.js');
 const crcs = require('../../utils/crcs');
 const Pix = require('../../models/pix');
 
