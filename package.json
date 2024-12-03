@@ -4,6 +4,11 @@
   "description": "eikko's bot",
   "main": "index.js",
   "author": "Eric Henrique Massaneiro",
+  "repository": {
+    "domain": "https://github.com",
+    "user": "EikkoMass",
+    "name": "discord-bot-study"
+  },
   "license": "MIT",
   "scripts": {
     "start": "nodemon index.js"
