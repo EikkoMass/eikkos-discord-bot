@@ -15,7 +15,7 @@ module.exports =  {
       default:
         await interaction.reply({
           ephemeral: true,
-          content: `Minecraft command command not found!`
+          content: `Minecraft command not found!`
         });
         return;
     }
@@ -142,14 +142,23 @@ async function status(client, interaction)
     });
     return;
   }
-  let attachment = Buffer.from(serverInfo.icon.split(",")[1], 'base64');
+
+  let attachment = null;
+  
+  if(serverInfo.icon)
+  {
+    attachment = Buffer.from(serverInfo.icon.split(",")[1], 'base64');
+  } else {
+    let defaultNoneImg = await fetch('https://minecraft-api.vercel.app/images/blocks/grass_block.png');
+    attachment = Buffer.from(await defaultNoneImg.arrayBuffer());
+  }
 
   const infoFields = [
     { name: 'Status', value: serverInfo.online ? `🟢 Online` : `🔴 Offline`, inline: true },
-    { name: `Version`, value: serverInfo.version, inline: true },
-    { name: 'Description', value: serverInfo.motd.raw[0] },
+    { name: `Version`, value: serverInfo.version || "N/A", inline: true },
+    { name: 'Description', value: serverInfo.motd?.raw[0] || "None" },
     { name: 'Address', value: server.address }, 
-    { name: 'Number of player', value: `${serverInfo.players.online}/${serverInfo.players.max}`, inline: true },
+    { name: 'Number of player', value: serverInfo.players ? `${serverInfo.players.online}/${serverInfo.players.max}` : "0/0", inline: true },
     { name: `Edition`, value: (editions.find(edition => edition.value === server.edition)?.name || "Not found"), inline: true },
   ];
 
