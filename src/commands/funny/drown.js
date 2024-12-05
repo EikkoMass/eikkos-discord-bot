@@ -26,10 +26,7 @@ module.exports =  {
 
     if(targetMember.user.bot)
       {
-        interaction.reply({
-          ephemeral: true,
-          content: `The drowned target couldn't be me, dumbass`,
-        });
+        interaction.reply(`The drowned target couldn't be me, dumbass`);
         return;
       }
 
@@ -83,9 +80,8 @@ module.exports =  {
     },
     {
       name: 'delay',
-      description: 'Delay between each attempt',
-      type: ApplicationCommandOptionType.Integer,
-      min_value: 1
+      description: 'Delay between each attempt (in seconds, you can also use floating numbers, like "1,5", "2,8", etc)',
+      type: ApplicationCommandOptionType.Number,
     }
   ],
 }
