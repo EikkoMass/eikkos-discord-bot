@@ -1,5 +1,7 @@
-const {Client, Interaction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require('discord.js');
+const {Client, Interaction, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require('discord.js');
 require('dotenv').config();
+
+//TODO Dynamic
 
 const roles = [
   {

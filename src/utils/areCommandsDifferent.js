@@ -28,19 +28,18 @@ module.exports = (existingCommand, localCommand) => {
         return true;
       }
       
-      /* Subcomandos sao obrigatorios por padrao, entao sempre e salvo como undefined */
-      const isRequiredDifferent = localOption.type !== ApplicationCommandOptionType.Subcommand && (localOption.required || false) !== existingOption.required;
+      /* Subcomandos e grupos de Subcomandos sao obrigatorios por padrao, entao sempre e salvo como undefined */
+      const isRequiredDifferent = 
+        localOption.type !== ApplicationCommandOptionType.SubcommandGroup 
+        && localOption.type !== ApplicationCommandOptionType.Subcommand 
+        && (localOption.required || false) !== existingOption.required;
 
       if (
         localOption.description !== existingOption.description ||
         localOption.type !== existingOption.type ||
         isRequiredDifferent ||
-        (localOption.choices?.length || 0) !==
-          (existingOption.choices?.length || 0) ||
-        areChoicesDifferent(
-          localOption.choices || [],
-          existingOption.choices || []
-        )
+        (localOption.choices?.length || 0) !== (existingOption.choices?.length || 0) ||
+        areChoicesDifferent(localOption.choices || [], existingOption.choices || [])
       ) {
         return true;
       }
@@ -48,13 +47,7 @@ module.exports = (existingCommand, localCommand) => {
     return false;
   };
   
-  if (
-    existingCommand.description !== localCommand.description ||
+  return existingCommand.description !== localCommand.description ||
     existingCommand.options?.length !== (localCommand.options?.length || 0) ||
-    areOptionsDifferent(existingCommand.options, localCommand.options || [])
-  ) {
-    return true;
-  }
-
-  return false;
+    areOptionsDifferent(existingCommand.options, localCommand.options || []);
 };

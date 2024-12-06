@@ -43,11 +43,4 @@ eventHandler(client);
 client.login(process.env.DISCORD_TOKEN);
 })();
 
-/*
-client.on("messageCreate", async (message) => {
-  if(message.author.bot) return;
-    // message.reply("Hello");
-});
-*/
-
 

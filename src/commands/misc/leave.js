@@ -9,19 +9,24 @@ module.exports =  {
    *  @param {Client} client
    *  @param {Interaction} interaction
   */
-  callback: async (client, interaction) => {
-    await interaction.deferReply();
+  callback: (client, interaction) => {
 
     const queue = useQueue(interaction.guild);
 
     if (!queue)
     {
-      await interaction.editReply("I'm not playing anything!");
+      interaction.reply({
+        ephemeral: true,
+        content: "I'm not playing anything!"
+      });
       return; 
     }
 
     if (!queue.deleted) queue.delete();
-    await interaction.editReply("Leaving the voice channel!");
+    interaction.reply({
+      ephemeral: true, 
+      content: "Leaving the voice channel!"
+    });
   }
 
 }
