@@ -1,4 +1,4 @@
-const {Client, Presence, ActivityType} = require('discord.js');
+const {Client, Presence, ActivityType, GuildMember, Activity } = require('discord.js');
 const MuteByGame = require('../../models/muteByGame');
 
 /**
@@ -8,9 +8,8 @@ const MuteByGame = require('../../models/muteByGame');
 */
 module.exports = async (client, oldPresence, newPresence) => {
   try{
-    // TODO refatorar / inverter logica (buscar por user -> loop de atividades (inverter))
 
-    // tentar verificar apenas mudancas de atividade relacionadas a jogo
+    // only changes with the 'Playing' ActivityType.
     if(newPresence.user.bot || 
       (!(newPresence?.activities || []).find(activity => activity.type === ActivityType.Playing) 
         && !(oldPresence?.activities || []).find(activity => activity.type === ActivityType.Playing))) return;
@@ -24,66 +23,67 @@ module.exports = async (client, oldPresence, newPresence) => {
     let channel = newPresence.member?.voice?.channel;
     if(channel && oldPresence.activities !== newPresence.activities)
     {
-      //buscar users que estao no voice channel
-      // buscar no banco quais desses users possuem registro para mutar habilitado (por guilda e jogo)
-      // mutar os users que possuirem registro
+      //All users in voice except the user who triggered the presence event
+      let membersOnVoice = channel.members.filter(m => m.user.id !== newPresence.user.id);
+      let memberIds = membersOnVoice?.map(member => member.id);
 
-      // se presenceUpdate disparar quando algum user fechar o jogo, verificar se ainda nao possui ninguem com o jogo aberto na call
-      startedActivities.forEach(n => {
-        console.log(`${newPresence.user.username} started playing ${n.name}`);
-      });
-      
-      stoppedActivities.forEach(o => {
-        console.log(`${newPresence.user.username} stopped playing ${o.name}`);
-      });
-
-      let members = channel.members.filter(m => m.user.id !== newPresence.user.id);
-      let memberIds = members?.map(member => member.id);
-
-      if(memberIds)
+      if(memberIds?.length)
       {
-        let mutedMembers = await MuteByGame.find({userId: {"$in": memberIds}, guildId: channel.guild.id });
+        let mutedMembersByDB = await MuteByGame.find({userId: {"$in": memberIds}, guildId: channel.guild.id });
   
-        if(mutedMembers)
-        {
-          for(let mutedMember of mutedMembers)
-          {
-            // started playing
-            startedActivities.forEach(activity => {
-              if(mutedMember.gameName === activity.name)
-              {
+        if(!mutedMembersByDB) return;
 
-                //mute
-                let currentMember = members.find(m => m.user.id === mutedMember.userId);
-                
-                if(!currentMember.presence?.activities?.find(ac => ac.name === mutedMember.gameName))
-                {
-                  currentMember.voice.setDeaf(true).catch(() => console.log('could not deaf the user'));
-                  currentMember.voice.setMute(true).catch(() => console.log('could not mute the user'));
-                }
+        // started playing
+        startedActivities.forEach(activity => startedActivityCallback(membersOnVoice, mutedMembersByDB, activity, newPresence));
 
-              }
-            });
-
-            // stopped playing
-            stoppedActivities.forEach(activity => {
-              if(mutedMember.gameName === activity.name)
-              {
-                //check if has more people playing this game, if not, unmute
-                if(!members.filter(m => m.presence?.activities?.find(ac => ac.name === activity.name))?.size)
-                {
-                  let currentMember = members.find(m => m.user.id === mutedMember.userId);
-
-                  currentMember.voice.setDeaf(false);
-                  currentMember.voice.setMute(false);
-                }
-              }
-            });
-          }
-        }
+        // stopped playing
+        stoppedActivities.forEach(activity => stoppedActivityCallback(membersOnVoice, mutedMembersByDB, activity, newPresence));
       }
     }
   } catch(e) {
     console.log(e);
   }
+}
+
+/**
+ *  @param {Array<GuildMember>} membersOnVoice
+ *  @param {Array<MuteByGame>} mutedMembersByDB
+ *  @param {Activity} mainActivity
+ *  @param {Presence} presence
+*/
+function startedActivityCallback(membersOnVoice, mutedMembersByDB, mainActivity, presence) {
+  console.log(`${presence.user.username} started playing ${mainActivity.name}`);
+
+  //mute
+  membersOnVoice
+    .filter(member => mutedMembersByDB.some(memberByDB => memberByDB.userId === member.user.id && mainActivity.name === memberByDB.gameName))
+    .forEach(member => {
+      console.log(member);
+      if(!member.presence?.activities?.find(memberActivity => memberActivity.name === mainActivity.name))
+      {
+        member.voice.setDeaf(true).catch(() => console.log('could not deaf the user'));
+        member.voice.setMute(true).catch(() => console.log('could not mute the user'));
+      }
+    });
+}
+
+/**
+ *  @param {Array<GuildMember>} membersOnVoice
+ *  @param {Array<MuteByGame>} mutedMembersByDB
+ *  @param {Activity} mainActivity
+ *  @param {Presence} presence
+*/
+function stoppedActivityCallback(membersOnVoice, mutedMembersByDB, mainActivity, presence) {
+  console.log(`${presence.user.username} stopped playing ${mainActivity.name}`);
+
+  const mutedMembersByGame = membersOnVoice.filter(member => mutedMembersByDB.some(memberByDB => memberByDB.userId === member.user.id && mainActivity.name === memberByDB.gameName));
+  
+  //check if has more people playing this game, if not, unmute
+  if(!membersOnVoice.filter(member => member.presence?.activities?.find(memberActivity => memberActivity.name === mainActivity.name))?.size)
+  {
+    mutedMembersByGame.forEach(memberToUnmute => {
+      memberToUnmute.voice.setDeaf(false);
+      memberToUnmute.voice.setMute(false);
+    });
+  } 
 }

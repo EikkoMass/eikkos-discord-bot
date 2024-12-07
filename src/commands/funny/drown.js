@@ -12,8 +12,17 @@ module.exports =  {
 
     const targetMember = await interaction.guild.members.fetch(interaction.options.get('user')?.value);
     const attempts = interaction.options.get('attempts')?.value || 3;
-    const secondsBetweenChanges = interaction.options.get('delay')?.value || 1;
+    const secondsBetweenChanges = interaction.options.get('delay')?.value;
     const ONE_SEC = 1000;
+    
+    if(secondsBetweenChanges < 0)
+    {
+      interaction.reply({
+        ephemeral: true,
+        content: `The delay must be an positive value!`,
+      });
+      return;
+    }
 
     if(targetMember.user.id === interaction.user.id)
     {
@@ -25,19 +34,19 @@ module.exports =  {
     }
 
     if(targetMember.user.bot)
-      {
-        interaction.reply(`The drowned target couldn't be me, dumbass`);
-        return;
-      }
+    {
+      interaction.reply(`The drowned target couldn't be me, dumbass`);
+      return;
+    }
 
     if(!targetMember?.voice?.channel)
-      {
-        interaction.reply({
-          ephemeral: true,
-          content: `The target user needs at least to be in a voice channel!`,
-        });
-        return;
-      }
+    {
+      interaction.reply({
+        ephemeral: true,
+        content: `The target user needs at least to be in a voice channel!`,
+      });
+      return;
+    }
     
       
     if(interaction.guild.channels.cache.size <= 1)

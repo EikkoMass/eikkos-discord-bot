@@ -12,6 +12,7 @@ module.exports = (client, interaction) => {
     interaction.respond([
       {name: 'League Of Legends', value: 'League of Legends'},
       {name: 'WEBFISHING', value: 'WEBFISHING'},
+      {name: 'Balatro', value: 'Balatro'},
     ]).catch(() => {});
   } catch (e) {
     console.log(e);
