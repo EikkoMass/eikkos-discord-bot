@@ -1,13 +1,13 @@
 {
-  "name": "discord-bot",
+  "name": "eikkos-bot",
   "version": "0.0.1",
-  "description": "eikko's bot",
+  "description": "My personal discord bot",
   "main": "index.js",
   "author": "Eric Henrique Massaneiro",
   "repository": {
     "domain": "https://github.com",
     "user": "EikkoMass",
-    "name": "discord-bot-study"
+    "name": "eikkos-discord-bot"
   },
   "license": "MIT",
   "scripts": {
