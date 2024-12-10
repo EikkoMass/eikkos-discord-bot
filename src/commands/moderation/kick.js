@@ -47,7 +47,6 @@ module.exports =  {
     //Ban the targetUser
     try{
       await targetUser.kick(reason);
-      //console.log('gotcha');
       await interaction.editReply(`User ${targetUser} was kicked\nReason: ${reason}`);
     }catch(e)
     {
