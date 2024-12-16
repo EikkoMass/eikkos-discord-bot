@@ -165,7 +165,7 @@ async function choose(client, interaction)
       role => 
         row.components.push(
           new ButtonBuilder()
-            .setCustomId(role.roleId)
+            .setCustomId(`role;${role.roleId}`)
             .setLabel(role.label)
             .setStyle(role.style || ButtonStyle.Primary)
         )

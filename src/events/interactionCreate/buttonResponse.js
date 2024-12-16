@@ -1,10 +1,17 @@
+const { Client, Interaction } = require('discord.js');
+
+/**
+ *  @param {Client} client
+ *  @param {Interaction} interaction
+*/
 module.exports = async (client, interaction) => {
   try {
       if(!interaction.isButton()) return;
-  
+      if(!interaction.customId?.startsWith('role;')) return;
+
       await interaction.deferReply({ ephemeral: true }) ;
   
-      const role = interaction.guild.roles.cache.get(interaction.customId);
+      const role = interaction.guild.roles.cache.get(interaction.customId.replace('role;', ''));
   
       if(!role)
       {
