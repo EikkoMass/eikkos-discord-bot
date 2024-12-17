@@ -46,7 +46,6 @@ await player.extractors.loadDefault(
 if(!process.env.IGDB_CLIENT_ID || !process.env.IGDB_CLIENT_SECRET)
 {
   console.log(`Missing IGDB credentials, skipping authentication!`);
-  return;
 } else {
   await authenticateOnIGDB(client);
 }

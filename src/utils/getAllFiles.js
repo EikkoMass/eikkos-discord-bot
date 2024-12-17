@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-module.exports = (directory, foldersOnly = false) => {
+const getAllFiles = (directory, foldersOnly = false, recursive = false) => {
   let fileNames = [];
   const files = fs.readdirSync(directory, { withFileTypes: true });
 
@@ -10,7 +10,11 @@ module.exports = (directory, foldersOnly = false) => {
   {
     const filePath = path.join(directory, file.name);
     
-    if(foldersOnly)
+    if(file.isDirectory() && recursive)
+    {
+      fileNames.push(...getAllFiles(filePath, foldersOnly, recursive));
+    }
+    else if(foldersOnly)
     {
       if(file.isDirectory()){
         fileNames.push(filePath);
@@ -25,3 +29,5 @@ module.exports = (directory, foldersOnly = false) => {
 
   return fileNames;
 };
+
+module.exports = getAllFiles;

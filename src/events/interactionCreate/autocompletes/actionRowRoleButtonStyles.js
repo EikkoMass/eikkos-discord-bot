@@ -1,5 +1,5 @@
 const {Client, Interaction} = require('discord.js');
-const styles = require('../../enums/buttonStyles');
+const styles = require('../../../enums/buttonStyles');
 
   /**
    *  @param {Client} client

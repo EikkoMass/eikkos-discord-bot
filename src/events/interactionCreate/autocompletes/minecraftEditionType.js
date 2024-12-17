@@ -1,5 +1,5 @@
 const {Client, Interaction} = require('discord.js');
-const editions = require('../../enums/minecraftEditions');
+const editions = require('../../../enums/minecraftEditions');
 
   /**
    *  @param {Client} client
