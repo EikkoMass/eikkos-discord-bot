@@ -10,7 +10,7 @@ module.exports =  {
    *  @param {Interaction} interaction
   */
   callback: async (client, interaction) => {
-    await interaction.deferReply();
+    await interaction.deferReply({ ephemeral: true });
 
     const queue = useQueue(interaction.guild);
 
@@ -25,7 +25,10 @@ module.exports =  {
 
     queue.node.skip();
 
-    await interaction.editReply("Skipped");
+    await interaction.editReply({
+      ehpemeral: true,
+      content: "Skipped"
+    });
   }
 
 }
