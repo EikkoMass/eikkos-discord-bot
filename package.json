@@ -15,18 +15,18 @@
   },
   "dependencies": {
     "@discord-player/extractor": "^4.5.1",
-    "@discordjs/voice": "^0.17.0",
+    "@discordjs/voice": "^0.18.0",
     "canvacord": "^6.0.2",
     "discord-player": "^6.7.1",
-    "discord-player-youtubei": "^1.3.4",
-    "discord.js": "^14.15.3",
-    "dotenv": "^16.4.5",
+    "discord-player-youtubei": "^1.3.7",
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.7",
     "ffmpeg-static": "^5.2.0",
-    "mediaplex": "^0.0.9",
-    "mongoose": "^8.8.4",
+    "mediaplex": "^1.0.0",
+    "mongoose": "^8.9.2",
     "ms": "^2.1.3",
-    "openai": "^4.72.0",
+    "openai": "^4.77.0",
     "play-dl": "^1.9.7",
-    "pretty-ms": "^9.1.0"
+    "pretty-ms": "^9.2.0"
   }
 }
