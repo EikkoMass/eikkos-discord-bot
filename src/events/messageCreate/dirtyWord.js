@@ -24,7 +24,7 @@ module.exports = async (client, message) => {
       client.dirtyWordCache.push(dirtyWordObj);
     }
 
-    if(message.content === dirtyWordObj.word)
+    if(message.content?.toLowerCase() === dirtyWordObj.word?.toLowerCase())
     {
       const targetUser = await message.guild.members.fetch(message.author.id);
       targetUser.kick('Bad word identified >:( ').catch(()=> {});
