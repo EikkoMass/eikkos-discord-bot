@@ -1,5 +1,7 @@
 const {Client, Interaction, ActionRowBuilder, ButtonBuilder, ButtonStyle, ApplicationCommandOptionType, PermissionFlagsBits } = require('discord.js');
 const ActionRowRole = require('../../models/actionRowRole');
+const RoleContext = require('../../models/roleContext');
+const { Types } = require('mongoose');
 
 module.exports = {
 
@@ -29,7 +31,7 @@ module.exports = {
   },
 
   name: 'role',
-  description: 'Set a new role',
+  description: 'Set a new role.',
   options: [
     {
       name: 'add',
@@ -53,6 +55,11 @@ module.exports = {
           description: 'The role that use want to add',
           type: ApplicationCommandOptionType.Number,
           autocomplete: true
+        },
+        {
+          name: 'context',
+          description: 'What\'s the button context',
+          type: ApplicationCommandOptionType.String,
         }
       ]
     },
@@ -66,14 +73,28 @@ module.exports = {
           required: true,
           description: 'The role that use want to remove',
           type: ApplicationCommandOptionType.Role
+        },
+        {
+          name: 'context',
+          description: 'What\'s the button context',
+          type: ApplicationCommandOptionType.String,
+          autocomplete: true
         }
       ]
     },
     {
       name: 'choose',
       description: 'Chooses an role around the added',
-      type: ApplicationCommandOptionType.Subcommand
-    },
+      type: ApplicationCommandOptionType.Subcommand,
+      options: [
+        {
+          name: 'context',
+          description: 'What\'s the button context',
+          type: ApplicationCommandOptionType.String,
+          autocomplete: true
+        }
+      ]
+    }
   ]
 }
 
@@ -88,7 +109,7 @@ async function add(client, interaction)
     const roleParam = interaction.options.get('role')?.value;
     const labelParam = interaction.options.get('label')?.value;
     const styleParam = interaction.options.get('style')?.value;
-
+    const contextParam = interaction.options?.get('context')?.value;
 
     if(styleParam && (styleParam < ButtonStyle.Primary || styleParam > ButtonStyle.Danger))
     {
@@ -112,18 +133,40 @@ async function add(client, interaction)
       return;
     }
 
-    let role = await ActionRowRole.findOne({ guildId: interaction.guild.id, roleId: roleParam});
+    const searchParams = { guildId: interaction.guild.id, roleId: roleParam };
+    let context = {};
+
+    if(contextParam)
+    {
+      context = await RoleContext.findOne({ name: contextParam, guildId: interaction.guild.id });
+
+      if(!context)
+      {
+        context = new RoleContext({
+          name: contextParam,
+          guildId: interaction.guild.id
+        });
+
+        await context.save();
+      }
+
+      searchParams.context = context._id;
+    }
+
+    let role = await ActionRowRole.findOne(searchParams);
 
     if(role)
     {
       role.label = labelParam;
       role.style = styleParam || ButtonStyle.Primary;
+      role.context = context._id;
     } else {
       role = new ActionRowRole({
         guildId: interaction.guild.id,
         label: labelParam,
         roleId: roleParam,
-        style: styleParam || ButtonStyle.Primary
+        style: styleParam || ButtonStyle.Primary,
+        context: context._id
       });
     }
 
@@ -131,7 +174,7 @@ async function add(client, interaction)
     interaction.reply(
     {
       ephemeral: true,
-      content: 'Role added / edited successfully!',
+      content: `Role added / edited successfully${context ? " on context '" + context.name + "'" : ''}!`,
     }
     );
   } catch (error) {
@@ -149,7 +192,13 @@ async function choose(client, interaction)
   try {
     const row = new ActionRowBuilder();
 
-    let roles = await ActionRowRole.find({ guildId: interaction.guild.id });
+    const context = interaction.options?.get('context')?.value;
+
+    const searchParams = { guildId: interaction.guild.id };
+
+    searchParams.context = context ? new Types.ObjectId(`${context}`) : { $eq: null };
+
+    let roles = await ActionRowRole.find(searchParams);
     
     if(!roles)
     {
@@ -190,11 +239,29 @@ async function choose(client, interaction)
 async function remove(client, interaction)
 {
   const roleParam = interaction.options.get('role')?.value;
+  const contextParam = interaction.options?.get('context')?.value;
 
-  const role = await ActionRowRole.findOneAndDelete({ guildId: interaction.guild.id, roleId: roleParam });
+  const searchParams = { guildId: interaction.guild.id, roleId: roleParam };
+
+  if(contextParam)
+  {
+    const context = await RoleContext.find({ guildId: interaction.guild.id, _id: new Types.ObjectId(`${contextParam}`)})
+    
+    searchParams.context = context._id || { $eq: null };
+  }
+
+  const role = await ActionRowRole.findOneAndDelete(searchParams);
 
   if(role)
   {
+    // TODO
+    //const remainingContextRoles = await ActionRowBuilder.countDocuments({ guildId: interaction.guild.id, context: new Types.ObjectId(`${contextParam}`)})
+
+    // if(!remainingContextRoles)
+    // {
+    //   await RoleContext.findOneAndDelete({ guildId: interaction.guild.id, _id: new Types.ObjectId(`${contextParam}`)});
+    // }
+
     await interaction.reply(
       {
         content: 'Role removed successfully!',

@@ -9,6 +9,9 @@ const actionRowRole = new Schema({
     type: String,
     required: true
   },
+  context: {
+    type: Schema.Types.ObjectId
+  },
   label: {
     type: String,
   },
