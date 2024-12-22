@@ -174,7 +174,7 @@ async function add(client, interaction)
     interaction.reply(
     {
       ephemeral: true,
-      content: `Role added / edited successfully${context ? " on context '" + context.name + "'" : ''}!`,
+      content: `Role added / edited successfully${context ? " on context '" + (context.name || 'not specified') + "'" : ''}!`,
     }
     );
   } catch (error) {
@@ -199,17 +199,18 @@ async function choose(client, interaction)
     searchParams.context = context ? new Types.ObjectId(`${context}`) : { $eq: null };
 
     let roles = await ActionRowRole.find(searchParams);
-    
-    if(!roles)
+
+    if(!roles?.length)
     {
       await interaction.reply(
         {
           content: 'There\'s no roles registered on this guild, use the command \'/role add <your-role>\'',
           ephemeral: true,
-      });
+        }
+      );
       return;
     }
-    
+
     roles.forEach(
       role => 
         row.components.push(
@@ -245,8 +246,7 @@ async function remove(client, interaction)
 
   if(contextParam)
   {
-    const context = await RoleContext.find({ guildId: interaction.guild.id, _id: new Types.ObjectId(`${contextParam}`)})
-    
+    const context = await RoleContext.findOne({ guildId: interaction.guild.id, _id: new Types.ObjectId(`${contextParam}`)})
     searchParams.context = context._id || { $eq: null };
   }
 
@@ -254,13 +254,15 @@ async function remove(client, interaction)
 
   if(role)
   {
-    // TODO
-    //const remainingContextRoles = await ActionRowBuilder.countDocuments({ guildId: interaction.guild.id, context: new Types.ObjectId(`${contextParam}`)})
+    if(contextParam)
+    {
+      const remainingContextRoles = await ActionRowRole.countDocuments({ guildId: interaction.guild.id, context: new Types.ObjectId(`${contextParam}`)})
 
-    // if(!remainingContextRoles)
-    // {
-    //   await RoleContext.findOneAndDelete({ guildId: interaction.guild.id, _id: new Types.ObjectId(`${contextParam}`)});
-    // }
+      if(remainingContextRoles == 0)
+      {
+        await RoleContext.findOneAndDelete({ guildId: interaction.guild.id, _id: new Types.ObjectId(`${contextParam}`)});
+      }
+    }
 
     await interaction.reply(
       {
