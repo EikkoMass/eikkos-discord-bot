@@ -37,7 +37,7 @@ module.exports =  {
       return;
     }
 
-    interaction.reply(`I'm not answering this yk, I'm not being payed enough to do this!`);
+    interaction.reply(`I'm not answering this yk, I'm not being paid enough to do this!`);
   },
   options: [
     {
