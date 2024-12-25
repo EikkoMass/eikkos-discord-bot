@@ -20,9 +20,9 @@ module.exports = async (client) => {
 
   setInterval(() => {
     client.user.setActivity({
-      name: stream?.title || 'Evt1',
+      name: stream?.title || 'Evt',
       type: ActivityType.Streaming,
-      url: stream?.link || 'https://www.youtube.com/watch?v=0UFLPJAp_Cw'
+      url: stream?.link || 'https://www.youtube.com/watch?v=JjjNa8khhww'
     });
   }, 10000);
 }

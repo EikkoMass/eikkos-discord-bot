@@ -18,7 +18,7 @@ module.exports = {
       default:
         await interaction.reply({
           ephemeral: true,
-          content: `Stream command not found!`
+          content: `Pix command not found!`
         });
         return;
     }
