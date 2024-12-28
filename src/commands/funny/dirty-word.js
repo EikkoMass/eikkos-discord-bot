@@ -41,12 +41,18 @@ module.exports =  {
         description: 'bad word',
         type: ApplicationCommandOptionType.String,
         required: true
-      }
+      },
+      {
+        name: 'type',
+        description: 'How you can identify the word?',
+        type: ApplicationCommandOptionType.Integer,
+        autocomplete: true
+      },
     ]
   }
 ],
   name: 'dirty-word',
-  description: 'Sets an word to auto-ban the user who write'
+  description: 'Sets an word to auto-ban the user who write.'
 };
 
 async function getCurrentDirtyWord(client, interaction)
@@ -63,7 +69,7 @@ async function getCurrentDirtyWord(client, interaction)
   if(dirtyWordObj)
   {
     const word = dirtyWordObj.word;
-    const censoredWord = word.length > 1 ? (word.slice(0, word.length / 2) + '****') : word;
+    const censoredWord = word.length > 1 ? (word.slice(0, word.length / 2) + '*'.repeat(word.length / 2)) : word;
     await interaction.reply({
       ephemeral: true,
       content: `The current bad word is ${censoredWord}`
@@ -85,8 +91,9 @@ async function setDirtyWord(client, interaction)
   }
 
   const word = interaction.options.get('word')?.value;
+  const type = interaction.options.get('type')?.value || 0;
+
   let dirtyWordObj = await DirtyWord.findOne({ guildId: interaction.guild.id });
-  const newDirtyWord = { guildId: interaction.guild.id, word };
 
   if(dirtyWordObj)
   {
@@ -96,9 +103,12 @@ async function setDirtyWord(client, interaction)
     if(index > -1)
     {
       client.dirtyWordCache[index].word = word;
+      client.dirtyWordCache[index].type = type;
     }
 
   } else {
+    const newDirtyWord = { guildId: interaction.guild.id, word, type };
+
     dirtyWordObj = new DirtyWord(newDirtyWord);
     client.dirtyWordCache.push(newDirtyWord);
   }
