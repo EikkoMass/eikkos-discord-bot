@@ -16,6 +16,9 @@ module.exports =  {
       case 'register':
         await setDirtyWord(client, interaction);
         break;
+      case 'remove':
+        await removeDirtyWord(client, interaction);
+        break;
       default:
         await interaction.reply({
           ephemeral: true,
@@ -49,11 +52,46 @@ module.exports =  {
         autocomplete: true
       },
     ]
-  }
+  },
+  {
+    name: 'remove',
+    description: 'remove the word',
+    type: ApplicationCommandOptionType.Subcommand
+  },
 ],
   name: 'dirty-word',
   description: 'Sets an word to auto-ban the user who write.'
 };
+
+async function removeDirtyWord(client, interaction)
+{
+  if(!client.dirtyWordCache)
+  {
+    client.dirtyWordCache = [];
+  }
+
+  const index = client.dirtyWordCache.findIndex(dirty => dirty.guildId === interaction.guild.id);
+
+  if(index > -1)
+  {
+    client.dirtyWordCache.splice(index, 1)
+  }
+
+  let dirtyWord = await DirtyWord.findOneAndDelete({ guildId: interaction.guild.id });
+
+  if(dirtyWord)
+  {
+    await interaction.reply({
+      ephemeral: true,
+      content: `Bad word removed successfully!`
+    });
+  } else {
+    await interaction.reply({
+      ephemeral: true,
+      content: `No bad word registered on this guild`
+    });
+  }
+}
 
 async function getCurrentDirtyWord(client, interaction)
 {
