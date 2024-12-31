@@ -40,6 +40,11 @@ await player.extractors.loadDefault(
   (ext) => !["YouTubeExtractor"].includes(ext)
 );
 
+client.dirtyWordCache = {
+  search: [],
+  result: []
+};
+
 // IGDB
 
 

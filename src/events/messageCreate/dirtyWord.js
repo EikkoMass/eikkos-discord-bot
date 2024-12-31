@@ -9,20 +9,21 @@ module.exports = async (client, message) => {
   if(!message.inGuild() || message.author.bot) return;
 
   try{
-    if(!client.dirtyWordCache)
-    {
-        client.dirtyWordCache = [];
-    }
 
-    let dirtyWordObj = client.dirtyWordCache.find(dirty => dirty.guildId === message.guild.id);
-
-    if(!dirtyWordObj) {
+    let dirtyWordObj = client.dirtyWordCache.result.find(dirty => dirty.guildId === message.guild.id);
+    let alreadySearchedOnDB = client.dirtyWordCache.search.some(dirty => dirty === message.guild.id);
+    console.log(dirtyWordObj);
+    console.log(alreadySearchedOnDB);
+    if(!dirtyWordObj && !alreadySearchedOnDB) {
+      
       dirtyWordObj = await DirtyWord.findOne({ guildId: message.guild.id });
+      client.dirtyWordCache.search.push(`${message.guild.id}`);
 
       if(!dirtyWordObj) return;
 
-      client.dirtyWordCache.push(dirtyWordObj);
-    }
+      client.dirtyWordCache.result.push(dirtyWordObj);
+    } 
+    else if (!dirtyWordObj) return;
 
     const currentMessage = message.content?.toLowerCase();
     

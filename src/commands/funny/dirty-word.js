@@ -65,16 +65,18 @@ module.exports =  {
 
 async function removeDirtyWord(client, interaction)
 {
-  if(!client.dirtyWordCache)
+
+  const indexResult = client.dirtyWordCache.result.findIndex(dirty => dirty.guildId === interaction.guild.id);
+  const indexSearch = client.dirtyWordCache.search.findIndex(dirty => dirty === interaction.guild.id);
+
+  if(indexResult > -1)
   {
-    client.dirtyWordCache = [];
+    client.dirtyWordCache.result.splice(indexResult, 1);
   }
 
-  const index = client.dirtyWordCache.findIndex(dirty => dirty.guildId === interaction.guild.id);
-
-  if(index > -1)
+  if(indexSearch > -1)
   {
-    client.dirtyWordCache.splice(index, 1)
+    client.dirtyWordCache.search.splice(indexSearch, 1);
   }
 
   let dirtyWord = await DirtyWord.findOneAndDelete({ guildId: interaction.guild.id });
@@ -95,12 +97,8 @@ async function removeDirtyWord(client, interaction)
 
 async function getCurrentDirtyWord(client, interaction)
 {
-  if(!client.dirtyWordCache)
-  {
-    client.dirtyWordCache = [];
-  }
 
-  const dirtyCache = client.dirtyWordCache.find(dirty => dirty.guildId === interaction.guild.id);
+  const dirtyCache = client.dirtyWordCache.result.find(dirty => dirty.guildId === interaction.guild.id);
   
   const dirtyWordObj = dirtyCache || await DirtyWord.findOne({ guildId: interaction.guild.id });
 
@@ -123,11 +121,6 @@ async function getCurrentDirtyWord(client, interaction)
 
 async function setDirtyWord(client, interaction)
 {
-  if(!client.dirtyWordCache)
-  {
-    client.dirtyWordCache = [];
-  }
-
   const word = interaction.options.get('word')?.value;
   const type = interaction.options.get('type')?.value || 0;
 
@@ -136,19 +129,19 @@ async function setDirtyWord(client, interaction)
   if(dirtyWordObj)
   {
     dirtyWordObj.word = word;
-    let index = client.dirtyWordCache.findIndex(dirty => dirty.guildId === interaction.guild.id);
+    let index = client.dirtyWordCache.result.findIndex(dirty => dirty.guildId === interaction.guild.id);
 
     if(index > -1)
     {
-      client.dirtyWordCache[index].word = word;
-      client.dirtyWordCache[index].type = type;
+      client.dirtyWordCache.result[index].word = word;
+      client.dirtyWordCache.result[index].type = type;
     }
 
   } else {
     const newDirtyWord = { guildId: interaction.guild.id, word, type };
 
     dirtyWordObj = new DirtyWord(newDirtyWord);
-    client.dirtyWordCache.push(newDirtyWord);
+    client.dirtyWordCache.result.push(newDirtyWord);
   }
 
   dirtyWordObj.save();
