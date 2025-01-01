@@ -12,8 +12,7 @@ module.exports = async (client, message) => {
 
     let dirtyWordObj = client.dirtyWordCache.result.find(dirty => dirty.guildId === message.guild.id);
     let alreadySearchedOnDB = client.dirtyWordCache.search.some(dirty => dirty === message.guild.id);
-    console.log(dirtyWordObj);
-    console.log(alreadySearchedOnDB);
+
     if(!dirtyWordObj && !alreadySearchedOnDB) {
       
       dirtyWordObj = await DirtyWord.findOne({ guildId: message.guild.id });
