@@ -62,6 +62,13 @@ module.exports =  {
             .setStyle(ButtonStyle.Secondary)
         )
 
+        row.components.push(
+          new ButtonBuilder()
+            .setCustomId(`player;stop;`)
+            .setLabel('⏹️')
+            .setStyle(ButtonStyle.Secondary)
+        )
+
     await interaction.editReply({
       embeds: [embed],
       components: [row],
