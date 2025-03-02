@@ -1,4 +1,4 @@
-const { Client, Interaction } = require('discord.js');
+const { Client, Interaction, EmbedBuilder } = require('discord.js');
 
 const { useQueue } = require('discord-player')
 
@@ -12,20 +12,12 @@ module.exports =  {
   callback: (client, interaction) => {
 
     const queue = useQueue(interaction.guild);
+    const embed = new EmbedBuilder();
 
-    if (!queue)
-    {
-      interaction.reply({
-        ephemeral: true,
-        content: "I'm not playing anything!"
-      });
-      return; 
-    }
+    if (queue && !queue.deleted) queue.delete();
 
-    if (!queue.deleted) queue.delete();
     interaction.reply({
-      ephemeral: true, 
-      content: "Leaving the voice channel!"
+      embeds: [embed.setDescription("Leaving the voice channel!")]
     });
   }
 

@@ -10,15 +10,14 @@ module.exports =  {
    *  @param {Interaction} interaction
   */
   callback: async (client, interaction) => {
-    await interaction.deferReply();
+    await interaction.deferReply({ ephemeral: true });
 
     const queue = useQueue(interaction.guild);
     const embed = new EmbedBuilder();
 
     if (queue.node.isPaused()) {
       await interaction.editReply({
-        ephemeral: true,
-        embeds: [embed.setDescription("The playback is already paused.")],
+        embeds: [embed.setDescription(":warning: The playback is already paused.")],
       });
       return;
     }
@@ -26,7 +25,7 @@ module.exports =  {
     queue.node.pause();
 
     await interaction.editReply({
-      embeds: [embed.setDescription("Paused the playback.")],
+      embeds: [embed.setDescription(":ice_cube: Paused the playback! Use the command `/resume` to play again.")],
     });
   }
 

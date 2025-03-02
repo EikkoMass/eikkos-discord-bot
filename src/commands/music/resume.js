@@ -10,15 +10,14 @@ module.exports =  {
    *  @param {Interaction} interaction
   */
   callback: async (client, interaction) => {
-    await interaction.deferReply();
+    await interaction.deferReply({ ephemeral: true });
 
     const queue = useQueue(interaction.guild);
     const embed = new EmbedBuilder();
 
     if (queue.node.isPlaying()) {
       await interaction.editReply({
-        ephemeral: true,
-        embeds: [embed.setDescription("The playback is not paused.")],
+        embeds: [embed.setDescription(":warning: The playback is not paused.")],
       });
       return;
     }
@@ -26,7 +25,7 @@ module.exports =  {
     queue.node.resume();
 
     await interaction.editReply({
-      embeds: [embed.setDescription("Resumed the playback.")],
+      embeds: [embed.setDescription(":fire: Playback resumed.")],
     });
   }
 

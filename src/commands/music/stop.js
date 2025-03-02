@@ -1,4 +1,4 @@
-const { Client, Interaction } = require('discord.js');
+const { Client, Interaction, EmbedBuilder } = require('discord.js');
 
 const { useQueue } = require('discord-player')
 
@@ -10,18 +10,19 @@ module.exports =  {
    *  @param {Interaction} interaction
   */
   callback: async (client, interaction) => {
-    await interaction.deferReply();
+    await interaction.deferReply({ ephemeral: true });
 
     const queue = useQueue(interaction.guild);
+    const embed = new EmbedBuilder();
 
     if (queue.isPlaying()) 
       {
         queue.node.stop();
-        await interaction.editReply("Stopped the song");
+        await interaction.editReply({ embeds: [embed.setDescription(":rock: Stopped the song! Queue cleaned.")] });
         return; 
       }
 
-      await interaction.editReply("No song are playing right now!");
+      await interaction.editReply({ embeds: [embed.setDescription(":warning: No song are playing right now!")] });
   }
 
 }
