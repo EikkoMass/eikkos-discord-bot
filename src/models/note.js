@@ -12,6 +12,9 @@ const noteSchema = new Schema({
   creationDate: {
     type: Date
   },
+  img: {
+    type: String
+  },
   text: {
     type: String,
     required: true

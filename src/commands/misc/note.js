@@ -25,7 +25,7 @@ module.exports =  {
 
   },
   name: 'note',
-  description: 'Manage your notes by guild.',
+  description: 'Manage your notes by guild',
   options: [
     {
       name: 'add',
@@ -35,6 +35,12 @@ module.exports =  {
         {
           name: 'text',
           description: 'the information you want to keep',
+          type: ApplicationCommandOptionType.String,
+          required: true
+        },
+        {
+          name: 'image',
+          description: 'Add and embedded image to the note',
           type: ApplicationCommandOptionType.String,
         }
       ]
@@ -66,11 +72,13 @@ module.exports =  {
 async function add(client, interaction)
 {
   const text = interaction.options?.get('text').value;
+  const img = interaction.options?.get('image')?.value;
 
   const note = new Note({
     guildId: interaction.guild.id,
     userId: interaction.user.id,
     creationDate: new Date(),
+    img: img || null,
     text
   });
 
@@ -97,13 +105,15 @@ async function show(client, interaction)
 
     for (let note of notes)
     {
-      embeds.push(
-        new EmbedBuilder()
-        .setDescription(note.text)
-        .setColor('Random')
-        .setTimestamp(note.creationDate)
-        .setFooter({ text: note._id.toString(), iconURL: interaction.member.displayAvatarURL({size: 256}) })
-      )
+      let embed = new EmbedBuilder()
+      .setDescription(note.text)
+      .setColor('Random')
+      .setTimestamp(note.creationDate)
+      .setFooter({ text: note._id.toString(), iconURL: interaction.member.displayAvatarURL({size: 256}) });
+
+      if(note.img) embed.setThumbnail(note.img);
+
+      embeds.push(embed)
     }
 
     interaction.editReply({ embeds });
