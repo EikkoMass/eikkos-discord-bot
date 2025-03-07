@@ -1,6 +1,12 @@
 const {ApplicationCommandOptionType } = require('discord.js');
 
 const SUSPENSE_TIMEOUT_MS = 3000;
+const quantity = {
+  name: 'quantity',
+  description: 'How many dices you want to roll?',
+  type: ApplicationCommandOptionType.Integer
+};
+
 
 module.exports =  {
   callback: async (client, interaction) => {
@@ -46,11 +52,7 @@ module.exports =  {
           description: 'Max value to randomize n - 1.000.000',
           type: ApplicationCommandOptionType.Integer,
         }, 
-        {
-          name: 'quantity',
-          description: 'How many dices you want to roll?',
-          type: ApplicationCommandOptionType.Integer
-        }
+        quantity
       ]
     },
     {
@@ -58,11 +60,7 @@ module.exports =  {
       description: 'Rolls a D4 dice',
       type: ApplicationCommandOptionType.Subcommand,
       options: [
-        {
-          name: 'quantity',
-          description: 'How many dices you want to roll?',
-          type: ApplicationCommandOptionType.Integer
-        }
+        quantity
       ]
     },       
     {
@@ -70,11 +68,7 @@ module.exports =  {
       description: 'Rolls a D6 dice',
       type: ApplicationCommandOptionType.Subcommand,
       options: [
-        {
-          name: 'quantity',
-          description: 'How many dices you want to roll?',
-          type: ApplicationCommandOptionType.Integer
-        }
+        quantity
       ]
     },  
     {
@@ -82,11 +76,7 @@ module.exports =  {
       description: 'Rolls a D8 dice',
       type: ApplicationCommandOptionType.Subcommand,
       options: [
-        {
-          name: 'quantity',
-          description: 'How many dices you want to roll?',
-          type: ApplicationCommandOptionType.Integer
-        }
+        quantity
       ]
     }, 
     {
@@ -94,11 +84,7 @@ module.exports =  {
       description: 'Rolls a D10 dice',
       type: ApplicationCommandOptionType.Subcommand,
       options: [
-        {
-          name: 'quantity',
-          description: 'How many dices you want to roll?',
-          type: ApplicationCommandOptionType.Integer
-        }
+        quantity
       ]
     }, 
     {
@@ -106,11 +92,7 @@ module.exports =  {
       description: 'Rolls a D12 dice',
       type: ApplicationCommandOptionType.Subcommand,
       options: [
-        {
-          name: 'quantity',
-          description: 'How many dices you want to roll?',
-          type: ApplicationCommandOptionType.Integer
-        }
+        quantity
       ]
     },  
     {
@@ -118,11 +100,7 @@ module.exports =  {
       description: 'Rolls a D20 dice',
       type: ApplicationCommandOptionType.Subcommand,
       options: [
-        {
-          name: 'quantity',
-          description: 'How many dices you want to roll?',
-          type: ApplicationCommandOptionType.Integer
-        }
+        quantity
       ]
     },  
     {
@@ -130,11 +108,7 @@ module.exports =  {
       description: 'Rolls a D100 dice',
       type: ApplicationCommandOptionType.Subcommand,
       options: [
-        {
-          name: 'quantity',
-          description: 'How many dices you want to roll?',
-          type: ApplicationCommandOptionType.Integer
-        }
+        quantity
       ]
     },  
   ]

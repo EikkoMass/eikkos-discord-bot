@@ -3,8 +3,10 @@ const { Client, GatewayIntentBits } = require("discord.js");
 const eventHandler = require('./handlers/eventHandler');
 const mongoose = require('mongoose');
 const { Player } = require('discord-player');
+const { DefaultExtractors } = require('@discord-player/extractor');
 const { YoutubeiExtractor } = require("discord-player-youtubei");
 const authenticateOnIGDB = require('./utils/igdbAuth');
+const loadPlayerEvents = require('./utils/loadPlayerEvents');
 
 const client = 
 new Client(
@@ -36,9 +38,8 @@ await player.extractors.register(YoutubeiExtractor, {
   authentication: process.env.YT_CREDENTIAL
 });
 
-await player.extractors.loadDefault(
-  (ext) => !["YouTubeExtractor"].includes(ext)
-);
+await player.extractors.loadMulti(DefaultExtractors);
+loadPlayerEvents(player.events);
 
 client.dirtyWordCache = {
   search: [],

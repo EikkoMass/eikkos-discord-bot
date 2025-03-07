@@ -10,12 +10,12 @@ module.exports =  {
    *  @param {Interaction} interaction
   */
   callback: async (client, interaction) => {
-    await interaction.deferReply();
+    await interaction.deferReply({ ephemeral: true });
     const link = interaction.options.get('song')?.value;
     let volume = interaction.options.get('volume')?.value || 100;
 
     if(volume > 100 || volume < 0) volume = 100;
-
+    
     const channel = interaction.member?.voice?.channel;
     const player = useMainPlayer();
     const embed = new EmbedBuilder();
@@ -23,7 +23,6 @@ module.exports =  {
     if(!channel)
     {
       await interaction.editReply({
-        ephemeral: true,
         embeds: [embed.setDescription("You need to be in a voice channel!")],
       });
       return;
@@ -41,37 +40,37 @@ module.exports =  {
     }
 
     try {
-        const { queue, track, searchResult } = await player.play(channel, result, {
-          nodeOptions: {
-            metadata: { channel: interaction.channel },
-            volume,
-            ...playerConfigs
-          },
-          requestedBy: interaction.user,
-          connectionOptions: { deaf: true },
-        });
+      const { queue, track, searchResult } = await player.play(channel, result, {
+        nodeOptions: {
+          metadata: { channel: interaction.channel },
+          volume,
+          ...playerConfigs
+        },
+        requestedBy: interaction.user,
+        connectionOptions: { deaf: true },
+      });
 
-        if (searchResult.hasPlaylist()) {
-          const playlist = searchResult.playlist;
-          embed
-            .setDescription(`Playlist added - ${playlist.tracks.length} tracks`)
-            .setThumbnail(playlist.thumbnail)
-            .setTitle(playlist.title)
-            .setFooter({text: `duration: ${playlist.durationFormatted}`})
-            .setURL(playlist.url);
-        } else {
-          embed
-            .setDescription(`Track added - Position ${queue.node.getTrackPosition(track) + 1}`)
-            .setThumbnail(track.thumbnail)
-            .setTitle(track.title)
-            .setFooter({text: `duration: ${track.duration}`})
-            .setURL(track.url);
-        }
-      } catch(e) {
-        console.log(e);
-      } 
+      if (searchResult.hasPlaylist()) {
+        const playlist = searchResult.playlist;
+        embed
+          .setDescription(`Playlist added - ${playlist.tracks.length} tracks`)
+          .setThumbnail(playlist.thumbnail)
+          .setTitle(playlist.title)
+          .setFooter({text: `duration: ${playlist.durationFormatted}`})
+          .setURL(playlist.url);
+      } else {
+        embed
+          .setDescription(`Track added - Position ${queue.node.getTrackPosition(track) + 1}`)
+          .setThumbnail(track.thumbnail)
+          .setTitle(track.title)
+          .setFooter({text: `duration: ${track.duration}`})
+          .setURL(track.url);
+      }
+    } catch(e) {
+      console.log(e);
+    } 
 
-      await interaction.editReply({embeds: [embed]});
+    await interaction.editReply({embeds: [embed]});
   },
 
   options: [

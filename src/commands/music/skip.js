@@ -17,7 +17,6 @@ module.exports =  {
     if(queue.isEmpty())
     {
       await interaction.editReply({
-        ephemeral: true,
         embeds: [new EmbedBuilder().setDescription("There is no song to skip.")],
       });
       return;
@@ -26,8 +25,7 @@ module.exports =  {
     queue.node.skip();
 
     await interaction.editReply({
-      ehpemeral: true,
-      content: "Skipped"
+      embeds: [new EmbedBuilder().setDescription(":fast_forward: Skipped")],
     });
   }
 

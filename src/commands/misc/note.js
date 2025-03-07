@@ -40,7 +40,7 @@ module.exports =  {
         },
         {
           name: 'image',
-          description: 'Add and embedded image to the note',
+          description: 'Add an embedded image to the note',
           type: ApplicationCommandOptionType.String,
         }
       ]
