@@ -1,4 +1,4 @@
-const {ApplicationCommandOptionType, Client, Interaction } = require('discord.js');
+const {ApplicationCommandOptionType, Client, Interaction, EmbedBuilder } = require('discord.js');
 const Stream = require('../../models/stream');
 
 module.exports =  {
@@ -15,7 +15,7 @@ module.exports =  {
       default:
         await interaction.reply({
           ephemeral: true,
-          content: `Stream command not found!`
+          embeds: [new EmbedBuilder().setDescription(`Stream command not found!`)]
         });
         return;
     }
@@ -74,6 +74,7 @@ async function register(client, interaction)
     const title = interaction.options.get('title')?.value;
     const link = interaction.options.get('link')?.value;
     const priority = interaction.options.get('priority')?.value || false;
+    const embed = new EmbedBuilder();
 
     let streamData = await Stream.findOne({
       link
@@ -86,7 +87,7 @@ async function register(client, interaction)
 
       await interaction.reply({
         ephemeral: true,
-        content: `Stream register edited!`
+        embeds: [embed.setDescription(`Stream register edited!`)]
       });
       return;
     }
@@ -100,7 +101,7 @@ async function register(client, interaction)
     await streamData.save();
     await interaction.reply({
       ephemeral: true,
-      content: `Stream link registered!`
+      embeds: [embed.setDescription(`Stream link registered!`)]
     });
   } catch (e)
   {
@@ -114,23 +115,22 @@ async function register(client, interaction)
 */
 async function remove(client, interaction)
 {
+  const embed = new EmbedBuilder();
   const link = interaction.options.get('link')?.value;
 
-  let result = await Stream.findOneAndDelete({
-    link
-  });
+  let result = await Stream.findOneAndDelete({ link });
 
   if(result)
   {
     await interaction.reply({
       ephemeral: true,
-      content: `Stream '${result.title}' removed successfully!`
+      embeds: [embed.setDescription(`Stream '${result.title}' removed successfully!`)]
     });
     return;
   }
 
   await interaction.reply({
     ephemeral: true,
-    content: `Stream not found!`
+    embeds: [embed.setDescription(`Stream not found!`)]
   });
 }

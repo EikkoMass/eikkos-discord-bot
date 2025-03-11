@@ -13,7 +13,7 @@ module.exports =  {
       default:
         await interaction.reply({
           ephemeral: true,
-          content: `Anime command not found!`
+          embeds: [new EmbedBuilder().setDescription(`Anime command not found!`)]
         });
         return;
     }
@@ -42,14 +42,14 @@ module.exports =  {
  *  @param {Interaction} interaction
 */
 async function search(client, interaction) {
-  
+  let embed = new EmbedBuilder();
   const malId = interaction.options?.get('query').value;
 
   const res = await fetch(`https://api.jikan.moe/v4/anime/${malId}`);
 
   if(!res.ok) {
     interaction.reply({
-      content: 'Failed to search the requested anime!'
+      embeds: [embed.setDescription('Failed to search the requested anime!')]
     });
     return;
   }
@@ -64,7 +64,7 @@ async function search(client, interaction) {
     {name: 'Genres', value: anime.data.genres.map(genre => genre.name).join(", "), inline: true},
   ]
 
-  let embed = new EmbedBuilder()
+  embed
   .setTitle(anime.data.title)
   .setURL(anime.data.url)
   .setThumbnail(anime.data.images.jpg.large_image_url)

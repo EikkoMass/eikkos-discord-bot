@@ -98,7 +98,7 @@ async function version(client, interaction)
 {
   await interaction.reply({
     ephemeral: true,
-    content: `Current version: ${info.version}`
+    embeds: [new EmbedBuilder().setDescription(`Current version: ${info.version}`)]
   });
 }
 
@@ -110,7 +110,7 @@ async function author(client, interaction)
 {
   await interaction.reply({
     ephemeral: true,
-    content: `The author of the project is ${info.author}`
+    embeds: [new EmbedBuilder().setDescription(`The author of the project is ${info.author}`)]
   });
 }
 
@@ -122,7 +122,7 @@ async function license(client, interaction)
 {
   await interaction.reply({
     ephemeral: true,
-    content: `Current license: ${info.license}`
+    embeds: [new EmbedBuilder().setDescription(`Current license: ${info.license}`)]
   });
 }
 
@@ -134,6 +134,6 @@ async function repository(client, interaction)
 {
   await interaction.reply({
     ephemeral: true,
-    content: `Project repository: ${info.repository.domain}/${info.repository.user}/${info.repository.name}`
+    embeds: [new EmbedBuilder().setDescription(`Project repository: ${info.repository.domain}/${info.repository.user}/${info.repository.name}`)]
   });
 }
