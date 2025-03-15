@@ -18,6 +18,9 @@ module.exports =  {
       case 'status':
         await status(client, interaction);
         break;
+      case 'cancel':
+        await cancel(client, interaction);
+        break;
       default:
         await interaction.reply({
           ephemeral: true,
@@ -55,6 +58,19 @@ module.exports =  {
       name: 'status',
       description: 'show a list of your current reminders',
       type: ApplicationCommandOptionType.Subcommand,
+    },
+    {
+      name: 'cancel',
+      description: 'Cancel an active reminder',
+      type: ApplicationCommandOptionType.Subcommand,
+      options: [
+        {
+          name: 'id',
+          description: 'The id of the pending reminder',
+          type: ApplicationCommandOptionType.String,
+          required: true
+        } 
+      ]
     }
   ]
 }
@@ -126,24 +142,62 @@ async function status(client, interaction)
   {
     interaction.reply({
       ephemeral: true,
-      embeds: [new EmbedBuilder().setDescription(`Not found any reminded created by you`)],
+      embeds: [new EmbedBuilder().setDescription(`Not found any reminder created by you`)],
     });
     return;
   }
 
   for(let reminder of remindersCache[cacheIdentifier]) {
     const user = reminder.receiver.user;
-    
-    embeds.push(
-      new EmbedBuilder()
-        .setTitle(`To: ${user.displayName || user.nickname}`)
-        .setDescription(reminder.message)
-        .setFooter({ text: `ID: ${reminder.id}` })
-    );
+    const embed = new EmbedBuilder()
+    .setTitle(`To: ${user.displayName || user.nickname}`)
+    .setFooter({ text: `ID: ${reminder.id}` });
+
+    if(reminder.message)
+    {
+      embed.setDescription(reminder.message);
+    }
+
+    embeds.push(embed);
   }
 
   interaction.reply({
     ephemeral: true,
     embeds
   });
+}
+
+async function cancel(client, interaction)
+{
+
+  let id = interaction.options.get('id')?.value;
+  const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;
+
+  if(!Array.isArray(remindersCache[cacheIdentifier]))
+    {
+      interaction.reply({
+        ephemeral: true,
+        embeds: [new EmbedBuilder().setDescription(`Not found any reminder created by you`)],
+      });
+      return;
+    }
+
+    let index = remindersCache[cacheIdentifier].findIndex(cache => cache.id === id);
+
+    if(index < 0)
+    {
+      interaction.reply({
+        ephemeral: true,
+        embeds: [new EmbedBuilder().setDescription(`Not found the specified reminder`)],
+      });
+      return;
+    }
+
+    clearTimeout(remindersCache[cacheIdentifier][index].timeoutId);
+    remindersCache[cacheIdentifier].splice(index, 1);
+
+    interaction.reply({
+      ephemeral: true,
+      embeds: [new EmbedBuilder().setDescription(`Reminder cancelled successfully!`)],
+    });
 }
