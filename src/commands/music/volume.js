@@ -1,6 +1,6 @@
 const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder} = require('discord.js');
 
-const { QueryType, useQueue } = require('discord-player')
+const { useQueue } = require('discord-player')
 
 module.exports =  {
   name: 'volume',
