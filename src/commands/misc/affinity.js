@@ -109,12 +109,12 @@ function affinityCalc(type) {
   
   const affinityEmojis = {
     love: {
-      filled: "💖",
-      empty: "💔"
+      filled: ":heart:",
+      empty: ":black_heart:"
     },
     hate: {
-      filled: "💢",
-      empty: "⬛"
+      filled: ":broken_heart:",
+      empty: ":black_heart:"
     }
   }
   

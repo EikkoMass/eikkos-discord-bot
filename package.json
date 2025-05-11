@@ -11,7 +11,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node src/index.js"
   },
   "dependencies": {
     "@discord-player/extractor": "^7.1.0",
