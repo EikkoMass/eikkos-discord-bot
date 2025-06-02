@@ -8,8 +8,13 @@ module.exports = {
    * @param {Track} track 
   */
   callback: (queue, track) => {
-    queue.metadata.channel.send({
-      embeds: [new EmbedBuilder().setDescription(":broken_heart: Leaving the voice channel because i'm alone and sad, goodbye!")],
-    });
+
+    if (queue && !queue.deleted) {
+      queue.delete();
+
+      queue.metadata.channel.send({
+        embeds: [new EmbedBuilder().setDescription(":broken_heart: Leaving the voice channel because i'm alone and sad, goodbye!")],
+      });
+    }
   } 
 }
