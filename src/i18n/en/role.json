@@ -1,0 +1,11 @@
+{
+  "NoRolesRegisteredOnGuild": "There's no roles registered on this guild, use the command 'role add <your-role>'",
+  "ClaimRemoveRole": "Claim of remove a role below",
+  "RoleRemoved": "Role removed successfully!",
+  "NoRoleFound": "No role was found!",
+  "NotSpecified": "not specified",
+  "OnContext": "on context",
+  "RoleAddedEdited": "Role added / edited successfully",
+  "CannotManageRoles": "You cannot manage roles!",
+  "InvalidStyleOption": "Invalid style option!"
+}

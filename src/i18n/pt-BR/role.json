@@ -1,0 +1,11 @@
+{
+  "NoRolesRegisteredOnGuild": "Nao existem cargos registrados desse servidor, use o comando 'role add <seu-cargo>'",
+  "ClaimRemoveRole": "Adicione ou remova um dos cargos abaixo",
+  "RoleRemoved": "Cargo removido com sucesso!",
+  "NoRoleFound": "Nenhum cargo foi encontrado!",
+  "NotSpecified": "não especificado",
+  "OnContext": "em contexto",
+  "RoleAddedEdited": "Cargo adicionado / editado com sucesso",
+  "CannotManageRoles": "Você não pode gerenciar cargos!",
+  "InvalidStyleOption": "Opção de estilização inválida!"
+}

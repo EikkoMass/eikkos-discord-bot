@@ -3,6 +3,9 @@ const ActionRowRole = require('../../models/actionRowRole');
 const RoleContext = require('../../models/roleContext');
 const { Types } = require('mongoose');
 
+const getI18n = require("../../utils/getI18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/role`);
+
 module.exports = {
 
   /**
@@ -104,6 +107,8 @@ module.exports = {
 */
 async function add(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
+
   try {
 
     const roleParam = interaction.options.get('role')?.value;
@@ -116,7 +121,7 @@ async function add(client, interaction)
       await interaction.reply(
         {
           ephemeral: true,
-          content: 'Invalid style option!',
+          content: words.InvalidStyleOption,
         }
       );
       return;
@@ -127,7 +132,7 @@ async function add(client, interaction)
       await interaction.reply(
         {
           ephemeral: true,
-          content: 'You cannot manage roles!',
+          content: words.CannotManageRoles,
         }
       );
       return;
@@ -174,7 +179,7 @@ async function add(client, interaction)
     interaction.reply(
     {
       ephemeral: true,
-      content: `Role added / edited successfully${context ? " on context '" + (context.name || 'not specified') + "'" : ''}!`,
+      content: `${words.RoleAddedEdited}${context ? ` ${words.OnContext} '` + (context.name || words.NotSpecified) + "'" : ''}!`,
     }
     );
   } catch (error) {
@@ -189,6 +194,8 @@ async function add(client, interaction)
 */
 async function choose(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
+
   try {
     const row = new ActionRowBuilder();
 
@@ -204,7 +211,7 @@ async function choose(client, interaction)
     {
       await interaction.reply(
         {
-          content: 'There\'s no roles registered on this guild, use the command \'/role add <your-role>\'',
+          content: words.NoRolesRegisteredOnGuild,
           ephemeral: true,
         }
       );
@@ -223,7 +230,7 @@ async function choose(client, interaction)
 
     await interaction.reply(
       {
-        content: 'Claim of remove a role below',
+        content: words.ClaimRemoveRole,
         components: [row],
       }
     );
@@ -239,6 +246,8 @@ async function choose(client, interaction)
 */
 async function remove(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
+
   const roleParam = interaction.options.get('role')?.value;
   const contextParam = interaction.options?.get('context')?.value;
 
@@ -266,7 +275,7 @@ async function remove(client, interaction)
 
     await interaction.reply(
       {
-        content: 'Role removed successfully!',
+        content: words.RoleRemoved,
         ephemeral: true,
     });
     return;
@@ -274,7 +283,7 @@ async function remove(client, interaction)
 
   await interaction.reply(
     {
-      content: 'No role was found!',
+      content: words.NoRoleFound,
       ephemeral: true,
   });  
 }
