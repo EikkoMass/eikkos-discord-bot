@@ -3,7 +3,7 @@ const ActionRowRole = require('../../models/actionRowRole');
 const RoleContext = require('../../models/roleContext');
 const { Types } = require('mongoose');
 
-const getI18n = require("../../utils/getI18n");
+const { getI18n } = require("../../utils/i18n");
 const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/role`);
 
 module.exports = {

@@ -1,0 +1,5 @@
+{
+  "AddedToBalance": "{0} was added to your balance. Your new balance is {1}",
+  "AlreadyCollected": "You have already collected your dailies today. Come back tomorrow!",
+  "OnlyInsideServer": "You can only run this command inside a server."
+}

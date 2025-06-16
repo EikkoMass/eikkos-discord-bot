@@ -1,6 +1,9 @@
 const User = require('../../models/user');
 const {Client, Interaction} = require('discord.js');
 
+const { getI18n, formatMessage } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/daily`);
+
 const dailyAmount = 1000;
 
 module.exports = {
@@ -11,17 +14,19 @@ module.exports = {
    * @param {Interaction} interaction 
    */
   callback: async (client, interaction) => {
+    const words = getLocalization(interaction.locale);
+
     if(!interaction.inGuild())
     {
       interaction.reply({
-        content: "You can only run this command inside a server.",
+        content: words.OnlyInsideServer,
         ephemeral: true
       });
       return;
     }
 
     try {
-      await interaction.deferReply();
+      await interaction.deferReply({ ephemeral: true });
       let query = {
         userId: interaction.member.id,
         guildId:  interaction.guild.id
@@ -35,9 +40,11 @@ module.exports = {
 
         if(lastDailyDate === currentDate)
         {
-          interaction.editReply("You have already collected your dailies today. Come back tomorrow!");
+          interaction.editReply(words.AlreadyCollected);
           return;
         }
+
+        user.lastDaily = new Date();
       } else {
         user = new User({...query, lastDaily: new Date()});
       }
@@ -45,7 +52,7 @@ module.exports = {
       user.balance += dailyAmount;
       await user.save();
 
-      interaction.editReply(`${dailyAmount} was added to your balance. Your new balance is ${user.balance}`);
+      interaction.editReply(formatMessage(words.AddedToBalance, [dailyAmount, user.balance]));
 
     } catch(e)
     {
