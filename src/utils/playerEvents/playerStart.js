@@ -11,7 +11,7 @@ module.exports = {
    * @param {GuildQueue} queue 
    * @param {Track} track 
   */
-  callback: (queue, track) => {
+  callback: async (queue, track) => {
     const words = getLocalization(queue.metadata.preferredLocale);
 
     const embed = new EmbedBuilder()
@@ -21,6 +21,7 @@ module.exports = {
     .setFooter({text: `${words.Duration}: ${track.duration}`})
     .setURL(track.url);
 
-    queue.metadata.channel.send({embeds: [embed]});
+    let message = await queue.metadata.channel.send({embeds: [embed]});
+    if(message) setTimeout(async () => await message.delete(), track.durationMS);
   }
 }
