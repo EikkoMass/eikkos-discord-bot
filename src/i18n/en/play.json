@@ -1,0 +1,7 @@
+{
+  "VoiceChannelRequired": "You need to be in a voice channel!",
+  "NoResults": "No results found",
+  "PlaylistAdded": "Playlist added - {0} tracks",
+  "Duration": "duration",
+  "TrackAdded": "Track added - Position {0}"
+}

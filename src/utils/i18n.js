@@ -12,7 +12,7 @@ function getI18n(locale) {
  * @param {String} message
  * @param {Array} values 
  */
-function formatMessage(message, values = [])
+function formatMessage(message = "", values = [])
 {
   if(!values?.length) return message;
 

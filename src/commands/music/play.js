@@ -2,6 +2,9 @@ const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder} = requir
 const playerConfigs = require('../../configs/player.json');
 const { QueryType, useMainPlayer } = require('discord-player')
 
+const { getI18n, formatMessage } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/play`);
+
 module.exports =  {
   name: 'play',
   description: 'play a song on the voice channel',
@@ -10,6 +13,8 @@ module.exports =  {
    *  @param {Interaction} interaction
   */
   callback: async (client, interaction) => {
+    const words = getLocalization(interaction.locale);
+
     await interaction.deferReply({ ephemeral: true });
     const link = interaction.options.get('song')?.value;
     let volume = interaction.options.get('volume')?.value || 100;
@@ -23,7 +28,7 @@ module.exports =  {
     if(!channel)
     {
       await interaction.editReply({
-        embeds: [embed.setDescription("You need to be in a voice channel!")],
+        embeds: [embed.setDescription(words.VoiceChannelRequired)],
       });
       return;
     }
@@ -35,7 +40,7 @@ module.exports =  {
 
     if(!result.hasTracks())
     {
-      await interaction.editReply("No results found");
+      await interaction.editReply(words.NoResults);
       return;
     }
 
@@ -53,17 +58,17 @@ module.exports =  {
       if (searchResult.hasPlaylist()) {
         const playlist = searchResult.playlist;
         embed
-          .setDescription(`Playlist added - ${playlist.tracks.length} tracks`)
+          .setDescription(formatMessage(words.PlaylistAdded, [playlist.tracks.length]))
           .setThumbnail(playlist.thumbnail)
           .setTitle(playlist.title)
-          .setFooter({text: `duration: ${playlist.durationFormatted}`})
+          .setFooter({text: `${words.Duration}: ${playlist.durationFormatted}`})
           .setURL(playlist.url);
       } else {
         embed
-          .setDescription(`Track added - Position ${queue.node.getTrackPosition(track) + 1}`)
+          .setDescription(formatMessage(words.TrackAdded, [queue.node.getTrackPosition(track) + 1]))
           .setThumbnail(track.thumbnail)
           .setTitle(track.title)
-          .setFooter({text: `duration: ${track.duration}`})
+          .setFooter({text: `${words.Duration}: ${track.duration}`})
           .setURL(track.url);
       }
     } catch(e) {
