@@ -1,0 +1,8 @@
+{
+  "NotFound": "Not found any reminder created by you",
+  "NotFoundSpecified": "Not found the specified reminder",
+  "Cancelled": "Reminder cancelled successfully!",
+  "Ping": "Sure, i'll ping about this in {0}",
+  "To": "To",
+  "EventHistory": "event created {0} ago"
+}

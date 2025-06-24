@@ -1,5 +1,9 @@
 const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder } = require('discord.js');
 const ms = require('ms');
+
+const { getI18n, formatMessage } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/remind`);
+
 const remindersCache = {};
 
 module.exports =  {
@@ -77,6 +81,7 @@ module.exports =  {
 
 async function create(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
       
   let time = interaction.options.get('time')?.value;
   const message = interaction.options.get('message')?.value || "";
@@ -100,14 +105,14 @@ async function create(client, interaction)
 
   interaction.reply({
     ephemeral: true,
-    content: `Sure, i'll ping about this in ${formattedDuration}`
+    content: formatMessage(words.Ping, [formattedDuration])
   });
 
   const embed = new EmbedBuilder();
 
   embed
   .setDescription(`<@${receiver.id}>${' ' + message || ''}`)
-  .setFooter({ text: `event created ${formattedDuration} ago` })
+  .setFooter({ text: formatMessage(words.EventHistory, [formattedDuration]) })
   
   const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;
   const generatedId = Math.random().toString(36).replace('0.', '');
@@ -135,6 +140,8 @@ async function create(client, interaction)
 
 async function status(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
+  
   const embeds = [];
   const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;
 
@@ -142,7 +149,7 @@ async function status(client, interaction)
   {
     interaction.reply({
       ephemeral: true,
-      embeds: [new EmbedBuilder().setDescription(`Not found any reminder created by you`)],
+      embeds: [new EmbedBuilder().setDescription(words.NotFound)],
     });
     return;
   }
@@ -150,7 +157,7 @@ async function status(client, interaction)
   for(let reminder of remindersCache[cacheIdentifier]) {
     const user = reminder.receiver.user;
     const embed = new EmbedBuilder()
-    .setTitle(`To: ${user.displayName || user.nickname}`)
+    .setTitle(`${words.To}: ${user.displayName || user.nickname}`)
     .setFooter({ text: `ID: ${reminder.id}` });
 
     if(reminder.message)
@@ -169,6 +176,7 @@ async function status(client, interaction)
 
 async function cancel(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
 
   let id = interaction.options.get('id')?.value;
   const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;
@@ -177,7 +185,7 @@ async function cancel(client, interaction)
     {
       interaction.reply({
         ephemeral: true,
-        embeds: [new EmbedBuilder().setDescription(`Not found any reminder created by you`)],
+        embeds: [new EmbedBuilder().setDescription(words.NotFound)],
       });
       return;
     }
@@ -188,7 +196,7 @@ async function cancel(client, interaction)
     {
       interaction.reply({
         ephemeral: true,
-        embeds: [new EmbedBuilder().setDescription(`Not found the specified reminder`)],
+        embeds: [new EmbedBuilder().setDescription(words.NotFoundSpecified)],
       });
       return;
     }
@@ -198,6 +206,6 @@ async function cancel(client, interaction)
 
     interaction.reply({
       ephemeral: true,
-      embeds: [new EmbedBuilder().setDescription(`Reminder cancelled successfully!`)],
+      embeds: [new EmbedBuilder().setDescription(words.Cancelled)],
     });
 }
