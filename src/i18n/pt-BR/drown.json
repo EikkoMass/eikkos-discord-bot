@@ -1,0 +1,8 @@
+{
+  "CantBeBot": "O usuário afogado não pode ser eu (ou outros bots) >:( !",
+  "CantBeSelf": "O usuário afogado não pode ser você mesmo!",
+  "DelayMustBePositive": "O delay deve ser um valor positivo!",
+  "MustBeInVC": "O usuário afogado precisa estar em uma call!",
+  "TwoVCRequired": "O servidor precisa ter ao menos 2 voice chats",
+  "DrowningPleaseWait": "afogando {0}, segure as pontas!"
+}

@@ -1,0 +1,8 @@
+{
+  "CantBeBot": "The drowned target couldn't be me (or other bots), dumbass",
+  "CantBeSelf": "The target user can't be yourself!",
+  "DelayMustBePositive": "The delay must be an positive value!",
+  "MustBeInVC": "The target user needs at least to be in a voice channel!",
+  "TwoVCRequired": "The guild needs to have at least 2 voice channels",
+  "DrowningPleaseWait": "drowning {0}, wait a sec!"
+}

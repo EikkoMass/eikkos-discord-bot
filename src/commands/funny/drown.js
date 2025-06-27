@@ -1,5 +1,8 @@
 const {Client, Interaction, ApplicationCommandOptionType, ChannelType} = require('discord.js');
 
+const { getI18n, formatMessage } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/drown`);
+
 module.exports =  {
   name: 'drown',
   description: 'drown away an user in random voice channels',
@@ -8,7 +11,8 @@ module.exports =  {
    *  @param {Interaction} interaction
   */
   callback: async (client, interaction) => {
-
+    
+    const words = getLocalization(interaction.locale);
 
     const targetMember = await interaction.guild.members.fetch(interaction.options.get('user')?.value);
     const attempts = interaction.options.get('attempts')?.value || 3;
@@ -19,7 +23,7 @@ module.exports =  {
     {
       interaction.reply({
         ephemeral: true,
-        content: `The delay must be an positive value!`,
+        content: words.DelayMustBePositive,
       });
       return;
     }
@@ -28,14 +32,17 @@ module.exports =  {
     {
       interaction.reply({
         ephemeral: true,
-        content: `The target user can't be yourself!`,
+        content: words.CantBeSelf,
       });
       return;
     }
 
     if(targetMember.user.bot)
     {
-      interaction.reply(`The drowned target couldn't be me, dumbass`);
+      interaction.reply({
+        ephemeral: true,
+        content: words.CantBeBot
+      });
       return;
     }
 
@@ -43,7 +50,7 @@ module.exports =  {
     {
       interaction.reply({
         ephemeral: true,
-        content: `The target user needs at least to be in a voice channel!`,
+        content: words.MustBeInVC,
       });
       return;
     }
@@ -53,14 +60,14 @@ module.exports =  {
     {
       interaction.reply({
         ephemeral: true,
-        content: `The guild needs to have at least 2 voice channels`,
+        content: words.TwoVCRequired,
       });
       return;
     }
     
     interaction.reply({
       ephemeral: true,
-      content: `drowning ${targetMember.displayName || targetMember.nickname}, wait a sec!`,
+      content: formatMessage(words.DrowningPleaseWait, [targetMember.displayName || targetMember.nickname]),
     });
 
     let finalChannel = targetMember.voice.channel;
