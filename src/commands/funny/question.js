@@ -1,5 +1,8 @@
 const { Client, Interaction, ApplicationCommandOptionType, EmbedBuilder } = require('discord.js');
 
+const { getI18n } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/question`);
+
 module.exports =  {
   name: 'question',
   description: 'make a question of yes / no to the bot',
@@ -9,13 +12,15 @@ module.exports =  {
   */
   callback: async (client, interaction) => {
 
+    const words = getLocalization(interaction.locale);
+
     let question = interaction.options.get('doubt')?.value;
 
     if(!question?.includes('?'))
     {
       interaction.reply({
         ephemeral: true,
-        content: `Ok, it's my turn now, is this even a question?`
+        content: words.NoQuestionMark
       });
       return;
     }
@@ -37,7 +42,10 @@ module.exports =  {
       return;
     }
 
-    interaction.reply(`I'm not answering this yk, I'm not being paid enough to do this!`);
+    interaction.reply({
+      ephemeral: true,
+      embeds: [new EmbedBuilder().setDescription(words.NotAnswering)]
+    });
   },
   options: [
     {
