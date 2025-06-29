@@ -1,0 +1,5 @@
+{
+  "AlreadyPaused": "O playback já está pausado.",
+  "Paused": "Playback pausado! Use o comando '/resume' para voltar a tocar.",
+  "NoQueue": "Nenhum playback disponível para pausar."
+}
