@@ -1,4 +1,7 @@
-const {ApplicationCommandOptionType } = require('discord.js');
+const {ApplicationCommandOptionType, EmbedBuilder } = require('discord.js');
+
+const { getI18n, formatMessage } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/roll`);
 
 const SUSPENSE_TIMEOUT_MS = 3000;
 const quantity = {
@@ -115,6 +118,9 @@ module.exports =  {
 }
 
 async function rollCustom(client, interaction) {
+
+  const words = getLocalization(interaction.locale);
+
   let min = interaction.options.get('min')?.value;
   let max = interaction.options.get('max')?.value;
 
@@ -123,7 +129,9 @@ async function rollCustom(client, interaction) {
   min = min ? Number.parseInt(min) : 1; 
   max = max ? Number.parseInt(max) : 1000000;
   
-  await interaction.reply(`The custom dice(s) returns...`);
+  await interaction.reply({
+    embeds: [new EmbedBuilder().setDescription(words.CustomDiceReturns)]
+  });
 
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
@@ -143,15 +151,22 @@ async function rollCustom(client, interaction) {
   }
 
 
-  setTimeout(()=> interaction.channel.send(result), SUSPENSE_TIMEOUT_MS);
+  setTimeout(()=> interaction.channel.send({
+    embeds: [new EmbedBuilder().setDescription(`:game_die: ${result}`)]
+  }), SUSPENSE_TIMEOUT_MS);
 }
 
 async function roll(client, interaction) {
+
+  const words = getLocalization(interaction.locale);
+  
   const sub = interaction.options.getSubcommand();
   const quantity = interaction.options.get('quantity')?.value || 1;
   let result = null;
 
-  await interaction.reply(`The ${sub} dice(s) returns...`);
+  await interaction.reply({
+    embeds: [new EmbedBuilder().setDescription(formatMessage(words.DDiceReturns, [sub]))]
+  });
   const maxFloored = Number.parseInt(sub.replace(/[^\d]+/g, ''));
 
 
@@ -168,5 +183,7 @@ async function roll(client, interaction) {
       result += ` / ${randomized}`;
     }
 
-  setTimeout(()=> interaction.channel.send(result), SUSPENSE_TIMEOUT_MS);
+  setTimeout(()=> interaction.channel.send({
+    embeds: [new EmbedBuilder().setDescription(`:game_die: ${result}`)]
+  }), SUSPENSE_TIMEOUT_MS);
 }
