@@ -1,5 +1,7 @@
 const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder} = require('discord.js');
 
+const { getI18n } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/anime`);
 
 module.exports =  {
   name: 'anime',
@@ -42,6 +44,9 @@ module.exports =  {
  *  @param {Interaction} interaction
 */
 async function search(client, interaction) {
+
+  const words = getLocalization(interaction.locale);
+
   let embed = new EmbedBuilder();
   const malId = interaction.options?.get('query').value;
 
@@ -57,11 +62,11 @@ async function search(client, interaction) {
   const anime = await res.json();
 
   const fields = [
-    {name: 'Status', value: anime.data.status, inline: true  },
-    {name: 'Type', value: anime.data.type, inline: true  },
+    {name: words.Status, value: anime.data.status, inline: true  },
+    {name: words.Type, value: anime.data.type, inline: true  },
     {name: " ", value: " " },
-    {name: 'Studios', value: anime.data.studios.map(studio => studio.name).join(", "), inline: true },
-    {name: 'Genres', value: anime.data.genres.map(genre => genre.name).join(", "), inline: true},
+    {name: words.Studios, value: anime.data.studios.map(studio => studio.name).join(", "), inline: true },
+    {name: words.Genres, value: anime.data.genres.map(genre => genre.name).join(", "), inline: true},
   ]
 
   embed
