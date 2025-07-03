@@ -1,4 +1,4 @@
-const {Client, Interaction, ApplicationCommandOptionType, ChannelType} = require('discord.js');
+const {Client, Interaction, ApplicationCommandOptionType, ChannelType, EmbedBuilder} = require('discord.js');
 
 const { getI18n, formatMessage } = require("../../utils/i18n");
 const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/drown`);
@@ -17,13 +17,14 @@ module.exports =  {
     const targetMember = await interaction.guild.members.fetch(interaction.options.get('user')?.value);
     const attempts = interaction.options.get('attempts')?.value || 3;
     const secondsBetweenChanges = interaction.options.get('delay')?.value;
+    const embed = new EmbedBuilder();
     const ONE_SEC = 1000;
     
     if(secondsBetweenChanges < 0)
     {
       interaction.reply({
         ephemeral: true,
-        content: words.DelayMustBePositive,
+        embeds: [embed.setDescription(words.DelayMustBePositive)],
       });
       return;
     }
@@ -32,7 +33,7 @@ module.exports =  {
     {
       interaction.reply({
         ephemeral: true,
-        content: words.CantBeSelf,
+        embeds: [embed.setDescription(words.CantBeSelf)],
       });
       return;
     }
@@ -41,7 +42,7 @@ module.exports =  {
     {
       interaction.reply({
         ephemeral: true,
-        content: words.CantBeBot
+        embeds: [embed.setDescription(words.CantBeBot)]
       });
       return;
     }
@@ -50,7 +51,7 @@ module.exports =  {
     {
       interaction.reply({
         ephemeral: true,
-        content: words.MustBeInVC,
+        embeds: [embed.setDescription(words.MustBeInVC)],
       });
       return;
     }
@@ -60,14 +61,14 @@ module.exports =  {
     {
       interaction.reply({
         ephemeral: true,
-        content: words.TwoVCRequired,
+        embeds: [embed.setDescription(words.TwoVCRequired)],
       });
       return;
     }
     
     interaction.reply({
       ephemeral: true,
-      content: formatMessage(words.DrowningPleaseWait, [targetMember.displayName || targetMember.nickname]),
+      embeds: [embed.setDescription(formatMessage(words.DrowningPleaseWait, [targetMember.displayName || targetMember.nickname]))],
     });
 
     let finalChannel = targetMember.voice.channel;
