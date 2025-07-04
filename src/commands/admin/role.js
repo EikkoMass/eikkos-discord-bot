@@ -1,4 +1,4 @@
-const {Client, Interaction, ActionRowBuilder, ButtonBuilder, ButtonStyle, ApplicationCommandOptionType, PermissionFlagsBits } = require('discord.js');
+const {Client, Interaction, ActionRowBuilder, ButtonBuilder, ButtonStyle, ApplicationCommandOptionType, MessageFlags, PermissionFlagsBits } = require('discord.js');
 const ActionRowRole = require('../../models/actionRowRole');
 const RoleContext = require('../../models/roleContext');
 const { Types } = require('mongoose');
@@ -26,7 +26,7 @@ module.exports = {
         break;
       default:
         await interaction.reply({
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
           content: `Role command not found!`
         });
         return;
@@ -120,7 +120,7 @@ async function add(client, interaction)
     {
       await interaction.reply(
         {
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
           content: words.InvalidStyleOption,
         }
       );
@@ -131,7 +131,7 @@ async function add(client, interaction)
     {
       await interaction.reply(
         {
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
           content: words.CannotManageRoles,
         }
       );
@@ -178,7 +178,7 @@ async function add(client, interaction)
     await role.save();
     interaction.reply(
     {
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral,
       content: `${words.RoleAddedEdited}${context ? ` ${words.OnContext} '` + (context.name || words.NotSpecified) + "'" : ''}!`,
     }
     );
@@ -212,7 +212,7 @@ async function choose(client, interaction)
       await interaction.reply(
         {
           content: words.NoRolesRegisteredOnGuild,
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
         }
       );
       return;
@@ -276,7 +276,7 @@ async function remove(client, interaction)
     await interaction.reply(
       {
         content: words.RoleRemoved,
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
     return;
   }
@@ -284,6 +284,6 @@ async function remove(client, interaction)
   await interaction.reply(
     {
       content: words.NoRoleFound,
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral,
   });  
 }

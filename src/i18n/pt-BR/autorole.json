@@ -1,0 +1,7 @@
+{
+  "OnlyInsideServer": "Você só pode executar este comando dentro de um servidor.",
+  "AlreadyConfigured": "Auto role já foi configurada para essa função. Para desabilitar, execute '/autorole disable'",
+  "Configured": "Auto role agora está configurado. Para desabilitar, execute '/autorole disable'",
+  "NotConfigured": "Auto role não foi configurado para este servidor. Use '/autorole configure' para configurá-lo.",
+  "Disabled": "Auto role foi desabilitado para este servidor. Use '/autorole configure' para configurá-lo novamente."
+}

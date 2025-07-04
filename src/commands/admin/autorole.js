@@ -1,5 +1,8 @@
-const { ApplicationCommandOptionType, PermissionFlagsBits, Client, Interaction } = require('discord.js');
+const { ApplicationCommandOptionType, PermissionFlagsBits, Client, Interaction, MessageFlags, EmbedBuilder } = require('discord.js');
 const AutoRole = require('../../models/autorole');
+
+const { getI18n } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/autorole`);
 
 module.exports = {
 
@@ -18,8 +21,8 @@ module.exports = {
         break;
       default:
         await interaction.reply({
-          ephemeral: true,
-          content: `Autorole command not found!`
+          flags: MessageFlags.Ephemeral,
+          embeds: [new EmbedBuilder().setDescription(`Auto role command not found!`)]
         });
         return;
     }
@@ -56,11 +59,15 @@ module.exports = {
 }
 
 async function configure(client, interaction) {
+  
+  const embed = new EmbedBuilder();
+  const words = getLocalization(interaction.locale);
+
   if(!interaction.inGuild())
     {
       interaction.reply({
-        ephemeral: true,
-        content: 'You can only run this command inside a server.'
+        flags: MessageFlags.Ephemeral,
+        embeds: [embed.setDescription(words.OnlyInsideServer)]
       });
       return;
     }
@@ -74,8 +81,8 @@ async function configure(client, interaction) {
         if(autoRole.roleId === targetRoleId)
         {
           interaction.reply({
-            ephemeral: true,
-            content: "Auto role has already been configured for that role. To disable run '/autorole disable'"
+            flags: MessageFlags.Ephemeral,
+            embeds: [embed.setDescription(words.AlreadyConfigured)]
           })
           return;
         }
@@ -90,8 +97,8 @@ async function configure(client, interaction) {
 
       await autoRole.save();
       interaction.reply({
-        ephemeral: true,
-        content: "Autorole has now been configured. To disable run '/autorole disable'"
+        flags: MessageFlags.Ephemeral,
+        embeds: [embed.setDescription(words.Configured)]
       });
     } catch(e)
     {
@@ -100,21 +107,25 @@ async function configure(client, interaction) {
 }
 
 async function disable(client, interaction) {
+  
+  const embed = new EmbedBuilder();
+  const words = getLocalization(interaction.locale);
+
   try {
 
     if(!(await AutoRole.exists({guildId: interaction.guild.id})))
     {
       interaction.reply({
-        ephemeral: true,
-        content: "Auto role has not been configured for this server. Use '/autorole configure' to set it up."
+        flags: MessageFlags.Ephemeral,
+        embeds: [embed.setDescription(words.NotConfigured)]
       })
       return;
     }
 
     await AutoRole.findOneAndDelete({guildId: interaction.guild.id});
     interaction.reply({
-      ephemeral: true,
-      content: "Auto role has been disabled for this server. Use '/autorole configure' to set it up again."
+      flags: MessageFlags.Ephemeral,
+      embeds: [embed.setDescription(words.Disabled)]
     })
    } catch (e) {
     console.log(e);
