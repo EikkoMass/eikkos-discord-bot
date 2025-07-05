@@ -1,4 +1,4 @@
-const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder} = require('discord.js');
+const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } = require('discord.js');
 const playerConfigs = require('../../configs/player.json');
 const { QueryType, useMainPlayer } = require('discord-player')
 
@@ -15,7 +15,9 @@ module.exports =  {
   callback: async (client, interaction) => {
     const words = getLocalization(interaction.locale);
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ 
+      flags: [ MessageFlags.Ephemeral ] 
+    });
     const link = interaction.options.get('song')?.value;
     let volume = interaction.options.get('volume')?.value || 100;
 

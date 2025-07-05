@@ -1,4 +1,5 @@
 const { Client, Interaction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const getPlayerActionRow = require("../../utils/playerActionRow")
 const { useQueue } = require('discord-player')
 
 module.exports =  {
@@ -38,40 +39,9 @@ module.exports =  {
       .setImage(queue.currentTrack.thumbnail)
       .setFields(fields);
 
-    const row = new ActionRowBuilder();
-
-
-        row.components.push(
-          new ButtonBuilder()
-            .setCustomId(`player;pause;`)
-            .setLabel('⏸️')
-            .setStyle(ButtonStyle.Secondary)
-        )
-
-        row.components.push(
-          new ButtonBuilder()
-            .setCustomId(`player;play;`)
-            .setLabel('▶️')
-            .setStyle(ButtonStyle.Secondary)
-        )
-
-        row.components.push(
-          new ButtonBuilder()
-            .setCustomId(`player;skip;`)
-            .setLabel('⏩')
-            .setStyle(ButtonStyle.Secondary)
-        )
-
-        row.components.push(
-          new ButtonBuilder()
-            .setCustomId(`player;stop;`)
-            .setLabel('⏹️')
-            .setStyle(ButtonStyle.Secondary)
-        )
-
     await interaction.editReply({
       embeds: [embed],
-      components: [row],
+      components: [getPlayerActionRow()],
     });
   }
 
