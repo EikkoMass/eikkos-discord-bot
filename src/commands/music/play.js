@@ -73,6 +73,8 @@ module.exports =  {
           .setFooter({text: `${words.Duration}: ${track.duration}`})
           .setURL(track.url);
       }
+
+      queue.metadata.preferredLocale = interaction.locale;
     } catch(e) {
       console.log(e);
     } 

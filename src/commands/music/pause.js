@@ -1,4 +1,4 @@
-const { Client, Interaction, EmbedBuilder } = require('discord.js');
+const { Client, Interaction, EmbedBuilder, MessageFlags } = require('discord.js');
 
 const { useQueue } = require('discord-player');
 const { getI18n } = require("../../utils/i18n");
@@ -15,7 +15,7 @@ module.exports =  {
     
     const words = getLocalization(interaction.locale);
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [ MessageFlags.Ephemeral ]  });
 
     const queue = useQueue(interaction.guild);
     const embed = new EmbedBuilder();

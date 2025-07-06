@@ -1,4 +1,4 @@
-const { Client, Interaction, EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
+const { Client, Interaction, EmbedBuilder, ApplicationCommandOptionType, MessageFlags } = require('discord.js');
 const { useQueue, QueueRepeatMode } = require('discord-player')
 
 module.exports =  {
@@ -12,7 +12,7 @@ module.exports =  {
 
     const repeatOption = interaction.options.get('type')?.value;
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [ MessageFlags.Ephemeral ] });
 
     const queue = useQueue(interaction.guild);
 

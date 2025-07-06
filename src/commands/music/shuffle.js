@@ -9,7 +9,7 @@ module.exports =  {
    *  @param {Interaction} interaction
   */
   callback: async (client, interaction) => {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [ MessageFlags.Ephemeral ] });
 
     const queue = useQueue(interaction.guild);
 
