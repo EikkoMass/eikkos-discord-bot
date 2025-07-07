@@ -1,4 +1,4 @@
-const {Client, Interaction, ApplicationCommandOptionType} = require('discord.js');
+const {Client, Interaction, ApplicationCommandOptionType, MessageFlags} = require('discord.js');
 const OpenAI = require('openai');
 require('dotenv').config();
 
@@ -17,7 +17,7 @@ module.exports =  {
     if(!prompt)
     {
       interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         content: 'You need to send an valid input'
       });
       return;
@@ -26,14 +26,14 @@ module.exports =  {
     if(!process.env.OPENAI_API_KEY)
     {
       interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         content: 'Missing API key'
       });
       return;
     }
 
     interaction.reply({
-      ephemeral: true,
+      flags: [ MessageFlags.Ephemeral ],
       content: `Generating the image, please wait!`
     });
     

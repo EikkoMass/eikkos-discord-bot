@@ -1,4 +1,4 @@
-const {ApplicationCommandOptionType, EmbedBuilder } = require('discord.js');
+const {ApplicationCommandOptionType, EmbedBuilder, MessageFlags } = require('discord.js');
 
 const { getI18n, formatMessage } = require("../../utils/i18n");
 const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/roll`);
@@ -30,7 +30,7 @@ module.exports =  {
         break;
       default:
         await interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: `Roll command not found!`
         });
         return;

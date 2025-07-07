@@ -1,4 +1,4 @@
-const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder} = require('discord.js');
+const { Client, Interaction, ApplicationCommandOptionType, MessageFlags } = require('discord.js');
 const MuteByGame = require('../../models/muteByGame');
 
 module.exports =  {
@@ -22,7 +22,7 @@ module.exports =  {
       if(data)
       {
         interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: 'Already activated'
         });
         return;
@@ -37,7 +37,7 @@ module.exports =  {
         data.save();
 
         interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: 'Mute command registered!'
         });
       }
@@ -47,14 +47,14 @@ module.exports =  {
         await MuteByGame.findOneAndDelete({userId: interaction.user.id, guildId: interaction.guild.id, gameName: gameName});
 
         interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: 'Mute command disabled!'
         });
         return;
       }
       
       interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         content: 'Already disabled'
       });
     }

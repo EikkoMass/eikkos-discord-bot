@@ -1,4 +1,4 @@
-const { EmbedBuilder, Client, Interaction } = require('discord.js');
+const { EmbedBuilder, Client, Interaction, MessageFlags } = require('discord.js');
 const Level = require('../../models/level')
 
 const QUANTITY_OF_USERS = 5;
@@ -13,7 +13,7 @@ module.exports = {
     {
       interaction.reply({
         content: "You can only run this command inside a server.",
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
       });
       return;
     }

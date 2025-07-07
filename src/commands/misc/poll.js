@@ -1,4 +1,4 @@
-const {PollLayoutType, Client, Interaction, ApplicationCommandOptionType } = require('discord.js');
+const {PollLayoutType, Client, Interaction, ApplicationCommandOptionType, MessageFlags } = require('discord.js');
 
 module.exports =  {
   /** 
@@ -18,7 +18,7 @@ module.exports =  {
         break;
       default:
         await interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: `Poll command not found!`
         });
         return;
@@ -99,7 +99,10 @@ async function createPoll(client, interaction)
   });
 
   await message.pin();
-  await interaction.reply({content: `Created a new poll!`, ephemeral: true});
+  await interaction.reply({
+    content: `Created a new poll!`, 
+    flags: [ MessageFlags.Ephemeral ],
+  });
 }
 
 async function finishPoll(client, interaction)
@@ -114,5 +117,8 @@ async function finishPoll(client, interaction)
     }
   });
 
-  await interaction.reply({content: `Finished pending polls!`, ephemeral: true});
+  await interaction.reply({
+    content: `Finished pending polls!`, 
+    flags: [ MessageFlags.Ephemeral ],
+  });
 }

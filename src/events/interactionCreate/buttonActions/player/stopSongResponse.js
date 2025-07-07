@@ -1,4 +1,4 @@
-const { Client, Interaction } = require('discord.js');
+const { Client, Interaction, MessageFlags } = require('discord.js');
 const { useQueue } = require('discord-player');
 
 /**
@@ -11,7 +11,9 @@ module.exports = async (client, interaction) => {
       if(!interaction.customId?.startsWith('player;')) return;
       if(!interaction.customId.includes('stop;')) return;
 
-      await interaction.deferReply({ ephemeral: true }) ;
+      await interaction.deferReply({ 
+        flags: [ MessageFlags.Ephemeral ],
+      }) ;
     
       const queue = useQueue(interaction.guild);
   

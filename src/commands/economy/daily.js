@@ -1,5 +1,5 @@
 const User = require('../../models/user');
-const {Client, Interaction} = require('discord.js');
+const { Client, Interaction, MessageFlags } = require('discord.js');
 
 const { getI18n, formatMessage } = require("../../utils/i18n");
 const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/daily`);
@@ -20,13 +20,16 @@ module.exports = {
     {
       interaction.reply({
         content: words.OnlyInsideServer,
-        ephemeral: true
+        flags: [ MessageFlags.Ephemeral ],
       });
       return;
     }
 
     try {
-      await interaction.deferReply({ ephemeral: true });
+      await interaction.deferReply({ 
+        flags: [ MessageFlags.Ephemeral ],
+      });
+
       let query = {
         userId: interaction.member.id,
         guildId:  interaction.guild.id

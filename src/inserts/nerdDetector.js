@@ -1,4 +1,4 @@
-const { Client, Message, AttachmentBuilder } = require('discord.js');
+const { Client, Message, AttachmentBuilder, MessageFlags } = require('discord.js');
 
 module.exports = {
   name: 'nerdDetector',
@@ -28,7 +28,7 @@ module.exports = {
       if(!isFire && Math.floor((Math.random() * 100) + 1) > 99)
       {
         message.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: `((Sorry if you feel offended, nothing personal dude!))`,
         });
       }

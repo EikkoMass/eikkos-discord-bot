@@ -1,4 +1,4 @@
-const {ApplicationCommandOptionType, Client, Interaction, EmbedBuilder } = require('discord.js');
+const {ApplicationCommandOptionType, Client, Interaction, EmbedBuilder, MessageFlags } = require('discord.js');
 const Stream = require('../../models/stream');
 
 module.exports =  {
@@ -14,7 +14,7 @@ module.exports =  {
         break;
       default:
         await interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           embeds: [new EmbedBuilder().setDescription(`Stream command not found!`)]
         });
         return;
@@ -86,7 +86,7 @@ async function register(client, interaction)
       streamData.priority = priority;
 
       await interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         embeds: [embed.setDescription(`Stream register edited!`)]
       });
       return;
@@ -100,7 +100,7 @@ async function register(client, interaction)
 
     await streamData.save();
     await interaction.reply({
-      ephemeral: true,
+      flags: [ MessageFlags.Ephemeral ],
       embeds: [embed.setDescription(`Stream link registered!`)]
     });
   } catch (e)
@@ -123,14 +123,14 @@ async function remove(client, interaction)
   if(result)
   {
     await interaction.reply({
-      ephemeral: true,
+      flags: [ MessageFlags.Ephemeral ],
       embeds: [embed.setDescription(`Stream '${result.title}' removed successfully!`)]
     });
     return;
   }
 
   await interaction.reply({
-    ephemeral: true,
+    flags: [ MessageFlags.Ephemeral ],
     embeds: [embed.setDescription(`Stream not found!`)]
   });
 }

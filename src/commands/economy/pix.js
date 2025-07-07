@@ -1,4 +1,4 @@
-const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder} = require('discord.js');
+const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } = require('discord.js');
 const crcs = require('../../utils/crcs');
 const Pix = require('../../models/pix');
 
@@ -17,7 +17,7 @@ module.exports = {
         break;
       default:
         await interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: `Pix command not found!`
         });
         return;
@@ -95,7 +95,7 @@ async function request(client, interaction)
 
     if(!userPixData) {
       await interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         content: `No user found, try to register your data with /pix register (...)`
       });
       return;
@@ -143,7 +143,7 @@ async function request(client, interaction)
       if (c > 255) {
         console.log(`code format is invalid!`);
         await interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: `Error`
         });
         return;
@@ -155,7 +155,7 @@ async function request(client, interaction)
     }
 
     await interaction.reply({
-      ephemeral: true,
+      flags: [ MessageFlags.Ephemeral ],
       content: `Creating your pix request, please wait!`
     });
 
@@ -193,7 +193,7 @@ async function request(client, interaction)
     if(!interaction.replied)
     {
       await interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         content: `Error: ${e}`
       });
     }
@@ -222,7 +222,7 @@ async function register(client, interaction)
   
       await pixRegister.save();
       await interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         content: `Pix data edited successfully!`
       });
       return;
@@ -239,7 +239,7 @@ async function register(client, interaction)
     await pixRegister.save();
   
     await interaction.reply({
-      ephemeral: true,
+      flags: [ MessageFlags.Ephemeral ],
       content: `Pix user info created successfully!`
     });
   } catch (e) {

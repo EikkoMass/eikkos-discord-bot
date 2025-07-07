@@ -1,4 +1,4 @@
-const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder} = require('discord.js');
+const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } = require('discord.js');
 
 const { useQueue } = require('discord-player')
 
@@ -19,7 +19,7 @@ module.exports =  {
     if(!amount)
     {
       await interaction.editReply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         embeds: [embed.setDescription(`Current volume level is ${queue.node.volume}%!`)],
       });
       return;

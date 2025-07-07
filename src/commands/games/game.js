@@ -1,4 +1,4 @@
-const {ApplicationCommandOptionType, EmbedBuilder, Client, Interaction } = require('discord.js');
+const {ApplicationCommandOptionType, EmbedBuilder, Client, Interaction, MessageFlags } = require('discord.js');
 require('dotenv').config();
 
 module.exports =  {
@@ -10,7 +10,7 @@ module.exports =  {
         return;
       default:
         await interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: `Game command not found!`
         });
         return;

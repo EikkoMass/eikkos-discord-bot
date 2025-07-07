@@ -1,4 +1,4 @@
-const {Client, Interaction, ApplicationCommandOptionType } = require('discord.js');
+const {Client, Interaction, ApplicationCommandOptionType, MessageFlags } = require('discord.js');
 const Joke = require('../../models/joke');
 
 
@@ -20,7 +20,7 @@ module.exports =  {
         break;
       default:
         await interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: `Joke command not found!`
         });
         return;
@@ -99,5 +99,8 @@ async function register(client, interaction)
   
   await joke.save();
 
-  interaction.reply({content: `Created a joke to <@${interaction.member.id}> from <@${targetUserId}>`, ephemeral: true});
+  interaction.reply({
+    content: `Created a joke to <@${interaction.member.id}> from <@${targetUserId}>`, 
+    flags: [ MessageFlags.Ephemeral ],
+  });
 }

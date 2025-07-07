@@ -1,4 +1,4 @@
-const { ApplicationCommandOptionType, Client, Interaction } = require('discord.js');
+const { ApplicationCommandOptionType, Client, Interaction, MessageFlags } = require('discord.js');
 const User = require('../../models/user')
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
     {
       interaction.reply({
         content: "You can only run this command inside a server.",
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
       });
       return;
     }

@@ -1,4 +1,4 @@
-const {ApplicationCommandOptionType, Client, Interaction } = require('discord.js');
+const {ApplicationCommandOptionType, Client, Interaction, MessageFlags } = require('discord.js');
 const DirtyWord = require('../../models/dirtyword')
 
 module.exports =  {
@@ -21,7 +21,7 @@ module.exports =  {
         break;
       default:
         await interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: `Dirty Word command not found!`
         });
         return;
@@ -84,12 +84,12 @@ async function removeDirtyWord(client, interaction)
   if(dirtyWord)
   {
     await interaction.reply({
-      ephemeral: true,
+      flags: [ MessageFlags.Ephemeral ],
       content: `Bad word removed successfully!`
     });
   } else {
     await interaction.reply({
-      ephemeral: true,
+      flags: [ MessageFlags.Ephemeral ],
       content: `No bad word registered on this guild`
     });
   }
@@ -107,12 +107,12 @@ async function getCurrentDirtyWord(client, interaction)
     const word = dirtyWordObj.word;
     const censoredWord = word.length > 1 ? (word.slice(0, word.length / 2) + '*'.repeat(word.length / 2)) : word;
     await interaction.reply({
-      ephemeral: true,
+      flags: [ MessageFlags.Ephemeral ],
       content: `The current bad word is ${censoredWord}`
     });
   } else {
     await interaction.reply({
-      ephemeral: true,
+      flags: [ MessageFlags.Ephemeral ],
       content: `No bad word registered on this guild`
     });
   }
@@ -146,7 +146,7 @@ async function setDirtyWord(client, interaction)
 
   dirtyWordObj.save();
   await interaction.reply({
-    ephemeral: true,
+    flags: [ MessageFlags.Ephemeral ],
     content: `Created the new word!`
   });
 }

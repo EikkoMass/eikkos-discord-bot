@@ -1,4 +1,4 @@
-const {ApplicationCommandOptionType, EmbedBuilder, Client, Interaction } = require('discord.js');
+const { ApplicationCommandOptionType, EmbedBuilder, Client, Interaction, MessageFlags } = require('discord.js');
 const info = require('../../../package.json');
 
 module.exports =  {
@@ -23,7 +23,7 @@ module.exports =  {
         return;
       default:
         await interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: `Info command not found!`
         });
         return;
@@ -97,7 +97,7 @@ async function all(client, interaction)
 async function version(client, interaction)
 {
   await interaction.reply({
-    ephemeral: true,
+    flags: [ MessageFlags.Ephemeral ],
     embeds: [new EmbedBuilder().setDescription(`Current version: ${info.version}`)]
   });
 }
@@ -109,7 +109,7 @@ async function version(client, interaction)
 async function author(client, interaction)
 {
   await interaction.reply({
-    ephemeral: true,
+    flags: [ MessageFlags.Ephemeral ],
     embeds: [new EmbedBuilder().setDescription(`The author of the project is ${info.author}`)]
   });
 }
@@ -121,7 +121,7 @@ async function author(client, interaction)
 async function license(client, interaction)
 {
   await interaction.reply({
-    ephemeral: true,
+    flags: [ MessageFlags.Ephemeral ],
     embeds: [new EmbedBuilder().setDescription(`Current license: ${info.license}`)]
   });
 }
@@ -133,7 +133,7 @@ async function license(client, interaction)
 async function repository(client, interaction)
 {
   await interaction.reply({
-    ephemeral: true,
+    flags: [ MessageFlags.Ephemeral ],
     embeds: [new EmbedBuilder().setDescription(`Project repository: ${info.repository.domain}/${info.repository.user}/${info.repository.name}`)]
   });
 }

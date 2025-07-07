@@ -1,3 +1,4 @@
+const { MessageFlags } = require('discord.js');
 const Note = require('../../../models/note');
 
 module.exports = async (client, interaction) => {
@@ -5,7 +6,9 @@ module.exports = async (client, interaction) => {
       if(!interaction.isButton()) return;
       if(!interaction.customId?.startsWith('noteManager;')) return;
       
-      await interaction.deferReply({ ephemeral: true }) ;
+      await interaction.deferReply({ 
+        flags: [ MessageFlags.Ephemeral ], 
+      }) ;
   
       if(interaction.customId.contains('delete;'))
       {
@@ -18,7 +21,7 @@ module.exports = async (client, interaction) => {
           await interaction.editReply(
             { 
               content: "I couldn't find that note!",   
-              ephemeral: true
+              flags: [ MessageFlags.Ephemeral ],
             }
           );
           return;

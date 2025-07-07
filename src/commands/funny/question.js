@@ -1,4 +1,4 @@
-const { Client, Interaction, ApplicationCommandOptionType, EmbedBuilder } = require('discord.js');
+const { Client, Interaction, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } = require('discord.js');
 
 const { getI18n } = require("../../utils/i18n");
 const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/question`);
@@ -19,7 +19,7 @@ module.exports =  {
     if(!question?.includes('?'))
     {
       interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         content: words.NoQuestionMark
       });
       return;
@@ -43,7 +43,7 @@ module.exports =  {
     }
 
     interaction.reply({
-      ephemeral: true,
+      flags: [ MessageFlags.Ephemeral ],
       embeds: [new EmbedBuilder().setDescription(words.NotAnswering)]
     });
   },

@@ -1,4 +1,4 @@
-const {Client, Interaction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, PermissionsBitField} = require('discord.js');
+const {Client, Interaction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, PermissionsBitField, MessageFlags } = require('discord.js');
 
 module.exports =  {
   name: 'nuke',
@@ -15,21 +15,21 @@ module.exports =  {
     if(!channel)
     {
       interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         content: `You need at least be in a voice channel!`,
       });
       return;
     } else if (channel && channel.type !== ChannelType.GuildVoice && channel.type !== ChannelType.GuildStageVoice)
     {
       interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         content: `The channel selected is not a voice channel!`,
       });
       return;
     } else if (!channel.permissionsFor(interaction.guild.id).has([PermissionsBitField.Flags.ViewChannel]))
     {
       interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         content: `I can only nuke public voice channels!`,
       });
       return;

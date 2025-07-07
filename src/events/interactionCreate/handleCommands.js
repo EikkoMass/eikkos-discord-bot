@@ -1,5 +1,6 @@
 const { devs, testServer } = require('../../../config.json');
 const getLocalCommands = require('../../utils/getLocalCommands');
+const { MessageFlags } = require('discord.js');
 
 module.exports = async (client, interaction) => {
   if(!interaction.isChatInputCommand()) return;
@@ -16,7 +17,7 @@ module.exports = async (client, interaction) => {
       {
         interaction.reply({
           content: `Only devs are allowed to run this command`,
-          ephemeral: true
+          flags: [ MessageFlags.Ephemeral ],
         });
         return;
       }
@@ -29,7 +30,7 @@ module.exports = async (client, interaction) => {
       {
         interaction.reply({
           content: `This command cannot be ran here`,
-          ephemeral: true
+          flags: [ MessageFlags.Ephemeral ],
         });
         return;
       }
@@ -42,7 +43,7 @@ module.exports = async (client, interaction) => {
         {
           interaction.reply({
             content: `Not enough permissions`,
-            ephemeral: true
+            flags: [ MessageFlags.Ephemeral ],
           });
           continue;
         }
@@ -59,7 +60,7 @@ module.exports = async (client, interaction) => {
         {
           interaction.reply({
             content: `I don't have enough permissions`,
-            ephemeral: true
+            flags: [ MessageFlags.Ephemeral ],
           });
           continue;
         }

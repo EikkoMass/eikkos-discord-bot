@@ -1,4 +1,4 @@
-const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder} = require('discord.js');
+const {Client, Interaction, MessageFlags, EmbedBuilder} = require('discord.js');
 const playerConfigs = require('../../configs/player.json');
 const { QueryType, useMainPlayer } = require('discord-player')
 
@@ -21,14 +21,14 @@ module.exports =  {
     if(!channel.requester)
     {
       return interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         embeds: [embed.setDescription("You need to be in a voice channel!")],
       });
     }
 
     if (channel?.bot?.id === channel?.requester?.id) {
       return interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         embeds: [embed.setDescription(`I'm already in the ${channel.bot.toString()} channel.`)],
       });
     }
@@ -36,7 +36,7 @@ module.exports =  {
     if(channel.bot)
       {
         return interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           embeds: [embed.setDescription("I'm already in a voice channel!")],
         });
       }
@@ -55,7 +55,7 @@ module.exports =  {
       console.error(error);
   
       return interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         embeds: [embed.setDescription("There was an error joining the voice channel!")],
       });
     }

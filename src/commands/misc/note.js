@@ -1,4 +1,4 @@
-const {ApplicationCommandOptionType, Client, Interaction, EmbedBuilder, ActionRowBuilder } = require('discord.js');
+const {ApplicationCommandOptionType, Client, Interaction, EmbedBuilder, MessageFlags } = require('discord.js');
 const Note = require('../../models/note');
 
 module.exports =  { 
@@ -17,7 +17,7 @@ module.exports =  {
         return;
       default:
         await interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: `Note command not found!`
         });
         return;
@@ -85,7 +85,7 @@ async function add(client, interaction)
   await note.save();
 
   interaction.reply({
-    ephemeral: true,
+    flags: [ MessageFlags.Ephemeral ],
     content: `Your note was added successfully!`
   });
 }
@@ -97,7 +97,9 @@ async function add(client, interaction)
 async function show(client, interaction)
 {
   const notes = await Note.find({ userId: interaction.user.id, guildId: interaction.guild.id });
-  await interaction.deferReply({ ephemeral: true });
+  await interaction.deferReply({ 
+    flags: [ MessageFlags.Ephemeral ], 
+  });
 
   if(notes?.length)
   {
@@ -122,7 +124,7 @@ async function show(client, interaction)
 
   interaction.editReply({
     content: `No notes were found on this server!`,
-    ephemeral: true
+    flags: [ MessageFlags.Ephemeral ],
   });
 }
 
@@ -139,14 +141,14 @@ async function remove(client, interaction)
   if(note)
   {
     interaction.reply({
-      ephemeral: true,
+      flags: [ MessageFlags.Ephemeral ],
       content: `Your note was removed successfully!`
     });
     return;
   }
 
   interaction.reply({
-    ephemeral: true,
+    flags: [ MessageFlags.Ephemeral ],
     content: `Note not found!`
   });
 }

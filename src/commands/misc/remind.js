@@ -1,4 +1,4 @@
-const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder } = require('discord.js');
+const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } = require('discord.js');
 const ms = require('ms');
 
 const { getI18n, formatMessage } = require("../../utils/i18n");
@@ -27,7 +27,7 @@ module.exports =  {
         break;
       default:
         await interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: `Reminder command not found!`
         });
         return;
@@ -104,7 +104,7 @@ async function create(client, interaction)
   const formattedDuration = prettyMs(duration, {verbose: true});
 
   interaction.reply({
-    ephemeral: true,
+    flags: [ MessageFlags.Ephemeral ],
     content: formatMessage(words.Ping, [formattedDuration])
   });
 
@@ -148,7 +148,7 @@ async function status(client, interaction)
   if(!Array.isArray(remindersCache[cacheIdentifier]))
   {
     interaction.reply({
-      ephemeral: true,
+      flags: [ MessageFlags.Ephemeral ],
       embeds: [new EmbedBuilder().setDescription(words.NotFound)],
     });
     return;
@@ -169,7 +169,7 @@ async function status(client, interaction)
   }
 
   interaction.reply({
-    ephemeral: true,
+    flags: [ MessageFlags.Ephemeral ],
     embeds
   });
 }
@@ -184,7 +184,7 @@ async function cancel(client, interaction)
   if(!Array.isArray(remindersCache[cacheIdentifier]))
     {
       interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         embeds: [new EmbedBuilder().setDescription(words.NotFound)],
       });
       return;
@@ -195,7 +195,7 @@ async function cancel(client, interaction)
     if(index < 0)
     {
       interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         embeds: [new EmbedBuilder().setDescription(words.NotFoundSpecified)],
       });
       return;
@@ -205,7 +205,7 @@ async function cancel(client, interaction)
     remindersCache[cacheIdentifier].splice(index, 1);
 
     interaction.reply({
-      ephemeral: true,
+      flags: [ MessageFlags.Ephemeral ],
       embeds: [new EmbedBuilder().setDescription(words.Cancelled)],
     });
 }

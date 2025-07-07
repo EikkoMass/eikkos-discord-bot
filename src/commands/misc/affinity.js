@@ -1,4 +1,4 @@
-const {Client, Interaction, ApplicationCommandOptionType, GuildMember, EmbedBuilder} = require('discord.js');
+const {Client, Interaction, ApplicationCommandOptionType, MessageFlags, EmbedBuilder } = require('discord.js');
 
 
 module.exports =  {
@@ -15,7 +15,7 @@ module.exports =  {
         break;
       default:
         await interaction.reply({
-          ephemeral: true,
+          flags: [ MessageFlags.Ephemeral ],
           content: `Affinity command not found!`
         });
         return;

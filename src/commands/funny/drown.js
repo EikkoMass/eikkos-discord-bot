@@ -1,4 +1,4 @@
-const {Client, Interaction, ApplicationCommandOptionType, ChannelType, EmbedBuilder} = require('discord.js');
+const { Client, Interaction, ApplicationCommandOptionType, ChannelType, EmbedBuilder, MessageFlags } = require('discord.js');
 
 const { getI18n, formatMessage } = require("../../utils/i18n");
 const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/drown`);
@@ -23,7 +23,7 @@ module.exports =  {
     if(secondsBetweenChanges < 0)
     {
       interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         embeds: [embed.setDescription(words.DelayMustBePositive)],
       });
       return;
@@ -32,7 +32,7 @@ module.exports =  {
     if(targetMember.user.id === interaction.user.id)
     {
       interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         embeds: [embed.setDescription(words.CantBeSelf)],
       });
       return;
@@ -41,7 +41,7 @@ module.exports =  {
     if(targetMember.user.bot)
     {
       interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         embeds: [embed.setDescription(words.CantBeBot)]
       });
       return;
@@ -50,7 +50,7 @@ module.exports =  {
     if(!targetMember?.voice?.channel)
     {
       interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         embeds: [embed.setDescription(words.MustBeInVC)],
       });
       return;
@@ -60,14 +60,14 @@ module.exports =  {
     if(interaction.guild.channels.cache.size <= 1)
     {
       interaction.reply({
-        ephemeral: true,
+        flags: [ MessageFlags.Ephemeral ],
         embeds: [embed.setDescription(words.TwoVCRequired)],
       });
       return;
     }
     
     interaction.reply({
-      ephemeral: true,
+      flags: [ MessageFlags.Ephemeral ],
       embeds: [embed.setDescription(formatMessage(words.DrowningPleaseWait, [targetMember.displayName || targetMember.nickname]))],
     });
 

@@ -1,4 +1,4 @@
-const { Client, Interaction } = require('discord.js');
+const { Client, Interaction, MessageFlags } = require('discord.js');
 
 /**
  *  @param {Client} client
@@ -9,7 +9,9 @@ module.exports = async (client, interaction) => {
       if(!interaction.isButton()) return;
       if(!interaction.customId?.startsWith('role;')) return;
 
-      await interaction.deferReply({ ephemeral: true }) ;
+      await interaction.deferReply({ 
+        flags: [ MessageFlags.Ephemeral ], 
+      }) ;
   
       const role = interaction.guild.roles.cache.get(interaction.customId.replace('role;', ''));
   
