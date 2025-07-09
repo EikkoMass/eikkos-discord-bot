@@ -1,6 +1,8 @@
 const {Client, Interaction, ApplicationCommandOptionType, MessageFlags, EmbedBuilder } = require('discord.js');
 const Joke = require('../../models/joke');
 
+const { getI18n, formatMessage } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/joke`);
 
 module.exports =  {
   name: 'joke',
@@ -65,6 +67,8 @@ module.exports =  {
 
 async function use(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
+
   const embed = new EmbedBuilder();
   const targetUserId = interaction.options.get('user')?.value;
 
@@ -77,13 +81,14 @@ async function use(client, interaction)
     });
   } else {
     interaction.reply({
-      embeds: [ embed.setDescription(`There's no joke registered to that user.`) ]
+      embeds: [ embed.setDescription(words.NoJokeRegistered) ]
     });
   }
 }
 
 async function register(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
   const embed = new EmbedBuilder();
   const message = interaction.options.get('message')?.value;
   const targetUserId = interaction.options.get('user')?.value;
@@ -106,7 +111,7 @@ async function register(client, interaction)
   await joke.save();
 
   interaction.reply({
-    embeds: [ embed.setDescription(`Created a joke to <@${interaction.member.id}> from <@${targetUserId}>`)], 
+    embeds: [ embed.setDescription(formatMessage(words.JokeCreated, [interaction.member.id, targetUserId]))], 
     flags: [ MessageFlags.Ephemeral ],
   });
 }
