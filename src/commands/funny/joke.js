@@ -1,4 +1,4 @@
-const {Client, Interaction, ApplicationCommandOptionType, MessageFlags } = require('discord.js');
+const {Client, Interaction, ApplicationCommandOptionType, MessageFlags, EmbedBuilder } = require('discord.js');
 const Joke = require('../../models/joke');
 
 
@@ -65,20 +65,26 @@ module.exports =  {
 
 async function use(client, interaction)
 {
+  const embed = new EmbedBuilder();
   const targetUserId = interaction.options.get('user')?.value;
 
   let joke = await Joke.findOne({userId: interaction.member.id, guildId: interaction.guild.id, targetUserId});
 
   if(joke && joke.message)
   {
-    interaction.reply(joke.message.replace('{user}', `<@${targetUserId}>`));
+    interaction.reply({
+      embeds: [ embed.setDescription(joke.message.replace('{user}', `<@${targetUserId}>`)) ]
+    });
   } else {
-    interaction.reply(`There's no joke registered to that user.`);
+    interaction.reply({
+      embeds: [ embed.setDescription(`There's no joke registered to that user.`) ]
+    });
   }
 }
 
 async function register(client, interaction)
 {
+  const embed = new EmbedBuilder();
   const message = interaction.options.get('message')?.value;
   const targetUserId = interaction.options.get('user')?.value;
 
@@ -100,7 +106,7 @@ async function register(client, interaction)
   await joke.save();
 
   interaction.reply({
-    content: `Created a joke to <@${interaction.member.id}> from <@${targetUserId}>`, 
+    embeds: [ embed.setDescription(`Created a joke to <@${interaction.member.id}> from <@${targetUserId}>`)], 
     flags: [ MessageFlags.Ephemeral ],
   });
 }
