@@ -1,0 +1,6 @@
+{
+  "VCRequired": "Você precisa estar em um canal de voz!",
+  "IsNotVC": "O canal selecionado não é um canal de voz!",
+  "OnlyPublicVC": "Apenas posso desintegrar canais de voz públicos!",
+  "Nuked": "O canal {0} foi desintegrado dessa realidade!"
+}

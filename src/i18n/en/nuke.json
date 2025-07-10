@@ -1,0 +1,6 @@
+{
+  "VCRequired": "You need at least be in a voice channel!",
+  "IsNotVC": "The channel selected is not a voice channel!",
+  "OnlyPublicVC": "I can only nuke public voice channels!",
+  "Nuked": "The {0} channel has been nuked away!"
+}

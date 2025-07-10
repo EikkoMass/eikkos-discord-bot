@@ -1,5 +1,8 @@
 const {Client, Interaction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, PermissionsBitField, MessageFlags } = require('discord.js');
 
+const { getI18n, formatMessage } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/nuke`);
+
 module.exports =  {
   name: 'nuke',
   description: 'nukes away an voice channel',
@@ -8,6 +11,7 @@ module.exports =  {
    *  @param {Interaction} interaction
   */
   callback: async (client, interaction) => {
+    const words = getLocalization(interaction.locale);
 
     let channel = interaction.options.get('channel')?.value;
     channel = channel ? await interaction.guild.channels.fetch(channel) : interaction.member?.voice?.channel; 
@@ -16,26 +20,26 @@ module.exports =  {
     {
       interaction.reply({
         flags: [ MessageFlags.Ephemeral ],
-        content: `You need at least be in a voice channel!`,
+        content: words.VCRequired,
       });
       return;
     } else if (channel && channel.type !== ChannelType.GuildVoice && channel.type !== ChannelType.GuildStageVoice)
     {
       interaction.reply({
         flags: [ MessageFlags.Ephemeral ],
-        content: `The channel selected is not a voice channel!`,
+        content: words.IsNotVC,
       });
       return;
     } else if (!channel.permissionsFor(interaction.guild.id).has([PermissionsBitField.Flags.ViewChannel]))
     {
       interaction.reply({
         flags: [ MessageFlags.Ephemeral ],
-        content: `I can only nuke public voice channels!`,
+        content: words.OnlyPublicVC,
       });
       return;
     }
 
-    await interaction.reply(`The ${channel} channel has been nuked away!`);
+    await interaction.reply(formatMessage(words.Nuked, [channel]));
 
     channel.delete();
   },
