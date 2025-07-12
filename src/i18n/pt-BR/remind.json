@@ -1,6 +1,6 @@
 {
-  "NotFound": "Lembrete criado por voce nao foi encontrado",
-  "NotFoundSpecified": "Nao foi encontrado o lembrete especificado",
+  "NotFound": "Lembrete criado por você não foi encontrado",
+  "NotFoundSpecified": "Não foi encontrado o lembrete especificado",
   "Cancelled": "Lembrete cancelado com sucesso!",
   "Ping": "Tudo bem, irei alertar sobre isso em {0}",
   "To": "Para",

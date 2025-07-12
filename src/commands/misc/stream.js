@@ -1,6 +1,9 @@
 const {ApplicationCommandOptionType, Client, Interaction, EmbedBuilder, MessageFlags } = require('discord.js');
 const Stream = require('../../models/stream');
 
+const { getI18n,  formatMessage } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/stream`);
+
 module.exports =  {
   callback: async (client, interaction) => {
 
@@ -70,6 +73,8 @@ module.exports =  {
 */
 async function register(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
+
   try {
     const title = interaction.options.get('title')?.value;
     const link = interaction.options.get('link')?.value;
@@ -87,7 +92,7 @@ async function register(client, interaction)
 
       await interaction.reply({
         flags: [ MessageFlags.Ephemeral ],
-        embeds: [embed.setDescription(`Stream register edited!`)]
+        embeds: [embed.setDescription(words.Edited)]
       });
       return;
     }
@@ -101,7 +106,7 @@ async function register(client, interaction)
     await streamData.save();
     await interaction.reply({
       flags: [ MessageFlags.Ephemeral ],
-      embeds: [embed.setDescription(`Stream link registered!`)]
+      embeds: [embed.setDescription(words.Registered)]
     });
   } catch (e)
   {
@@ -115,6 +120,8 @@ async function register(client, interaction)
 */
 async function remove(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
+  
   const embed = new EmbedBuilder();
   const link = interaction.options.get('link')?.value;
 
@@ -124,13 +131,13 @@ async function remove(client, interaction)
   {
     await interaction.reply({
       flags: [ MessageFlags.Ephemeral ],
-      embeds: [embed.setDescription(`Stream '${result.title}' removed successfully!`)]
+      embeds: [embed.setDescription(formatMessage(words.Removed,  [result.title]))]
     });
     return;
   }
 
   await interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
-    embeds: [embed.setDescription(`Stream not found!`)]
+    embeds: [embed.setDescription(words.NotFound)]
   });
 }
