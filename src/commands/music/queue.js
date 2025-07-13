@@ -12,6 +12,7 @@ module.exports =  {
   callback: async (client, interaction) => {
     await interaction.deferReply();
     const embed = new EmbedBuilder();
+    const MAX_TRACKS_DISPLAYED = 10;
 
     const queue = useQueue(interaction.guild);
 
@@ -22,22 +23,26 @@ module.exports =  {
       });
       return;
     }
-    
-    const fields = [
-      { name: 'Duration',      value: queue.currentTrack.duration,                inline: true  },
-      { name: 'Author',        value: queue.currentTrack.author,                  inline: true  },
-      { name: 'Views',         value: `${queue.currentTrack.views}`,              inline: true  },
-      { name: 'Voice Channel', value: queue.channel.name,                         inline: true  },
-      { name: 'Volume',        value: `${queue.node.volume}%`,                    inline: true  },
-      { name: 'Requested by',  value: `<@${queue.currentTrack.requestedBy.id}>`,  inline: true  },
-    ];
+
+    let fields, footer, banner;
+
+    if(queue.tracks.size > 0)
+    {
+      let nextTracks = queue.tracks.data.slice(0, MAX_TRACKS_DISPLAYED).map((track, i) => `\`${i + 1})\` \`${track.duration}\` ${track.title} [${track.requestedBy.displayName}]`).join(" \n\n");
+      fields = [{ name: 'Next Tracks', value: nextTracks }];
+      footer = { text: `${queue.tracks.size} track(s) - ${queue.durationFormatted}`, iconURL: client.user.avatarURL({size: 1024}) };
+    } else {
+      banner = queue.currentTrack.thumbnail;
+    }
 
     embed
-      .setTitle(`Playing: ${queue.currentTrack.title}`)
+      .setTitle(`Playing`)
       .setDescription(queue.currentTrack.description)
-      .setURL(queue.currentTrack.url)
-      .setImage(queue.currentTrack.thumbnail)
-      .setFields(fields);
+      .setURL(queue.currentTrack.url);
+
+    if (fields) embed.setFields(fields);
+    if (footer) embed.setFooter(footer);
+    if (banner) embed.setImage(banner);
 
     await interaction.editReply({
       embeds: [embed],
