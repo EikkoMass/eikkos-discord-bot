@@ -31,6 +31,14 @@ module.exports = () => {
   )
 
   row.components.push(
+  new ButtonBuilder()
+    .setCustomId(`player;shuffle;`)
+    .setEmoji("<:shuffle:1394480011573985391>")
+    .setLabel(' ')
+    .setStyle(ButtonStyle.Secondary)
+  )
+
+  row.components.push(
     new ButtonBuilder()
       .setCustomId(`player;stop;`)
       .setEmoji("<:stop:1391132125281124362>")
