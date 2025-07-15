@@ -1,17 +1,23 @@
 const { Client, Interaction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const getPlayerActionRow = require("../../utils/playerActionRow")
-const { useQueue } = require('discord-player')
+const getPlayerActionRow = require("../../utils/playerActionRow");
+const { useQueue } = require('discord-player');
+
+const { getI18n } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/queue`);
 
 module.exports =  {
   name: 'queue',
-  description: 'shows the current song',
+  description: 'shows the current and next songs',
   /**
    *  @param {Client} client
    *  @param {Interaction} interaction
   */
   callback: async (client, interaction) => {
+
+    const words = getLocalization(interaction.locale);
+
     await interaction.deferReply();
-    const embed = new EmbedBuilder();
+    
     const MAX_TRACKS_DISPLAYED = 10;
 
     const queue = useQueue(interaction.guild);
@@ -19,33 +25,39 @@ module.exports =  {
     if(!queue?.channel || !queue?.currentTrack)
     {
       await interaction.editReply({
-        embeds: [embed.setDescription("There's no track playing.")],
+        embeds: [new EmbedBuilder().setDescription(words.NoTrack)],
       });
       return;
     }
 
-    let fields, footer, banner;
+    const embeds = [];
+    let currentTrackEmbed = new EmbedBuilder().setColor([20, 240, 20]);
+    let nextTracksEmbed;
 
     if(queue.tracks.size > 0)
     {
       let nextTracks = queue.tracks.data.slice(0, MAX_TRACKS_DISPLAYED).map((track, i) => `\`${i + 1})\` \`${track.duration}\` ${track.title} [${track.requestedBy.displayName}]`).join(" \n\n");
-      fields = [{ name: 'Next Tracks', value: nextTracks }];
-      footer = { text: `${queue.tracks.size} track(s) - ${queue.durationFormatted}`, iconURL: client.user.avatarURL({size: 1024}) };
+      
+      nextTracksEmbed = new EmbedBuilder()
+        .setTitle(" ")
+        .setFields([{ name: words.NextTracks, value: nextTracks }])
+        .setFooter({ text: `${queue.tracks.size} ${words.Trackss} - ${queue.durationFormatted}`, iconURL: client.user.avatarURL({size: 1024}) });
+
     } else {
-      banner = queue.currentTrack.thumbnail;
+      currentTrackEmbed.setFooter({ text: `${queue.currentTrack.duration}`, iconURL: client.user.avatarURL({size: 1024}) })
     }
 
-    embed
-      .setTitle(`Playing`)
+    currentTrackEmbed
+      .setTitle(words.Playing)
       .setDescription(queue.currentTrack.description)
-      .setURL(queue.currentTrack.url);
+      .setURL(queue.currentTrack.url)
+      .setImage(queue.currentTrack.thumbnail);
 
-    if (fields) embed.setFields(fields);
-    if (footer) embed.setFooter(footer);
-    if (banner) embed.setImage(banner);
+    embeds.push(currentTrackEmbed);
+    if(nextTracksEmbed) embeds.push(nextTracksEmbed);
 
     await interaction.editReply({
-      embeds: [embed],
+      embeds: embeds,
       components: [getPlayerActionRow()],
     });
   }

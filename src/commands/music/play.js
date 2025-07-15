@@ -49,7 +49,10 @@ module.exports =  {
     try {
       const { queue, track, searchResult } = await player.play(channel, result, {
         nodeOptions: {
-          metadata: { channel: interaction.channel },
+          metadata: { 
+            channel: interaction.channel,
+            preferredLocale: interaction.locale
+          },
           volume,
           ...playerConfigs
         },
@@ -73,8 +76,6 @@ module.exports =  {
           .setFooter({text: `${words.Duration}: ${track.duration}`})
           .setURL(track.url);
       }
-
-      queue.metadata.preferredLocale = interaction.locale;
     } catch(e) {
       console.log(e);
     } 
