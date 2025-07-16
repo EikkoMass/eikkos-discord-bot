@@ -1,0 +1,7 @@
+{
+  "VCRequired": "Voice precisa estar em um canal de voz!",
+  "AlreadyInNVC": "Eu ja estou no canal de voz {0}.",
+  "AlreadyInVC": "Eu ja estou em um canal de voz.",
+  "JoinedVC": "Entrado no canal de voz {0}.",
+  "ErrorJoiningVC": "Ocorreu um erro ao tentar entrar no canal de voz!"
+}

@@ -1,6 +1,9 @@
 const {Client, Interaction, MessageFlags, EmbedBuilder} = require('discord.js');
 const playerConfigs = require('../../configs/player.json');
-const { QueryType, useMainPlayer } = require('discord-player')
+const { QueryType, useMainPlayer } = require('discord-player');
+
+const { getI18n, formatMessage } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/join`);
 
 module.exports =  {
   name: 'join',
@@ -10,6 +13,8 @@ module.exports =  {
    *  @param {Interaction} interaction
   */
   callback: async (client, interaction) => {
+
+    const words = getLocalization(interaction.locale);
 
     const channel = {
       requester: interaction.member?.voice?.channel,
@@ -22,14 +27,14 @@ module.exports =  {
     {
       return interaction.reply({
         flags: [ MessageFlags.Ephemeral ],
-        embeds: [embed.setDescription("You need to be in a voice channel!")],
+        embeds: [embed.setDescription(words.VCRequired)],
       });
     }
 
     if (channel?.bot?.id === channel?.requester?.id) {
       return interaction.reply({
         flags: [ MessageFlags.Ephemeral ],
-        embeds: [embed.setDescription(`I'm already in the ${channel.bot.toString()} channel.`)],
+        embeds: [embed.setDescription(formatMessage(words.AlreadyInNVC, [channel.bot.toString()]))],
       });
     }
 
@@ -37,7 +42,7 @@ module.exports =  {
       {
         return interaction.reply({
           flags: [ MessageFlags.Ephemeral ],
-          embeds: [embed.setDescription("I'm already in a voice channel!")],
+          embeds: [embed.setDescription(words.AlreadyInVC)],
         });
       }
 
@@ -49,14 +54,14 @@ module.exports =  {
       await queue.connect(channel.requester);
   
       return interaction.reply({
-        embeds: [embed.setDescription(`Joined the ${channel.requester.toString()} channel.`)],
+        embeds: [embed.setDescription(formatMessage(words.JoinedVC, [channel.requester.toString()]))],
       });
     } catch (error) {
       console.error(error);
   
       return interaction.reply({
         flags: [ MessageFlags.Ephemeral ],
-        embeds: [embed.setDescription("There was an error joining the voice channel!")],
+        embeds: [embed.setDescription(words.ErrorJoiningVC)],
       });
     }
   }
