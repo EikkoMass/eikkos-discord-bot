@@ -1,5 +1,8 @@
-const {ApplicationCommandOptionType, Client, Interaction, MessageFlags } = require('discord.js');
+const {ApplicationCommandOptionType, Client, Interaction, MessageFlags, EmbedBuilder } = require('discord.js');
 const DirtyWord = require('../../models/dirtyword')
+
+const { getI18n, formatMessage } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/dirtyWord`);
 
 module.exports =  {
   /** 
@@ -65,6 +68,8 @@ module.exports =  {
 
 async function removeDirtyWord(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
+  const embed = new EmbedBuilder();
 
   const indexResult = client.dirtyWordCache.result.findIndex(dirty => dirty.guildId === interaction.guild.id);
   const indexSearch = client.dirtyWordCache.search.findIndex(dirty => dirty === interaction.guild.id);
@@ -85,12 +90,12 @@ async function removeDirtyWord(client, interaction)
   {
     await interaction.reply({
       flags: [ MessageFlags.Ephemeral ],
-      content: `Bad word removed successfully!`
+      embeds: [embed.setDescription(words.Removed)]
     });
   } else {
     await interaction.reply({
       flags: [ MessageFlags.Ephemeral ],
-      content: `No bad word registered on this guild`
+      embeds: [embed.setDescription(words.NotFound)]
     });
   }
 }
@@ -98,6 +103,9 @@ async function removeDirtyWord(client, interaction)
 async function getCurrentDirtyWord(client, interaction)
 {
 
+  const words = getLocalization(interaction.locale);
+  const embed = new EmbedBuilder();
+  
   const dirtyCache = client.dirtyWordCache.result.find(dirty => dirty.guildId === interaction.guild.id);
   
   const dirtyWordObj = dirtyCache || await DirtyWord.findOne({ guildId: interaction.guild.id });
@@ -108,12 +116,12 @@ async function getCurrentDirtyWord(client, interaction)
     const censoredWord = word.length > 1 ? (word.slice(0, word.length / 2) + '*'.repeat(word.length / 2)) : word;
     await interaction.reply({
       flags: [ MessageFlags.Ephemeral ],
-      content: `The current bad word is ${censoredWord}`
+      embeds: [embed.setDescription(formatMessage(words.CurrentWord, [censoredWord]))],
     });
   } else {
     await interaction.reply({
       flags: [ MessageFlags.Ephemeral ],
-      content: `No bad word registered on this guild`
+      embeds: [embed.setDescription(words.NotFound)],
     });
   }
 
@@ -121,6 +129,9 @@ async function getCurrentDirtyWord(client, interaction)
 
 async function setDirtyWord(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
+  const embed = new EmbedBuilder();
+
   const word = interaction.options.get('word')?.value;
   const type = interaction.options.get('type')?.value || 0;
 
@@ -146,7 +157,7 @@ async function setDirtyWord(client, interaction)
 
   dirtyWordObj.save();
   await interaction.reply({
+    embeds: [embed.setDescription(words.Created)],
     flags: [ MessageFlags.Ephemeral ],
-    content: `Created the new word!`
   });
 }
