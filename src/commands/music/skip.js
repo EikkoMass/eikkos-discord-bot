@@ -1,6 +1,9 @@
 const { Client, Interaction, EmbedBuilder, MessageFlags } = require('discord.js');
 
-const { useQueue } = require('discord-player')
+const { useQueue } = require('discord-player');
+
+const { getI18n } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/skip`);
 
 module.exports =  {
   name: 'skip',
@@ -10,6 +13,8 @@ module.exports =  {
    *  @param {Interaction} interaction
   */
   callback: async (client, interaction) => {
+    const words = getLocalization(interaction.locale);
+
     await interaction.deferReply({ flags: [ MessageFlags.Ephemeral ] });
 
     const queue = useQueue(interaction.guild);
@@ -17,7 +22,7 @@ module.exports =  {
     if(queue.isEmpty())
     {
       await interaction.editReply({
-        embeds: [new EmbedBuilder().setDescription("There is no song to skip.")],
+        embeds: [new EmbedBuilder().setDescription(words.NoSong)],
       });
       return;
     }
@@ -25,7 +30,7 @@ module.exports =  {
     queue.node.skip();
 
     await interaction.editReply({
-      embeds: [new EmbedBuilder().setDescription(":fast_forward: Skipped")],
+      embeds: [new EmbedBuilder().setDescription(`:fast_forward: ${words.Skipped}`)],
     });
   }
 
