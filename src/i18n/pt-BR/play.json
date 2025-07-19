@@ -3,5 +3,7 @@
   "NoResults": "Nenhum resultado encontrado",
   "PlaylistAdded": "Playlist adicionada - {0} músicas",
   "Duration": "duração",
-  "TrackAdded": "Música adicionada - Posição {0}"
+  "TrackAdded": "Música adicionada - Posição {0}",
+  "AlreadyPlaying": "Músicas já estão sendo tocadas",
+  "Resumed": "Musica retomada."
 }
