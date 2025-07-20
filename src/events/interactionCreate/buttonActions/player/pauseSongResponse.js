@@ -1,8 +1,8 @@
-const { Client, Interaction, MessageFlags } = require('discord.js');
+const { Client, Interaction, MessageFlags, EmbedBuilder } = require('discord.js');
 const { useQueue } = require('discord-player');
 
-const { getI18n } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/pause`);
+const { getI18n } = require("../../../../utils/i18n");
+const getLocalization = locale => require(`../../../../i18n/${getI18n(locale)}/pause`);
 
 /**
  *  @param {Client} client
@@ -23,12 +23,16 @@ module.exports = async (client, interaction) => {
       const queue = useQueue(interaction.guild);
 
       if(!queue.node.isPlaying()){
-        await interaction.editReply(words.AlreadyPaused);
+        await interaction.editReply({
+          embeds: [new EmbedBuilder().setDescription(words.AlreadyPaused)]
+        });
         return;
       }
   
       queue.node.pause();
-      await interaction.editReply(words.Paused);
+      await interaction.editReply({
+        embeds: [new EmbedBuilder().setDescription(words.Paused)]
+      });
   
     } catch (err) {
         console.log(err);
