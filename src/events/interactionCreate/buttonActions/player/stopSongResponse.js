@@ -1,4 +1,4 @@
-const { Client, Interaction, MessageFlags } = require('discord.js');
+const { Client, Interaction, MessageFlags, EmbedBuilder } = require('discord.js');
 const { useQueue } = require('discord-player');
 
 const { getI18n } = require("../../../../utils/i18n");
@@ -15,6 +15,7 @@ module.exports = async (client, interaction) => {
     if(!interaction.customId.includes('stop;')) return;
 
     const words = getLocalization(interaction.locale);
+    const embed = new EmbedBuilder();
 
     await interaction.deferReply({ 
       flags: [ MessageFlags.Ephemeral ],
@@ -25,7 +26,7 @@ module.exports = async (client, interaction) => {
     if (queue.isPlaying()) 
     {
       queue.node.stop();
-      await interaction.editReply(`:rock: ${words.Stopped}`); 
+      await interaction.editReply({ embeds: [embed.setDescription(`:rock: ${words.Stopped}`)] }); 
     }
 
     await interaction.editReply({ embeds: [embed.setDescription(`:warning: ${words.NoSongPlaying}`)] });
