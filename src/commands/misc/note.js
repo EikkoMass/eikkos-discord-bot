@@ -1,6 +1,9 @@
 const {ApplicationCommandOptionType, Client, Interaction, EmbedBuilder, MessageFlags } = require('discord.js');
 const Note = require('../../models/note');
 
+const { getI18n } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/note`);
+
 module.exports =  { 
   callback: async (client, interaction) => {
 
@@ -74,6 +77,8 @@ async function add(client, interaction)
   const text = interaction.options?.get('text').value;
   const img = interaction.options?.get('image')?.value;
 
+  const words = getLocalization(interaction.locale);
+
   const note = new Note({
     guildId: interaction.guild.id,
     userId: interaction.user.id,
@@ -86,7 +91,7 @@ async function add(client, interaction)
 
   interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
-    embeds: [new EmbedBuilder().setDescription(`Your note was added successfully!`)]
+    embeds: [ new EmbedBuilder().setDescription(words.Added) ]
   });
 }
 
@@ -96,6 +101,8 @@ async function add(client, interaction)
 */
 async function show(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
+
   const notes = await Note.find({ userId: interaction.user.id, guildId: interaction.guild.id });
   await interaction.deferReply({ 
     flags: [ MessageFlags.Ephemeral ], 
@@ -123,7 +130,7 @@ async function show(client, interaction)
   }
 
   interaction.editReply({
-embeds: [new EmbedBuilder().setDescription(`No notes were found on this server!`)],
+    embeds: [ new EmbedBuilder().setDescription(words.NotFoundInServer) ],
     flags: [ MessageFlags.Ephemeral ],
   });
 }
@@ -136,19 +143,21 @@ async function remove(client, interaction)
 {
   const id = interaction.options?.get('id').value;
 
+  const words = getLocalization(interaction.locale);
+
   const note = await Note.findByIdAndDelete(id).catch(() => {});
 
   if(note)
   {
     interaction.reply({
       flags: [ MessageFlags.Ephemeral ],
-embeds: [new EmbedBuilder().setDescription(`Your note was removed successfully!`)]
+      embeds: [ new EmbedBuilder().setDescription(words.Removed) ]
     });
     return;
   }
 
   interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
-embeds: [new EmbedBuilder().setDescription(`Note not found!`)]
+    embeds: [ new EmbedBuilder().setDescription(words.NotFound) ]
   });
 }
