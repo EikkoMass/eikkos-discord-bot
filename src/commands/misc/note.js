@@ -86,7 +86,7 @@ async function add(client, interaction)
 
   interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
-    content: `Your note was added successfully!`
+    embeds: [new EmbedBuilder().setDescription(`Your note was added successfully!`)]
   });
 }
 
@@ -123,7 +123,7 @@ async function show(client, interaction)
   }
 
   interaction.editReply({
-    content: `No notes were found on this server!`,
+embeds: [new EmbedBuilder().setDescription(`No notes were found on this server!`)],
     flags: [ MessageFlags.Ephemeral ],
   });
 }
@@ -142,13 +142,13 @@ async function remove(client, interaction)
   {
     interaction.reply({
       flags: [ MessageFlags.Ephemeral ],
-      content: `Your note was removed successfully!`
+embeds: [new EmbedBuilder().setDescription(`Your note was removed successfully!`)]
     });
     return;
   }
 
   interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
-    content: `Note not found!`
+embeds: [new EmbedBuilder().setDescription(`Note not found!`)]
   });
 }
