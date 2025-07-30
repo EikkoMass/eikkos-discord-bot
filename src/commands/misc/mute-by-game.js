@@ -1,5 +1,8 @@
-const { Client, Interaction, ApplicationCommandOptionType, MessageFlags } = require('discord.js');
+const { Client, Interaction, ApplicationCommandOptionType, MessageFlags, EmbedBuilder } = require('discord.js');
 const MuteByGame = require('../../models/muteByGame');
+
+const { getI18n } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/mute-by-game`);
 
 module.exports =  {
   name: 'mute-by-game',
@@ -10,6 +13,9 @@ module.exports =  {
    *  @param {Interaction} interaction
   */
   callback: async (client, interaction) => {
+    const embed = new EmbedBuilder();
+    const words = getLocalization(interaction.locale);
+
     const gameName = interaction.options.get('game').value;
     let activate = interaction.options.get('activate')?.value;
 
@@ -23,7 +29,7 @@ module.exports =  {
       {
         interaction.reply({
           flags: [ MessageFlags.Ephemeral ],
-          content: 'Already activated'
+          embeds: [ embed.setDescription(words.AlreadyActive) ]
         });
         return;
 
@@ -38,7 +44,7 @@ module.exports =  {
 
         interaction.reply({
           flags: [ MessageFlags.Ephemeral ],
-          content: 'Mute command registered!'
+          embeds: [ embed.setDescription(words.Registered) ]
         });
       }
     } else {
@@ -48,14 +54,14 @@ module.exports =  {
 
         interaction.reply({
           flags: [ MessageFlags.Ephemeral ],
-          content: 'Mute command disabled!'
+          embeds: [ embed.setDescription(words.Disabled) ]
         });
         return;
       }
       
       interaction.reply({
         flags: [ MessageFlags.Ephemeral ],
-        content: 'Already disabled'
+        embeds: [ embed.setDescription(words.AlreadyDisabled) ]
       });
     }
   },
