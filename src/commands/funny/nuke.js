@@ -1,4 +1,4 @@
-const {Client, Interaction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, PermissionsBitField, MessageFlags } = require('discord.js');
+const {Client, Interaction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, PermissionsBitField, MessageFlags, EmbedBuilder } = require('discord.js');
 
 const { getI18n, formatMessage } = require("../../utils/i18n");
 const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/nuke`);
@@ -12,6 +12,7 @@ module.exports =  {
   */
   callback: async (client, interaction) => {
     const words = getLocalization(interaction.locale);
+    const embed = new EmbedBuilder();
 
     let channel = interaction.options.get('channel')?.value;
     channel = channel ? await interaction.guild.channels.fetch(channel) : interaction.member?.voice?.channel; 
@@ -20,26 +21,28 @@ module.exports =  {
     {
       interaction.reply({
         flags: [ MessageFlags.Ephemeral ],
-        content: words.VCRequired,
+        embeds: [ embed.setDescription(words.VCRequired) ],
       });
       return;
     } else if (channel && channel.type !== ChannelType.GuildVoice && channel.type !== ChannelType.GuildStageVoice)
     {
       interaction.reply({
         flags: [ MessageFlags.Ephemeral ],
-        content: words.IsNotVC,
+        embeds: [ embed.setDescription(words.IsNotVC) ]
       });
       return;
     } else if (!channel.permissionsFor(interaction.guild.id).has([PermissionsBitField.Flags.ViewChannel]))
     {
       interaction.reply({
         flags: [ MessageFlags.Ephemeral ],
-        content: words.OnlyPublicVC,
+        embeds: [ embed.setDescription(words.OnlyPublicVC) ]
       });
       return;
     }
 
-    await interaction.reply(formatMessage(words.Nuked, [channel]));
+    await interaction.reply({
+      embeds: [ embed.setDescription(formatMessage(words.Nuked, [channel])) ]
+    });
 
     channel.delete();
   },
