@@ -23,7 +23,7 @@ module.exports = async (client, interaction) => {
   
     const queue = useQueue(interaction.guild);
 
-    if (queue.isPlaying()) 
+    if (queue?.isPlaying()) 
     {
       queue.node.stop();
       await interaction.editReply({ embeds: [embed.setDescription(`:rock: ${words.Stopped}`)] }); 

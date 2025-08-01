@@ -22,7 +22,7 @@ module.exports = async (client, interaction) => {
   
     const queue = useQueue(interaction.guild);
   
-    if(queue.isEmpty())
+    if(!queue || queue.isEmpty())
     {
       await interaction.editReply({
         embeds: [new EmbedBuilder().setDescription(words.NoSong)],
