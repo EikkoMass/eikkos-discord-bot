@@ -2,6 +2,6 @@
   "VCRequired": "You need to be in a voice channel!",
   "AlreadyInNVC": "I'm already in the {0} channel.",
   "AlreadyInVC": "I'm already in a voice channel.",
-  "JoinedVC": "Joined the {0} channel.",
+  "JoinedVC": "Joined the {0} voice channel.",
   "ErrorJoiningVC": "There was an error joining the voice channel!"
 }
