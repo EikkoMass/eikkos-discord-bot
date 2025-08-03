@@ -1,4 +1,4 @@
-const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits } = require('discord.js');
+const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
 
 module.exports =  {
 
@@ -9,6 +9,8 @@ module.exports =  {
   */
 
   callback: async (client, interaction) => {
+
+    const embed = new EmbedBuilder();
     const targetUserId = interaction.options.get('target-user').value;
     const reason = interaction.options.get('reason')?.value || "No reason provided.";
 
@@ -18,13 +20,17 @@ module.exports =  {
 
     if(!targetUser)
     {
-      await interaction.editReply("That user doesn't exist in this server.");
+      await interaction.editReply({
+        embeds: [embed.setDescription("That user doesn't exist in this server.")]
+      });
       return;
     }
 
     if(targetUser.id === interaction.guild.ownerId)
     {
-      await interaction.editReply("You can't kick that user because they're the server owner.");
+      await interaction.editReply({
+        embeds: [embed.setDescription("You can't kick that user because they're the server owner.")]
+      });
       return;
     }
 
@@ -34,23 +40,34 @@ module.exports =  {
 
     if(targetUserRolePosition >= requestUserRolePosition)
     {
-      await interaction.editReply("You can't kick that user because they have same / higher role than you.");
+      await interaction.editReply({
+        embeds: [embed.setDescription("You can't kick that user because they have same / higher role than you.")]
+      });
       return;
     }
 
     if(targetUserRolePosition >= botRolePosition)
     {
-      await interaction.editReply("I can't kick that user because they have the same / higher role than me.");
+      await interaction.editReply({
+        embeds: [embed.setDescription("I can't kick that user because they have the same / higher role than me.")]
+      });
       return;
     }
 
     //Ban the targetUser
     try{
       await targetUser.kick(reason);
-      await interaction.editReply(`User ${targetUser} was kicked\nReason: ${reason}`);
+      
+      await interaction.editReply({
+        embeds: [embed.setDescription(`User ${targetUser} was kicked\nReason: ${reason}`)]
+      });
     }catch(e)
     {
       console.log(`There was an error when kicking: ${e}`);
+      
+      await interaction.editReply({
+        embeds: [embed.setDescription(`User ${targetUser} could not be kicked`)]
+      });
     }
   },
 
