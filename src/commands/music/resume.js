@@ -1,6 +1,9 @@
-const { Client, Interaction, EmbedBuilder } = require('discord.js');
+const { Client, Interaction, EmbedBuilder, MessageFlags } = require('discord.js');
 
 const { useQueue } = require('discord-player')
+
+const { getI18n } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/resume`);
 
 module.exports =  {
   name: 'resume',
@@ -12,12 +15,14 @@ module.exports =  {
   callback: async (client, interaction) => {
     await interaction.deferReply({ flags: [ MessageFlags.Ephemeral ] });
 
+    const words = getLocalization(interaction.locale);
+
     const queue = useQueue(interaction.guild);
     const embed = new EmbedBuilder();
 
     if (queue.node.isPlaying()) {
       await interaction.editReply({
-        embeds: [embed.setDescription(":warning: The playback is not paused.")],
+        embeds: [embed.setDescription(`:warning: ${words.NotPaused}`)],
       });
       return;
     }
@@ -25,7 +30,7 @@ module.exports =  {
     queue.node.resume();
 
     await interaction.editReply({
-      embeds: [embed.setDescription(":fire: Playback resumed.")],
+      embeds: [embed.setDescription(`:fire: ${words.Resumed}`)],
     });
   }
 
