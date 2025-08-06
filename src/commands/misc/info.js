@@ -1,6 +1,9 @@
 const { ApplicationCommandOptionType, EmbedBuilder, Client, Interaction, MessageFlags } = require('discord.js');
 const info = require('../../../package.json');
 
+const { getI18n, formatMessage } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/info`);
+
 module.exports =  {
   callback: async (client, interaction) => {
 
@@ -67,14 +70,16 @@ module.exports =  {
 */
 async function all(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
+
   const avatar = await fetch(`https://github.com/${info.repository.user}.png`);
   const bufferImg = await avatar.arrayBuffer();
 
   const infoFields = [
-    {name: `Version`, value: info.version},
-    {name: `License`, value: info.license},
-    {name: `Author`, value: info.author},
-    { name: 'Repository', value: `${info.repository.domain}/${info.repository.user}/${info.repository.name}` },
+    {name: words.Version, value: info.version},
+    {name: words.License, value: info.license},
+    {name: words.Author, value: info.author},
+    { name: words.Repository, value: `${info.repository.domain}/${info.repository.user}/${info.repository.name}` },
   ];
 
   const embed = new EmbedBuilder()
@@ -96,9 +101,11 @@ async function all(client, interaction)
 */
 async function version(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
+
   await interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
-    embeds: [new EmbedBuilder().setDescription(`Current version: ${info.version}`)]
+    embeds: [new EmbedBuilder().setDescription(formatMessage(words.CurrentVersion, [info.version]))]
   });
 }
 
@@ -108,9 +115,11 @@ async function version(client, interaction)
 */
 async function author(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
+
   await interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
-    embeds: [new EmbedBuilder().setDescription(`The author of the project is ${info.author}`)]
+    embeds: [new EmbedBuilder().setDescription(formatMessage(words.ProjectOwner, [info.author]))]
   });
 }
 
@@ -120,9 +129,11 @@ async function author(client, interaction)
 */
 async function license(client, interaction)
 {
+  const words = getLocalization(interaction.locale);
+
   await interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
-    embeds: [new EmbedBuilder().setDescription(`Current license: ${info.license}`)]
+    embeds: [new EmbedBuilder().setDescription(formatMessage(words.CurrentLicense, [info.license]))]
   });
 }
 
@@ -132,8 +143,10 @@ async function license(client, interaction)
 */
 async function repository(client, interaction)
 {
+    const words = getLocalization(interaction.locale);
+
   await interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
-    embeds: [new EmbedBuilder().setDescription(`Project repository: ${info.repository.domain}/${info.repository.user}/${info.repository.name}`)]
+    embeds: [new EmbedBuilder().setDescription(formatMessage(words.CurrentRepository, [`${info.repository.domain}/${info.repository.user}/${info.repository.name}`]))]
   });
 }

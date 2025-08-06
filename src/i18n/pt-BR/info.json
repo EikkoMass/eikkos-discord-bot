@@ -1,0 +1,10 @@
+{
+  "CurrentVersion": "Versão atual: {0}",
+  "ProjectOwner": "O autor do projeto é {0}",
+  "CurrentLicense": "Licença atual: {0}",
+  "CurrentRepository": "Repositório do projeto: {0}",
+  "Version": "Versão",
+  "License": "Licença",
+  "Author": "Autor",
+  "Repository": "Repositório"
+}
