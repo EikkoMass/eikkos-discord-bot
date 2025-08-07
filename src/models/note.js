@@ -9,6 +9,10 @@ const noteSchema = new Schema({
     type: String,
     required: true
   },
+  type: {
+    type: Number,
+    required: true
+  },
   creationDate: {
     type: Date
   },
