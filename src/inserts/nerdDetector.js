@@ -18,7 +18,7 @@ module.exports = {
       // 15%
       const isFire = Math.floor((Math.random() * 100) + 1) > 85;
 
-      const file = new AttachmentBuilder(`gifs/${isFire ? 'fire' : 'nerd'}.gif`);
+      const file = new AttachmentBuilder(`src/gifs/${isFire ? 'fire' : 'nerd'}.gif`);
       message.reply({
         content: isFire ? `"${message.content.toUpperCase()}" 🗣️🗣️🗣️🔥🔥🔥` : `'${message.content.toLowerCase()}' ☝☝🤓`,
         files: [file]
