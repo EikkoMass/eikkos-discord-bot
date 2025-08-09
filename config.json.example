@@ -1,5 +1,4 @@
 {
   "testServer": "guild-id",
-  "clientId": "app-id",
   "devs": ["dev-discord-id-1"]
 }
