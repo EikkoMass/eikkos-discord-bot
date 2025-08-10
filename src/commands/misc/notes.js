@@ -2,7 +2,7 @@ const {ApplicationCommandOptionType, Client, Interaction, EmbedBuilder, MessageF
 const Note = require('../../models/note');
 
 const { getI18n } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/note`);
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/notes`);
 
 let userCache = [];
 
