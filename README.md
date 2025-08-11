@@ -2,6 +2,10 @@
 
 This is a bot that started the development as a study, now became a hobby project, hope you enjoy too.
 
+
+![Discord.JS](https://img.shields.io/badge/Discord.JS-%235865F2.svg?style=for-the-badge&logo=discorddotjs&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+
 ## How to build the project
 
 Make sure you have Node.js installed (last version revised: v22.11.0).
