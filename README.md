@@ -2,9 +2,8 @@
 
 This is a bot that started the development as a study, now became a hobby project, hope you enjoy too.
 
-
-![Discord.JS](https://img.shields.io/badge/Discord.JS-%235865F2.svg?style=for-the-badge&logo=discorddotjs&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+[![Discord.JS](https://img.shields.io/badge/Discord.JS-%235865F2.svg?style=for-the-badge&logo=discorddotjs&logoColor=white)](https://discord.js.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 
 ## How to build the project
 
@@ -18,7 +17,7 @@ Make sure you have Node.js installed (last version revised: v22.11.0).
   - [`MONGODB_URI` | `string`]
     - Connection string of your MongoDB database  
 - Create an `config.json` file into the project, using the file `config.json.example` as a template.
-  - [`testServer` | `string`] 
+  - [`testServer` | `string`]
     - tells the bot the id of the `test server` (filling this field will make the bot register the command **ONLY** into the test server, if you don't want this, just keep as an empty string).
   - [ `devs` | `Array<string>` ]
     - specify to the bot who is the`developer`, important if you want to create debug / experimental commands.

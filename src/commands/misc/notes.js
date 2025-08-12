@@ -133,7 +133,7 @@ async function show(client, interaction)
     query.userId = interaction.user.id;
   }
 
-  const notes = await Note.find(query);
+  const notes = await Note.find(query).sort({ _id: -1 }).limit(10);
   await interaction.deferReply({ 
     flags: [ MessageFlags.Ephemeral ], 
   });
