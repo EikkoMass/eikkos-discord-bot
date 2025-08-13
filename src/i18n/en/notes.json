@@ -2,5 +2,6 @@
   "Added": "Your note was added successfully!",
   "NotFoundInServer": "No notes were found on this server!",
   "Removed": "Your note was removed successfully!",
-  "NotFound": "Note not found!"
+  "NotFound": "Note not found!",
+  "LimitExceeded": "You have exceeded the limit of private notes, try deleting some to free up space"
 }

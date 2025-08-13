@@ -2,5 +2,6 @@
   "Added": "Sua anotação foi adicionada com sucesso!",
   "NotFoundInServer": "Nenhuma anotação foi encontrada neste servidor!",
   "Removed": "Sua anotação foi removida com sucesso!",
-  "NotFound": "Anotação não encontrada!"
+  "NotFound": "Anotação não encontrada!",
+  "LimitExceeded": "Você excedeu o limite de notas privadas, tente excluir algumas para liberar espaço"
 }

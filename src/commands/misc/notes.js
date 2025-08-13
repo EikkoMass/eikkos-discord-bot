@@ -1,10 +1,10 @@
-const {ApplicationCommandOptionType, Client, Interaction, EmbedBuilder, MessageFlags } = require('discord.js');
+const {ApplicationCommandOptionType, Client, Interaction, EmbedBuilder, MessageFlags, ButtonStyle, ButtonBuilder, ActionRowBuilder } = require('discord.js');
+const getNoteEmbeds = require('../../utils/getNoteEmbeds');
 const Note = require('../../models/note');
 
 const { getI18n } = require("../../utils/i18n");
 const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/notes`);
-
-let userCache = [];
+const amount = 10;
 
 module.exports =  { 
   callback: async (client, interaction) => {
@@ -96,6 +96,28 @@ async function add(client, interaction)
 
   const words = getLocalization(interaction.locale);
 
+  let query = {
+    guildId: interaction.guild.id,
+    type: context,
+  }
+
+  if(context == 1)
+  {
+    query.userId = interaction.user.id;
+  }
+
+  let countNotes = await Note.countDocuments(query);
+
+  if(context === 1 && countNotes >= amount)
+  {
+    interaction.reply({
+      flags: [ MessageFlags.Ephemeral ],
+      embeds: [ new EmbedBuilder().setDescription(words.LimitExceeded) ]
+    });
+    return;
+  }
+
+
   const note = new Note({
     guildId: interaction.guild.id,
     userId: interaction.user.id,
@@ -133,32 +155,36 @@ async function show(client, interaction)
     query.userId = interaction.user.id;
   }
 
-  const notes = await Note.find(query).sort({ _id: -1 }).limit(10);
+  const row = new ActionRowBuilder();
+
+  let countNotes = await Note.countDocuments(query);
+  const notes = await Note.find(query).sort({ _id: -1 }).limit(amount);
+
   await interaction.deferReply({ 
-    flags: [ MessageFlags.Ephemeral ], 
+    flags: context === 1 ? [ MessageFlags.Ephemeral ] : [], 
   });
 
   if(notes?.length)
   {
-    const embeds = [];
+    const embeds = await getNoteEmbeds(client, notes);
+    const minPage = 1;
 
-    for (let note of notes)
+    if(context === 2 && Math.ceil(countNotes / amount) > minPage)
     {
-      const owner = (await getUser(client, note.userId)) || client.user;
 
-      let embed = new EmbedBuilder()
-      .setDescription(note.text)
-      .setColor('Random')
-      .setTimestamp(note.creationDate)
-      .setFooter({ text: note._id.toString(), iconURL: owner.displayAvatarURL({size: 256}) });
-
-      if(note.img) embed.setThumbnail(note.img);
-
-      embeds.push(embed)
+      row.components.push(
+        new ButtonBuilder()
+          .setCustomId(`notes;show;${context};2`)
+          .setEmoji("<:next:1405034907264094259>")
+          .setLabel(' ')
+          .setStyle(ButtonStyle.Secondary)
+      )
     }
 
-    userCache = [];
-    interaction.editReply({ embeds });
+    interaction.editReply({ 
+      embeds, 
+      components: row.components?.length ? [row] : []
+    });
     return;
   }
 
@@ -193,23 +219,4 @@ async function remove(client, interaction)
     flags: [ MessageFlags.Ephemeral ],
     embeds: [ new EmbedBuilder().setDescription(words.NotFound) ]
   });
-}
-
-async function getUser(client, userId)
-{
-
-  let user = userCache.find(user => user.id == userId);
-
-  if(!user)
-  {
-    try {
-      user = await client.users.cache.get(userId, { force: true, cache: true });
-      userCache[userId] = user;
-    }
-    catch(e) {
-      console.log(`usuario nao encontrado: ${e}`);
-    }
-  }
-
-  return userCache[userId];
 }
