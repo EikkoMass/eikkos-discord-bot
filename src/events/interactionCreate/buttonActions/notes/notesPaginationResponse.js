@@ -3,9 +3,6 @@ const getNoteEmbeds = require('../../../../utils/getNoteEmbeds');
 
 const Note = require('../../../../models/note');
 
-const { getI18n } = require("../../../../utils/i18n");
-const getLocalization = locale => require(`../../../../i18n/${getI18n(locale)}/notes`);
-
 /**
  *  @param {Client} client
  *  @param {Interaction} interaction
@@ -15,8 +12,6 @@ module.exports = async (client, interaction) => {
       if(!interaction.isButton()) return;
       if(!interaction.customId?.startsWith('notes;')) return;
       if(!interaction.customId.includes('show;')) return;
-
-      const words = getLocalization(interaction.locale);
 
       let content = interaction.customId.replace('notes;show;', '');
       let splitContent = content.split(';');
@@ -45,39 +40,41 @@ module.exports = async (client, interaction) => {
       const lastPage = Math.max(minPage, page - 1);
       const nextPage = Math.min(maxPage, page + 1);
 
-      if(page !== minPage)
-      {
-        row.components.push(
-          new ButtonBuilder()
-            .setCustomId(`notes;show;${context};${lastPage}`)
-            .setEmoji("<:before:1405034897004957761>")
-            .setLabel(` `)
-            .setStyle(ButtonStyle.Secondary)
-        );
-      }
-  
-      if(page !== maxPage)
-      { 
-        row.components.push(
-          new ButtonBuilder()
-            .setCustomId(`notes;show;${context};${nextPage}`)
-            .setEmoji("<:next:1405034907264094259>")
-            .setLabel(` `)
-            .setStyle(ButtonStyle.Secondary)
-        );
-      }
-      const message = await interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        embeds: [new EmbedBuilder().setDescription("Updated")]
-      });
-      
-      interaction.message.edit({
-        embeds: await getNoteEmbeds(client, notes),
-        components: row.components?.length ? [row] : []
-      });
 
-      setTimeout(() => message.delete(), 3000);
+      row.components.push(
+        new ButtonBuilder()
+          .setCustomId(`notes;show;${context};${lastPage}`)
+          .setDisabled(page === minPage)
+          .setEmoji("<:before:1405034897004957761>")
+          .setLabel(` `)
+          .setStyle(ButtonStyle.Secondary)
+      );
+      
+
+      row.components.push(
+          new ButtonBuilder()
+            .setCustomId(crypto.randomUUID())
+            .setDisabled(true)
+            .setLabel(`${page}`)
+            .setStyle(ButtonStyle.Primary)
+      );
   
+      row.components.push(
+        new ButtonBuilder()
+          .setCustomId(`notes;show;${context};${nextPage}`)
+          .setDisabled(page === maxPage)
+          .setEmoji("<:next:1405034907264094259>")
+          .setLabel(` `)
+          .setStyle(ButtonStyle.Secondary)
+      );
+      
+      const embeds = await getNoteEmbeds(client, notes);
+
+      await interaction.deferReply();
+      await interaction.editReply({
+        embeds,
+        components: [row]
+      });  
     } catch (err) {
         console.log(err);
     }
