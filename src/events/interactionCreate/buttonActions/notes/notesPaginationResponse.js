@@ -69,9 +69,8 @@ module.exports = async (client, interaction) => {
       );
       
       const embeds = await getNoteEmbeds(client, notes);
-
-      await interaction.deferReply();
-      await interaction.editReply({
+      await interaction.deferUpdate();
+      await interaction.message.edit({
         embeds,
         components: [row]
       });  

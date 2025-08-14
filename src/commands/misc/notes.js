@@ -169,11 +169,30 @@ async function show(client, interaction)
     const embeds = await getNoteEmbeds(client, notes);
     const minPage = 1;
 
-    if(context === 2 && Math.ceil(countNotes / amount) > minPage)
+    if(context === 2)
     {
 
       row.components.push(
         new ButtonBuilder()
+          .setCustomId(`notes;show;${context};1`)
+          .setDisabled(true)
+          .setEmoji("<:before:1405034897004957761>")
+          .setLabel(` `)
+          .setStyle(ButtonStyle.Secondary)
+      );
+      
+
+      row.components.push(
+          new ButtonBuilder()
+            .setCustomId(crypto.randomUUID())
+            .setDisabled(true)
+            .setLabel(`1`)
+            .setStyle(ButtonStyle.Primary)
+      );
+
+      row.components.push(
+        new ButtonBuilder() 
+          .setDisabled(Math.ceil(countNotes / amount) <= minPage)
           .setCustomId(`notes;show;${context};2`)
           .setEmoji("<:next:1405034907264094259>")
           .setLabel(' ')
