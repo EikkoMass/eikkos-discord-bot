@@ -3,5 +3,9 @@
   "NotFoundInServer": "Nenhuma anotação foi encontrada neste servidor!",
   "Removed": "Sua anotação foi removida com sucesso!",
   "NotFound": "Anotação não encontrada!",
-  "LimitExceeded": "Você excedeu o limite de notas privadas, tente excluir algumas para liberar espaço"
+  "LimitExceeded": "Você excedeu o limite de notas privadas, tente excluir algumas para liberar espaço",
+  "Title": "Titulo",
+  "NewNote": "Nova Anotação",
+  "ImageLink": "Link da Imagem",
+  "NoteInfo": "Informações da Anotação"
 }

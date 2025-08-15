@@ -1,28 +1,32 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
 
 const noteSchema = new Schema({
   userId: {
     type: String,
-    required: true
+    required: true,
   },
   guildId: {
     type: String,
-    required: true
+    required: true,
   },
   type: {
     type: Number,
-    required: true
+    required: true,
   },
   creationDate: {
-    type: Date
+    type: Date,
   },
   img: {
-    type: String
+    type: String,
+  },
+  title: {
+    type: String,
+    required: false,
   },
   text: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
-module.exports = model('Note', noteSchema)
+module.exports = model("Note", noteSchema);
