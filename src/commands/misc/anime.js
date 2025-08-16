@@ -54,7 +54,7 @@ async function search(client, interaction) {
 
   if(!res.ok) {
     interaction.reply({
-      embeds: [embed.setDescription('Failed to search the requested anime!')]
+      embeds: [embed.setDescription(words.SearchFailed)]
     });
     return;
   }
