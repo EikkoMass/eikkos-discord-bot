@@ -1,5 +1,8 @@
 const { Client, Interaction, EmbedBuilder, ApplicationCommandOptionType, MessageFlags } = require('discord.js');
-const { useQueue, QueueRepeatMode } = require('discord-player')
+const { useQueue } = require('discord-player')
+
+const { getI18n } = require("../../utils/i18n");
+const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/autorole`);
 
 module.exports =  {
   name: 'repeat',
@@ -10,6 +13,8 @@ module.exports =  {
   */
   callback: async (client, interaction) => {
 
+    const words = getLocalization(interaction.locale);
+
     const repeatOption = interaction.options.get('type')?.value;
 
     await interaction.deferReply({ flags: [ MessageFlags.Ephemeral ] });
@@ -19,7 +24,7 @@ module.exports =  {
     if(!queue || queue.isEmpty())
     {
       await interaction.editReply({
-        embeds: [new EmbedBuilder().setDescription("There is no song to repeat.")],
+        embeds: [new EmbedBuilder().setDescription(words.NoSong)],
       });
       return;
     }
@@ -27,7 +32,7 @@ module.exports =  {
     queue.setRepeatMode(repeatOption);
 
     await interaction.editReply({
-      embeds: [new EmbedBuilder().setDescription(`:repeat: Repeat command applied`)],
+      embeds: [new EmbedBuilder().setDescription(`:repeat: ${words.CommandApplied}`)],
     });
   },
     options: [
