@@ -4,7 +4,7 @@ const { getI18n } = require("../../utils/i18n");
 const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/question`);
 
 module.exports =  {
-  name: 'question',
+  name: 'yesno',
   description: 'make a question of yes / no to the bot',
   /**
    *  @param {Client} client
