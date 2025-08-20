@@ -89,9 +89,14 @@ async function create(client, interaction)
   let receiver = interaction.member;
 
   time = time
-    .replace('segundo', 'second')
-    .replace('minuto', 'minute')
-    .replace('hora', 'hour');
+    .replaceAll(words.Seconds, 'seconds')
+    .replaceAll(words.Second, 'second')
+
+    .replaceAll(words.Minutes, 'minutes')
+    .replaceAll(words.Minute, 'minute')
+    
+    .replaceAll(words.Hours, 'hours')
+    .replaceAll(words.Hour, 'hour');
 
   if(user)
   {
