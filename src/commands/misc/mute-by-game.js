@@ -1,4 +1,4 @@
-const { Client, Interaction, ApplicationCommandOptionType, MessageFlags, EmbedBuilder } = require('discord.js');
+const { Client, Interaction, ApplicationCommandOptionType, MessageFlags, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const MuteByGame = require('../../models/muteByGame');
 
 const { getI18n } = require("../../utils/i18n");
@@ -79,5 +79,6 @@ module.exports =  {
       description: 'if you want the option enabled or disabled',
       type: ApplicationCommandOptionType.Boolean,
     }
-  ]
+  ],
+  botPermissions: [PermissionFlagsBits.MuteMembers],
 }

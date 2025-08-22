@@ -1,4 +1,4 @@
-const { Client, Interaction, ApplicationCommandOptionType, ChannelType, EmbedBuilder, MessageFlags } = require('discord.js');
+const { Client, Interaction, ApplicationCommandOptionType, ChannelType, EmbedBuilder, MessageFlags, PermissionFlagsBits } = require('discord.js');
 
 const { getI18n, formatMessage } = require("../../utils/i18n");
 const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/drown`);
@@ -101,6 +101,7 @@ module.exports =  {
       type: ApplicationCommandOptionType.Number,
     }
   ],
+  botPermissions: [ PermissionFlagsBits.MoveMembers ],
 }
 
 function delay(ms) {

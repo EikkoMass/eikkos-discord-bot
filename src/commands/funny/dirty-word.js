@@ -1,4 +1,4 @@
-const {ApplicationCommandOptionType, Client, Interaction, MessageFlags, EmbedBuilder } = require('discord.js');
+const {ApplicationCommandOptionType, Client, Interaction, MessageFlags, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const DirtyWord = require('../../models/dirtyword')
 
 const { getI18n, formatMessage } = require("../../utils/i18n");
@@ -63,7 +63,9 @@ module.exports =  {
   },
 ],
   name: 'dirty-word',
-  description: 'Sets an word to auto-ban the user who write.'
+  description: 'Sets an word to auto-ban the user who write.',
+  permissionsRequired : [PermissionFlagsBits.KickMembers],
+  botPermissions: [PermissionFlagsBits.KickMembers]
 };
 
 async function removeDirtyWord(client, interaction)
