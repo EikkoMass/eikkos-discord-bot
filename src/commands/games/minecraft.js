@@ -1,11 +1,11 @@
-const {ApplicationCommandOptionType, EmbedBuilder, Client, Interaction, MessageFlags } = require('discord.js');
-const MinecraftServer = require('../../models/minecraftServer');
-const editions = require('../../enums/minecraftEditions');
+import {ApplicationCommandOptionType, EmbedBuilder, Client, MessageFlags } from 'discord.js';
+import MinecraftServer from '../../models/minecraftServer.js';
+import editions from '../../enums/minecraftEditions.js';
 
-module.exports =  {
+export default  {
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
     switch(interaction.options.getSubcommandGroup())
@@ -90,7 +90,7 @@ module.exports =  {
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function register(client, interaction)
 {
@@ -135,7 +135,7 @@ async function register(client, interaction)
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function status(client, interaction)
 {
@@ -197,7 +197,7 @@ async function status(client, interaction)
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function server(client, interaction)
 {
@@ -220,7 +220,7 @@ async function server(client, interaction)
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function player(client, interaction)
 {
@@ -240,7 +240,7 @@ async function player(client, interaction)
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function skin(client, interaction)
 {

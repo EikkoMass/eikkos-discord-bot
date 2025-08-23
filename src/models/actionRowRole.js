@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model } from 'mongoose';
 
 const actionRowRole = new Schema({
   guildId: {
@@ -20,4 +20,4 @@ const actionRowRole = new Schema({
   }
 });
 
-module.exports = model('ActionRowRole', actionRowRole)
+export default model('ActionRowRole', actionRowRole);

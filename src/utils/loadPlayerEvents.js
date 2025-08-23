@@ -1,14 +1,14 @@
-const path = require('path');
-const getAllFiles = require('./getAllFiles');
+import path from 'path';
+import getAllFiles from './getAllFiles.js';
 
-module.exports = (eventListener) => {
-  const files = getAllFiles(path.join(__dirname, 'playerEvents'));
+export default async (eventListener) => {
+  const files = getAllFiles(path.join(import.meta.dirname, 'playerEvents'));
 
   if(!files) return;
 
   for(let file of files)
   {
-    const event = require(file);
+    const event = (await import(file)).default;
     eventListener.on(event.name, event.callback);
   }
 }

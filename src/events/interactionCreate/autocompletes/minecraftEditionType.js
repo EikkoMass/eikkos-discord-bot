@@ -1,11 +1,11 @@
-const {Client, Interaction} = require('discord.js');
-const editions = require('../../../enums/minecraftEditions');
+import {Client} from 'discord.js';
+import editions from '../../../enums/minecraftEditions.js';
 
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
-module.exports = (client, interaction) => {
+export default (client, interaction) => {
   try {
     if(!interaction.isAutocomplete()) return;
     if(interaction.commandName !== 'minecraft') return;

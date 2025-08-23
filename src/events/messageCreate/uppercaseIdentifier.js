@@ -1,10 +1,10 @@
-const {Client, Message} = require('discord.js');
+import {Client, Message} from 'discord.js';
 
 /**
  *  @param {Client} client
  *  @param {Message} message
 */
-module.exports = async (client, message) => {
+export default async (client, message) => {
   if(!message.inGuild() || message.author.bot) return;
   const containsCharsRegex = /[a-zA-Z]+/g;
 

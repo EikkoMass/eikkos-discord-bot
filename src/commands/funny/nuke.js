@@ -1,17 +1,17 @@
-const {Client, Interaction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, PermissionsBitField, MessageFlags, EmbedBuilder } = require('discord.js');
+import {Client, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, PermissionsBitField, MessageFlags, EmbedBuilder } from 'discord.js';
 
-const { getI18n, formatMessage } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/nuke`);
+import { getI18n, formatMessage } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/nuke.json`, { with: { type: 'json' } });
 
-module.exports =  {
+export default  {
   name: 'nuke',
   description: 'nukes away an voice channel',
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
-    const words = getLocalization(interaction.locale);
+    const words = (await getLocalization(interaction.locale)).default;
     const embed = new EmbedBuilder();
 
     let channel = interaction.options.get('channel')?.value;

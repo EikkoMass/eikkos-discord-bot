@@ -1,7 +1,7 @@
-const { ActivityType } = require("discord.js");
-const Stream = require('../../models/stream');
+import { ActivityType } from "discord.js";
+import Stream from '../../models/stream.js';
 
-module.exports = async (client) => {
+export default async (client) => {
 
   let stream = await Stream.findOne({ priority: true });
 

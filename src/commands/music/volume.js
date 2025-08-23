@@ -1,13 +1,13 @@
-const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } = require('discord.js');
+import {Client, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } from 'discord.js';
 
-const { useQueue } = require('discord-player')
+import { useQueue } from 'discord-player';
 
-module.exports =  {
+export default  {
   name: 'volume',
   description: 'individual command to manage voice channel volume',
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
     await interaction.deferReply();

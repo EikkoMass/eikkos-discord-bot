@@ -1,13 +1,13 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-module.exports = (exceptions = []) => {
+export default async(exceptions = []) => {
   let localInserts = [];
-  const mainPath = path.join(__dirname, '..', 'inserts');
+  const mainPath = path.join(import.meta.dirname, '..', 'inserts');
   const files = fs.readdirSync(mainPath);
   for(const file of files)
   {    
-      const insertObject = require(`${mainPath}/${file}`);
+      const insertObject = await import(`${mainPath}/${file}`);
       
       if(exceptions.includes(insertObject.name)) continue;
       

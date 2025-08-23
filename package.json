@@ -4,6 +4,7 @@
   "description": "My personal discord bot",
   "main": "index.js",
   "author": "Eric Henrique Massaneiro",
+  "type": "module",
   "repository": {
     "domain": "https://github.com",
     "user": "EikkoMass",
@@ -11,7 +12,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node --disable-warning=ExperimentalWarning src/index.js"
   },
   "dependencies": {
     "@discord-player/extractor": "^7.1.0",

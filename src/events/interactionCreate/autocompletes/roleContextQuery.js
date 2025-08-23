@@ -1,11 +1,11 @@
-const {Client, Interaction} = require('discord.js');
-const RoleContext = require('../../../models/roleContext');
+import {Client} from 'discord.js';
+import RoleContext from '../../../models/roleContext.js';
 
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
-module.exports = async (client, interaction) => {
+export default async (client, interaction) => {
   try {
     if(!interaction.isAutocomplete()) return;
     if(interaction.commandName !== 'role') return;

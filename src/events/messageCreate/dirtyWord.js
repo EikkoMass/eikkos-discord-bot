@@ -1,11 +1,11 @@
-const {Client, Message} = require('discord.js');
-const DirtyWord = require('../../models/dirtyword')
+import {Client, Message} from 'discord.js';
+import DirtyWord from '../../models/dirtyword.js';
 
 /**
  *  @param {Client} client
  *  @param {Message} message
 */
-module.exports = async (client, message) => {
+export default async (client, message) => {
   if(!message.inGuild() || message.author.bot) return;
 
   try{

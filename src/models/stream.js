@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose');
+import { Schema, model } from 'mongoose';
 
 const streamScheme = new Schema({
   title: {
@@ -13,4 +13,4 @@ const streamScheme = new Schema({
   }
 });
 
-module.exports = model('Stream', streamScheme);
+export default model('Stream', streamScheme);

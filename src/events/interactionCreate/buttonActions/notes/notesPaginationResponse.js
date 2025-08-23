@@ -1,13 +1,13 @@
-const { Client, Interaction, ButtonStyle, ActionRowBuilder, EmbedBuilder, ButtonBuilder, MessageFlags } = require('discord.js');
-const getNoteEmbeds = require('../../../../utils/getNoteEmbeds');
+import { Client, ButtonStyle, ActionRowBuilder, EmbedBuilder, ButtonBuilder, MessageFlags } from 'discord.js';
+import getNoteEmbeds from '../../../../utils/getNoteEmbeds.js';
 
-const Note = require('../../../../models/note');
+import Note from '../../../../models/note.js';
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
-module.exports = async (client, interaction) => {
+export default async (client, interaction) => {
   try {
       if(!interaction.isButton()) return;
       if(!interaction.customId?.startsWith('notes;')) return;

@@ -1,20 +1,20 @@
-const User = require('../../models/user');
-const { Client, Interaction, MessageFlags } = require('discord.js');
+import User from '../../models/user.js';
+import { Client, MessageFlags } from 'discord.js';
 
-const { getI18n, formatMessage } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/daily`);
+import { getI18n, formatMessage } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/daily.json`, { with: { type: 'json' } });
 
 const dailyAmount = 1000;
 
-module.exports = {
+export default {
 
   /**
    * 
    * @param {Client} client 
-   * @param {Interaction} interaction 
+   * @param  interaction 
    */
   callback: async (client, interaction) => {
-    const words = getLocalization(interaction.locale);
+    const words = (await getLocalization(interaction.locale)).default;
 
     if(!interaction.inGuild())
     {

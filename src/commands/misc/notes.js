@@ -1,7 +1,6 @@
-const {
+import {
   ApplicationCommandOptionType,
   Client,
-  Interaction,
   EmbedBuilder,
   MessageFlags,
   ButtonStyle,
@@ -10,16 +9,16 @@ const {
   ModalBuilder,
   TextInputStyle,
   TextInputBuilder,
-} = require("discord.js");
-const getNoteEmbeds = require("../../utils/getNoteEmbeds");
-const Note = require("../../models/note");
+} from "discord.js";
 
-const { getI18n } = require("../../utils/i18n");
-const getLocalization = (locale) =>
-  require(`../../i18n/${getI18n(locale)}/notes`);
+import getNoteEmbeds from "../../utils/getNoteEmbeds.js";
+import Note from "../../models/note.js";
+
+import { getI18n } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/notes.json`, { with: { type: 'json' } });
 const amount = 10;
 
-module.exports = {
+export default {
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
       case "add":
@@ -85,11 +84,11 @@ module.exports = {
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
  */
 async function add(client, interaction) {
   const context = interaction.options?.get("context")?.value || 1;
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   let query = {
     guildId: interaction.guild.id,
@@ -142,10 +141,10 @@ async function add(client, interaction) {
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
  */
 async function show(client, interaction) {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   const context = interaction.options?.get("context")?.value || 1;
 
@@ -214,12 +213,12 @@ async function show(client, interaction) {
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
  */
 async function remove(client, interaction) {
   const id = interaction.options?.get("id").value;
 
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   const note = await Note.findByIdAndDelete(id).catch(() => {});
 

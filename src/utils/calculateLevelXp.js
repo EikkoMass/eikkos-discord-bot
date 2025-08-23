@@ -1,1 +1,1 @@
-module.exports = level => 100 * level || 1;
+export default level => 100 * level || 1;

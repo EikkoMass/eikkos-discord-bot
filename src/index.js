@@ -1,12 +1,14 @@
-require('dotenv').config();
-const { Client, GatewayIntentBits } = require("discord.js");
-const eventHandler = require('./handlers/eventHandler');
-const mongoose = require('mongoose');
-const { Player } = require('discord-player');
-const { DefaultExtractors } = require('@discord-player/extractor');
-const { YoutubeiExtractor } = require("discord-player-youtubei");
-const authenticateOnIGDB = require('./utils/igdbAuth');
-const loadPlayerEvents = require('./utils/loadPlayerEvents');
+import dotenv from 'dotenv';
+import { Client, GatewayIntentBits } from "discord.js";
+import eventHandler from './handlers/eventHandler.js';
+import mongoose from 'mongoose';
+import { Player } from 'discord-player';
+import { DefaultExtractors } from '@discord-player/extractor';
+import { YoutubeiExtractor } from "discord-player-youtubei";
+import authenticateOnIGDB from './utils/igdbAuth.js';
+import loadPlayerEvents from './utils/loadPlayerEvents.js';
+
+dotenv.config();
 
 const client = 
 new Client(
@@ -25,39 +27,39 @@ new Client(
 );
 
 (async () => {
-try{
-  await mongoose.connect(process.env.MONGODB_URI);
-  console.log('Connected to DB');
-} catch (e) {
-  console.log(e);
-}
+  try{
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('Connected to DB');
+  } catch (e) {
+    console.log(e);
+  }
 
-const player = new Player(client);
+  const player = new Player(client);
 
-await player.extractors.register(YoutubeiExtractor, {
-  authentication: process.env.YT_CREDENTIAL
-});
+  await player.extractors.register(YoutubeiExtractor, {
+    authentication: process.env.YT_CREDENTIAL
+  });
 
-await player.extractors.loadMulti(DefaultExtractors);
-loadPlayerEvents(player.events);
+  await player.extractors.loadMulti(DefaultExtractors);
+  await loadPlayerEvents(player.events);
 
-client.dirtyWordCache = {
-  search: [],
-  result: []
-};
+  client.dirtyWordCache = {
+    search: [],
+    result: []
+  };
 
-// IGDB
+  // IGDB
 
 
-if(!process.env.IGDB_CLIENT_ID || !process.env.IGDB_CLIENT_SECRET)
-{
-  console.log(`Missing IGDB credentials, skipping authentication!`);
-} else {
-  await authenticateOnIGDB(client);
-}
+  if(!process.env.IGDB_CLIENT_ID || !process.env.IGDB_CLIENT_SECRET)
+  {
+    console.log(`Missing IGDB credentials, skipping authentication!`);
+  } else {
+    await authenticateOnIGDB(client);
+  }
 
-eventHandler(client);
-client.login(process.env.DISCORD_TOKEN);
+  eventHandler(client);
+  client.login(process.env.DISCORD_TOKEN);
 })();
 
 

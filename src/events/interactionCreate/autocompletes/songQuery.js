@@ -1,15 +1,14 @@
-const {Client, Interaction} = require('discord.js');
-const { QueryType, useMainPlayer } = require('discord-player')
-
+import {Client} from 'discord.js';
+import { QueryType, useMainPlayer } from 'discord-player';
 
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
 
 const player = useMainPlayer();
 
-module.exports = async (client, interaction) => {
+export default async (client, interaction) => {
   try {
       if(!interaction.isAutocomplete()) return;
       if(interaction.commandName !== 'play') return;

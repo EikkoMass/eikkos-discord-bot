@@ -1,10 +1,10 @@
-const { Client, Interaction, MessageFlags } = require('discord.js');
+import { Client, MessageFlags } from 'discord.js';
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
-module.exports = async (client, interaction) => {
+export default async (client, interaction) => {
   try {
       if(!interaction.isButton()) return;
       if(!interaction.customId?.startsWith('role;')) return;

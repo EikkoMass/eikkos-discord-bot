@@ -1,7 +1,9 @@
-const {ApplicationCommandOptionType, EmbedBuilder, Client, Interaction, MessageFlags } = require('discord.js');
-require('dotenv').config();
+import { ApplicationCommandOptionType, EmbedBuilder, Client, MessageFlags } from 'discord.js';
+import dotenv from 'dotenv';
 
-module.exports =  {
+dotenv.config();
+
+export default  {
   callback: async (client, interaction) => {
     switch(interaction.options.getSubcommand())
     {
@@ -38,7 +40,7 @@ module.exports =  {
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function search(client, interaction) {
   const query = interaction.options?.get('query').value;

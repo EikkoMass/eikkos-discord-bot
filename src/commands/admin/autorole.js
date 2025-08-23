@@ -1,15 +1,15 @@
-const { ApplicationCommandOptionType, PermissionFlagsBits, Client, Interaction, MessageFlags, EmbedBuilder } = require('discord.js');
-const AutoRole = require('../../models/autorole');
+import { ApplicationCommandOptionType, PermissionFlagsBits, Client, MessageFlags, EmbedBuilder } from 'discord.js';
+import AutoRole from '../../models/autorole.js';
 
-const { getI18n } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/autorole`);
+import { getI18n } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/autorole.json`, { with: { type: 'json' } });
 
-module.exports = {
+export default {
 
   /**
- *  @param {Client} client
- *  @param {Interaction} interaction
-*/
+   *  @param {Client} client
+   *  @param interaction
+  */
   callback: async (client, interaction) => {
     switch(interaction.options.getSubcommand())
     {
@@ -61,7 +61,7 @@ module.exports = {
 async function configure(client, interaction) {
   
   const embed = new EmbedBuilder();
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   if(!interaction.inGuild())
     {
@@ -109,7 +109,7 @@ async function configure(client, interaction) {
 async function disable(client, interaction) {
   
   const embed = new EmbedBuilder();
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   try {
 

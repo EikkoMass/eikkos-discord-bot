@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model } from 'mongoose';
 
 const levelSchema = new Schema({
   userId: {
@@ -19,4 +19,4 @@ const levelSchema = new Schema({
   }
 });
 
-module.exports = model('Level', levelSchema)
+export default model('Level', levelSchema)

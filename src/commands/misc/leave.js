@@ -1,20 +1,20 @@
-const { Client, Interaction, EmbedBuilder, MessageFlags } = require('discord.js');
+import { Client, EmbedBuilder, MessageFlags } from 'discord.js';
 
-const { useQueue } = require('discord-player');
+import { useQueue } from 'discord-player';
 
-const { getI18n, formatMessage } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/leave`);
+import { getI18n, formatMessage } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/leave.json`, { with: { type: 'json' } });
 
-module.exports =  {
+export default  {
   name: 'leave',
   description: 'leave the voice channel',
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
-  callback: (client, interaction) => {
+  callback: async (client, interaction) => {
 
-    const words = getLocalization(interaction.locale);
+    const words = (await getLocalization(interaction.locale)).default;
 
     const queue = useQueue(interaction.guild);
     const embed = new EmbedBuilder();

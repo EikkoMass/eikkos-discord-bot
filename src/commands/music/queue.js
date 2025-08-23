@@ -1,20 +1,20 @@
-const { Client, Interaction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const getPlayerActionRow = require("../../utils/playerActionRow");
-const { useQueue } = require('discord-player');
+import { Client, EmbedBuilder } from 'discord.js';
+import getPlayerActionRow from "../../utils/playerActionRow.js";
+import { useQueue } from 'discord-player';
 
-const { getI18n } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/queue`);
+import { getI18n } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/queue.json`, { with: { type: 'json' } });
 
-module.exports =  {
+export default  {
   name: 'queue',
   description: 'shows the current and next songs',
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
 
-    const words = getLocalization(interaction.locale);
+    const words = (await getLocalization(interaction.locale)).default;
 
     await interaction.deferReply();
     

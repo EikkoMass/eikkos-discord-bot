@@ -1,14 +1,14 @@
-const {ApplicationCommandOptionType, Client, Interaction, MessageFlags, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
-const DirtyWord = require('../../models/dirtyword')
+import {ApplicationCommandOptionType, Client, MessageFlags, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import DirtyWord from '../../models/dirtyword.js';
 
-const { getI18n, formatMessage } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/dirtyWord`);
+import { getI18n, formatMessage } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/dirtyWord.json`, { with: { type: 'json' } });
 
-module.exports =  {
+export default  {
   /** 
    * 
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
     switch(interaction.options.getSubcommand())
@@ -70,7 +70,7 @@ module.exports =  {
 
 async function removeDirtyWord(client, interaction)
 {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
   const embed = new EmbedBuilder();
 
   const indexResult = client.dirtyWordCache.result.findIndex(dirty => dirty.guildId === interaction.guild.id);
@@ -105,7 +105,7 @@ async function removeDirtyWord(client, interaction)
 async function getCurrentDirtyWord(client, interaction)
 {
 
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
   const embed = new EmbedBuilder();
   
   const dirtyCache = client.dirtyWordCache.result.find(dirty => dirty.guildId === interaction.guild.id);
@@ -131,7 +131,7 @@ async function getCurrentDirtyWord(client, interaction)
 
 async function setDirtyWord(client, interaction)
 {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
   const embed = new EmbedBuilder();
 
   const word = interaction.options.get('word')?.value;

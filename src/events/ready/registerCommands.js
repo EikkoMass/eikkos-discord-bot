@@ -1,13 +1,13 @@
-const { testServer } = require('../../../config.json');
-const getLocalCommands = require('../../utils/getLocalCommands');
-const getApplicationCommands = require('../../utils/getApplicationCommands');
-const areCommandsDifferent = require('../../utils/areCommandsDifferent');
+import config from '../../../config.json' with { type: 'json' };
+import getLocalCommands from '../../utils/getLocalCommands.js';
+import getApplicationCommands from '../../utils/getApplicationCommands.js';
+import areCommandsDifferent from '../../utils/areCommandsDifferent.js';
 
-module.exports = async (client) => { 
+export default async (client) => {
   try {
-    const localCommands = getLocalCommands();
+    const localCommands = await getLocalCommands();
     // Add testServer as a second parameter if you want to register only on a specific guild
-    const applicationCommands = await getApplicationCommands(client, testServer);
+    const applicationCommands = await getApplicationCommands(client, config.testServer);
 
     for(const localCommand  of localCommands)
     {

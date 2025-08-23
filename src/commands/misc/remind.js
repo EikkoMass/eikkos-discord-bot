@@ -1,17 +1,17 @@
-const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } = require('discord.js');
-const ms = require('ms');
+import {Client, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } from 'discord.js';
+import ms from 'ms';
 
-const { getI18n, formatMessage } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/remind`);
+import { getI18n, formatMessage } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/remind.json`, { with: { type: 'json' } });
 
 const remindersCache = {};
 
-module.exports =  {
+export default  {
   name: 'reminder',
   description: 'Reminds you something later.',
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
     switch(interaction.options.getSubcommand())
@@ -81,7 +81,7 @@ module.exports =  {
 
 async function create(client, interaction)
 {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
       
   let time = interaction.options.get('time')?.value;
   const message = interaction.options.get('message')?.value || "";
@@ -145,7 +145,7 @@ async function create(client, interaction)
 
 async function status(client, interaction)
 {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
   
   const embeds = [];
   const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;
@@ -181,7 +181,7 @@ async function status(client, interaction)
 
 async function cancel(client, interaction)
 {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   let id = interaction.options.get('id')?.value;
   const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;

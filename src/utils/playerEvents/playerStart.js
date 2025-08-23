@@ -1,11 +1,11 @@
-const { EmbedBuilder, MessageFlags } = require('discord.js');
-const { GuildQueue, Track } = require('discord-player');
-const getPlayerActionRow = require("../../utils/playerActionRow");
+import { EmbedBuilder, MessageFlags } from 'discord.js';
+import { GuildQueue, Track } from 'discord-player';
+import getPlayerActionRow from "../../utils/playerActionRow.js";
 
-const { getI18n } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/playerEvents/playerStart`);
+import { getI18n } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/playerEvents/playerStart.json`, { with: { type: 'json' } });
 
-module.exports = {
+export default {
   name: 'playerStart',
 
   /**

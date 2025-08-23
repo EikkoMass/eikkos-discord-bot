@@ -1,23 +1,22 @@
-const {
+import {
   Client,
-  Interaction,
+ 
   ButtonStyle,
   ActionRowBuilder,
   EmbedBuilder,
   ButtonBuilder,
   MessageFlags,
-} = require("discord.js");
-const { getI18n } = require("../../../../utils/i18n");
-const getLocalization = (locale) =>
-  require(`../../../../i18n/${getI18n(locale)}/notes`);
+} from "discord.js";
+import { getI18n } from "../../../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../../../i18n/${getI18n(locale)}/notes.json`, { with: { type: 'json' } });
 
-const Note = require("../../../../models/note");
+import Note from "../../../../models/note.js";
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
  */
-module.exports = async (client, interaction) => {
+export default async (client, interaction) => {
   try {
     if (!interaction.isModalSubmit()) return;
     if (!interaction.customId?.startsWith("notes;")) return;
@@ -33,7 +32,7 @@ module.exports = async (client, interaction) => {
     const description = interaction.fields?.getField("description").value;
     const img = interaction.fields?.getField("img")?.value;
 
-    const words = getLocalization(interaction.locale);
+    const words = (await getLocalization(interaction.locale)).default;
 
     const note = new Note({
       guildId: interaction.guild.id,

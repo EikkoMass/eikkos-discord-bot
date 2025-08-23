@@ -1,20 +1,20 @@
-const { Client, Interaction, MessageFlags, EmbedBuilder } = require('discord.js');
-const { useQueue } = require('discord-player');
+import { Client, MessageFlags, EmbedBuilder } from 'discord.js';
+import { useQueue } from 'discord-player';
 
-const { getI18n } = require("../../../../utils/i18n");
-const getLocalization = locale => require(`../../../../i18n/${getI18n(locale)}/pause`);
+import { getI18n } from "../../../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../../../i18n/${getI18n(locale)}/pause.json`, { with: { type: 'json' } });
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
-module.exports = async (client, interaction) => {
+export default async (client, interaction) => {
   try {
       if(!interaction.isButton()) return;
       if(!interaction.customId?.startsWith('player;')) return;
       if(!interaction.customId.includes('pause;')) return;
 
-      const words = getLocalization(interaction.locale);
+      const words = (await getLocalization(interaction.locale)).default;
 
       await interaction.deferReply({ 
         flags: [ MessageFlags.Ephemeral ], 
@@ -22,7 +22,7 @@ module.exports = async (client, interaction) => {
     
       const queue = useQueue(interaction.guild);
 
-      if(!queue || !queue.node)
+      if(!queue?.node)
       {
         await interaction.editReply({
           embeds: [new EmbedBuilder().setDescription(":x: " + words.NoQueue)],

@@ -1,10 +1,10 @@
-const {ApplicationCommandOptionType, Client, Interaction, EmbedBuilder, MessageFlags } = require('discord.js');
-const Stream = require('../../models/stream');
+import {ApplicationCommandOptionType, Client, EmbedBuilder, MessageFlags } from 'discord.js';
+import Stream from '../../models/stream.js';
 
-const { getI18n,  formatMessage } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/stream`);
+import { getI18n,  formatMessage } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/stream.json`, { with: { type: 'json' } });
 
-module.exports =  {
+export default  {
   callback: async (client, interaction) => {
 
     switch(interaction.options.getSubcommand())
@@ -69,11 +69,11 @@ module.exports =  {
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function register(client, interaction)
 {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   try {
     const title = interaction.options.get('title')?.value;
@@ -116,11 +116,11 @@ async function register(client, interaction)
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function remove(client, interaction)
 {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
   
   const embed = new EmbedBuilder();
   const link = interaction.options.get('link')?.value;

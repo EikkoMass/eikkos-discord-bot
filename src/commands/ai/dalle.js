@@ -1,13 +1,15 @@
-const {Client, Interaction, ApplicationCommandOptionType, MessageFlags} = require('discord.js');
-const OpenAI = require('openai');
-require('dotenv').config();
+import {Client, ApplicationCommandOptionType, MessageFlags} from 'discord.js';
+import OpenAI from 'openai';
+import dotenv from 'dotenv';
 
-module.exports =  {
+dotenv.config();
+
+export default  {
   name: 'dalle',
   description: 'send a prompt to openai\'s dalle',
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
 

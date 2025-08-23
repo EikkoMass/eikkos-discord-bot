@@ -1,10 +1,10 @@
-const { ApplicationCommandOptionType, EmbedBuilder, Client, Interaction, MessageFlags } = require('discord.js');
-const info = require('../../../package.json');
+import { ApplicationCommandOptionType, EmbedBuilder, Client, MessageFlags } from 'discord.js';
+import info from '../../../package.json' with { type: 'json' };
 
-const { getI18n, formatMessage } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/info`);
+import { getI18n, formatMessage } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/info.json`, { with: { type: 'json' } });
 
-module.exports =  {
+export default  {
   callback: async (client, interaction) => {
 
     switch(interaction.options.getSubcommand())
@@ -66,11 +66,11 @@ module.exports =  {
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function all(client, interaction)
 {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   const avatar = await fetch(`https://github.com/${info.repository.user}.png`);
   const bufferImg = await avatar.arrayBuffer();
@@ -97,11 +97,11 @@ async function all(client, interaction)
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function version(client, interaction)
 {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   await interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
@@ -111,11 +111,11 @@ async function version(client, interaction)
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function author(client, interaction)
 {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   await interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
@@ -125,11 +125,11 @@ async function author(client, interaction)
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function license(client, interaction)
 {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   await interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
@@ -139,11 +139,11 @@ async function license(client, interaction)
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function repository(client, interaction)
 {
-    const words = getLocalization(interaction.locale);
+    const words = (await getLocalization(interaction.locale)).default;
 
   await interaction.reply({
     flags: [ MessageFlags.Ephemeral ],

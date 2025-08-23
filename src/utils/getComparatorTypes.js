@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     includes: (a,b) =>
     {
       return a.includes(b);

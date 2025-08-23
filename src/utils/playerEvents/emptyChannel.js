@@ -1,10 +1,10 @@
-const { EmbedBuilder } = require('discord.js');
-const { GuildQueue, Track } = require('discord-player');
+import { EmbedBuilder } from 'discord.js';
+import { GuildQueue, Track } from 'discord-player';
 
-const { getI18n } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/playerEvents/emptyChannel`);
+import { getI18n } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/playerEvents/emptyChannel.json`, { with: { type: 'json' } });
 
-module.exports = {
+export default {
   name: 'emptyChannel',
   /**
    * @param {GuildQueue} queue 

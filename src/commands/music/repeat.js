@@ -1,19 +1,19 @@
-const { Client, Interaction, EmbedBuilder, ApplicationCommandOptionType, MessageFlags } = require('discord.js');
-const { useQueue } = require('discord-player')
+import { Client, EmbedBuilder, ApplicationCommandOptionType, MessageFlags } from 'discord.js';
+import { useQueue } from 'discord-player';
 
-const { getI18n } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/autorole`);
+import { getI18n } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/autorole.json`, { with: { type: 'json' } });
 
-module.exports =  {
+export default  {
   name: 'repeat',
   description: 'repeat the current songs on the queue',
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
 
-    const words = getLocalization(interaction.locale);
+    const words = (await getLocalization(interaction.locale)).default;
 
     const repeatOption = interaction.options.get('type')?.value;
 

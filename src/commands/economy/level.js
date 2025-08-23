@@ -1,13 +1,13 @@
-const {Client, Interaction, ApplicationCommandOptionType, AttachmentBuilder } = require('discord.js');
-const Level = require('../../models/level');
-const { Font, RankCardBuilder } = require('canvacord');
-const calculateLevelXp = require('../../utils/calculateLevelXp');
+import {Client, ApplicationCommandOptionType, AttachmentBuilder } from 'discord.js';
+import Level from '../../models/level.js';
+import { Font, RankCardBuilder } from 'canvacord';
+import calculateLevelXp from '../../utils/calculateLevelXp.js';
 
-module.exports = {
+export default {
   /** 
    * 
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
     if(!interaction.inGuild()) {

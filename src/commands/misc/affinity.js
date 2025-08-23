@@ -1,7 +1,6 @@
-const {Client, Interaction, ApplicationCommandOptionType, MessageFlags, EmbedBuilder } = require('discord.js');
+import {Client, ApplicationCommandOptionType, MessageFlags, EmbedBuilder } from 'discord.js';
 
-
-module.exports =  {
+export default  {
   name: 'affinity',
   description: 'Calculate the affinity (love / hate) between 2 users',
   callback: async (client, interaction) => {
@@ -66,7 +65,7 @@ module.exports =  {
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function love(client, interaction) {
   
@@ -86,7 +85,7 @@ async function love(client, interaction) {
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function hate(client, interaction) {
   

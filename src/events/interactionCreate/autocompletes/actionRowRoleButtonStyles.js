@@ -1,11 +1,11 @@
-const {Client, Interaction} = require('discord.js');
-const styles = require('../../../enums/buttonStyles');
+import {Client} from 'discord.js';
+import styles from '../../../enums/buttonStyles.js';
 
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
-module.exports = (client, interaction) => {
+export default (client, interaction) => {
   try {
     if(!interaction.isAutocomplete()) return;
     if(interaction.commandName !== 'role') return;

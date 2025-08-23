@@ -1,11 +1,11 @@
-const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+import { Client, ApplicationCommandOptionType, PermissionFlagsBits, EmbedBuilder } from 'discord.js';
 
-module.exports =  {
+export default  {
 
   /** 
    * 
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
 
   callback: async (client, interaction) => {

@@ -1,12 +1,12 @@
-const {Client, Presence, ActivityType, GuildMember, Activity } = require('discord.js');
-const MuteByGame = require('../../models/muteByGame');
+import {Client, Presence, ActivityType, GuildMember, Activity } from 'discord.js';
+import MuteByGame from '../../models/muteByGame.js';
 
 /**
  *  @param {Client} client
  *  @param {Presence} oldPresence
  *  @param {Presence} newPresence
 */
-module.exports = async (client, oldPresence, newPresence) => {
+export default async (client, oldPresence, newPresence) => {
   try{
 
     // only changes with the 'Playing' ActivityType.

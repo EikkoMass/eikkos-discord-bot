@@ -1,12 +1,12 @@
-const {Client, Interaction, ApplicationCommandOptionType} = require('discord.js');
+import {Client, ApplicationCommandOptionType} from 'discord.js';
 
 
-module.exports =  {
+export default  {
   name: 'qr',
   description: 'Replies a QR code from the link',
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
     await interaction.deferReply();

@@ -1,11 +1,11 @@
-const {Client, Interaction} = require('discord.js');
-const types = require('../../../enums/dirtyWordTypes');
+import {Client} from 'discord.js';
+import types from '../../../enums/dirtyWordTypes.js';
 
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
-module.exports = (client, interaction) => {
+export default (client, interaction) => {
   try {
     if(!interaction.isAutocomplete()) return;
     if(interaction.commandName !== 'dirty-word') return;

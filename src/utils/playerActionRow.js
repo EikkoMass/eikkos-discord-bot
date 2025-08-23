@@ -1,9 +1,9 @@
-const { ActionRowBuilder, ButtonStyle, ButtonBuilder } = require("discord.js");
+import { ActionRowBuilder, ButtonStyle, ButtonBuilder } from "discord.js";
 
 /**
  * @returns {ActionRowBuilder} actionRow
  */
-module.exports = () => {
+export default () => {
   const row = new ActionRowBuilder();
 
   row.components.push(

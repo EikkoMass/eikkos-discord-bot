@@ -1,13 +1,13 @@
-const {Client, Interaction} = require('discord.js');
+import {Client} from 'discord.js';
 
 
 const QUANTITY_OF_RESULTS = 6;
 
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
-module.exports = async (client, interaction) => {
+export default async (client, interaction) => {
   try {
     if(!interaction.isAutocomplete()) return;
     if(interaction.commandName !== 'anime') return;

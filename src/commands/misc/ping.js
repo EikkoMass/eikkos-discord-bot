@@ -1,4 +1,4 @@
-module.exports =  {
+export default  {
   name: 'ping',
   description: 'Replies with the bot ping!!',
   // devOnly: Boolean,

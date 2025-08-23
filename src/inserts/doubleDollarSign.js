@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   name: 'doubleDollarSign',
   description: 'quote the user who writes a text that includes "$$"',
   match: "$$",

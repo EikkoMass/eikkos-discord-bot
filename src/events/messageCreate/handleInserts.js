@@ -1,9 +1,9 @@
-const getLocalInserts = require('../../utils/getLocalInserts');
-const comparatorTypes = require('../../utils/getComparatorTypes');
+import getLocalInserts from '../../utils/getLocalInserts.js';
+import comparatorTypes from '../../utils/getComparatorTypes.js';
 
-module.exports = async (client, message) => {
+export default async (client, message) => {
 
-  const localInserts = getLocalInserts();
+  const localInserts = await getLocalInserts();
   try {
 
     const insertObject = localInserts.find(cmd => (comparatorTypes[cmd?.type] || comparatorTypes.equals)(message.content, cmd.match));

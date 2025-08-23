@@ -1,19 +1,20 @@
-const { devs, testServer } = require('../../../config.json');
-const getLocalCommands = require('../../utils/getLocalCommands');
-const { MessageFlags, EmbedBuilder, Client, Interaction } = require('discord.js');
+import config from '../../../config.json' with { type: 'json' };
+import getLocalCommands from '../../utils/getLocalCommands.js';
+import { MessageFlags, EmbedBuilder, Client } from 'discord.js';
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
-module.exports = async (client, interaction) => {
+export default async (client, interaction) => {
   if(!interaction.isChatInputCommand()) return;
 
   try {
-    const commandObject = getLocalCommands().find(cmd => cmd.name === interaction.commandName);
+    const localCommands = await getLocalCommands();
+    const commandObject = localCommands.find(cmd => cmd.name === interaction.commandName);
 
     if(!commandObject) return;
-
+    
     if (
       checkDevOnly(interaction, commandObject) &&
       checkTestOnly(interaction, commandObject) &&
@@ -31,13 +32,13 @@ module.exports = async (client, interaction) => {
 
 function checkDevOnly(interaction, commandObject)
 {
-  return (!commandObject.devOnly || devs.includes(interaction.member.id)) 
+  return (!commandObject.devOnly || config.devs.includes(interaction.member.id)) 
     || reply(interaction, `Only devs are allowed to run this command`);
 }
 
 function checkTestOnly(interaction, commandObject) 
 {  
-  return (!commandObject.testOnly || interaction.guild.id === testServer) 
+  return (!commandObject.testOnly || interaction.guild.id === config.testServer) 
     || reply(interaction, `This command cannot be ran here`);
 }
 

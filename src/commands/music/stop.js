@@ -1,19 +1,19 @@
-const { Client, Interaction, EmbedBuilder, MessageFlags } = require('discord.js');
+import { Client, EmbedBuilder, MessageFlags } from 'discord.js';
 
-const { useQueue } = require('discord-player')
+import { useQueue } from 'discord-player';
 
-const { getI18n } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/stop`);
+import { getI18n } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/stop.json`, { with: { type: 'json' } });
 
-module.exports =  {
+export default  {
   name: 'stop',
   description: 'stop the song on the voice channel',
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
-    const words = getLocalization(interaction.locale);
+    const words = (await getLocalization(interaction.locale)).default;
 
     await interaction.deferReply({ flags: [ MessageFlags.Ephemeral ] });
 

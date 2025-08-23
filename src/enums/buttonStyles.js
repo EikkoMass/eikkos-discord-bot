@@ -1,6 +1,6 @@
-const {ButtonStyle} = require('discord.js');
+import {ButtonStyle} from 'discord.js';
 
-module.exports = [
+export default [
   {name: ButtonStyle[ButtonStyle.Primary], value: ButtonStyle.Primary},
   {name: ButtonStyle[ButtonStyle.Secondary], value: ButtonStyle.Secondary},
   {name: ButtonStyle[ButtonStyle.Success], value: ButtonStyle.Success},

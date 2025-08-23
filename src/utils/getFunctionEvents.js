@@ -1,9 +1,9 @@
-module.exports = {
+export default {
   default: (client, eventFiles) => {
       return async (interaction) => {
         for(const eventFile of eventFiles)
         {
-          const eventFunction  = require(eventFile);
+          const eventFunction = (await import(eventFile)).default;
           await eventFunction(client, interaction);
         }
       }
@@ -12,7 +12,7 @@ module.exports = {
       return async (oldPresence, newPresence) => {
         for(const eventFile of eventFiles)
         {
-          const eventFunction  = require(eventFile);
+          const eventFunction = (await import(eventFile)).default;
           await eventFunction(client, oldPresence, newPresence);
         }
       }
@@ -21,7 +21,7 @@ module.exports = {
       return async message => {
         for(const eventFile of eventFiles)
           {
-            const eventFunction  = require(eventFile);
+            const eventFunction = (await import(eventFile)).default;
             await eventFunction(client, message);
           }
       }

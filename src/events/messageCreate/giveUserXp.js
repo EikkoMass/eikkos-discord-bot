@@ -1,6 +1,6 @@
-const {Client, Message} = require('discord.js');
-const calculateLevelXp = require('../../utils/calculateLevelXp');
-const Level = require('../../models/level');
+import {Client, Message} from 'discord.js';
+import calculateLevelXp from '../../utils/calculateLevelXp.js';
+import Level from '../../models/level.js';
 const cooldowns = new Set();
 
 function getRandomXp(min, max) {
@@ -13,7 +13,7 @@ function getRandomXp(min, max) {
  *  @param {Client} client
  *  @param {Message} message
 */
-module.exports = async (client, message) => {
+export default async (client, message) => {
   if(!message.inGuild() || message.author.bot || cooldowns.has(message.author.id)) return;
 
   const xpToGive = getRandomXp(5, 15);

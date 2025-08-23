@@ -1,18 +1,18 @@
-const { Client, Interaction, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } = require('discord.js');
+import { Client, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } from 'discord.js';
 
-const { getI18n } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/question`);
+import { getI18n } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/question.json`, { with: { type: 'json' } });
 
-module.exports =  {
+export default  {
   name: 'yesno',
   description: 'make a question of yes / no to the bot',
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
 
-    const words = getLocalization(interaction.locale);
+    const words = (await getLocalization(interaction.locale)).default;
 
     let question = interaction.options.get('doubt')?.value;
 

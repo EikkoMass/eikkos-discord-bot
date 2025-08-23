@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model } from 'mongoose';
 
 const roleContext = new Schema({
   name: {
@@ -11,4 +11,4 @@ const roleContext = new Schema({
   },
 });
 
-module.exports = model('RoleContext', roleContext)
+export default model('RoleContext', roleContext);

@@ -1,10 +1,10 @@
-const { ApplicationCommandOptionType, Client, Interaction, MessageFlags } = require('discord.js');
-const User = require('../../models/user')
+import { ApplicationCommandOptionType, Client, MessageFlags } from 'discord.js';
+import User from '../../models/user.js';
 
-module.exports = {
+export default {
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
     if(!interaction.inGuild())

@@ -1,16 +1,16 @@
-const {Client, Interaction, ActionRowBuilder, ButtonBuilder, ButtonStyle, ApplicationCommandOptionType, MessageFlags, PermissionFlagsBits } = require('discord.js');
-const ActionRowRole = require('../../models/actionRowRole');
-const RoleContext = require('../../models/roleContext');
-const { Types } = require('mongoose');
+import {Client, ActionRowBuilder, ButtonBuilder, ButtonStyle, ApplicationCommandOptionType, MessageFlags, PermissionFlagsBits } from 'discord.js';
+import ActionRowRole from '../../models/actionRowRole.js';
+import RoleContext from '../../models/roleContext.js';
+import { Types } from 'mongoose';
 
-const { getI18n } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/role`);
+import { getI18n } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/role.json`, { with: { type: 'json' } });
 
-module.exports = {
+export default {
 
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
     switch(interaction.options.getSubcommand())
@@ -103,11 +103,11 @@ module.exports = {
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function add(client, interaction)
 {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   try {
 
@@ -190,11 +190,11 @@ async function add(client, interaction)
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function choose(client, interaction)
 {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   try {
     const row = new ActionRowBuilder();
@@ -242,11 +242,11 @@ async function choose(client, interaction)
 
 /**
  *  @param {Client} client
- *  @param {Interaction} interaction
+ *  @param  interaction
 */
 async function remove(client, interaction)
 {
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   const roleParam = interaction.options.get('role')?.value;
   const contextParam = interaction.options?.get('context')?.value;

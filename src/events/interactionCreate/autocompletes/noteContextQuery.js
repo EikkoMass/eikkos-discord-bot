@@ -1,11 +1,11 @@
-const { Client, Interaction } = require('discord.js');
-const types = require('../../../enums/noteContextTypes');
+import { Client } from 'discord.js';
+import types from '../../../enums/noteContextTypes.js';
 
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
-module.exports = (client, interaction) => {
+export default (client, interaction) => {
   try {
     if(!interaction.isAutocomplete()) return;
     if(interaction.commandName !== 'notes') return;

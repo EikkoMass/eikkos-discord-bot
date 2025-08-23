@@ -1,10 +1,10 @@
-const getAllFiles = require('../utils/getAllFiles');
-const functionEvents = require('../utils/getFunctionEvents');
-const path = require('path');
+import getAllFiles from '../utils/getAllFiles.js';
+import functionEvents from '../utils/getFunctionEvents.js';
+import path from 'path';
 
-module.exports = (client) => {
+export default (client) => {
 
-  const eventFolders = getAllFiles(path.join(__dirname, '..', 'events'), true);
+  const eventFolders = getAllFiles(path.join(import.meta.dirname, '..', 'events'), true);
   
   for (const eventFolder of eventFolders)
   {

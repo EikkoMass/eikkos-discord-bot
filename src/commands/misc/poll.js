@@ -1,10 +1,10 @@
-const {PollLayoutType, Client, Interaction, ApplicationCommandOptionType, MessageFlags } = require('discord.js');
+import {PollLayoutType, Client, ApplicationCommandOptionType, MessageFlags } from 'discord.js';
 
-module.exports =  {
+export default  {
   /** 
    * 
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
 

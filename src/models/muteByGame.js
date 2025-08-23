@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model } from 'mongoose';
 
 const muteByGameSchema = new Schema({
   userId: {
@@ -15,4 +15,4 @@ const muteByGameSchema = new Schema({
   }
 });
 
-module.exports = model('MuteByGame', muteByGameSchema)
+export default model('MuteByGame', muteByGameSchema);

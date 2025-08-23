@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model } from 'mongoose';
 
 const dirtyWordSchema = new Schema({
   guildId: {
@@ -12,4 +12,4 @@ const dirtyWordSchema = new Schema({
   }
 });
 
-module.exports = model('DirtyWord', dirtyWordSchema)
+export default model('DirtyWord', dirtyWordSchema);

@@ -1,18 +1,18 @@
-const { Client, Interaction, ApplicationCommandOptionType, ChannelType, EmbedBuilder, MessageFlags, PermissionFlagsBits } = require('discord.js');
+import { Client, ApplicationCommandOptionType, ChannelType, EmbedBuilder, MessageFlags, PermissionFlagsBits } from 'discord.js';
 
-const { getI18n, formatMessage } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/drown`);
+import { getI18n, formatMessage } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/drown.json`, { with: { type: 'json' } });
 
-module.exports =  {
+export default  {
   name: 'drown',
   description: 'drown away an user in random voice channels',
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
     
-    const words = getLocalization(interaction.locale);
+    const words = (await getLocalization(interaction.locale)).default;
 
     const targetMember = await interaction.guild.members.fetch(interaction.options.get('user')?.value);
     const attempts = interaction.options.get('attempts')?.value || 3;

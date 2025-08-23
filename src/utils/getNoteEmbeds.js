@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+import { EmbedBuilder } from "discord.js";
 
 let userCache = [];
 
@@ -42,4 +42,4 @@ async function getUser(client, userId) {
   return userCache[userId];
 }
 
-module.exports = getNoteEmbeds;
+export default getNoteEmbeds;

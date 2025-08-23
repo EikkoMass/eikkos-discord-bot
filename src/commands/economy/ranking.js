@@ -1,12 +1,12 @@
-const { EmbedBuilder, Client, Interaction, MessageFlags } = require('discord.js');
-const Level = require('../../models/level')
+import { EmbedBuilder, Client, MessageFlags } from 'discord.js';
+import Level from '../../models/level.js';
 
 const QUANTITY_OF_USERS = 5;
 
-module.exports = {
+export default {
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
     if(!interaction.inGuild())

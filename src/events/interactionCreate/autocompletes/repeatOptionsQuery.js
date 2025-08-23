@@ -1,11 +1,11 @@
-const {Client, Interaction} = require('discord.js');
-const { QueueRepeatMode } = require('discord-player');
+import {Client} from 'discord.js';
+import { QueueRepeatMode } from 'discord-player';
 
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
-module.exports = (client, interaction) => {
+export default (client, interaction) => {
   try {
     if(!interaction.isAutocomplete()) return;
     if(interaction.commandName !== 'repeat') return;

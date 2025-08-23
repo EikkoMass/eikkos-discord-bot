@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model } from 'mongoose';
 
 const minecraftServerSchema = new Schema({
   guildId: {
@@ -18,4 +18,4 @@ const minecraftServerSchema = new Schema({
   }
 });
 
-module.exports = model('MinecraftServer', minecraftServerSchema)
+export default model('MinecraftServer', minecraftServerSchema);

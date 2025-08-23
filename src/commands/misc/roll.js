@@ -1,7 +1,7 @@
-const {ApplicationCommandOptionType, EmbedBuilder, MessageFlags } = require('discord.js');
+import {ApplicationCommandOptionType, EmbedBuilder, MessageFlags } from 'discord.js';
 
-const { getI18n, formatMessage } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/roll`);
+import { getI18n, formatMessage } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/roll.json`, { with: { type: 'json' } });
 
 const SUSPENSE_TIMEOUT_MS = 3000;
 const quantity = {
@@ -11,7 +11,7 @@ const quantity = {
 };
 
 
-module.exports =  {
+export default  {
   callback: async (client, interaction) => {
 
     switch(interaction.options.getSubcommand())
@@ -119,7 +119,7 @@ module.exports =  {
 
 async function rollCustom(client, interaction) {
 
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
 
   let min = interaction.options.get('min')?.value;
   let max = interaction.options.get('max')?.value;
@@ -158,7 +158,7 @@ async function rollCustom(client, interaction) {
 
 async function roll(client, interaction) {
 
-  const words = getLocalization(interaction.locale);
+  const words = (await getLocalization(interaction.locale)).default;
   
   const sub = interaction.options.getSubcommand();
   const quantity = interaction.options.get('quantity')?.value || 1;

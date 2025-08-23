@@ -1,6 +1,6 @@
-const { Client, Interaction, ApplicationCommandOptionType, EmbedBuilder } = require('discord.js');
+import { Client, ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
 
-module.exports = {
+export default {
 
   name: 'question',
   description: 'Create a question with emoji voting',
@@ -8,7 +8,7 @@ module.exports = {
   /** 
    * 
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
     const text = interaction.options.get('text').value;

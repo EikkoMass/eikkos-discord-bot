@@ -1,4 +1,4 @@
-module.exports = async (client) => {
+export default async (client) => {
   authenticate(client);
 }
 
@@ -18,6 +18,3 @@ async function authenticate(client)
   tokenObj = json;
   setTimeout(authenticate.bind(this, client), 604800 * 1000); // 7 days
 }
-
-
-exports.getAuthParams = () => tokenObj; 

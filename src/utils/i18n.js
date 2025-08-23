@@ -1,10 +1,10 @@
-const languages = require("../i18n/languages.json");
+import languages from "../i18n/languages.json" with { type: 'json' };
 const defaultLanguage = "en";
 
 /** 
  * @param {String} locale
  */
-function getI18n(locale) {
+export function getI18n(locale) {
   return languages[locale] ?? defaultLanguage;
 }
 
@@ -12,7 +12,7 @@ function getI18n(locale) {
  * @param {String} message
  * @param {Array} values 
  */
-function formatMessage(message = "", values = [])
+export function formatMessage(message = "", values = [])
 {
   if(!values?.length) return message;
 
@@ -25,10 +25,7 @@ function formatMessage(message = "", values = [])
   return content;
 }
 
-exports.getI18n = getI18n;
-exports.formatMessage = formatMessage; 
-
-module.exports = {
+export default {
   getI18n,
   formatMessage,
 };

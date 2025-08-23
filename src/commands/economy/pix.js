@@ -1,8 +1,8 @@
-const {Client, Interaction, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } = require('discord.js');
-const crcs = require('../../utils/crcs');
-const Pix = require('../../models/pix');
+import {Client, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } from 'discord.js';
+import crcs from '../../utils/crcs.js';
+import Pix from '../../models/pix.js';
 
-module.exports = {
+export default {
 
   // Heavily inspired by https://github.com/EnssureIT/faz-um-pix
 
@@ -86,7 +86,7 @@ function getSafeLength(obj) {
 /**
  * 
  * @param {Client} client 
- * @param {Interaction} interaction 
+ * @param  interaction 
  */
 async function request(client, interaction)
 {
@@ -203,7 +203,7 @@ async function request(client, interaction)
 /**
  * 
  * @param {Client} client 
- * @param {Interaction} interaction 
+ * @param  interaction 
  */
 async function register(client, interaction)
 {

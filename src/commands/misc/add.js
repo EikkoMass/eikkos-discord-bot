@@ -1,6 +1,6 @@
-const {ApplicationCommandOptionType } = require('discord.js');
+import {ApplicationCommandOptionType } from 'discord.js';
 
-module.exports =  {
+export default  {
   callback: async (client, interaction) => {
   try{
     await interaction.deferReply();

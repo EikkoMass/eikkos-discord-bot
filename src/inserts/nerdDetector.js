@@ -1,6 +1,6 @@
-const { Client, Message, AttachmentBuilder, MessageFlags } = require('discord.js');
+import { Client, Message, AttachmentBuilder, MessageFlags } from 'discord.js';
 
-module.exports = {
+export default {
   name: 'nerdDetector',
   description: 'quote the user with the nerdiest comment possible',
   match: "",

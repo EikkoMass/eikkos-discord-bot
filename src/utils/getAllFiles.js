@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 const getAllFiles = (directory, foldersOnly = false, recursive = false) => {
   let fileNames = [];
@@ -30,4 +30,4 @@ const getAllFiles = (directory, foldersOnly = false, recursive = false) => {
   return fileNames;
 };
 
-module.exports = getAllFiles;
+export default getAllFiles;

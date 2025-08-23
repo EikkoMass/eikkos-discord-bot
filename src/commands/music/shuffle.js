@@ -1,19 +1,19 @@
-const { Client, Interaction, EmbedBuilder, MessageFlags } = require('discord.js');
-const { useQueue } = require('discord-player')
+import { Client, EmbedBuilder, MessageFlags } from 'discord.js';
+import { useQueue } from 'discord-player';
 
-const { getI18n, formatMessage } = require("../../utils/i18n");
-const getLocalization = locale => require(`../../i18n/${getI18n(locale)}/shuffle`);
+import { getI18n, formatMessage } from "../../utils/i18n.js";
+const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/shuffle.json`, { with: { type: 'json' } });
 
-module.exports =  {
+export default  {
   name: 'shuffle',
   description: 'shuffles the current playlist',
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
 
-    const words = getLocalization(interaction.locale);
+    const words = (await getLocalization(interaction.locale)).default;
     await interaction.deferReply({ flags: [ MessageFlags.Ephemeral ] });
 
     const queue = useQueue(interaction.guild);

@@ -1,11 +1,11 @@
-const { Client, GuildMember } = require('discord.js');
-const AutoRole = require('../../models/autorole')
+import { Client, GuildMember } from 'discord.js';
+import AutoRole from '../../models/autorole.js';
 
 /**
  *  @param {Client} client
  *  @param {GuildMember} member
 */
-module.exports = async (client, member) => {
+export default async (client, member) => {
   try {
     let guild = member.guild;
     if(!guild) return;

@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   0x0000,
   0x1021,
   0x2042,

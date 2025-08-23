@@ -1,10 +1,10 @@
-const {Client, Interaction} = require('discord.js');
+import {Client} from 'discord.js';
 
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
-module.exports = (client, interaction) => {
+export default (client, interaction) => {
   try {
     if(!interaction.isAutocomplete()) return;
     if(interaction.commandName !== 'mute-by-game') return;

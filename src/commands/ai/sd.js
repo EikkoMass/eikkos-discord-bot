@@ -1,13 +1,15 @@
-const { Client, Interaction, ApplicationCommandOptionType, MessageFlags } = require('discord.js');
-const { Buffer } = require('node:buffer');
-require('dotenv').config();
+import { Client, ApplicationCommandOptionType, MessageFlags } from 'discord.js';
+import { Buffer } from 'node:buffer';
+import dotenv from 'dotenv';
 
-module.exports =  {
+dotenv.config();
+
+export default  {
   name: 'sd',
   description: 'send a prompt to stable diffusion',
   /**
    *  @param {Client} client
-   *  @param {Interaction} interaction
+   *  @param  interaction
   */
   callback: async (client, interaction) => {
 
