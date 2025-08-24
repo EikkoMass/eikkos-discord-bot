@@ -27,6 +27,7 @@ export default async (client, interaction) => {
     {
       queue.node.stop();
       await interaction.editReply({ embeds: [embed.setDescription(`:rock: ${words.Stopped}`)] }); 
+      return;
     }
 
     await interaction.editReply({ embeds: [embed.setDescription(`:warning: ${words.NoSongPlaying}`)] });

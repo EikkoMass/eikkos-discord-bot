@@ -10,10 +10,10 @@ export default {
    * @param {GuildQueue} queue 
    * @param {Track} track 
   */
-  callback: (queue, track) => {
+  callback: async (queue, track) => {
 
     if (queue && !queue.deleted) {
-      const words = getLocalization(queue.metadata.preferredLocale);
+      const words = (await getLocalization(queue.metadata.preferredLocale)).default;
       
       queue.delete();
 

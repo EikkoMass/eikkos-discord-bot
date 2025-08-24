@@ -33,6 +33,7 @@ export default async (client, interaction) => {
         await interaction.editReply({
           embeds: [new EmbedBuilder().setDescription(words.NotEnoughTracks)],
         });
+        return;
       }
 
       queue.tracks.shuffle();

@@ -13,7 +13,7 @@ export default {
    * @param {Track} track 
   */
   callback: async (queue, track) => {
-    const words = getLocalization(queue.metadata.preferredLocale);
+    const words = (await getLocalization(queue.metadata.preferredLocale)).default;
 
     const embed = new EmbedBuilder()
     .setTitle(words.Playing)
