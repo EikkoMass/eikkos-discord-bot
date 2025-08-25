@@ -2,8 +2,7 @@ import { Client, EmbedBuilder } from 'discord.js';
 import getPlayerActionRow from "../../utils/playerActionRow.js";
 import { useQueue } from 'discord-player';
 
-import { getI18n } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/queue.json`, { with: { type: 'json' } });
+import { getLocalization } from "../../utils/i18n.js";
 
 export default  {
   name: 'queue',
@@ -14,7 +13,7 @@ export default  {
   */
   callback: async (client, interaction) => {
 
-    const words = (await getLocalization(interaction.locale)).default;
+    const words = await getLocalization(interaction.locale, `queue`);
 
     await interaction.deferReply();
     

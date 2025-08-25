@@ -2,8 +2,7 @@ import { EmbedBuilder, MessageFlags } from 'discord.js';
 import { GuildQueue, Track } from 'discord-player';
 import getPlayerActionRow from "../../utils/playerActionRow.js";
 
-import { getI18n } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/playerEvents/playerStart.json`, { with: { type: 'json' } });
+import { getLocalization } from "../../utils/i18n.js";
 
 export default {
   name: 'playerStart',
@@ -13,7 +12,7 @@ export default {
    * @param {Track} track 
   */
   callback: async (queue, track) => {
-    const words = (await getLocalization(queue.metadata.preferredLocale)).default;
+    const words = await getLocalization(queue.metadata.preferredLocale, 'playerEvents/playerStart');
 
     const embed = new EmbedBuilder()
     .setTitle(words.Playing)

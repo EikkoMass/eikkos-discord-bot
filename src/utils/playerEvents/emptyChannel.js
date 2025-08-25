@@ -1,8 +1,7 @@
 import { EmbedBuilder } from 'discord.js';
 import { GuildQueue, Track } from 'discord-player';
 
-import { getI18n } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/playerEvents/emptyChannel.json`, { with: { type: 'json' } });
+import { getLocalization } from "../../utils/i18n.js";
 
 export default {
   name: 'emptyChannel',
@@ -13,7 +12,7 @@ export default {
   callback: async (queue, track) => {
 
     if (queue && !queue.deleted) {
-      const words = (await getLocalization(queue.metadata.preferredLocale)).default;
+      const words = await getLocalization(queue.metadata.preferredLocale, `playerEvents/emptyChannel`);
       
       queue.delete();
 

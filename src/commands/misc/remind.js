@@ -1,8 +1,7 @@
 import {Client, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } from 'discord.js';
 import ms from 'ms';
 
-import { getI18n, formatMessage } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/remind.json`, { with: { type: 'json' } });
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 const remindersCache = {};
 
@@ -81,7 +80,7 @@ export default  {
 
 async function create(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `remind`);
       
   let time = interaction.options.get('time')?.value;
   const message = interaction.options.get('message')?.value || "";

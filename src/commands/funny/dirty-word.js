@@ -1,8 +1,7 @@
 import {ApplicationCommandOptionType, Client, MessageFlags, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import DirtyWord from '../../models/dirtyword.js';
 
-import { getI18n, formatMessage } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/dirtyWord.json`, { with: { type: 'json' } });
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 export default  {
   /** 
@@ -70,7 +69,7 @@ export default  {
 
 async function removeDirtyWord(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, 'dirtyWord');
   const embed = new EmbedBuilder();
 
   const indexResult = client.dirtyWordCache.result.findIndex(dirty => dirty.guildId === interaction.guild.id);
@@ -131,7 +130,7 @@ async function getCurrentDirtyWord(client, interaction)
 
 async function setDirtyWord(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `dirtyWord`);
   const embed = new EmbedBuilder();
 
   const word = interaction.options.get('word')?.value;

@@ -2,8 +2,7 @@ import { Client, EmbedBuilder, MessageFlags } from 'discord.js';
 
 import { useQueue } from 'discord-player';
 
-import { getI18n, formatMessage } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/leave.json`, { with: { type: 'json' } });
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 export default  {
   name: 'leave',
@@ -14,7 +13,7 @@ export default  {
   */
   callback: async (client, interaction) => {
 
-    const words = (await getLocalization(interaction.locale)).default;
+    const words = await getLocalization(interaction.locale, `leave`);
 
     const queue = useQueue(interaction.guild);
     const embed = new EmbedBuilder();

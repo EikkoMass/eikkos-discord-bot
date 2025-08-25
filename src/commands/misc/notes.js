@@ -14,8 +14,7 @@ import {
 import getNoteEmbeds from "../../utils/getNoteEmbeds.js";
 import Note from "../../models/note.js";
 
-import { getI18n } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/notes.json`, { with: { type: 'json' } });
+import { getLocalization } from "../../utils/i18n.js";
 const amount = 10;
 
 export default {
@@ -88,7 +87,7 @@ export default {
  */
 async function add(client, interaction) {
   const context = interaction.options?.get("context")?.value || 1;
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `notes`);
 
   let query = {
     guildId: interaction.guild.id,
@@ -144,7 +143,7 @@ async function add(client, interaction) {
  *  @param  interaction
  */
 async function show(client, interaction) {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `notes`);
 
   const context = interaction.options?.get("context")?.value || 1;
 
@@ -218,7 +217,7 @@ async function show(client, interaction) {
 async function remove(client, interaction) {
   const id = interaction.options?.get("id").value;
 
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `notes`);
 
   const note = await Note.findByIdAndDelete(id).catch(() => {});
 

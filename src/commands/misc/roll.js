@@ -1,7 +1,6 @@
 import {ApplicationCommandOptionType, EmbedBuilder, MessageFlags } from 'discord.js';
 
-import { getI18n, formatMessage } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/roll.json`, { with: { type: 'json' } });
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 const SUSPENSE_TIMEOUT_MS = 3000;
 const quantity = {

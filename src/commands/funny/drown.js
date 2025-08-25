@@ -1,7 +1,6 @@
 import { Client, ApplicationCommandOptionType, ChannelType, EmbedBuilder, MessageFlags, PermissionFlagsBits } from 'discord.js';
 
-import { getI18n, formatMessage } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/drown.json`, { with: { type: 'json' } });
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 export default  {
   name: 'drown',
@@ -12,7 +11,7 @@ export default  {
   */
   callback: async (client, interaction) => {
     
-    const words = (await getLocalization(interaction.locale)).default;
+    const words = await getLocalization(interaction.locale, `drown`);
 
     const targetMember = await interaction.guild.members.fetch(interaction.options.get('user')?.value);
     const attempts = interaction.options.get('attempts')?.value || 3;

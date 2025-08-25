@@ -7,8 +7,7 @@ import {
   ButtonBuilder,
   MessageFlags,
 } from "discord.js";
-import { getI18n } from "../../../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../../../i18n/${getI18n(locale)}/notes.json`, { with: { type: 'json' } });
+import { getLocalization } from "../../../../utils/i18n.js";
 
 import Note from "../../../../models/note.js";
 
@@ -32,7 +31,7 @@ export default async (client, interaction) => {
     const description = interaction.fields?.getField("description").value;
     const img = interaction.fields?.getField("img")?.value;
 
-    const words = (await getLocalization(interaction.locale)).default;
+    const words = await getLocalization(interaction.locale, `notes`);
 
     const note = new Note({
       guildId: interaction.guild.id,

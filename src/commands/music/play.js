@@ -2,18 +2,18 @@ import {Client, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } from 
 import playerConfigs from '../../configs/player.json' with { type: 'json' };
 import { QueryType, useMainPlayer } from 'discord-player';
 
-import { getI18n, formatMessage } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/play.json`, { with: { type: 'json' } });
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
+const NAME = 'play';
 
 export default  {
-  name: 'play',
+  name: NAME,
   description: 'play a song on the voice channel',
   /**
    *  @param {Client} client
    *  @param  interaction
   */
   callback: async (client, interaction) => {
-    const words = (await getLocalization(interaction.locale)).default;
+    const words = await getLocalization(interaction.locale, NAME);
 
     await interaction.deferReply({ 
       flags: [ MessageFlags.Ephemeral ] 

@@ -1,7 +1,6 @@
 import { Client, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } from 'discord.js';
 
-import { getI18n } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/question.json`, { with: { type: 'json' } });
+import { getLocalization } from "../../utils/i18n.js";
 
 export default  {
   name: 'yesno',
@@ -12,7 +11,7 @@ export default  {
   */
   callback: async (client, interaction) => {
 
-    const words = (await getLocalization(interaction.locale)).default;
+    const words = await getLocalization(interaction.locale, `yesno`);
 
     let question = interaction.options.get('doubt')?.value;
 

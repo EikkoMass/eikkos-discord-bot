@@ -1,8 +1,7 @@
 import { Client, EmbedBuilder, ApplicationCommandOptionType, MessageFlags } from 'discord.js';
 import { useQueue } from 'discord-player';
 
-import { getI18n } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/autorole.json`, { with: { type: 'json' } });
+import { getLocalization } from "../../utils/i18n.js";
 
 export default  {
   name: 'repeat',
@@ -13,7 +12,7 @@ export default  {
   */
   callback: async (client, interaction) => {
 
-    const words = (await getLocalization(interaction.locale)).default;
+    const words = await getLocalization(interaction.locale, `autorole`);
 
     const repeatOption = interaction.options.get('type')?.value;
 

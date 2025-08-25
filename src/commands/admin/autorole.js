@@ -1,8 +1,7 @@
 import { ApplicationCommandOptionType, PermissionFlagsBits, Client, MessageFlags, EmbedBuilder } from 'discord.js';
 import AutoRole from '../../models/autorole.js';
 
-import { getI18n } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/autorole.json`, { with: { type: 'json' } });
+import { getLocalization } from "../../utils/i18n.js";
 
 export default {
 
@@ -61,7 +60,7 @@ export default {
 async function configure(client, interaction) {
   
   const embed = new EmbedBuilder();
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, 'autorole');
 
   if(!interaction.inGuild())
     {
@@ -109,7 +108,7 @@ async function configure(client, interaction) {
 async function disable(client, interaction) {
   
   const embed = new EmbedBuilder();
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, 'autorole');
 
   try {
 

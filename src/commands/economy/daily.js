@@ -1,8 +1,7 @@
 import User from '../../models/user.js';
 import { Client, MessageFlags } from 'discord.js';
 
-import { getI18n, formatMessage } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/daily.json`, { with: { type: 'json' } });
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 const dailyAmount = 1000;
 
@@ -14,7 +13,7 @@ export default {
    * @param  interaction 
    */
   callback: async (client, interaction) => {
-    const words = (await getLocalization(interaction.locale)).default;
+    const words = await getLocalization(interaction.locale, 'daily');
 
     if(!interaction.inGuild())
     {

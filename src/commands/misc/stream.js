@@ -1,8 +1,7 @@
 import {ApplicationCommandOptionType, Client, EmbedBuilder, MessageFlags } from 'discord.js';
 import Stream from '../../models/stream.js';
 
-import { getI18n,  formatMessage } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/stream.json`, { with: { type: 'json' } });
+import { getLocalization,  formatMessage } from "../../utils/i18n.js";
 
 export default  {
   callback: async (client, interaction) => {
@@ -73,7 +72,7 @@ export default  {
 */
 async function register(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `stream`);
 
   try {
     const title = interaction.options.get('title')?.value;
@@ -120,7 +119,7 @@ async function register(client, interaction)
 */
 async function remove(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `stream`);
   
   const embed = new EmbedBuilder();
   const link = interaction.options.get('link')?.value;

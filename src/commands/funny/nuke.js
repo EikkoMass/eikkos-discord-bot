@@ -1,7 +1,6 @@
 import {Client, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, PermissionsBitField, MessageFlags, EmbedBuilder } from 'discord.js';
 
-import { getI18n, formatMessage } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/nuke.json`, { with: { type: 'json' } });
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 export default  {
   name: 'nuke',
@@ -11,7 +10,7 @@ export default  {
    *  @param  interaction
   */
   callback: async (client, interaction) => {
-    const words = (await getLocalization(interaction.locale)).default;
+    const words = await getLocalization(interaction.locale, `nuke`);
     const embed = new EmbedBuilder();
 
     let channel = interaction.options.get('channel')?.value;

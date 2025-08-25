@@ -4,7 +4,7 @@ const defaultLanguage = "en";
 /** 
  * @param {String} locale
  */
-export function getI18n(locale) {
+function getI18n(locale) {
   return languages[locale] ?? defaultLanguage;
 }
 
@@ -25,7 +25,12 @@ export function formatMessage(message = "", values = [])
   return content;
 }
 
+export async function getLocalization(locale, context)
+{
+  return (await import(`../i18n/${getI18n(locale)}/${context}.json`, { with: { type: 'json' } })).default;
+}
+
 export default {
-  getI18n,
   formatMessage,
+  getLocalization,
 };

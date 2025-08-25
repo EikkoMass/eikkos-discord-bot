@@ -2,8 +2,7 @@ import {Client, MessageFlags, EmbedBuilder} from 'discord.js';
 import playerConfigs from '../../configs/player.json' with { type: 'json' };
 import { QueryType, useMainPlayer } from 'discord-player';
 
-import { getI18n, formatMessage } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/join.json`, { with: { type: 'json' } });
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 export default  {
   name: 'join',
@@ -14,7 +13,7 @@ export default  {
   */
   callback: async (client, interaction) => {
 
-    const words = (await getLocalization(interaction.locale)).default;
+    const words = await getLocalization(interaction.locale, `join`);
 
     const channel = {
       requester: interaction.member?.voice?.channel,

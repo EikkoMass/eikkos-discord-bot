@@ -3,8 +3,7 @@ import ActionRowRole from '../../models/actionRowRole.js';
 import RoleContext from '../../models/roleContext.js';
 import { Types } from 'mongoose';
 
-import { getI18n } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/role.json`, { with: { type: 'json' } });
+import { getLocalization } from "../../utils/i18n.js";
 
 export default {
 

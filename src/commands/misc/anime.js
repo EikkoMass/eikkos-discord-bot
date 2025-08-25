@@ -1,7 +1,6 @@
 import {Client, ApplicationCommandOptionType, EmbedBuilder, MessageFlags } from 'discord.js';
 
-import { getI18n } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/anime.json`, { with: { type: 'json' } });
+import { getLocalization } from "../../utils/i18n.js";
 
 export default  {
   name: 'anime',
@@ -45,7 +44,7 @@ export default  {
 */
 async function search(client, interaction) {
 
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `anime`);
 
   let embed = new EmbedBuilder();
   const malId = interaction.options?.get('query').value;

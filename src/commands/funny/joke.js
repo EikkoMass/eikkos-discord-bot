@@ -1,8 +1,7 @@
 import {Client, ApplicationCommandOptionType, MessageFlags, EmbedBuilder } from 'discord.js';
 import Joke from '../../models/joke.js';
 
-import { getI18n, formatMessage } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/joke.json`, { with: { type: 'json' } });
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 export default  {
   name: 'joke',
@@ -67,7 +66,7 @@ export default  {
 
 async function use(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `joke`);
 
   const embed = new EmbedBuilder();
   const targetUserId = interaction.options.get('user')?.value;
@@ -88,7 +87,7 @@ async function use(client, interaction)
 
 async function register(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `joke`);
   const embed = new EmbedBuilder();
   const message = interaction.options.get('message')?.value;
   const targetUserId = interaction.options.get('user')?.value;

@@ -1,8 +1,7 @@
 import { ApplicationCommandOptionType, EmbedBuilder, Client, MessageFlags } from 'discord.js';
 import info from '../../../package.json' with { type: 'json' };
 
-import { getI18n, formatMessage } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/info.json`, { with: { type: 'json' } });
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 export default  {
   callback: async (client, interaction) => {
@@ -70,7 +69,7 @@ export default  {
 */
 async function all(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `info`);
 
   const avatar = await fetch(`https://github.com/${info.repository.user}.png`);
   const bufferImg = await avatar.arrayBuffer();
@@ -101,7 +100,7 @@ async function all(client, interaction)
 */
 async function version(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `info`);
 
   await interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
@@ -115,7 +114,7 @@ async function version(client, interaction)
 */
 async function author(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `info`);
 
   await interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
@@ -129,7 +128,7 @@ async function author(client, interaction)
 */
 async function license(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `info`);
 
   await interaction.reply({
     flags: [ MessageFlags.Ephemeral ],
@@ -143,7 +142,7 @@ async function license(client, interaction)
 */
 async function repository(client, interaction)
 {
-    const words = (await getLocalization(interaction.locale)).default;
+    const words = await getLocalization(interaction.locale, `info`);
 
   await interaction.reply({
     flags: [ MessageFlags.Ephemeral ],

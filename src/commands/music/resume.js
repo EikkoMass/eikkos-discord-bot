@@ -2,8 +2,7 @@ import { Client, EmbedBuilder, MessageFlags } from 'discord.js';
 
 import { useQueue } from 'discord-player';
 
-import { getI18n } from "../../utils/i18n.js";
-const getLocalization = async locale => await import(`../../i18n/${getI18n(locale)}/resume.json`, { with: { type: 'json' } });
+import { getLocalization } from "../../utils/i18n.js";
 
 export default  {
   name: 'resume',
@@ -15,7 +14,7 @@ export default  {
   callback: async (client, interaction) => {
     await interaction.deferReply({ flags: [ MessageFlags.Ephemeral ] });
 
-    const words = (await getLocalization(interaction.locale)).default;
+    const words = await getLocalization(interaction.locale, `resume`);
 
     const queue = useQueue(interaction.guild);
     const embed = new EmbedBuilder();
