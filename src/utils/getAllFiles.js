@@ -20,7 +20,7 @@ const getAllFiles = (directory, foldersOnly = false, recursive = false) => {
         fileNames.push(filePath);
       }
     } else {
-      if(file.isFile())
+      if (file.isFile())
       {
         fileNames.push(filePath);
       }

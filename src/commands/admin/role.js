@@ -106,7 +106,7 @@ export default {
 */
 async function add(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `role`);
 
   try {
 
@@ -193,7 +193,7 @@ async function add(client, interaction)
 */
 async function choose(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `role`);
 
   try {
     const row = new ActionRowBuilder();
@@ -245,7 +245,7 @@ async function choose(client, interaction)
 */
 async function remove(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `role`);
 
   const roleParam = interaction.options.get('role')?.value;
   const contextParam = interaction.options?.get('context')?.value;

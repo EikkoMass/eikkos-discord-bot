@@ -118,7 +118,7 @@ export default  {
 
 async function rollCustom(client, interaction) {
 
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `roll`);
 
   let min = interaction.options.get('min')?.value;
   let max = interaction.options.get('max')?.value;
@@ -157,7 +157,7 @@ async function rollCustom(client, interaction) {
 
 async function roll(client, interaction) {
 
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `roll`);
   
   const sub = interaction.options.getSubcommand();
   const quantity = interaction.options.get('quantity')?.value || 1;

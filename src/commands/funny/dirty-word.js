@@ -104,7 +104,7 @@ async function removeDirtyWord(client, interaction)
 async function getCurrentDirtyWord(client, interaction)
 {
 
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, 'dirtyWord');
   const embed = new EmbedBuilder();
   
   const dirtyCache = client.dirtyWordCache.result.find(dirty => dirty.guildId === interaction.guild.id);

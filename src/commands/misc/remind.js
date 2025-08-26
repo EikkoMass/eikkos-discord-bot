@@ -144,7 +144,7 @@ async function create(client, interaction)
 
 async function status(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `remind`);
   
   const embeds = [];
   const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;
@@ -180,7 +180,7 @@ async function status(client, interaction)
 
 async function cancel(client, interaction)
 {
-  const words = (await getLocalization(interaction.locale)).default;
+  const words = await getLocalization(interaction.locale, `remind`);
 
   let id = interaction.options.get('id')?.value;
   const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;

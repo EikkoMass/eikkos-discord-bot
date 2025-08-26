@@ -1,9 +1,11 @@
+const importEvent = async eventFile => (await import(eventFile)).default;
+
 export default {
   default: (client, eventFiles) => {
       return async (interaction) => {
         for(const eventFile of eventFiles)
         {
-          const eventFunction = (await import(eventFile)).default;
+          const eventFunction = await importEvent(eventFile);
           await eventFunction(client, interaction);
         }
       }
@@ -12,7 +14,7 @@ export default {
       return async (oldPresence, newPresence) => {
         for(const eventFile of eventFiles)
         {
-          const eventFunction = (await import(eventFile)).default;
+          const eventFunction = await importEvent(eventFile);
           await eventFunction(client, oldPresence, newPresence);
         }
       }
@@ -21,7 +23,7 @@ export default {
       return async message => {
         for(const eventFile of eventFiles)
           {
-            const eventFunction = (await import(eventFile)).default;
+            const eventFunction = await importEvent(eventFile);
             await eventFunction(client, message);
           }
       }
