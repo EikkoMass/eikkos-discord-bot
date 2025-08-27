@@ -23,14 +23,14 @@ export default async (client) => {
         }
 
         if(areCommandsDifferent(existingCommand, localCommand))
-          {
-            await applicationCommands.edit(existingCommand.id, {
-              description,
-              options,
-            });
-    
-            console.log(`Edited command ${name}`);
-          } 
+        {
+          await applicationCommands.edit(existingCommand.id, {
+            description,
+            options,
+          });
+  
+          console.log(`Edited command ${name}`);
+        } 
       }
       else {
         if (localCommand.deleted)
