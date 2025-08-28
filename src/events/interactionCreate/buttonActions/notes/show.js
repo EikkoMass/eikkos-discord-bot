@@ -1,4 +1,4 @@
-import { Client, ButtonStyle, ActionRowBuilder, EmbedBuilder, ButtonBuilder, MessageFlags } from 'discord.js';
+import { Client, ButtonStyle, ActionRowBuilder, ButtonBuilder } from 'discord.js';
 import getNoteEmbeds from '../../../../utils/getNoteEmbeds.js';
 
 import Note from '../../../../models/note.js';

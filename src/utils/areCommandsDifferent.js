@@ -16,7 +16,7 @@ function areOptionsDifferent(existingOptions, localOptions) {
       
       if(
         isSubcommand(localOption) &&
-        (localOption.required || false) !== existingOption.required &&
+        ((localOption.required || false) !== existingOption.required) &&
         areOptionsDifferent(existingOption.options || [], localOption.options || [])
       )
       {

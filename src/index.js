@@ -13,17 +13,18 @@ dotenv.config();
 const client = 
 new Client(
   { 
-    intents: [
-                  GatewayIntentBits.Guilds,
-                  GatewayIntentBits.GuildMembers, 
-                  GatewayIntentBits.GuildMessages, 
-                  GatewayIntentBits.GuildVoiceStates,
-                  GatewayIntentBits.GuildMessagePolls, 
-                  GatewayIntentBits.GuildPresences, 
-                  GatewayIntentBits.GuildIntegrations, 
-                  GatewayIntentBits.MessageContent,
-              ] 
-    }
+    intents: 
+    [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMembers, 
+      GatewayIntentBits.GuildMessages, 
+      GatewayIntentBits.GuildVoiceStates,
+      GatewayIntentBits.GuildMessagePolls, 
+      GatewayIntentBits.GuildPresences, 
+      GatewayIntentBits.GuildIntegrations, 
+      GatewayIntentBits.MessageContent,
+    ] 
+  }
 );
 
 (async () => {
@@ -49,8 +50,6 @@ new Client(
   };
 
   // IGDB
-
-
   if(!process.env.IGDB_CLIENT_ID || !process.env.IGDB_CLIENT_SECRET)
   {
     console.log(`Missing IGDB credentials, skipping authentication!`);

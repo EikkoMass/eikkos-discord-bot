@@ -107,7 +107,7 @@ async function createPoll(client, interaction)
 
 async function finishPoll(client, interaction)
 {
-  const msgs = await interaction.channel.messages.fetchPinned()
+  const msgs = await interaction.channel.messages.fetchPins();
     
   msgs.forEach(async msg => {
     if(msg.poll)
