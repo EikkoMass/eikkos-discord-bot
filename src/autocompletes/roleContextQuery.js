@@ -1,16 +1,16 @@
 import {Client} from 'discord.js';
-import RoleContext from '../../../models/roleContext.js';
+import RoleContext from '../models/roleContext.js';
+
+export default {
+  name: 'role',
+  contexts: ['remove', 'choose'],
 
   /**
    *  @param {Client} client
    *  @param  interaction
   */
-export default async (client, interaction) => {
+  callback: async (client, interaction) => {
   try {
-    if(!interaction.isAutocomplete()) return;
-    if(interaction.commandName !== 'role') return;
-    if(interaction.options.getSubcommand() !== 'remove' && interaction.options.getSubcommand() !== 'choose') return;
-
     const contexts = await RoleContext.find({ name: { $regex: '.*' + interaction.options.getFocused() + '.*' }, guildId: interaction.guild.id });
 
     interaction.respond([
@@ -20,4 +20,5 @@ export default async (client, interaction) => {
   } catch (e) {
     console.log(e);
   }
+}
 }

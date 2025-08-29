@@ -7,7 +7,7 @@ export default async(exceptions = []) => {
   const files = fs.readdirSync(mainPath);
   for(const file of files)
   {    
-      const insertObject = await import(`${mainPath}/${file}`);
+      const insertObject = (await import(`${mainPath}/${file}`)).default;
       
       if(exceptions.includes(insertObject.name)) continue;
       
