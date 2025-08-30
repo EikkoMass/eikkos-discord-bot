@@ -1,6 +1,5 @@
-import config from '../../../config.json' with { type: 'json' };
 import getAutocompletes from '../../utils/getLocalAutocompletes.js';
-import { MessageFlags, EmbedBuilder, Client } from 'discord.js';
+import { Client } from 'discord.js';
 
 /**
  *  @param {Client} client

@@ -1,11 +1,15 @@
 import { Client, MessageFlags } from 'discord.js';
 
-/**
- *  @param {Client} client
- *  @param  interaction
-*/
-export default async (client, interaction) => {
-  try {
+export default {
+  
+  name: 'role',
+
+  /**
+   *  @param {Client} client
+   *  @param  interaction
+  */
+  callback: async (client, interaction) => {
+    try {
       if(!interaction.isButton()) return;
       if(!interaction.customId?.startsWith('role;')) return;
 
@@ -35,4 +39,5 @@ export default async (client, interaction) => {
     } catch (err) {
         console.log(err);
     }
+  }
 }

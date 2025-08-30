@@ -1,18 +1,18 @@
 import { Client, ButtonStyle, ActionRowBuilder, ButtonBuilder } from 'discord.js';
-import getNoteEmbeds from '../../../../utils/getNoteEmbeds.js';
+import getNoteEmbeds from '../../../utils/getNoteEmbeds.js';
 
-import Note from '../../../../models/note.js';
+import Note from '../../../models/note.js';
 
-/**
- *  @param {Client} client
- *  @param  interaction
-*/
-export default async (client, interaction) => {
+export default {
+  name: 'notes',
+  tags: ['show'],
+
+  /**
+   *  @param {Client} client
+   *  @param  interaction
+  */
+  callback: async (client, interaction) => {
   try {
-      if(!interaction.isButton()) return;
-      if(!interaction.customId?.startsWith('notes;')) return;
-      if(!interaction.customId.includes('show;')) return;
-
       let content = interaction.customId.replace('notes;show;', '');
       let splitContent = content.split(';');
 
@@ -77,4 +77,5 @@ export default async (client, interaction) => {
     } catch (err) {
         console.log(err);
     }
+}
 }
