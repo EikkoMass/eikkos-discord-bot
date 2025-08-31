@@ -1,3 +1,10 @@
+import { Client } from 'discord.js';
+
+  /**
+   * 
+   * @param {Client} client 
+   * @param  interaction 
+   */
 export default async (client, guildId) => {
   let applicationCommands;
 
