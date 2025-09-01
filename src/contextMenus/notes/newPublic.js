@@ -1,7 +1,5 @@
 import {
   Client,
-  EmbedBuilder,
-  MessageFlags,
   InteractionContextType,
   ApplicationCommandType,
   ActionRowBuilder,
@@ -12,12 +10,8 @@ import {
 
 import { getLocalization } from '../../utils/i18n.js';
 
-import Note from "../../models/note.js";
-
-const amount = 10;
-
 export default {
-  name: 'New Private Note',
+  name: 'New Public Note',
   contexts: [InteractionContextType.Guild],
   type: ApplicationCommandType.Message,
 
@@ -26,24 +20,8 @@ export default {
    *  @param  interaction
   */
   callback: async (client, interaction) => {
-    const context = 1;
+    const context = 2;
     const words = await getLocalization(interaction.locale, `notes`);
-
-    let query = {
-      guildId: interaction.guild.id,
-      userId: interaction.user.id,
-      type: context,
-    };
-
-    let countNotes = await Note.countDocuments(query);
-  
-    if (countNotes >= amount) {
-      interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        embeds: [new EmbedBuilder().setDescription(words.LimitExceeded)],
-      });
-      return;
-    }
 
     const title = new TextInputBuilder()
       .setCustomId("title")
@@ -65,7 +43,7 @@ export default {
 
     const modal = new ModalBuilder()
       .setCustomId(`notes;add;${context};${crypto.randomUUID()}`)
-      .setTitle(words.NewPrivateNote)
+      .setTitle(words.NewPublicNote)
       .setComponents(
         new ActionRowBuilder().addComponents(title),
         new ActionRowBuilder().addComponents(description),

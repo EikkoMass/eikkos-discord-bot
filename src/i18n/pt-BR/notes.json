@@ -5,7 +5,8 @@
   "NotFound": "Anotação não encontrada!",
   "LimitExceeded": "Você excedeu o limite de notas privadas, tente excluir algumas para liberar espaço",
   "Title": "Titulo",
-  "NewNote": "Nova Anotação",
+  "NewPublicNote": "Nova Anotação Publica",
+  "NewPrivateNote": "Nova Anotação Privada",
   "ImageLink": "Link da Imagem",
   "NoteInfo": "Informações da Anotação"
 }

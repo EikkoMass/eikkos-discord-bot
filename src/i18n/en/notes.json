@@ -5,7 +5,8 @@
   "NotFound": "Note not found!",
   "LimitExceeded": "You have exceeded the limit of private notes, try deleting some to free up space",
   "Title": "Title",
-  "NewNote": "New Note",
+  "NewPublicNote": "New Public Note",
+  "NewPrivateNote": "New Private Note",
   "ImageLink": "Image Link",
   "NoteInfo": "Note Information"
 }
