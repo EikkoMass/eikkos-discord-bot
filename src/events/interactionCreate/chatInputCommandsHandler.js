@@ -2,12 +2,18 @@ import config from '../../../config.json' with { type: 'json' };
 import getLocalCommands from '../../utils/getLocalCommands.js';
 import { MessageFlags, EmbedBuilder, Client } from 'discord.js';
 
+import  { getLocalization, formatMessage } from '../../utils/i18n.js';
+
+let words;
+
 /**
  *  @param {Client} client
  *  @param  interaction
 */
 export default async (client, interaction) => {
   if(!interaction.isChatInputCommand()) return;
+
+  words = getLocalization(interaction.locale, `handlers/chatInputCommands`)
 
   try {
     const localCommands = await getLocalCommands();
@@ -26,20 +32,20 @@ export default async (client, interaction) => {
     }
   } catch (error)
   {
-    console.log(`There was an error running this command: ${error}`);
+    console.log(formatMessage(words.Error, [error]));
   }
 }
 
 function checkDevOnly(interaction, commandObject)
 {
   return (!commandObject.devOnly || config.devs.includes(interaction.member.id)) 
-    || reply(interaction, `Only devs are allowed to run this command`);
+    || reply(interaction, words.DevOnly);
 }
 
 function checkTestOnly(interaction, commandObject) 
 {  
   return (!commandObject.testOnly || interaction.guild.id === config.testServer) 
-    || reply(interaction, `This command cannot be ran here`);
+    || reply(interaction, words.TestOnly);
 }
 
 function checkUserPermissions(interaction, commandObject)
@@ -48,7 +54,7 @@ function checkUserPermissions(interaction, commandObject)
     for(const permission of commandObject.permissionsRequired)
     {
       if(!interaction.member.permissions.has(permission)) 
-        return reply(interaction, `Not enough permissions`);
+        return reply(interaction, words.MissingPermissions);
     }
   }
 
@@ -64,7 +70,7 @@ function checkBotPermissions(interaction, commandObject)
     for(const permission of commandObject.botPermissions)
     {
       if(!bot.permissions.has(permission))
-        return reply(interaction, `I don't have enough permissions`);
+        return reply(interaction, words.MissingBotPermissions);
     }
   }
 

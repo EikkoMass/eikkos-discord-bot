@@ -1,0 +1,7 @@
+{
+  "Error": "There was an error running this command: {0}",
+  "DevOnly": "Only devs are allowed to run this command",
+  "TestOnly": "This command cannot be ran here",
+  "MissingPermissions": "Not enough permissions",
+  "MissingBotPermissions": "I don't have enough permissions"
+}

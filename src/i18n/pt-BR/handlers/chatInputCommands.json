@@ -1,0 +1,7 @@
+{
+  "Error": "Ocorreu um erro ao executar este comando: {0}",
+  "DevOnly": "Somente desenvolvedores têm permissão para executar este comando",
+  "TestOnly": "Este comando não pode ser executado aqui",
+  "MissingPermissions": "Permissões insuficientes",
+  "MissingBotPermissions": "Não tenho permissões suficientes"
+}
