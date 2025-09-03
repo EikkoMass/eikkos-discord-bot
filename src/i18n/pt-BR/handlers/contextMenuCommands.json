@@ -1,0 +1,7 @@
+{
+  "Error": "Ocorreu um erro ao executar este menu de contexto: {0}",
+  "DevOnly": "Somente desenvolvedores têm permissão para executar este menu de contexto",
+  "TestOnly": "Este menu de contexto não pode ser executado aqui",
+  "MissingPermissions": "Permissões insuficientes",
+  "MissingBotPermissions": "Não tenho permissões suficientes"
+}

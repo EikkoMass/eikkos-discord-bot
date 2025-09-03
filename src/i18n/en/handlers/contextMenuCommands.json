@@ -1,0 +1,7 @@
+{
+  "Error": "There was an error running this context menu: {0}",
+  "DevOnly": "Only devs are allowed to run this context menu",
+  "TestOnly": "This context menu cannot be ran here",
+  "MissingPermissions": "Not enough permissions",
+  "MissingBotPermissions": "I don't have enough permissions"
+}
