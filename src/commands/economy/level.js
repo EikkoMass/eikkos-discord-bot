@@ -3,6 +3,8 @@ import Level from '../../models/level.js';
 import { Font, RankCardBuilder } from 'canvacord';
 import calculateLevelXp from '../../utils/calculateLevelXp.js';
 
+import { getLocalization, formatMessage } from '../../utils/i18n.js'
+
 export default {
   /** 
    * 
@@ -10,8 +12,11 @@ export default {
    *  @param  interaction
   */
   callback: async (client, interaction) => {
+
+    const words = getLocalization(interaction.locale, `level`);
+
     if(!interaction.inGuild()) {
-      interaction.reply("You can only run this command inside a server.");
+      interaction.reply(words.ServerOnly);
       return;
     }
 
@@ -29,8 +34,8 @@ export default {
     if(!fetchLevel)
     {
       interaction.editReply(
-        mentionedUserId ? `${targetUserObj.user.tag} doesn't have any levels yet. Try again when they chat a little more.` :
-        `You don't have any levels yet. Chat a little more and try again.`
+        mentionedUserId ? formatMessage(words.UserNoLevels, [targetUserObj.user.tag]) :
+        words.NoLevels
       );
       return;
     }
