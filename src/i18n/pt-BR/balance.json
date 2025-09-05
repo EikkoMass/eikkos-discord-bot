@@ -1,0 +1,6 @@
+{
+  "ServerOnly": "Você só pode executar este comando dentro de um servidor.",
+  "UserNoProfile": "<@{0}> ainda não possui perfil",
+  "Balance": "Seu saldo é **{0}**",
+  "UserBalance": "Saldo do <@{0}> é **{1}**"
+}

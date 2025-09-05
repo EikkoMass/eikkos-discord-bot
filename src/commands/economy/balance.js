@@ -1,5 +1,7 @@
-import { ApplicationCommandOptionType, Client, MessageFlags } from 'discord.js';
+import { ApplicationCommandOptionType, Client, MessageFlags, EmbedBuilder } from 'discord.js';
 import User from '../../models/user.js';
+
+import { getLocalization, formatMessage } from '../../utils/i18n.js';
 
 export default {
   /**
@@ -7,10 +9,13 @@ export default {
    *  @param  interaction
   */
   callback: async (client, interaction) => {
+
+    const words = await getLocalization(interaction.locale, `balance`);
+
     if(!interaction.inGuild())
     {
       interaction.reply({
-        content: "You can only run this command inside a server.",
+        embeds: [new EmbedBuilder().setDescription(words.ServerOnly)],
         flags: [ MessageFlags.Ephemeral ],
       });
       return;
@@ -18,20 +23,24 @@ export default {
 
     const targetUserId = interaction.options.get('user')?.value || interaction.member.id;
 
-    await interaction.deferReply();
-
     const user = await User.findOne({userId: targetUserId, guildId: interaction.guild.id});
 
     if(!user)
     {
-      interaction.editReply(`<@${targetUserId}> doesn't have a profile yet`);
+      interaction.reply({
+        embeds: [new EmbedBuilder().setDescription(formatMessage(words.UserNoProfile, [targetUserId]))]
+      });
       return;
     }
 
-    interaction.editReply(
-      targetUserId === interaction.member.id ? `Your balance is **${user.balance}**` :
-      `<@${targetUserId}>'s balance is **${user.balance}**`
-    );
+    interaction.reply({
+      embeds: [ new EmbedBuilder().setDescription(
+        targetUserId === interaction.member.id ? 
+          formatMessage(words.Balance, [user.balance]) 
+            :
+          formatMessage(words.UserBalance, [targetUserId, user.balance])
+        )]
+    });
   },
 
   name: 'balance',
