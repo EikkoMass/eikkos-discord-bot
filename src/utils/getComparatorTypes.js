@@ -1,15 +1,11 @@
 export default {
-    includes: (a,b) =>
-    {
-      return a.includes(b);
-    },
-    equals: (a,b) => {
-      return a === b;
-    },
-    regex: (message, pattern) => {
-      return pattern.test(message);
-    },
-    custom: (message, callback) => {
-      return callback(message);
-    }
+
+    includes: (message, fraction)   => message.content.includes(fraction),
+
+    equals:   (message, reference)  => message.content === reference,
+
+    regex:    (message, pattern)    => pattern.test(message.content),
+
+    custom:   (message, callback)   => callback(message)
+  
   }

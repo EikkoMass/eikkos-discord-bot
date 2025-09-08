@@ -12,7 +12,7 @@ export default async (client, message) => {
   const localInserts = await getLocalInserts();
   try {
 
-    const insertObjects = localInserts.filter(cmd => (comparatorTypes[cmd?.type] || comparatorTypes.equals)(message.content, cmd.match));
+    const insertObjects = localInserts.filter(cmd => (comparatorTypes[cmd?.type] || comparatorTypes.equals)(message, cmd.match));
     if(!insertObjects?.length) return;
 
     insertObjects.forEach(async insert => await insert.callback(client, message));
