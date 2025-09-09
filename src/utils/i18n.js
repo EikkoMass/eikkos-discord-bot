@@ -1,20 +1,21 @@
-import languages from "../i18n/languages.json" with { type: 'json' };
+import languages from "../i18n/languages.json" with { type: "json" };
 const defaultLanguage = "en";
 
-/** 
+const localizationCache = {};
+
+/**
  * @param {String} locale
  */
 function getI18n(locale) {
   return languages[locale] ?? defaultLanguage;
 }
 
-/** 
+/**
  * @param {String} message
- * @param {Array} values 
+ * @param {Array} values
  */
-export function formatMessage(message = "", values = [])
-{
-  if(!values?.length) return message;
+export function formatMessage(message = "", values = []) {
+  if (!values?.length) return message;
 
   let content = message;
 
@@ -25,9 +26,18 @@ export function formatMessage(message = "", values = [])
   return content;
 }
 
-export async function getLocalization(locale, context)
-{
-  return (await import(`../i18n/${getI18n(locale)}/${context}.json`, { with: { type: 'json' } })).default;
+export async function getLocalization(locale, context) {
+  const path = `${getI18n(locale)}/${context}`;
+
+  if (localizationCache[path]) return localizationCache[path];
+
+  const localization = (
+    await import(`../i18n/${path}.json`, { with: { type: "json" } })
+  ).default;
+
+  localizationCache[path] = localization;
+
+  return localization;
 }
 
 export default {
