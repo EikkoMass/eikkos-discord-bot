@@ -1,16 +1,11 @@
-import {
-  Client,
-  EmbedBuilder,
-  MessageFlags,
-} from "discord.js";
+import { Client, EmbedBuilder, MessageFlags } from "discord.js";
 import { getLocalization } from "../../../utils/i18n.js";
 
 import Note from "../../../models/note.js";
 
 export default {
-  
-  name: 'notes',
-  tags: ['add'],
+  name: "notes",
+  tags: ["add"],
 
   /**
    *  @param {Client} client
@@ -49,5 +44,5 @@ export default {
     } catch (err) {
       console.log(err);
     }
-  }
-}
+  },
+};
