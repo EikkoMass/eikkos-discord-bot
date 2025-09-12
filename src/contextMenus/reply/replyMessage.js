@@ -8,6 +8,8 @@ import {
   TextInputStyle,
 } from "discord.js";
 
+import { getLocalization } from "../../utils/i18n.js";
+
 export default {
   name: "Reply Message",
   contexts: [InteractionContextType.Guild],
@@ -20,14 +22,16 @@ export default {
    *  @param  interaction
    */
   callback: async (client, interaction) => {
+    const words = await getLocalization(interaction.locale, `reply-message`);
+
     const description = new TextInputBuilder()
       .setCustomId("description")
-      .setLabel("What you want to reply?")
+      .setLabel(words.WhatToReply)
       .setStyle(TextInputStyle.Paragraph)
       .setRequired(true);
 
     const modal = new ModalBuilder()
-      .setTitle("Reply Message")
+      .setTitle(words.Title)
       .setCustomId(
         `reply;${interaction.targetMessage.id};${crypto.randomUUID()}`,
       )
