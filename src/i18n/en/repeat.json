@@ -1,4 +1,7 @@
 {
   "NoSong": "There is no song to repeat.",
-  "CommandApplied": "Repeat command applied"
+  "CommandApplied": "Repeat command applied",
+  "CurrentTrack": "Current track",
+  "EntireQueue": "Entire queue",
+  "Disable":  "Disable"
 }

@@ -1,4 +1,7 @@
 {
   "NoSong": "Não há nenhuma música para repetir.",
-  "CommandApplied": "Comando de repetição aplicado"
+  "CommandApplied": "Comando de repetição aplicado",
+  "CurrentTrack": "Música atual",
+  "EntireQueue": "Playlist Inteira",
+  "Disable":  "Desabilitar"
 }
