@@ -128,7 +128,7 @@ async function add(client, interaction) {
 
   const modal = new ModalBuilder()
     .setCustomId(`notes;add;${context};${crypto.randomUUID()}`)
-    .setTitle(words.NewNote)
+    .setTitle(context === 1 ? words.NewPrivateNote : words.NewPublicNote)
     .setComponents(
       new ActionRowBuilder().addComponents(title),
       new ActionRowBuilder().addComponents(description),
