@@ -1,5 +1,5 @@
 import { Client } from 'discord.js';
-import types from '../enums/noteContextTypes.js';
+import getTypes from '../enums/noteContextTypes.js';
 
 
 export default {
@@ -10,5 +10,7 @@ export default {
    *  @param {Client} client
    *  @param  interaction
   */
-  callback: (client, interaction) => interaction.respond(types).catch(() => {})
+  callback: async (client, interaction) => {
+    
+    interaction.respond(await getTypes(interaction)).catch(() => {})}
 }
