@@ -69,7 +69,7 @@ export default  {
 
 async function removeDirtyWord(client, interaction)
 {
-  const words = await getLocalization(interaction.locale, 'dirtyWord');
+  const words = await getLocalization(interaction.locale, 'dirty-word');
   const embed = new EmbedBuilder();
 
   const indexResult = client.dirtyWordCache.result.findIndex(dirty => dirty.guildId === interaction.guild.id);
@@ -104,7 +104,7 @@ async function removeDirtyWord(client, interaction)
 async function getCurrentDirtyWord(client, interaction)
 {
 
-  const words = await getLocalization(interaction.locale, 'dirtyWord');
+  const words = await getLocalization(interaction.locale, 'dirty-word');
   const embed = new EmbedBuilder();
   
   const dirtyCache = client.dirtyWordCache.result.find(dirty => dirty.guildId === interaction.guild.id);
@@ -130,7 +130,7 @@ async function getCurrentDirtyWord(client, interaction)
 
 async function setDirtyWord(client, interaction)
 {
-  const words = await getLocalization(interaction.locale, `dirtyWord`);
+  const words = await getLocalization(interaction.locale, `dirty-word`);
   const embed = new EmbedBuilder();
 
   const word = interaction.options.get('word')?.value;
