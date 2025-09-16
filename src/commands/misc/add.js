@@ -19,7 +19,7 @@ export default  {
   options: [
     {
       name: 'first-number',
-      description: 'The first input  value',
+      description: 'The first input value',
       required: true,
       type: ApplicationCommandOptionType.Integer
     },      

@@ -60,7 +60,7 @@ export default {
 async function configure(client, interaction) {
   
   const embed = new EmbedBuilder();
-  const words = await getLocalization(interaction.locale, 'autorole');
+  const words = await getLocalization(interaction.locale, 'auto-role');
 
   if(!interaction.inGuild())
     {
@@ -108,7 +108,7 @@ async function configure(client, interaction) {
 async function disable(client, interaction) {
   
   const embed = new EmbedBuilder();
-  const words = await getLocalization(interaction.locale, 'autorole');
+  const words = await getLocalization(interaction.locale, 'auto-role');
 
   try {
 
