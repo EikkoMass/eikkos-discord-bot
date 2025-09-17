@@ -28,10 +28,10 @@ export default async (client) => {
 
         if(areContextMenusDifferent(existingContext, localContext))
         {
-          const res = await applicationCommands.edit(existingContext.id, {
+          await applicationCommands.edit(existingContext.id, {
             contexts
           });
-          console.log(res);
+          
           console.log(`Edited context menu ${name}`);
         }
       }
@@ -43,12 +43,12 @@ export default async (client) => {
         }
 
         
-        const res = await applicationCommands.create({
+        await applicationCommands.create({
           name,
           contexts,
           type: type || ApplicationCommandType.Message
         });
-        console.log(res);
+        
 
         console.log(`Registered context menu ${name}`);
       }
