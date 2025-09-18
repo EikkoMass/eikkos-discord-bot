@@ -19,7 +19,7 @@ export default  {
       default:
         await interaction.reply({
           flags: [ MessageFlags.Ephemeral ],
-          content: `Minecraft command not found!`
+          embeds: [new EmbedBuilder().setDescription(`Minecraft command not found!`)]
         });
         return;
     }
@@ -111,7 +111,7 @@ async function register(client, interaction)
   
       await server.save();
       await interaction.reply({
-        content: `Minecraft server register edited successfully!`,
+        embeds: [new EmbedBuilder().setDescription(`Minecraft server register edited successfully!`)],
         flags: [ MessageFlags.Ephemeral ],
       });
       return;
@@ -125,7 +125,7 @@ async function register(client, interaction)
     });
     await server.save();
     await interaction.reply({
-      content: `Minecraft server created successfully!`,
+      embeds: [new EmbedBuilder().setDescription(`Minecraft server created successfully!`)],
       flags: [ MessageFlags.Ephemeral ],
     });
   } catch (e) {
@@ -147,7 +147,7 @@ async function status(client, interaction)
   {
     await interaction.reply({
       flags: [ MessageFlags.Ephemeral ],
-      content: `No minecraft server registered in this guild, create a new one with the command '/minecraft server register'.`
+      embeds: [new EmbedBuilder().setDescription(`No minecraft server registered in this guild, create a new one with the command '/minecraft server register'.`)]
     });
     return;
   }
@@ -161,7 +161,7 @@ async function status(client, interaction)
   {
     console.log(serverInfo.error);
     await interaction.reply({
-      content: `Error on fetching server info!`,
+      embeds: [new EmbedBuilder().setDescription(`Error on fetching server info!`)],
       flags: [ MessageFlags.Ephemeral ],
     });
     return;
@@ -212,7 +212,7 @@ async function server(client, interaction)
       default:
         await interaction.reply({
           flags: [ MessageFlags.Ephemeral ],
-          content: `Minecraft server command not found!`
+          embeds: [new EmbedBuilder().setDescription(`Minecraft server command not found!`)]
         });
         return;
     }
@@ -232,7 +232,7 @@ async function player(client, interaction)
       default:
         await interaction.reply({
           flags: [ MessageFlags.Ephemeral ],
-          content: `Minecraft player command not found!`
+          embeds: [new EmbedBuilder().setDescription(`Minecraft player command not found!`)]
         });
         return;
     }
@@ -253,7 +253,7 @@ async function skin(client, interaction)
   {
 
     await interaction.reply({
-      content: `Error on fetching player info!`,
+      embeds: [new EmbedBuilder().setDescription(`Error on fetching player info!`)],
       flags: [ MessageFlags.Ephemeral ],
     });
     return;
@@ -265,7 +265,7 @@ async function skin(client, interaction)
   {
 
     await interaction.reply({
-      content: `Could not find the player requested!`,
+      embeds: [new EmbedBuilder().setDescription(`Could not find the player requested!`)],
       flags: [ MessageFlags.Ephemeral ],
     });
     return;
