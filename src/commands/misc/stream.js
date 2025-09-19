@@ -25,6 +25,7 @@ export default  {
   },
   name: 'stream',
   description: 'Manage links to bot stream',
+  devOnly:  true,
   options: [
     {
       name: 'register',
