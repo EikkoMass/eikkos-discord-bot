@@ -1,6 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-
-let userCache = [];
+import { getUser, resetUserCache } from "./getUser.js";
 
 async function getNoteEmbeds(client, notes) {
   const embeds = [];
@@ -23,23 +22,8 @@ async function getNoteEmbeds(client, notes) {
     embeds.push(embed);
   }
 
-  userCache = [];
+  resetUserCache();
   return embeds;
-}
-
-async function getUser(client, userId) {
-  let user = userCache.find((user) => user.id == userId);
-
-  if (!user) {
-    try {
-      user = await client.users.cache.get(userId, { force: true, cache: true });
-      userCache[userId] = user;
-    } catch (e) {
-      console.log(`usuario nao encontrado: ${e}`);
-    }
-  }
-
-  return userCache[userId];
 }
 
 export default getNoteEmbeds;
