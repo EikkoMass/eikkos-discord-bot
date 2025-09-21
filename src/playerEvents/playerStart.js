@@ -1,8 +1,8 @@
 import { EmbedBuilder, MessageFlags } from 'discord.js';
 import { GuildQueue, Track } from 'discord-player';
-import getPlayerActionRow from "../../utils/playerActionRow.js";
+import getPlayerActionRow from "../utils/playerActionRow.js";
 
-import { getLocalization } from "../../utils/i18n.js";
+import { getLocalization } from "../utils/i18n.js";
 
 export default {
   name: 'playerStart',

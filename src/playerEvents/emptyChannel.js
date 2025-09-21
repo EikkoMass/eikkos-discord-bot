@@ -1,7 +1,7 @@
 import { EmbedBuilder } from 'discord.js';
 import { GuildQueue, Track } from 'discord-player';
 
-import { getLocalization } from "../../utils/i18n.js";
+import { getLocalization } from "../utils/i18n.js";
 
 export default {
   name: 'emptyChannel',
