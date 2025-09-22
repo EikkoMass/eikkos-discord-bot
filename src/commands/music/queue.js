@@ -43,7 +43,7 @@ export default  {
         .setFooter({ text: `${queue.tracks.size} ${words.Trackss} - ${queue.durationFormatted}`, iconURL: client.user.avatarURL({size: 1024}) });
 
     } else {
-      currentTrackEmbed.setFooter({ text: `${queue.currentTrack.duration}`, iconURL: client.user.avatarURL({size: 1024}) })
+      currentTrackEmbed.setFooter({ text: `${queue.currentTrack.duration}`, iconURL: (queue.currentTrack?.requestedBy || client.user).avatarURL({size: 1024}) })
     }
 
     currentTrackEmbed
