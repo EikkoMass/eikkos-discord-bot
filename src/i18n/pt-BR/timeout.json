@@ -1,0 +1,11 @@
+{
+  "NoReasonProvided": "Nenhuma razão fornecida",
+  "UserNotExists": "Esse usuário não existe neste servidor.",
+  "CantTimeoutBot": "Não consigo dar timeout em um bot.",
+  "ValidTimeoutDuration": "Forneça uma duração de timeout válida.",
+  "TimeoutLimit": "A duração do timeout não pode ser superior a 5 segundos ou 28 dias.",
+  "SameHigherRole": "Você não pode suspender o timeout desse usuário porque ele tem uma função igual ou mais alta que a sua.",
+  "SameHigherRoleBot": "Não posso suspender o timeout desse usuário porque ele tem uma função igual ou mais alta que a minha.",
+  "Updated": "O timeout do {0} foi atualizado para {1}",
+  "TimedOut": "{0} recebeu um timeout de {1}\nMotivo: {2}"
+}

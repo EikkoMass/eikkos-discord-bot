@@ -1,0 +1,11 @@
+{
+  "NoReasonProvided": "No reason provided",
+  "UserNotExists": "That user doesn't exist in this server.",
+  "CantTimeoutBot": "I can't timeout a bot.",
+  "ValidTimeoutDuration": "Please provide a valid timeout duration.",
+  "TimeoutLimit": "Timeout duration cannot be last than 5s or 28 days.",
+  "SameHigherRole": "You can't timeout that user because they have same / higher role than you.",
+  "SameHigherRoleBot": "I can't timeout that user because they have the same / higher role than me.",
+  "Updated": "{0}'s timeout has been updated to {1}",
+  "TimedOut": "{0} was timed out for {1}\nReason: {2}"
+}
