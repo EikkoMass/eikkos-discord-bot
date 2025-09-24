@@ -4,12 +4,12 @@
   "Cancelled": "Reminder cancelled successfully!",
   "Ping": "Sure, i'll ping about this in {0}",
   "To": "To",
-  "EventHistory": "event created {0} ago",
+  "EventHistory": "Requested by: {0} • event created '{1}' ago",
 
   "Hours": "hours",
   "Hour": "hour",
   "Minutes": "minutes",
-  "Minute": "minute",  
+  "Minute": "minute",
   "Seconds": "seconds",
   "Second": "second"
 }

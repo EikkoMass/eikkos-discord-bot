@@ -4,12 +4,12 @@
   "Cancelled": "Lembrete cancelado com sucesso!",
   "Ping": "Tudo bem, irei alertar sobre isso em {0}",
   "To": "Para",
-  "EventHistory": "evento criado {0} atrás",
+  "EventHistory": "Solicitado por: {0} • evento criado '{1}' atrás",
 
   "Hours": "horas",
   "Hour": "hora",
   "Minutes": "minutos",
-  "Minute": "minuto",  
+  "Minute": "minuto",
   "Seconds": "segundos",
   "Second": "segundo"
 }
