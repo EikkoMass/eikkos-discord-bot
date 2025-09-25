@@ -1,0 +1,9 @@
+{
+  "NoReasonProvided": "No reason provided",
+  "UserNotExists": "That user doesn't exist in this server.",
+  "CannotBanOwner": "You can't ban that user because they're the server owner.",
+  "BanHigherRole": "You can't ban that user because they have same / higher role than you.",
+  "BanHigherRoleBot": "I can't ban that user because they have the same / higher role than me.",
+  "Banned": "{0} was banned\nReason: {1}",
+  "Error": "There was an error when banning"
+}

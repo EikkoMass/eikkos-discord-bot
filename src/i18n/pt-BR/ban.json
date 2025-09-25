@@ -1,0 +1,9 @@
+{
+  "NoReasonProvided": "Nenhuma razão fornecida",
+  "UserNotExists": "Esse usuário não existe neste servidor.",
+  "CannotBanOwner": "Você não pode banir desse usuário pois ele é dono do servidor",
+  "BanHigherRole": "Você não pode banir desse usuário porque ele tem uma função igual ou mais alta que a sua.",
+  "BanHigherRoleBot": "Não posso banir desse usuário porque ele tem uma função igual ou mais alta que a minha.",
+  "Banned": "{0} foi banido\nMotivo: {1}",
+  "Error": "Houve um erro ao tentar banir"
+}

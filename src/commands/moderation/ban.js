@@ -1,34 +1,40 @@
-import { Client, ApplicationCommandOptionType, PermissionFlagsBits, EmbedBuilder } from 'discord.js';
+import {
+  Client,
+  ApplicationCommandOptionType,
+  PermissionFlagsBits,
+  EmbedBuilder,
+} from "discord.js";
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
-export default  {
-
-  /** 
-   * 
+export default {
+  /**
+   *
    *  @param {Client} client
    *  @param  interaction
-  */
+   */
 
   callback: async (client, interaction) => {
-    const targetUserId = interaction.options.get('target-user').value;
-    const reason = interaction.options.get('reason')?.value || "No reason provided.";
+    const words = await getLocalization(interaction.locale, `ban`);
+
+    const targetUserId = interaction.options.get("target-user").value;
+    const reason =
+      interaction.options.get("reason")?.value || words.NoReasonProvided;
     const embed = new EmbedBuilder();
 
     await interaction.deferReply();
 
     const targetUser = await interaction.guild.members.fetch(targetUserId);
 
-    if(!targetUser)
-    {
+    if (!targetUser) {
       await interaction.editReply({
-        embeds: [embed.setDescription("That user doesn't exist in this server.")]
+        embeds: [embed.setDescription(words.UserNotExists)],
       });
       return;
     }
 
-    if(targetUser.id === interaction.guild.ownerId)
-    {
+    if (targetUser.id === interaction.guild.ownerId) {
       await interaction.editReply({
-        embeds: [embed.setDescription("You can't ban that user because they're the server owner.")]
+        embeds: [embed.setDescription(words.CannotBanOwner)],
       });
       return;
     }
@@ -37,54 +43,55 @@ export default  {
     const requestUserRolePosition = interaction.member.roles.highest.position; // Highest role of the user running the cmd;
     const botRolePosition = interaction.guild.members.me.roles.highest.position; // Highest role of the bot;
 
-    if(targetUserRolePosition >= requestUserRolePosition)
-    {
+    if (targetUserRolePosition >= requestUserRolePosition) {
       await interaction.editReply({
-        embeds: [embed.setDescription("You can't ban that user because they have same / higher role than you.")]
+        embeds: [embed.setDescription(words.BanHigherRole)],
       });
       return;
     }
 
-    if(targetUserRolePosition >= botRolePosition)
-    {
+    if (targetUserRolePosition >= botRolePosition) {
       await interaction.editReply({
-        embeds: [embed.setDescription("I can't ban that user because they have the same / higher role than me.")]
+        embeds: [embed.setDescription(words.BanHigherRoleBot)],
       });
       return;
     }
 
     //Ban the targetUser
-    try{
-      await targetUser.ban({reason});
+    try {
+      await targetUser.ban({ reason });
       await interaction.editReply({
-        embeds: [embed.setDescription(`User ${targetUser} was banned\nReason: ${reason}`)]
+        embeds: [
+          embed.setDescription(
+            formatMessage(words.Banned, [targetUser, reason]),
+          ),
+        ],
       });
-    }catch(e)
-    {
+    } catch (e) {
       await interaction.editReply({
-        embeds: [embed.setDescription(`There was an error when banning`)]
+        embeds: [embed.setDescription(words.Error)],
       });
       console.log(`There was an error when banning: ${e}`);
     }
   },
 
-  name: 'ban',
-  description: 'bans a member from this server.',
+  name: "ban",
+  description: "bans a member from this server.",
   // devOnly: Boolean,
   // testOnly: Boolean,
   options: [
     {
-      name: 'target-user',
-      description: 'The user you want to ban.',
+      name: "target-user",
+      description: "The user you want to ban.",
       required: true,
-      type: ApplicationCommandOptionType.Mentionable
-    },    
+      type: ApplicationCommandOptionType.Mentionable,
+    },
     {
-      name: 'reason',
-      description: 'The reason you want for ban1',
-      type: ApplicationCommandOptionType.String
-    }
+      name: "reason",
+      description: "The reason you want for ban1",
+      type: ApplicationCommandOptionType.String,
+    },
   ],
   permissionsRequired: [PermissionFlagsBits.BanMembers],
   botPermissions: [PermissionFlagsBits.BanMembers],
-}
+};
