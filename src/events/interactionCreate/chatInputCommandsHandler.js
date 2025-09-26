@@ -1,5 +1,5 @@
 import config from "../../../config.json" with { type: "json" };
-import getLocalCommands from "../../utils/getLocalCommands.js";
+import getLocalCommands from "../../utils/importers/getLocalCommands.js";
 import { MessageFlags, EmbedBuilder, Client } from "discord.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
