@@ -1,41 +1,43 @@
-import {Client, Message} from 'discord.js';
-import calculateLevelXp from '../utils/calculateLevelXp.js';
-import Level from '../models/level.js';
+import { Client, Message } from "discord.js";
+import xp from "../utils/xp.js";
+import Level from "../models/level.js";
 const cooldowns = new Set();
 
 export default {
+  name: "giveUserXP",
+  description: "calculates the user leveling",
 
-  name: 'giveUserXP',
-  description: 'calculates the user leveling',
-
-  type: 'custom',
-  match: message => !message.author.bot && message.inGuild() && !cooldowns.has(message.author.id),
+  type: "custom",
+  match: (message) =>
+    !message.author.bot &&
+    message.inGuild() &&
+    !cooldowns.has(message.author.id),
 
   /**
    *  @param {Client} client
    *  @param {Message} message
-  */
+   */
   callback: async (client, message) => {
-    
     const xpToGive = getRandomXp(5, 15);
 
     const query = {
       userId: message.author.id,
-      guildId: message.guild.id
+      guildId: message.guild.id,
     };
 
-    try{
+    try {
       const level = await Level.findOne(query);
 
-      if(level) {
+      if (level) {
         level.xp += xpToGive;
 
-        if (level.xp > calculateLevelXp(level.level))
-        {
+        if (level.xp > xp.calc(level.level)) {
           level.xp = 0;
           level.level += 1;
-        
-          message.channel.send(`${message.member} you have leveled up to **level ${level.level}**`);
+
+          message.channel.send(
+            `${message.member} you have leveled up to **level ${level.level}**`,
+          );
         }
 
         await level.save().catch((e) => {
@@ -54,22 +56,20 @@ export default {
         const newLevel = new Level({
           userId: message.author.id,
           guildId: message.guild.id,
-          xp: xpToGive
+          xp: xpToGive,
         });
 
-        await newLevel.save(); 
+        await newLevel.save();
         cooldowns.add(message.author.id);
         setTimeout(() => {
-        cooldowns.delete(message.author.id);
+          cooldowns.delete(message.author.id);
         }, 6000);
       }
-
-    } catch(e) {
+    } catch (e) {
       console.log(`Error giving XP: ${e}`);
     }
-  }
-
-}
+  },
+};
 
 function getRandomXp(min, max) {
   min = Math.ceil(min);

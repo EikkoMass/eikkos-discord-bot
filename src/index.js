@@ -1,36 +1,32 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 import { Client, GatewayIntentBits } from "discord.js";
-import eventHandler from './handlers/eventHandler.js';
-import mongoose from 'mongoose';
-import { Player } from 'discord-player';
-import { DefaultExtractors } from '@discord-player/extractor';
+import eventHandler from "./handlers/eventHandler.js";
+import mongoose from "mongoose";
+import { Player } from "discord-player";
+import { DefaultExtractors } from "@discord-player/extractor";
 import { YoutubeiExtractor } from "discord-player-youtubei";
-import authenticateOnIGDB from './utils/igdbAuth.js';
-import loadPlayerEvents from './utils/loadPlayerEvents.js';
+import authenticateOnIGDB from "./utils/authenticators/igdbAuth.js";
+import loadPlayerEvents from "./utils/importers/loadPlayerEvents.js";
 
 dotenv.config();
 
-const client = 
-new Client(
-  { 
-    intents: 
-    [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildMembers, 
-      GatewayIntentBits.GuildMessages, 
-      GatewayIntentBits.GuildVoiceStates,
-      GatewayIntentBits.GuildMessagePolls, 
-      GatewayIntentBits.GuildPresences, 
-      GatewayIntentBits.GuildIntegrations, 
-      GatewayIntentBits.MessageContent,
-    ] 
-  }
-);
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.GuildMessagePolls,
+    GatewayIntentBits.GuildPresences,
+    GatewayIntentBits.GuildIntegrations,
+    GatewayIntentBits.MessageContent,
+  ],
+});
 
 (async () => {
-  try{
+  try {
     await mongoose.connect(process.env.MONGODB_URI);
-    console.log('Connected to DB');
+    console.log("Connected to DB");
   } catch (e) {
     console.log(e);
   }
@@ -38,7 +34,7 @@ new Client(
   const player = new Player(client);
 
   await player.extractors.register(YoutubeiExtractor, {
-    authentication: process.env.YT_CREDENTIAL
+    authentication: process.env.YT_CREDENTIAL,
   });
 
   await player.extractors.loadMulti(DefaultExtractors);
@@ -46,12 +42,11 @@ new Client(
 
   client.dirtyWordCache = {
     search: [],
-    result: []
+    result: [],
   };
 
   // IGDB
-  if(!process.env.IGDB_CLIENT_ID || !process.env.IGDB_CLIENT_SECRET)
-  {
+  if (!process.env.IGDB_CLIENT_ID || !process.env.IGDB_CLIENT_SECRET) {
     console.log(`Missing IGDB credentials, skipping authentication!`);
   } else {
     await authenticateOnIGDB(client);
@@ -60,5 +55,3 @@ new Client(
   eventHandler(client);
   client.login(process.env.DISCORD_TOKEN);
 })();
-
-

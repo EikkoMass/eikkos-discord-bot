@@ -5,7 +5,7 @@ import {
 } from "discord.js";
 import Level from "../../models/level.js";
 import { Font, RankCardBuilder } from "canvacord";
-import calculateLevelXp from "../../utils/calculateLevelXp.js";
+import xp from "../../utils/xp.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
@@ -64,7 +64,7 @@ export default {
       .setRank(currentRank)
       .setLevel(fetchLevel.level)
       .setCurrentXP(fetchLevel.xp)
-      .setRequiredXP(calculateLevelXp(fetchLevel.level))
+      .setRequiredXP(xp.calc(fetchLevel.level))
       .setStatus(targetUserObj.presence.status)
       .setUsername(targetUserObj.user.username);
 

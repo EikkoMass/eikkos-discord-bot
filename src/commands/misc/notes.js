@@ -11,7 +11,7 @@ import {
   TextInputBuilder,
 } from "discord.js";
 
-import getNoteEmbeds from "../../utils/getNoteEmbeds.js";
+import getNoteEmbeds from "../../utils/components/getNoteEmbeds.js";
 import Note from "../../models/note.js";
 
 import { getLocalization } from "../../utils/i18n.js";
