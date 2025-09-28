@@ -1,15 +1,20 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 const dirtyWordSchema = new Schema({
   guildId: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   word: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
+  type: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
 });
 
-export default model('DirtyWord', dirtyWordSchema);
+export default model("DirtyWord", dirtyWordSchema);

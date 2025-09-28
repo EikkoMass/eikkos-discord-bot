@@ -1,5 +1,6 @@
 import { Client, Message } from "discord.js";
 import DirtyWord from "../models/dirtyword.js";
+import cache from "../utils/cache/dirty-word.js";
 
 export default {
   name: "dirtyWord",
@@ -14,12 +15,8 @@ export default {
    */
   callback: async (client, message) => {
     try {
-      let dirtyWordObj = client.dirtyWordCache.result.find(
-        (dirty) => dirty.guildId === message.guild.id,
-      );
-      let alreadySearchedOnDB = client.dirtyWordCache.search.some(
-        (dirty) => dirty === message.guild.id,
-      );
+      let dirtyWordObj = cache.result.find(message.guild.id);
+      let alreadySearchedOnDB = cache.search.exists(message.guild.id);
 
       if (!dirtyWordObj && !alreadySearchedOnDB) {
         dirtyWordObj = await DirtyWord.findOne({ guildId: message.guild.id });
@@ -27,7 +24,7 @@ export default {
 
         if (!dirtyWordObj) return;
 
-        client.dirtyWordCache.result.push(dirtyWordObj);
+        cache.result.add(dirtyWordObj);
       } else if (!dirtyWordObj) return;
 
       const currentMessage = message.content?.toLowerCase();
