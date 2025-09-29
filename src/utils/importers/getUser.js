@@ -1,25 +1,18 @@
-let userCache = {};
+import cache from "../cache/user.js";
 
 export async function getUser(client, userId) {
-  let user = userCache[userId];
+  let user = cache.get(userId);
 
   if (!user) {
     try {
-
       user = await client.users.cache.get(userId, { force: true, cache: true });
-      if(user) userCache[userId] = user;
-
+      if (user) cache.set(userId, user);
     } catch (e) {
       console.log(`usuario nao encontrado: ${e}`);
     }
   }
 
-  return userCache[userId];
-}
-
-export function resetUserCache()
-{
-  userCache = {};
+  return user;
 }
 
 export default getUser;

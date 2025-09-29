@@ -1,5 +1,6 @@
 import { EmbedBuilder } from "discord.js";
-import { getUser, resetUserCache } from "../importers/getUser.js";
+import { getUser } from "../importers/getUser.js";
+import cache from "../cache/user.js";
 
 async function getNoteEmbeds(client, notes) {
   const embeds = [];
@@ -22,7 +23,7 @@ async function getNoteEmbeds(client, notes) {
     embeds.push(embed);
   }
 
-  resetUserCache();
+  cache.reset();
   return embeds;
 }
 
