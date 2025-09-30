@@ -1,8 +1,8 @@
 import getAllFiles from "../utils/getAllFiles.js";
-import functionEvents from "../utils/importers/getFunctionEvents.js";
+import cache from "../utils/cache/event.js";
 import path from "path";
 
-export default (client) => {
+export default async (client) => {
   const eventFolders = getAllFiles(
     path.join(import.meta.dirname, "..", "events"),
     true,
@@ -12,10 +12,20 @@ export default (client) => {
     const eventFiles = getAllFiles(eventFolder, false, true);
     eventFiles.sort((a, b) => a > b);
 
-    const eventName = eventFolder.replace(/\\/g, "/").split("/").pop();
-    client.on(
-      eventName,
-      (functionEvents[eventName] || functionEvents.default)(client, eventFiles),
-    );
+    const eventName = eventFolder?.replace(/\\/g, "/").split("/").pop();
+
+    let event = cache.get(eventName);
+
+    if (!event) {
+      try {
+        event = (await import(`../utils/events/${eventName}.js`)).default;
+      } catch (error) {
+        event = (await import(`../utils/events/default.js`)).default;
+      }
+
+      cache.set(eventName, event);
+    }
+
+    client.on(eventName, event(client, eventFiles));
   }
 };

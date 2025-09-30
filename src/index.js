@@ -40,11 +40,6 @@ const client = new Client({
   await player.extractors.loadMulti(DefaultExtractors);
   await loadPlayerEvents(player.events);
 
-  client.dirtyWordCache = {
-    search: [],
-    result: [],
-  };
-
   // IGDB
   if (!process.env.IGDB_CLIENT_ID || !process.env.IGDB_CLIENT_SECRET) {
     console.log(`Missing IGDB credentials, skipping authentication!`);
