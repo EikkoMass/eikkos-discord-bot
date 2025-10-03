@@ -1,8 +1,16 @@
-import {ButtonStyle} from 'discord.js';
+import { ButtonStyle } from "discord.js";
 
-export default [
-  {name: ButtonStyle[ButtonStyle.Primary], value: ButtonStyle.Primary},
-  {name: ButtonStyle[ButtonStyle.Secondary], value: ButtonStyle.Secondary},
-  {name: ButtonStyle[ButtonStyle.Success], value: ButtonStyle.Success},
-  {name: ButtonStyle[ButtonStyle.Danger], value: ButtonStyle.Danger},
-]
+import { getLocalization } from "../utils/i18n.js";
+
+async function getTypes(interaction) {
+  const words = await getLocalization(interaction.locale, `buttons`);
+
+  return [
+    { name: words.Primary, value: ButtonStyle.Primary },
+    { name: words.Secondary, value: ButtonStyle.Secondary },
+    { name: words.Success, value: ButtonStyle.Success },
+    { name: words.Danger, value: ButtonStyle.Danger },
+  ];
+}
+
+export default getTypes;
