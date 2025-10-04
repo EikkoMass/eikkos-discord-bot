@@ -7,5 +7,6 @@
   "OnContext": "em contexto",
   "RoleAddedEdited": "Cargo adicionado / editado com sucesso",
   "CannotManageRoles": "Você não pode gerenciar cargos!",
-  "InvalidStyleOption": "Opção de estilização inválida!"
+  "InvalidStyleOption": "Opção de estilização inválida!",
+  "None": "Nenhum"
 }

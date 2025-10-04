@@ -7,5 +7,6 @@
   "OnContext": "on context",
   "RoleAddedEdited": "Role added / edited successfully",
   "CannotManageRoles": "You cannot manage roles!",
-  "InvalidStyleOption": "Invalid style option!"
+  "InvalidStyleOption": "Invalid style option!",
+  "None": "None"
 }
