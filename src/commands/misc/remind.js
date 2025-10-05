@@ -7,6 +7,10 @@ import {
 import ms from "ms";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
+import cache from "../../utils/cache/reminder.js";
+import Reminder from "../../models/reminder.js";
+
+import build from "../../utils/components/reminderBuilder.js";
 
 const remindersCache = {};
 
@@ -124,33 +128,20 @@ async function create(client, interaction) {
     ]),
   });
 
-  const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;
-  const generatedId = Math.random().toString(36).replace("0.", "");
+  let reminderData = new Reminder({
+    userId: interaction.member.id,
+    guildId: interaction.guild.id,
+    channelId: interaction.channel.id,
+    message: message || "",
+    receiverId: receiver.id,
+    creationDate: Date.now(),
+    duration: Number.parseInt(duration),
+    locale: interaction.locale,
+  });
 
-  (function () {
-    const timeoutId = setTimeout(() => {
-      interaction.channel.send({
-        content: `<@${receiver.id}>`,
-        embeds: [embed],
-      });
+  reminderData.save();
 
-      remindersCache[cacheIdentifier].splice(
-        remindersCache[cacheIdentifier].findIndex(
-          (cache) => cache.id === generatedId,
-        ),
-        1,
-      );
-    }, Number.parseInt(duration));
-
-    if (!Array.isArray(remindersCache[cacheIdentifier]))
-      remindersCache[cacheIdentifier] = [];
-    remindersCache[cacheIdentifier].push({
-      id: generatedId,
-      timeoutId,
-      message,
-      receiver,
-    });
-  })();
+  build(interaction.guild, reminderData);
 }
 
 async function status(client, interaction) {
@@ -160,8 +151,8 @@ async function status(client, interaction) {
   const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;
 
   if (
-    !Array.isArray(remindersCache[cacheIdentifier]) ||
-    !remindersCache[cacheIdentifier].length
+    !Array.isArray(cache.get(cacheIdentifier)) ||
+    cache.empty(cacheIdentifier)
   ) {
     interaction.reply({
       flags: [MessageFlags.Ephemeral],
@@ -170,14 +161,17 @@ async function status(client, interaction) {
     return;
   }
 
-  for (let reminder of remindersCache[cacheIdentifier]) {
-    const user = reminder.receiver.user;
+  const reminders = cache.get(cacheIdentifier);
+  for (let data of reminders) {
+    const user = await interaction.guild.members.fetch(
+      data.reminder.receiverId,
+    );
     const embed = new EmbedBuilder()
       .setTitle(`${words.To}: ${user.displayName || user.nickname}`)
-      .setFooter({ text: `ID: ${reminder.id}` });
+      .setFooter({ text: `ID: ${data.reminder._id}` });
 
-    if (reminder.message) {
-      embed.setDescription(reminder.message);
+    if (data.reminder.message) {
+      embed.setDescription(data.reminder.message);
     }
 
     embeds.push(embed);
@@ -195,7 +189,7 @@ async function cancel(client, interaction) {
   let id = interaction.options.get("id")?.value;
   const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;
 
-  if (!Array.isArray(remindersCache[cacheIdentifier])) {
+  if (!Array.isArray(cache.get(cacheIdentifier))) {
     interaction.reply({
       flags: [MessageFlags.Ephemeral],
       embeds: [new EmbedBuilder().setDescription(words.NotFound)],
@@ -203,11 +197,9 @@ async function cancel(client, interaction) {
     return;
   }
 
-  let index = remindersCache[cacheIdentifier].findIndex(
-    (cache) => cache.id === id,
-  );
+  let cachedReminder = cache.get(cacheIdentifier, id);
 
-  if (index < 0) {
+  if (!cachedReminder) {
     interaction.reply({
       flags: [MessageFlags.Ephemeral],
       embeds: [new EmbedBuilder().setDescription(words.NotFoundSpecified)],
@@ -215,8 +207,11 @@ async function cancel(client, interaction) {
     return;
   }
 
-  clearTimeout(remindersCache[cacheIdentifier][index].timeoutId);
-  remindersCache[cacheIdentifier].splice(index, 1);
+  clearTimeout(cachedReminder.timeout);
+  const res = await Reminder.findByIdAndDelete({
+    _id: cachedReminder._id,
+  }).catch(() => {});
+  cache.remove(cacheIdentifier, id);
 
   interaction.reply({
     flags: [MessageFlags.Ephemeral],
