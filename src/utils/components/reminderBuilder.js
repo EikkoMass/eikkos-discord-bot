@@ -1,18 +1,36 @@
-import { EmbedBuilder } from "discord.js";
+import { EmbedBuilder, Guild } from "discord.js";
 import Reminder from "../../models/reminder.js";
 import cache from "../cache/reminder.js";
 import { formatMessage, getLocalization } from "../i18n.js";
 
+/**
+ *  @param {Guild} guild
+ *  @param {Reminder} reminder
+ */
 export default async (guild, reminder) => {
   const embed = new EmbedBuilder();
 
-  if (!guild) return;
+  if (!guild) {
+    const res = await Reminder.deleteMany({
+      guildId: reminder.guildId,
+      channelId: reminder.channelId,
+    });
+    return;
+  }
 
-  const channel = guild.channels.cache.get(reminder.channelId);
+  const channel =
+    guild.channels.cache.get(reminder.channelId) ||
+    (await guild.channels.fetch(reminder.channelId));
 
-  if (!channel) return;
+  if (!channel) {
+    const res = await Reminder.deleteMany({
+      guildId: channel.guild.id,
+      channelId: reminder.channelId,
+    });
+    return;
+  }
 
-  const member = await guild.members.cache.get(reminder.userId);
+  const member = guild.members.cache.get(reminder.userId);
 
   const dynDuration =
     reminder.duration - (Date.now() - reminder.creationDate.getTime());
