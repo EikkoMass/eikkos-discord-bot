@@ -20,7 +20,7 @@ export default {
 
       if (!dirtyWordObj && !alreadySearchedOnDB) {
         dirtyWordObj = await DirtyWord.findOne({ guildId: message.guild.id });
-        client.dirtyWordCache.search.push(`${message.guild.id}`);
+        cache.search.add(`${message.guild.id}`);
 
         if (!dirtyWordObj) return;
 

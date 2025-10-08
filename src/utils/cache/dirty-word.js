@@ -46,6 +46,10 @@ export function addResult(obj) {
   dirtyWordCache.result.push(obj);
 }
 
+export function addSearch(obj) {
+  dirtyWordCache.search.push(obj);
+}
+
 export function existsSearch(key) {
   return dirtyWordCache.result.some((dirty) => dirty === key);
 }
@@ -62,6 +66,7 @@ export default {
   },
 
   search: {
+    add: addSearch,
     exists: existsSearch,
     index: {
       find: findSearchIndex,
