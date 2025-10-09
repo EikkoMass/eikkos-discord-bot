@@ -7,7 +7,7 @@ This is a bot that started the development as a study, now became a hobby projec
 
 ## How to build the project
 
-Make sure you have Node.js installed (last version revised: v22.11.0).
+Make sure you have Node.js installed (last version revised: v22.20.0).
 
 - Create an `.env` file into the project, using the file `.env.example` as a template.
   - [`APP_ID` | `string`]
@@ -15,7 +15,7 @@ Make sure you have Node.js installed (last version revised: v22.11.0).
   - [`DISCORD_TOKEN` | `string`]
     - Client Secret available on the Discord Developer Portal
   - [`MONGODB_URI` | `string`]
-    - Connection string of your MongoDB database  
+    - Connection string of your MongoDB database
 - Create an `config.json` file into the project, using the file `config.json.example` as a template.
   - [`testServer` | `string`]
     - tells the bot the id of the `test server` (filling this field will make the bot register the command **ONLY** into the test server, if you don't want this, just keep as an empty string).
@@ -43,13 +43,13 @@ The logic structure of the command that will be executed.
 #### [`options` | `Array<object>`]
 Recursive array to add subcommands / fields to the command.
 
-#### [ `devOnly` | `boolean`] 
+#### [ `devOnly` | `boolean`]
 Saying that only the `developer` of the bot can run the command.
 
-#### [ `testOnly` | `boolean`] 
+#### [ `testOnly` | `boolean`]
 Specifying to the bot that the command only should run inside a `test server`.
 
-#### [ `deleted` | `boolean` ] 
+#### [ `deleted` | `boolean` ]
 Marking the command to be removed from discord's command cache (recommended if you want to remove the feature from the bot).
 
 #### [ `permissionsRequired` | `Array<PermissionFlagsBits>`]
