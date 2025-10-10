@@ -8,9 +8,12 @@ import {
 
 import Playlist from "../../models/playlist.js";
 
+import { useMainPlayer } from "discord-player";
+import playerConfigs from "../../configs/player.json" with { type: "json" };
+
 import getPlaylistEmbeds from "../../utils/components/getPlaylistEmbeds.js";
 import getPaginator from "../../utils/components/getPaginator.js";
-import { getLocalization } from "../../utils/i18n.js";
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 export default {
   name: "playlist",
@@ -23,6 +26,9 @@ export default {
     switch (interaction.options.getSubcommand()) {
       case "add":
         await add(client, interaction);
+        break;
+      case "play":
+        await play(client, interaction);
         break;
       case "remove":
         await remove(client, interaction);
@@ -41,6 +47,20 @@ export default {
     }
   },
   options: [
+    {
+      name: "play",
+      description: "play the selected playlist",
+      type: ApplicationCommandOptionType.Subcommand,
+      options: [
+        {
+          name: "name",
+          description: "name of the saved playlist you want.",
+          type: ApplicationCommandOptionType.String,
+          required: true,
+          autocomplete: true,
+        },
+      ],
+    },
     {
       name: "add",
       description: "adds a playlist context",
@@ -158,5 +178,63 @@ async function list(client, interaction) {
   return await interaction.reply({
     flags: MessageFlags.Ephemeral,
     embeds: [embed.setDescription("No playlists found!")],
+  });
+}
+
+async function play(client, interaction) {
+  const words = await getLocalization(interaction.locale, `play`);
+
+  const embed = new EmbedBuilder();
+  const link = interaction.options.get("name")?.value;
+  const channel = interaction.member?.voice?.channel;
+  const player = useMainPlayer();
+
+  await interaction.deferReply();
+
+  if (!channel) {
+    await interaction.editReply({
+      embeds: [embed.setDescription(words.VCRequired)],
+    });
+    return;
+  }
+
+  const result = await player.search(link, {
+    requestedBy: interaction.user,
+    searchEngine: QueryType.AUTO,
+  });
+
+  const { queue, track, searchResult } = await player.play(channel, result, {
+    nodeOptions: {
+      metadata: {
+        channel: interaction.channel,
+        preferredLocale: interaction.locale,
+      },
+      ...playerConfigs,
+    },
+    requestedBy: interaction.user,
+    connectionOptions: { deaf: true },
+  });
+
+  const playlist = searchResult.playlist;
+
+  if (!searchResult || !playlist) {
+    await interaction.editReply({
+      embeds: [embed.setDescription("not found")],
+    });
+    return;
+  }
+
+  embed
+    .setDescription(
+      formatMessage(words.PlaylistAdded, [playlist.tracks.length]),
+    )
+    .setThumbnail(playlist.thumbnail)
+    .setTitle(playlist.title)
+    .setFooter({ text: `${words.Duration}: ${playlist.durationFormatted}` })
+    .setURL(playlist.url);
+
+  await interaction.editReply({
+    flags: MessageFlags.Ephemeral,
+    embeds: [embed],
   });
 }
