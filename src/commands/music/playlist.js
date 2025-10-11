@@ -104,6 +104,7 @@ export default {
 
 async function add(client, interaction) {
   const embed = new EmbedBuilder();
+  const words = await getLocalization(interaction.locale, `playlist`);
 
   try {
     const name = interaction.options.get("name").value;
@@ -119,19 +120,20 @@ async function add(client, interaction) {
 
     await interaction.reply({
       flags: MessageFlags.Ephemeral,
-      embeds: [embed.setDescription(`Playlist added successfully`)],
+      embeds: [embed.setDescription(words.Added)],
     });
   } catch (error) {
     console.error(error);
     await interaction.reply({
       flags: MessageFlags.Ephemeral,
-      embeds: [embed.setDescription(`Error adding playlist!`)],
+      embeds: [embed.setDescription(words.ErrorAdding)],
     });
   }
 }
 
 async function remove(client, interaction) {
   const embed = new EmbedBuilder();
+  const words = await getLocalization(interaction.locale, `playlist`);
 
   const id = interaction.options.get("id").value;
 
@@ -142,18 +144,19 @@ async function remove(client, interaction) {
   if (playlist) {
     return await interaction.reply({
       flags: MessageFlags.Ephemeral,
-      embeds: [embed.setDescription(`Playlist removed successfully`)],
+      embeds: [embed.setDescription(words.Removed)],
     });
   }
 
   return await interaction.reply({
     flags: MessageFlags.Ephemeral,
-    embeds: [embed.setDescription(`Error removing playlist!`)],
+    embeds: [embed.setDescription(words.ErrorRemoving)],
   });
 }
 
 async function list(client, interaction) {
   const embed = new EmbedBuilder();
+  const words = await getLocalization(interaction.locale, `playlist`);
 
   let query = {
     guildId: interaction.guild.id,
@@ -177,7 +180,7 @@ async function list(client, interaction) {
 
   return await interaction.reply({
     flags: MessageFlags.Ephemeral,
-    embeds: [embed.setDescription("No playlists found!")],
+    embeds: [embed.setDescription(words.NotFound)],
   });
 }
 
