@@ -3,7 +3,6 @@ import {
   EmbedBuilder,
   MessageFlags,
   ApplicationCommandOptionType,
-  ButtonStyle,
 } from "discord.js";
 
 import Playlist from "../../models/playlist.js";
@@ -174,7 +173,16 @@ async function list(client, interaction) {
   if (count > 0) {
     return await interaction.reply({
       embeds: await getPlaylistEmbeds(client, playlists),
-      components: [getPaginator("playlist;list;", count, 1, amount)],
+      components: [
+        getPaginator(
+          {
+            id: "playlist;list;",
+          },
+          count,
+          1,
+          amount,
+        ),
+      ],
     });
   }
 

@@ -19,9 +19,9 @@ export default {
    */
   callback: async (client, interaction) => {
     try {
-      let content = interaction.customId.replace("playlist;list;", "");
+      let content = JSON.parse(interaction.customId);
 
-      let page = Number.parseInt(content);
+      let page = content.page;
       let amount = 10;
 
       let query = {
@@ -37,7 +37,16 @@ export default {
       await interaction.deferUpdate();
       await interaction.message.edit({
         embeds: await getPlaylistEmbeds(client, playlists),
-        components: [getPaginator("playlist;list;", count, page, amount)],
+        components: [
+          getPaginator(
+            {
+              id: "playlist;list;",
+            },
+            count,
+            page,
+            amount,
+          ),
+        ],
       });
     } catch (err) {
       console.log(err);

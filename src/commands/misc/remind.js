@@ -12,8 +12,6 @@ import Reminder from "../../models/reminder.js";
 
 import build from "../../utils/components/reminderBuilder.js";
 
-const remindersCache = {};
-
 export default {
   name: "reminder",
   description: "Reminds you something later.",

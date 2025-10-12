@@ -15,6 +15,8 @@ import getNoteEmbeds from "../../utils/components/getNoteEmbeds.js";
 import Note from "../../models/note.js";
 
 import { getLocalization } from "../../utils/i18n.js";
+import getPaginator from "../../utils/components/getPaginator.js";
+
 const amount = 10;
 
 export default {
@@ -127,7 +129,13 @@ async function add(client, interaction) {
     .setRequired(false);
 
   const modal = new ModalBuilder()
-    .setCustomId(`notes;add;${context};${crypto.randomUUID()}`)
+    .setCustomId(
+      JSON.stringify({
+        id: "notes;add;",
+        context: context,
+        hash: crypto.randomUUID(),
+      }),
+    )
     .setTitle(context === 1 ? words.NewPrivateNote : words.NewPublicNote)
     .setComponents(
       new ActionRowBuilder().addComponents(title),
@@ -156,7 +164,7 @@ async function show(client, interaction) {
     query.userId = interaction.user.id;
   }
 
-  const row = new ActionRowBuilder();
+  let row = new ActionRowBuilder();
 
   let countNotes = await Note.countDocuments(query);
   const notes = await Note.find(query).sort({ _id: -1 }).limit(amount);
@@ -170,30 +178,14 @@ async function show(client, interaction) {
     const minPage = 1;
 
     if (context === 2) {
-      row.components.push(
-        new ButtonBuilder()
-          .setCustomId(`notes;show;${context};1`)
-          .setDisabled(true)
-          .setEmoji("<:before:1405034897004957761>")
-          .setLabel(` `)
-          .setStyle(ButtonStyle.Secondary),
-      );
-
-      row.components.push(
-        new ButtonBuilder()
-          .setCustomId(crypto.randomUUID())
-          .setDisabled(true)
-          .setLabel(`1`)
-          .setStyle(ButtonStyle.Primary),
-      );
-
-      row.components.push(
-        new ButtonBuilder()
-          .setDisabled(Math.ceil(countNotes / amount) <= minPage)
-          .setCustomId(`notes;show;${context};2`)
-          .setEmoji("<:next:1405034907264094259>")
-          .setLabel(" ")
-          .setStyle(ButtonStyle.Secondary),
+      row = getPaginator(
+        {
+          id: `notes;show;`,
+          context,
+        },
+        countNotes,
+        1,
+        amount,
       );
     }
 

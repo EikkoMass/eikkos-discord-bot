@@ -14,10 +14,11 @@ export default async (client, interaction) => {
 
   if (!interaction.customId) return reply(interaction, `No custom ID found`);
 
-  const splittedId = interaction.customId.split(";");
+  const customId = JSON.parse(interaction.customId);
+  const splittedId = customId.id.split(";");
 
   const action = actions.find((cmd) => {
-    if (!interaction.customId.startsWith(cmd.name + ";")) return false;
+    if (!customId.id.startsWith(cmd.name + ";")) return false;
     if (cmd.tags && !cmd.tags.every((tag) => splittedId.includes(tag)))
       return false;
 
