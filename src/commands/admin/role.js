@@ -1,154 +1,156 @@
-import {Client, ActionRowBuilder, ButtonBuilder, ButtonStyle, ApplicationCommandOptionType, MessageFlags, PermissionFlagsBits } from 'discord.js';
-import ActionRowRole from '../../models/actionRowRole.js';
-import RoleContext from '../../models/roleContext.js';
-import { Types } from 'mongoose';
+import {
+  Client,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ApplicationCommandOptionType,
+  MessageFlags,
+  PermissionFlagsBits,
+} from "discord.js";
+import ActionRowRole from "../../models/actionRowRole.js";
+import RoleContext from "../../models/roleContext.js";
+import { Types } from "mongoose";
 
 import { getLocalization } from "../../utils/i18n.js";
 
 export default {
-
   /**
    *  @param {Client} client
    *  @param  interaction
-  */
+   */
   callback: async (client, interaction) => {
-    switch(interaction.options.getSubcommand())
-    {
-      case 'choose':
+    switch (interaction.options.getSubcommand()) {
+      case "choose":
         await choose(client, interaction);
         break;
-      case 'add':
+      case "add":
         await add(client, interaction);
         break;
-      case 'remove':
+      case "remove":
         await remove(client, interaction);
         break;
       default:
         await interaction.reply({
           flags: MessageFlags.Ephemeral,
-          content: `Role command not found!`
+          content: `Role command not found!`,
         });
         return;
     }
   },
 
-  name: 'role',
-  description: 'Set a new role.',
+  name: "role",
+  description: "Set a new role.",
   options: [
     {
-      name: 'add',
-      description: 'Add / edit an role to be selected',
+      name: "add",
+      description: "Add / edit an role to be selected",
       type: ApplicationCommandOptionType.Subcommand,
       options: [
         {
-          name: 'role',
+          name: "role",
           required: true,
-          description: 'The role that use want to add',
-          type: ApplicationCommandOptionType.Role
+          description: "The role that use want to add",
+          type: ApplicationCommandOptionType.Role,
         },
         {
-          name: 'label',
+          name: "label",
           required: true,
-          description: 'The name of the role',
-          type: ApplicationCommandOptionType.String
+          description: "The name of the role",
+          type: ApplicationCommandOptionType.String,
         },
         {
-          name: 'style',
-          description: 'The role that use want to add',
+          name: "style",
+          description: "The role that use want to add",
           type: ApplicationCommandOptionType.Number,
-          autocomplete: true
+          autocomplete: true,
         },
         {
-          name: 'context',
-          description: 'What\'s the button context',
+          name: "context",
+          description: "What's the button context",
           type: ApplicationCommandOptionType.String,
-        }
-      ]
+        },
+      ],
     },
     {
-      name: 'remove',
-      description: 'Removes a role to the selection',
+      name: "remove",
+      description: "Removes a role to the selection",
       type: ApplicationCommandOptionType.Subcommand,
       options: [
         {
-          name: 'role',
+          name: "role",
           required: true,
-          description: 'The role that use want to remove',
-          type: ApplicationCommandOptionType.Role
+          description: "The role that use want to remove",
+          type: ApplicationCommandOptionType.Role,
         },
         {
-          name: 'context',
-          description: 'What\'s the button context',
+          name: "context",
+          description: "What's the button context",
           type: ApplicationCommandOptionType.String,
-          autocomplete: true
-        }
-      ]
+          autocomplete: true,
+        },
+      ],
     },
     {
-      name: 'choose',
-      description: 'Chooses an role around the added',
+      name: "choose",
+      description: "Chooses an role around the added",
       type: ApplicationCommandOptionType.Subcommand,
       options: [
         {
-          name: 'context',
-          description: 'What\'s the button context',
+          name: "context",
+          description: "What's the button context",
           type: ApplicationCommandOptionType.String,
-          autocomplete: true
-        }
-      ]
-    }
-  ]
-}
+          autocomplete: true,
+        },
+      ],
+    },
+  ],
+};
 
 /**
  *  @param {Client} client
  *  @param  interaction
-*/
-async function add(client, interaction)
-{
+ */
+async function add(client, interaction) {
   const words = await getLocalization(interaction.locale, `role`);
 
   try {
+    const roleParam = interaction.options.get("role")?.value;
+    const labelParam = interaction.options.get("label")?.value;
+    const styleParam = interaction.options.get("style")?.value;
+    const contextParam = interaction.options?.get("context")?.value;
 
-    const roleParam = interaction.options.get('role')?.value;
-    const labelParam = interaction.options.get('label')?.value;
-    const styleParam = interaction.options.get('style')?.value;
-    const contextParam = interaction.options?.get('context')?.value;
-
-    if(styleParam && (styleParam < ButtonStyle.Primary || styleParam > ButtonStyle.Danger))
-    {
-      await interaction.reply(
-        {
-          flags: MessageFlags.Ephemeral,
-          content: words.InvalidStyleOption,
-        }
-      );
+    if (
+      styleParam &&
+      (styleParam < ButtonStyle.Primary || styleParam > ButtonStyle.Danger)
+    ) {
+      await interaction.reply({
+        flags: MessageFlags.Ephemeral,
+        content: words.InvalidStyleOption,
+      });
       return;
     }
 
-    if(!interaction.member.permissions.has(PermissionFlagsBits.ManageRoles))
-    {
-      await interaction.reply(
-        {
-          flags: MessageFlags.Ephemeral,
-          content: words.CannotManageRoles,
-        }
-      );
+    if (!interaction.member.permissions.has(PermissionFlagsBits.ManageRoles)) {
+      await interaction.reply({
+        flags: MessageFlags.Ephemeral,
+        content: words.CannotManageRoles,
+      });
       return;
     }
 
     const searchParams = { guildId: interaction.guild.id, roleId: roleParam };
     let context = {};
 
-    if(contextParam)
-    {
-      context = await RoleContext.findOne({ name: contextParam, guildId: interaction.guild.id });
+    if (contextParam) {
+      context = await RoleContext.findOne({
+        name: contextParam,
+        guildId: interaction.guild.id,
+      });
 
-      if(!context)
-      {
+      if (!context) {
         context = new RoleContext({
           name: contextParam,
-          guildId: interaction.guild.id
+          guildId: interaction.guild.id,
         });
 
         await context.save();
@@ -159,8 +161,7 @@ async function add(client, interaction)
 
     let role = await ActionRowRole.findOne(searchParams);
 
-    if(role)
-    {
+    if (role) {
       role.label = labelParam;
       role.style = styleParam || ButtonStyle.Primary;
       role.context = context._id;
@@ -170,119 +171,118 @@ async function add(client, interaction)
         label: labelParam,
         roleId: roleParam,
         style: styleParam || ButtonStyle.Primary,
-        context: context._id
+        context: context._id,
       });
     }
 
     await role.save();
-    interaction.reply(
-    {
+    interaction.reply({
       flags: MessageFlags.Ephemeral,
-      content: `${words.RoleAddedEdited}${context ? ` ${words.OnContext} '` + (context.name || words.NotSpecified) + "'" : ''}!`,
-    }
-    );
+      content: `${words.RoleAddedEdited}${context ? ` ${words.OnContext} '` + (context.name || words.NotSpecified) + "'" : ""}!`,
+    });
   } catch (error) {
     console.log(error);
-  } 
+  }
 }
-
 
 /**
  *  @param {Client} client
  *  @param  interaction
-*/
-async function choose(client, interaction)
-{
+ */
+async function choose(client, interaction) {
   const words = await getLocalization(interaction.locale, `role`);
 
   try {
     const row = new ActionRowBuilder();
 
-    const context = interaction.options?.get('context')?.value;
+    const context = interaction.options?.get("context")?.value;
 
     const searchParams = { guildId: interaction.guild.id };
 
-    searchParams.context = context ? new Types.ObjectId(`${context}`) : { $eq: null };
+    searchParams.context = context
+      ? new Types.ObjectId(`${context}`)
+      : { $eq: null };
 
     let roles = await ActionRowRole.find(searchParams);
 
-    if(!roles?.length)
-    {
-      await interaction.reply(
-        {
-          content: words.NoRolesRegisteredOnGuild,
-          flags: MessageFlags.Ephemeral,
-        }
-      );
+    if (!roles?.length) {
+      await interaction.reply({
+        content: words.NoRolesRegisteredOnGuild,
+        flags: MessageFlags.Ephemeral,
+      });
       return;
     }
 
-    roles.forEach(
-      role => 
-        row.components.push(
-          new ButtonBuilder()
-            .setCustomId(`role;${role.roleId}`)
-            .setLabel(role.label)
-            .setStyle(role.style || ButtonStyle.Primary)
-        )
+    roles.forEach((role) =>
+      row.components.push(
+        new ButtonBuilder()
+          .setCustomId(
+            JSON.stringify({
+              id: "role;",
+              roleId: role.roleId,
+              hash: crypto.randomUUID(),
+            }),
+          )
+          .setLabel(role.label)
+          .setStyle(role.style || ButtonStyle.Primary),
+      ),
     );
 
-    await interaction.reply(
-      {
-        content: words.ClaimRemoveRole,
-        components: [row],
-      }
-    );
-
+    await interaction.reply({
+      content: words.ClaimRemoveRole,
+      components: [row],
+    });
   } catch (error) {
     console.log(error);
-  } 
+  }
 }
 
 /**
  *  @param {Client} client
  *  @param  interaction
-*/
-async function remove(client, interaction)
-{
+ */
+async function remove(client, interaction) {
   const words = await getLocalization(interaction.locale, `role`);
 
-  const roleParam = interaction.options.get('role')?.value;
-  const contextParam = interaction.options?.get('context')?.value;
+  const roleParam = interaction.options.get("role")?.value;
+  const contextParam = interaction.options?.get("context")?.value;
 
   const searchParams = { guildId: interaction.guild.id, roleId: roleParam };
 
-  if(contextParam)
-  {
-    const context = await RoleContext.findOne({ guildId: interaction.guild.id, _id: new Types.ObjectId(`${contextParam}`)})
+  if (contextParam) {
+    const context = await RoleContext.findOne({
+      guildId: interaction.guild.id,
+      _id: new Types.ObjectId(`${contextParam}`),
+    });
     searchParams.context = context._id || { $eq: null };
   }
 
   const role = await ActionRowRole.findOneAndDelete(searchParams);
 
-  if(role)
-  {
-    if(contextParam)
-    {
-      const remainingContextRoles = await ActionRowRole.countDocuments({ guildId: interaction.guild.id, context: new Types.ObjectId(`${contextParam}`)})
+  if (role) {
+    if (contextParam) {
+      const remainingContextRoles = await ActionRowRole.countDocuments({
+        guildId: interaction.guild.id,
+        context: new Types.ObjectId(`${contextParam}`),
+      });
 
-      if(remainingContextRoles == 0)
-      {
-        await RoleContext.findOneAndDelete({ guildId: interaction.guild.id, _id: new Types.ObjectId(`${contextParam}`)});
+      if (remainingContextRoles == 0) {
+        await RoleContext.findOneAndDelete({
+          guildId: interaction.guild.id,
+          _id: new Types.ObjectId(`${contextParam}`),
+        });
       }
     }
 
-    await interaction.reply(
-      {
-        content: words.RoleRemoved,
-        flags: MessageFlags.Ephemeral,
+    await interaction.reply({
+      content: words.RoleRemoved,
+      flags: MessageFlags.Ephemeral,
     });
     return;
   }
 
-  await interaction.reply(
-    {
-      content: words.NoRoleFound,
-      flags: MessageFlags.Ephemeral,
-  });  
+  await interaction.reply({
+    content: words.NoRoleFound,
+    flags: MessageFlags.Ephemeral,
+  });
 }

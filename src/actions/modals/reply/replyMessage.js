@@ -9,9 +9,9 @@ export default {
    */
   callback: async (client, interaction) => {
     try {
-      const splittedId = interaction.customId.replace("reply;", "").split(";");
+      const content = JSON.parse(interaction.customId);
 
-      const messageId = splittedId[0];
+      const messageId = content.messageId;
 
       if (!messageId)
         return interaction.reply({

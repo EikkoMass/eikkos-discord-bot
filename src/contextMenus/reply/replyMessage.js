@@ -33,7 +33,11 @@ export default {
     const modal = new ModalBuilder()
       .setTitle(words.Title)
       .setCustomId(
-        `reply;${interaction.targetMessage.id};${crypto.randomUUID()}`,
+        JSON.stringify({
+          id: "reply;",
+          messageId: interaction.targetMessage.id,
+          hash: crypto.randomUUID(),
+        }),
       )
       .setComponents(new ActionRowBuilder().addComponents(description));
 
