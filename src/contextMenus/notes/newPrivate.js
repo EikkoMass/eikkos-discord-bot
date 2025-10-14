@@ -10,21 +10,21 @@ import {
   TextInputBuilder,
 } from "discord.js";
 
-import { getLocalization } from '../../utils/i18n.js';
+import { getLocalization } from "../../utils/i18n.js";
 
 import Note from "../../models/note.js";
 
 const amount = 10;
 
 export default {
-  name: 'New Private Note',
+  name: "New Private Note",
   contexts: [InteractionContextType.Guild],
   type: ApplicationCommandType.Message,
 
   /**
    *  @param {Client} client
    *  @param  interaction
-  */
+   */
   callback: async (client, interaction) => {
     const context = 1;
     const words = await getLocalization(interaction.locale, `notes`);
@@ -36,7 +36,7 @@ export default {
     };
 
     let countNotes = await Note.countDocuments(query);
-  
+
     if (countNotes >= amount) {
       interaction.reply({
         flags: [MessageFlags.Ephemeral],
@@ -64,7 +64,13 @@ export default {
       .setRequired(false);
 
     const modal = new ModalBuilder()
-      .setCustomId(`notes;add;${context};${crypto.randomUUID()}`)
+      .setCustomId(
+        JSON.stringify({
+          id: "notes;add;",
+          context,
+          hash: crypto.randomUUID(),
+        }),
+      )
       .setTitle(words.NewPrivateNote)
       .setComponents(
         new ActionRowBuilder().addComponents(title),
@@ -73,5 +79,5 @@ export default {
       );
 
     await interaction.showModal(modal);
-  }
-}
+  },
+};

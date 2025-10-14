@@ -1,5 +1,6 @@
 {
   "Added": "Sua anotação foi adicionada com sucesso!",
+  "Edited": "Sua anotação foi editada com sucesso!",
   "NotFoundInServer": "Nenhuma anotação foi encontrada neste servidor!",
   "Removed": "Sua anotação foi removida com sucesso!",
   "NotFound": "Anotação não encontrada!",
@@ -7,6 +8,8 @@
   "Title": "Titulo",
   "NewPublicNote": "Nova Anotação Publica",
   "NewPrivateNote": "Nova Anotação Privada",
+  "EditPublicNote": "Editando Anotação Publica",
+  "EditPrivateNote": "Editando Anotação Privada",
   "ImageLink": "Link da Imagem",
   "NoteInfo": "Informações da Anotação"
 }

@@ -1,5 +1,6 @@
 {
   "Added": "Your note was added successfully!",
+  "Edited": "Your note was edited successfully!",
   "NotFoundInServer": "No notes were found on this server!",
   "Removed": "Your note was removed successfully!",
   "NotFound": "Note not found!",
@@ -7,6 +8,8 @@
   "Title": "Title",
   "NewPublicNote": "New Public Note",
   "NewPrivateNote": "New Private Note",
+  "EditPublicNote": "Editing Public Note",
+  "EditPrivateNote": "Editing Private Note",
   "ImageLink": "Image Link",
   "NoteInfo": "Note Information"
 }

@@ -8,17 +8,17 @@ import {
   TextInputBuilder,
 } from "discord.js";
 
-import { getLocalization } from '../../utils/i18n.js';
+import { getLocalization } from "../../utils/i18n.js";
 
 export default {
-  name: 'New Public Note',
+  name: "New Public Note",
   contexts: [InteractionContextType.Guild],
   type: ApplicationCommandType.Message,
 
   /**
    *  @param {Client} client
    *  @param  interaction
-  */
+   */
   callback: async (client, interaction) => {
     const context = 2;
     const words = await getLocalization(interaction.locale, `notes`);
@@ -42,7 +42,13 @@ export default {
       .setRequired(false);
 
     const modal = new ModalBuilder()
-      .setCustomId(`notes;add;${context};${crypto.randomUUID()}`)
+      .setCustomId(
+        JSON.stringify({
+          id: "notes;add;",
+          context,
+          hash: crypto.randomUUID(),
+        }),
+      )
       .setTitle(words.NewPublicNote)
       .setComponents(
         new ActionRowBuilder().addComponents(title),
@@ -51,5 +57,5 @@ export default {
       );
 
     await interaction.showModal(modal);
-  }
-}
+  },
+};

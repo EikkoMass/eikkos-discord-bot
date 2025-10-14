@@ -16,6 +16,8 @@ import Note from "../../models/note.js";
 
 import { getLocalization } from "../../utils/i18n.js";
 import getPaginator from "../../utils/components/getPaginator.js";
+import NoteActionTypes from "../../enums/noteActionTypes.js";
+import noteActionTypes from "../../enums/noteActionTypes.js";
 
 const amount = 10;
 
@@ -24,6 +26,9 @@ export default {
     switch (interaction.options.getSubcommand()) {
       case "add":
         await add(client, interaction);
+        return;
+      case "edit":
+        await edit(client, interaction);
         return;
       case "show":
         await show(client, interaction);
@@ -52,6 +57,18 @@ export default {
           description: "where you want to register",
           type: ApplicationCommandOptionType.Integer,
           autocomplete: true,
+        },
+      ],
+    },
+    {
+      name: "edit",
+      description: "Edit an existing note.",
+      type: ApplicationCommandOptionType.Subcommand,
+      options: [
+        {
+          name: "code",
+          description: "where you want to register",
+          type: ApplicationCommandOptionType.String,
         },
       ],
     },
@@ -88,6 +105,25 @@ export default {
  *  @param  interaction
  */
 async function add(client, interaction) {
+  return manageNote(client, interaction, NoteActionTypes.ADD);
+}
+
+/**
+ *  @param {Client} client
+ *  @param  interaction
+ */
+async function edit(client, interaction) {
+  const code = interaction.options.get("code").value;
+  return manageNote(client, interaction, NoteActionTypes.EDIT, code);
+}
+
+/**
+ *  @param {Client} client
+ *  @param  interaction
+ *  @param {number} action
+ *  @param {string} code
+ */
+async function manageNote(client, interaction, action, code = null) {
   const context = interaction.options?.get("context")?.value || 1;
   const words = await getLocalization(interaction.locale, `notes`);
 
@@ -128,15 +164,18 @@ async function add(client, interaction) {
     .setStyle(TextInputStyle.Short)
     .setRequired(false);
 
+  const id = action === noteActionTypes.ADD ? "notes;add;" : "notes;edit;";
+
   const modal = new ModalBuilder()
     .setCustomId(
       JSON.stringify({
-        id: "notes;add;",
-        context: context,
+        id,
+        context,
+        code,
         hash: crypto.randomUUID(),
       }),
     )
-    .setTitle(context === 1 ? words.NewPrivateNote : words.NewPublicNote)
+    .setTitle(getTitle(context, action))
     .setComponents(
       new ActionRowBuilder().addComponents(title),
       new ActionRowBuilder().addComponents(description),
@@ -144,6 +183,14 @@ async function add(client, interaction) {
     );
 
   await interaction.showModal(modal);
+}
+
+function getTitle(context, action) {
+  if (action === noteActionTypes.ADD) {
+    return context === 1 ? words.NewPrivateNote : words.NewPublicNote;
+  } else {
+    return context === 1 ? words.EditPrivateNote : words.EditPublicNote;
+  }
 }
 
 /**
