@@ -13,6 +13,7 @@ import {
 
 import getNoteEmbeds from "../../utils/components/getNoteEmbeds.js";
 import Note from "../../models/note.js";
+import { Types } from "mongoose";
 
 import { getLocalization } from "../../utils/i18n.js";
 import getPaginator from "../../utils/components/getPaginator.js";
@@ -164,7 +165,32 @@ async function manageNote(client, interaction, action, code = null) {
     .setStyle(TextInputStyle.Short)
     .setRequired(false);
 
+  if (code) {
+    let note = await Note.findOne({
+      userId: interaction.user.id,
+      guildId: interaction.guild.id,
+      _id: new Types.ObjectId(`${code}`),
+    });
+
+    if (note) {
+      if (note.title) title.setValue(note.title);
+      description.setValue(note.text);
+      if (note.img) img.setValue(note.img);
+    } else {
+      await interaction.reply({
+        flags: [MessageFlags.Ephemeral],
+        embeds: [new EmbedBuilder().setDescription(words.NotFound)],
+      });
+      return;
+    }
+  }
+
   const id = action === noteActionTypes.ADD ? "notes;add;" : "notes;edit;";
+
+  const hashSize = 6;
+  const hash = Math.random()
+    .toString(36)
+    .substring(2, hashSize + 2);
 
   const modal = new ModalBuilder()
     .setCustomId(
@@ -172,10 +198,10 @@ async function manageNote(client, interaction, action, code = null) {
         id,
         context,
         code,
-        hash: crypto.randomUUID(),
+        hash,
       }),
     )
-    .setTitle(getTitle(context, action))
+    .setTitle(getTitle(words, context, action))
     .setComponents(
       new ActionRowBuilder().addComponents(title),
       new ActionRowBuilder().addComponents(description),
@@ -185,7 +211,7 @@ async function manageNote(client, interaction, action, code = null) {
   await interaction.showModal(modal);
 }
 
-function getTitle(context, action) {
+function getTitle(words, context, action) {
   if (action === noteActionTypes.ADD) {
     return context === 1 ? words.NewPrivateNote : words.NewPublicNote;
   } else {

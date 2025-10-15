@@ -2,6 +2,7 @@ import { Client, EmbedBuilder, MessageFlags } from "discord.js";
 import { getLocalization } from "../../../utils/i18n.js";
 
 import Note from "../../../models/note.js";
+import { Types } from "mongoose";
 
 export default {
   name: "notes",
