@@ -8,5 +8,8 @@
   "RoleAddedEdited": "Role added / edited successfully",
   "CannotManageRoles": "You cannot manage roles!",
   "InvalidStyleOption": "Invalid style option!",
-  "None": "None"
+  "None": "None",
+  "CouldntFindRole": "I couldn't find that role!",
+  "RoleNRemoved": "The role {0} has been removed.",
+  "RoleNAdded": "The role {0} has been added."
 }

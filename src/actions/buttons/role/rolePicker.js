@@ -1,4 +1,5 @@
-import { Client, MessageFlags } from "discord.js";
+import { Client, MessageFlags, EmbedBuilder } from "discord.js";
+import { getLocalization, formatMessage } from "../../../utils/i18n.js";
 
 export default {
   name: "role",
@@ -9,6 +10,9 @@ export default {
    */
   callback: async (client, interaction) => {
     try {
+      const words = await getLocalization(interaction.locale, `role`);
+      const embed = new EmbedBuilder();
+
       await interaction.deferReply({
         flags: [MessageFlags.Ephemeral],
       });
@@ -17,7 +21,9 @@ export default {
       const role = interaction.guild.roles.cache.get(content.roleId);
 
       if (!role) {
-        await interaction.editReply({ content: "I couldn't find that role!" });
+        await interaction.editReply({
+          embeds: [embed.setDescription(words.CouldntFindRole)],
+        });
         return;
       }
 
@@ -25,12 +31,16 @@ export default {
 
       if (hasRole) {
         await interaction.member.roles.remove(role);
-        await interaction.editReply(`The role ${role} has been removed.`);
+        await interaction.editReply({
+          embeds: [embed.setDescription(words.RoleNRemoved, [role])],
+        });
         return;
       }
 
       await interaction.member.roles.add(role);
-      await interaction.editReply(`The role ${role} has been added.`);
+      await interaction.editReply({
+        embeds: [embed.setDescription(words.RoleNAdded, [role])],
+      });
     } catch (err) {
       console.log(err);
     }

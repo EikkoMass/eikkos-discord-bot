@@ -8,5 +8,8 @@
   "RoleAddedEdited": "Cargo adicionado / editado com sucesso",
   "CannotManageRoles": "Você não pode gerenciar cargos!",
   "InvalidStyleOption": "Opção de estilização inválida!",
-  "None": "Nenhum"
+  "None": "Nenhum",
+  "CouldntFindRole": "Não foi possível encontrar esse cargo!",
+  "RoleNRemoved": "O cargo {0} foi removido.",
+  "RoleNAdded": "O cargo {0} foi adicionado."
 }
