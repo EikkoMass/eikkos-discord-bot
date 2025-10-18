@@ -7,7 +7,7 @@ import {
 
 import Playlist from "../../models/playlist.js";
 
-import { useMainPlayer } from "discord-player";
+import { useMainPlayer, QueryType } from "discord-player";
 import playerConfigs from "../../configs/player.json" with { type: "json" };
 
 import getPlaylistEmbeds from "../../utils/components/getPlaylistEmbeds.js";
@@ -196,15 +196,16 @@ async function play(client, interaction) {
   const words = await getLocalization(interaction.locale, `play`);
 
   const embed = new EmbedBuilder();
-  const link = interaction.options.get("name")?.value;
-  const channel = interaction.member?.voice?.channel;
-  const player = useMainPlayer();
+  let link = interaction.options.get("name")?.value;
+  let channel = interaction.member?.voice?.channel;
+  let player = useMainPlayer();
 
+  console.log(!channel);
   await interaction.deferReply();
 
   if (!channel) {
     await interaction.editReply({
-      embeds: [embed.setDescription(words.VCRequired)],
+      embeds: [embed.setDescription(words.VoiceChannelRequired)],
     });
     return;
   }
