@@ -75,7 +75,11 @@ async function love(client, interaction) {
   const user1 = interaction.options?.get("first").value;
   const user2 = interaction.options?.get("second").value;
 
-  const results = affinityCalc("love", user1, user2);
+  const results = affinityCalc(
+    "love",
+    Number.parseInt(user1),
+    Number.parseInt(user2),
+  );
 
   let embed = new EmbedBuilder()
     .setTitle("Love percentage")
@@ -96,7 +100,11 @@ async function hate(client, interaction) {
   const user1 = interaction.options?.get("first").value;
   const user2 = interaction.options?.get("second").value;
 
-  const results = affinityCalc("hate", user1, user2);
+  const results = affinityCalc(
+    "hate",
+    Number.parseInt(user1),
+    Number.parseInt(user2),
+  );
 
   let embed = new EmbedBuilder()
     .setTitle("Hate percentage")
@@ -142,6 +150,7 @@ function affinityCalc(type, user1, user2) {
 }
 
 function randomize(seed) {
+  console.log(seed);
   var x = Math.sin(seed || 1) * 10000;
   return x - Math.floor(x);
 }
