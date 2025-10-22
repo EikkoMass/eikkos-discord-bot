@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { Client, GatewayIntentBits } from "discord.js";
+import { Client, GatewayIntentBits, Partials } from "discord.js";
 import eventHandler from "./handlers/eventHandler.js";
 import mongoose from "mongoose";
 import { Player } from "discord-player";
@@ -15,12 +15,14 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageReactions,
     GatewayIntentBits.GuildVoiceStates,
     GatewayIntentBits.GuildMessagePolls,
     GatewayIntentBits.GuildPresences,
     GatewayIntentBits.GuildIntegrations,
     GatewayIntentBits.MessageContent,
   ],
+  partials: [Partials.User, Partials.Reaction, Partials.Message],
 });
 
 (async () => {

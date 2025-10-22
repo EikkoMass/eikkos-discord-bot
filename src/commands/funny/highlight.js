@@ -60,6 +60,12 @@ export default {
           channel_types: [ChannelType.GuildText],
           required: true,
         },
+        {
+          name: "quantity",
+          description: "amount of reactions to create the highlight (min 4)",
+          type: ApplicationCommandOptionType.Integer,
+          min_value: 4,
+        },
       ],
     },
   ],
@@ -111,6 +117,7 @@ async function enable(client, interaction) {
 
 async function config(client, interaction) {
   const channel = interaction.options?.get("channel").value;
+  let quantity = interaction.options?.get("quantity")?.value || 4;
 
   //const words = await getLocalization(interaction.locale, `highlight`);
 
@@ -122,6 +129,8 @@ async function config(client, interaction) {
     await HighlightGuild.insertOne({
       guildId: interaction.guild.id,
       channelId: channel,
+      count: quantity,
+      active: true,
     });
   } else {
     await HighlightGuild.updateOne(
@@ -130,6 +139,7 @@ async function config(client, interaction) {
       },
       {
         channelId: channel,
+        count: quantity,
         active: true,
       },
     );

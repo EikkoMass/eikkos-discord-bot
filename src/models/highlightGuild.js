@@ -9,10 +9,15 @@ const scheme = new Schema({
     type: String,
     required: true,
   },
+  count: {
+    type: Number,
+    default: 4,
+    required: true,
+  },
   active: {
     type: Boolean,
     default: true,
   },
 });
 
-export default model("HightlightGuild", scheme);
+export default model("HighlightGuild", scheme);
