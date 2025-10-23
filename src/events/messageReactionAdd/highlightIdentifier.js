@@ -80,7 +80,7 @@ export default async (client, reaction, user) => {
     attachment,
     fileName,
     count: reaction.count,
-    creationDate: new Date(),
+    creationDate: reaction.message.createdAt,
   });
 
   if (channel && channel.isTextBased()) {
