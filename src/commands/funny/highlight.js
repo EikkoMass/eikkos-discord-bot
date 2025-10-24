@@ -73,8 +73,8 @@ export default {
 };
 
 async function disable(client, interaction) {
-  //const words = await getLocalization(interaction.locale, `highlight`);
-  console.log(interaction.guild.id);
+  const words = await getLocalization(interaction.locale, `highlight`);
+
   let result = await HighlightGuild.updateOne(
     {
       guildId: interaction.guild.id,
@@ -85,17 +85,14 @@ async function disable(client, interaction) {
   );
 
   if (result.matchedCount === 0) {
-    return await reply(
-      interaction,
-      `Highlight feature still not properly configured!`,
-    );
+    return await reply(interaction, words.NotConfigured);
   }
 
-  return await reply(interaction, `Highlight feature disabled!`);
+  return await reply(interaction, words.Disabled);
 }
 
 async function enable(client, interaction) {
-  //const words = await getLocalization(interaction.locale, `highlight`);
+  const words = await getLocalization(interaction.locale, `highlight`);
   let result = await HighlightGuild.updateOne(
     {
       guildId: interaction.guild.id,
@@ -106,20 +103,17 @@ async function enable(client, interaction) {
   );
 
   if (result.matchedCount === 0) {
-    return await reply(
-      interaction,
-      `Highlight feature still not properly configured!`,
-    );
+    return await reply(interaction, words.NotConfigured);
   }
 
-  return await reply(interaction, `Highlight feature enabled!`);
+  return await reply(interaction, words.Enabled);
 }
 
 async function config(client, interaction) {
   const channel = interaction.options?.get("channel").value;
   let quantity = interaction.options?.get("quantity")?.value || 4;
 
-  //const words = await getLocalization(interaction.locale, `highlight`);
+  const words = await getLocalization(interaction.locale, `highlight`);
 
   let count = await HighlightGuild.countDocuments({
     guildId: interaction.guild.id,
@@ -145,7 +139,7 @@ async function config(client, interaction) {
     );
   }
 
-  return await reply(interaction, `Highlight feature enabled!`);
+  return await reply(interaction, words.Enabled);
 }
 
 async function reply(interaction, message, ephemeral = true) {
