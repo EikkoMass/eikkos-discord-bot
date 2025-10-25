@@ -200,7 +200,6 @@ async function play(client, interaction) {
   let channel = interaction.member?.voice?.channel;
   let player = useMainPlayer();
 
-  console.log(!channel);
   await interaction.deferReply();
 
   if (!channel) {
