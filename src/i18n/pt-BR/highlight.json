@@ -1,5 +1,13 @@
 {
   "Enabled": "feature de Highlighting habilitada!",
   "Disabled": "feature de Highlighting desabilitada!",
-  "NotConfigured": "feature de Highlighting não está configurada!"
+  "NotConfigured": "feature de Highlighting não está configurada!",
+  "HighlightTitle": "Highlights do servidor '{0}'",
+  "None": "Nenhum",
+  "Status": "Status",
+  "Active": "Ativo",
+  "Inactive": "Inativo",
+  "Quantity": "Quantidade",
+  "Target": "Direcionamento",
+  "Minimum": "Mínimo"
 }

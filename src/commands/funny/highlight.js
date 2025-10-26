@@ -5,11 +5,13 @@ import {
   ChannelType,
   MessageFlags,
   EmbedBuilder,
+  Colors,
 } from "discord.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 import HighlightGuild from "../../models/highlightGuild.js";
+import Highlight from "../../models/highlight.js";
 
 export default {
   name: "highlight",
@@ -25,6 +27,9 @@ export default {
         break;
       case "disable":
         await disable(client, interaction);
+        break;
+      case "status":
+        await status(client, interaction);
         break;
       case "config":
         await config(client, interaction);
@@ -67,6 +72,11 @@ export default {
           min_value: 4,
         },
       ],
+    },
+    {
+      name: "status",
+      description: "shows the status of the guild's highlights",
+      type: ApplicationCommandOptionType.Subcommand,
     },
   ],
   permissionsRequired: [PermissionFlagsBits.ManageChannels],
@@ -146,5 +156,57 @@ async function reply(interaction, message, ephemeral = true) {
   return await interaction.reply({
     flags: ephemeral ? [MessageFlags.Ephemeral] : [],
     embeds: [new EmbedBuilder().setDescription(message)],
+  });
+}
+
+async function status(client, interaction) {
+  const words = await getLocalization(interaction.locale, `highlight`);
+
+  let guild = await HighlightGuild.findOne({
+    guildId: interaction.guild.id,
+  });
+  let count = await Highlight.countDocuments({
+    guildId: interaction.guild.id,
+  });
+
+  const embed = new EmbedBuilder();
+
+  embed.setTitle(formatMessage(words.HighlightTitle, [interaction.guild.name]));
+  embed.setThumbnail(interaction.guild.iconURL());
+  embed.setFields([
+    {
+      name: words.Status,
+      value: guild?.active ? words.Active : words.Inactive,
+      inline: true,
+    },
+    {
+      name: words.Quantity,
+      value: guild ? count.toString() : "0",
+      inline: true,
+    },
+    {
+      name: " ",
+      value: " ",
+    },
+    {
+      name: words.Target,
+      value: guild ? `<#${guild.channelId}>` : words.None,
+      inline: true,
+    },
+    {
+      name: words.Minimum,
+      value: guild ? guild.count.toString() : "0",
+      inline: true,
+    },
+  ]);
+
+  if (guild?.active) {
+    embed.setColor(Colors.Green);
+  } else {
+    embed.setColor(Colors.Red);
+  }
+
+  return await interaction.reply({
+    embeds: [embed],
   });
 }

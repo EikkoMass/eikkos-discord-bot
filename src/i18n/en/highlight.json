@@ -1,5 +1,13 @@
 {
   "Enabled": "Highlight feature enabled!",
   "Disabled": "Highlight feature disabled!",
-  "NotConfigured": "Highlight feature still not properly configured!"
+  "NotConfigured": "Highlight feature still not properly configured!",
+  "HighlightTitle": "{0}'s Highlights",
+  "None": "None",
+  "Status": "Status",
+  "Active": "Active",
+  "Inactive": "Inactive",
+  "Quantity": "Quantity",
+  "Target": "Target",
+  "Minimum": "Minimum"
 }
