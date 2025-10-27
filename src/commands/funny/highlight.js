@@ -13,6 +13,8 @@ import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import HighlightGuild from "../../models/highlightGuild.js";
 import Highlight from "../../models/highlight.js";
 
+import highlightGuildCache from "../../utils/cache/highlight-guild.js";
+
 export default {
   name: "highlight",
   description: "immortalize a message with enough reactions",
@@ -85,37 +87,47 @@ export default {
 async function disable(client, interaction) {
   const words = await getLocalization(interaction.locale, `highlight`);
 
-  let result = await HighlightGuild.updateOne(
+  let result = await HighlightGuild.findOneAndUpdate(
     {
       guildId: interaction.guild.id,
     },
     {
       active: false,
     },
+    {
+      new: true,
+      upsert: false,
+    },
   );
 
-  if (result.matchedCount === 0) {
+  if (!result) {
     return await reply(interaction, words.NotConfigured);
   }
 
+  highlightGuildCache.set(interaction.guild.id, result);
   return await reply(interaction, words.Disabled);
 }
 
 async function enable(client, interaction) {
   const words = await getLocalization(interaction.locale, `highlight`);
-  let result = await HighlightGuild.updateOne(
+  let result = await HighlightGuild.findOneAndUpdate(
     {
       guildId: interaction.guild.id,
     },
     {
       active: true,
     },
+    {
+      new: true,
+      upsert: false,
+    },
   );
 
-  if (result.matchedCount === 0) {
+  if (!result) {
     return await reply(interaction, words.NotConfigured);
   }
 
+  highlightGuildCache.set(interaction.guild.id, result);
   return await reply(interaction, words.Enabled);
 }
 
@@ -129,15 +141,17 @@ async function config(client, interaction) {
     guildId: interaction.guild.id,
   });
 
+  let highlight;
+
   if (count === 0) {
-    await HighlightGuild.insertOne({
+    highlight = await HighlightGuild.insertOne({
       guildId: interaction.guild.id,
       channelId: channel,
       count: quantity,
       active: true,
     });
   } else {
-    await HighlightGuild.updateOne(
+    highlight = await HighlightGuild.findOneAndUpdate(
       {
         guildId: interaction.guild.id,
       },
@@ -146,8 +160,14 @@ async function config(client, interaction) {
         count: quantity,
         active: true,
       },
+      {
+        new: true,
+        upsert: false,
+      },
     );
   }
+
+  highlightGuildCache.set(interaction.guild.id, highlight);
 
   return await reply(interaction, words.Enabled);
 }
@@ -162,9 +182,16 @@ async function reply(interaction, message, ephemeral = true) {
 async function status(client, interaction) {
   const words = await getLocalization(interaction.locale, `highlight`);
 
-  let guild = await HighlightGuild.findOne({
-    guildId: interaction.guild.id,
-  });
+  let guild = highlightGuildCache.get(interaction.guild.id);
+
+  if (!guild) {
+    guild = await HighlightGuild.findOne({
+      guildId: interaction.guild.id,
+    });
+
+    highlightGuildCache.set(interaction.guild.id, guild);
+  }
+
   let count = await Highlight.countDocuments({
     guildId: interaction.guild.id,
   });
