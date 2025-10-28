@@ -1,6 +1,8 @@
 import HighlightGuild from "../../models/highlightGuild.js";
 import Highlight from "../../models/highlight.js";
 
+import highlightGuildCache from "../../utils/cache/highlight-guild.js";
+
 import getHighlightEmbed from "../../utils/components/getHighlightEmbed.js";
 import getHighlightMessageButton from "../../utils/components/getHighlightMessageButton.js";
 
@@ -17,9 +19,18 @@ export default async (client, reaction, user) => {
   if (reaction.me) return;
   if (reaction._emoji.name !== "⭐") return;
 
-  let highlightGuild = await HighlightGuild.findOne({
-    guildId: reaction.message.guildId,
-  });
+  let highlightGuild = highlightGuildCache.get(reaction.message.guildId);
+
+  if (
+    !highlightGuild &&
+    !highlightGuildCache.searched(reaction.message.guildId)
+  ) {
+    highlightGuild = await HighlightGuild.findOne({
+      guildId: reaction.message.guildId,
+    });
+
+    highlightGuildCache.set(reaction.message.guildId, highlightGuild);
+  }
 
   if (!highlightGuild || !highlightGuild.active) return;
 
