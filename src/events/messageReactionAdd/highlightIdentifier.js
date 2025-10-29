@@ -2,6 +2,7 @@ import HighlightGuild from "../../models/highlightGuild.js";
 import Highlight from "../../models/highlight.js";
 
 import highlightGuildCache from "../../utils/cache/highlight-guild.js";
+import highlightCache from "../../utils/cache/highlight.js";
 
 import getHighlightEmbed from "../../utils/components/getHighlightEmbed.js";
 import getHighlightMessageButton from "../../utils/components/getHighlightMessageButton.js";
@@ -36,11 +37,23 @@ export default async (client, reaction, user) => {
 
   if (reaction.count < (highlightGuild.count || 4)) return;
 
-  let highlight = await Highlight.findOne({
-    guildId: reaction.message.guildId,
-    channelId: reaction.message.channelId,
-    messageId: reaction.message.id,
-  });
+  const guildId = reaction.message.guildId;
+  const channelId = reaction.message.channelId;
+  const messageId = reaction.message.id;
+
+  const cacheIdentifier = `${guildId}$${channelId}$${messageId}`;
+
+  let highlight = highlightCache.get(cacheIdentifier);
+
+  if (!highlight && !highlightCache.searched(cacheIdentifier)) {
+    highlight = await Highlight.findOne({
+      guildId,
+      channelId,
+      messageId,
+    });
+
+    highlightCache.set(cacheIdentifier, highlight);
+  }
 
   let messageUser = await client.users.fetch(reaction.message.author.id, {
     force: true,
