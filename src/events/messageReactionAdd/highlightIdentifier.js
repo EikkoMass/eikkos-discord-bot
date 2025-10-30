@@ -55,11 +55,6 @@ export default async (client, reaction, user) => {
     highlightCache.set(cacheIdentifier, highlight);
   }
 
-  let messageUser = await client.users.fetch(reaction.message.author.id, {
-    force: true,
-    cache: true,
-  });
-
   const channel = await client.channels.cache.get(highlightGuild.channelId);
 
   if (highlight) {
@@ -72,7 +67,7 @@ export default async (client, reaction, user) => {
 
     await message.edit({
       content: `⭐ ${highlight.count} - ${channel.requester.toString()}`,
-      embeds: [await getHighlightEmbed(highlight, messageUser)],
+      embeds: [await getHighlightEmbed(highlight, reaction.message.author)],
       components: [await getHighlightMessageButton(highlight)],
     });
     return;
@@ -110,7 +105,7 @@ export default async (client, reaction, user) => {
   if (channel && channel.isTextBased()) {
     channel.send({
       content: `⭐ ${newHighlight.count} - <#${newHighlight.channelId}>`,
-      embeds: [await getHighlightEmbed(newHighlight, messageUser)],
+      embeds: [await getHighlightEmbed(newHighlight, reaction.message.author)],
       components: [await getHighlightMessageButton(newHighlight)],
     });
   }
