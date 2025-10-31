@@ -3,5 +3,8 @@
   "Status": "Status",
   "Type": "Tipo",
   "Studios": "Estúdios",
-  "Genres": "Gêneros"
+  "Genres": "Gêneros",
+  "Role": "Papel",
+  "Favorites": "Favoritos",
+  "VoiceActor": "Dublador"
 }

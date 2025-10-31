@@ -3,5 +3,8 @@
   "Status": "Status",
   "Type": "Type",
   "Studios": "Studios",
-  "Genres": "Genres"
+  "Genres": "Genres",
+  "Role": "Role",
+  "Favorites": "Favorites",
+  "VoiceActor": "Voice Actor"
 }
