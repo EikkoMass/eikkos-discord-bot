@@ -27,7 +27,11 @@ const client = new Client({
 
 (async () => {
   try {
+    if (!process.env.MONGODB_URI)
+      throw new Error("Missing MongoDB URI, required to use the bot");
+
     await mongoose.connect(process.env.MONGODB_URI);
+
     console.log("Connected to DB");
   } catch (e) {
     console.log(e);
