@@ -57,6 +57,8 @@ export default async (client, reaction, user) => {
 
   const channel = await client.channels.cache.get(highlightGuild.channelId);
 
+  if (!channel) return;
+
   if (highlight) {
     if (highlight.count <= reaction.count) return;
 
