@@ -9,5 +9,6 @@
   "Inactive": "Inativo",
   "Quantity": "Quantidade",
   "Target": "Direcionamento",
-  "Minimum": "Mínimo"
+  "Minimum": "Mínimo",
+  "MissingValidChannel": "Não foi possível ativar porque o canal especificado não foi encontrado."
 }

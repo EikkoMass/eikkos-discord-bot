@@ -110,24 +110,26 @@ async function disable(client, interaction) {
 
 async function enable(client, interaction) {
   const words = await getLocalization(interaction.locale, `highlight`);
-  let result = await HighlightGuild.findOneAndUpdate(
-    {
-      guildId: interaction.guild.id,
-    },
-    {
-      active: true,
-    },
-    {
-      new: true,
-      upsert: false,
-    },
-  );
+  let highlightGuild = await HighlightGuild.findOne({
+    guildId: interaction.guild.id,
+  });
 
-  if (!result) {
+  if (!highlightGuild) {
     return await reply(interaction, words.NotConfigured);
   }
 
-  highlightGuildCache.set(interaction.guild.id, result);
+  const channel = await interaction.guild.channels.fetch(
+    highlightGuild.channelId,
+  );
+
+  if (!channel) {
+    return await reply(interaction, words.MissingValidChannel);
+  }
+
+  highlightGuild.active = true;
+  await highlightGuild.save();
+
+  highlightGuildCache.set(interaction.guild.id, highlightGuild);
   return await reply(interaction, words.Enabled);
 }
 
