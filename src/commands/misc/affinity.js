@@ -5,6 +5,8 @@ import {
   EmbedBuilder,
 } from "discord.js";
 
+import { randomize } from "../../utils/core/randomize.js";
+
 export default {
   name: "affinity",
   description: "Calculate the affinity (love / hate) between 2 users",
@@ -147,10 +149,4 @@ function affinityCalc(type, user1, user2) {
     index: affinityIndex,
     level: affinityLevel,
   };
-}
-
-function randomize(seed) {
-  console.log(seed);
-  var x = Math.sin(seed || 1) * 10000;
-  return x - Math.floor(x);
 }
