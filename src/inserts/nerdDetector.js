@@ -1,38 +1,41 @@
-import { Client, Message, AttachmentBuilder, MessageFlags } from 'discord.js';
+import { Client, Message, AttachmentBuilder, MessageFlags } from "discord.js";
+import { getRandomNumber } from "../utils/core/randomizer.js";
 
 export default {
-  name: 'nerdDetector',
-  description: 'quote the user with the nerdiest comment possible',
+  name: "nerdDetector",
+  description: "quote the user with the nerdiest comment possible",
   match: "",
   type: "includes",
 
   /**
-  *  @param {Client} client
-  *  @param {Message} message
-  */
+   *  @param {Client} client
+   *  @param {Message} message
+   */
   callback: async (client, message) => {
-    if(message.author.bot) return;
+    if (message.author.bot) return;
 
     // 3%
-    if(message.content?.length > 3 && Math.floor((Math.random() * 100) + 1) > 97) {
+    if (message.content?.length > 3 && getRandomNumber() > 97) {
       // 15%
-      const isFire = Math.floor((Math.random() * 100) + 1) > 85;
+      const isFire = getRandomNumber() > 85;
 
-      const file = new AttachmentBuilder(`src/gifs/${isFire ? 'fire' : 'nerd'}.gif`);
+      const file = new AttachmentBuilder(
+        `src/gifs/${isFire ? "fire" : "nerd"}.gif`,
+      );
       message.reply({
-        content: isFire ? `"${message.content.toUpperCase()}" 🗣️🗣️🗣️🔥🔥🔥` : `'${message.content.toLowerCase()}' ☝☝🤓`,
-        files: [file]
+        content: isFire
+          ? `"${message.content.toUpperCase()}" 🗣️🗣️🗣️🔥🔥🔥`
+          : `'${message.content.toLowerCase()}' ☝☝🤓`,
+        files: [file],
       });
-    
+
       // 1%
-      if(!isFire && Math.floor((Math.random() * 100) + 1) > 99)
-      {
+      if (!isFire && Math.floor(Math.random() * 100 + 1) > 99) {
         message.reply({
-          flags: [ MessageFlags.Ephemeral ],
+          flags: [MessageFlags.Ephemeral],
           content: `((Sorry if you feel offended, nothing personal dude!))`,
         });
       }
-    
     }
-  }
-}
+  },
+};

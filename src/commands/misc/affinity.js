@@ -5,7 +5,7 @@ import {
   EmbedBuilder,
 } from "discord.js";
 
-import { randomize } from "../../utils/core/randomize.js";
+import { randomize } from "../../utils/core/randomizer.js";
 
 export default {
   name: "affinity",
