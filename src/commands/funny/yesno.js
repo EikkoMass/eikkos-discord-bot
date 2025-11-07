@@ -16,12 +16,14 @@ export default {
    *  @param  interaction
    */
   callback: async (client, interaction) => {
+    interaction.reply("meu teste 123", { tts: true });
+    return;
     const words = await getLocalization(interaction.locale, `yesno`);
 
     let question = interaction.options.get("doubt")?.value;
 
     if (!question?.includes("?")) {
-      return await reply.errorMessage(interaction, words.NoQuestionMark);
+      return await reply.message.error(interaction, words.NoQuestionMark);
     }
 
     const res = await fetch("https://yesno.wtf/api");
@@ -43,7 +45,7 @@ export default {
       return;
     }
 
-    await reply.errorMessage(interaction, words.NotAnswering);
+    await reply.message.error(interaction, words.NotAnswering);
   },
   options: [
     {

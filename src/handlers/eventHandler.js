@@ -1,4 +1,4 @@
-import getAllFiles from "../utils/getAllFiles.js";
+import getAllFiles from "../utils/core/getAllFiles.js";
 import cache from "../utils/cache/event.js";
 import path from "path";
 

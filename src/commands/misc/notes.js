@@ -3,8 +3,6 @@ import {
   Client,
   EmbedBuilder,
   MessageFlags,
-  ButtonStyle,
-  ButtonBuilder,
   ActionRowBuilder,
   ModalBuilder,
   TextInputStyle,
@@ -12,6 +10,7 @@ import {
 } from "discord.js";
 
 import getNoteEmbeds from "../../utils/components/getNoteEmbeds.js";
+import reply from "../../utils/core/replies.js";
 import Note from "../../models/note.js";
 import { Types } from "mongoose";
 
@@ -38,10 +37,7 @@ export default {
         await remove(client, interaction);
         return;
       default:
-        await interaction.reply({
-          flags: [MessageFlags.Ephemeral],
-          content: `Note command not found!`,
-        });
+        await reply.message.error(interaction, `Note command not found!`);
         return;
     }
   },
@@ -140,10 +136,7 @@ async function manageNote(client, interaction, action, code = null) {
   let countNotes = await Note.countDocuments(query);
 
   if (context === 1 && countNotes >= amount) {
-    interaction.reply({
-      flags: [MessageFlags.Ephemeral],
-      embeds: [new EmbedBuilder().setDescription(words.LimitExceeded)],
-    });
+    await reply.message.error(interaction, words.LimitExceeded);
     return;
   }
 
@@ -177,10 +170,7 @@ async function manageNote(client, interaction, action, code = null) {
       description.setValue(note.text);
       if (note.img) img.setValue(note.img);
     } else {
-      await interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        embeds: [new EmbedBuilder().setDescription(words.NotFound)],
-      });
+      await reply.message.error(interaction, words.NotFound);
       return;
     }
   }
@@ -287,15 +277,9 @@ async function remove(client, interaction) {
   const note = await Note.findByIdAndDelete(id).catch(() => {});
 
   if (note) {
-    interaction.reply({
-      flags: [MessageFlags.Ephemeral],
-      embeds: [new EmbedBuilder().setDescription(words.Removed)],
-    });
+    await reply.message.success(interaction, words.Removed);
     return;
   }
 
-  interaction.reply({
-    flags: [MessageFlags.Ephemeral],
-    embeds: [new EmbedBuilder().setDescription(words.NotFound)],
-  });
+  await reply.message.error(interaction, words.NotFound);
 }

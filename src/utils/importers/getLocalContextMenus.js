@@ -1,5 +1,5 @@
 import path from "path";
-import getAllFiles from "../getAllFiles.js";
+import getAllFiles from "../core/getAllFiles.js";
 
 export default async (exceptions = []) => {
   let localContextMenus = [];

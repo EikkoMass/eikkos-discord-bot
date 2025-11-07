@@ -25,25 +25,25 @@ export default {
       : interaction.member?.voice?.channel;
 
     if (!channel) {
-      await reply.errorMessage(interaction, words.VCRequired);
+      await reply.message.error(interaction, words.VCRequired);
       return;
     } else if (
       channel &&
       channel.type !== ChannelType.GuildVoice &&
       channel.type !== ChannelType.GuildStageVoice
     ) {
-      await reply.errorMessage(interaction, words.IsNotVC);
+      await reply.message.error(interaction, words.IsNotVC);
       return;
     } else if (
       !channel
         .permissionsFor(interaction.guild.id)
         .has([PermissionsBitField.Flags.ViewChannel])
     ) {
-      await reply.errorMessage(interaction, words.OnlyPublicVC);
+      await reply.message.error(interaction, words.OnlyPublicVC);
       return;
     }
 
-    await reply.successMessage(
+    await reply.message.success(
       interaction,
       formatMessage(words.Nuked, [channel]),
     );
