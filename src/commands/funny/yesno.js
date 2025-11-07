@@ -16,8 +16,6 @@ export default {
    *  @param  interaction
    */
   callback: async (client, interaction) => {
-    interaction.reply("meu teste 123", { tts: true });
-    return;
     const words = await getLocalization(interaction.locale, `yesno`);
 
     let question = interaction.options.get("doubt")?.value;

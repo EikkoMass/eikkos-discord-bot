@@ -107,7 +107,7 @@ async function all(client, interaction) {
 async function version(client, interaction) {
   const words = await getLocalization(interaction.locale, `info`);
 
-  await reply.infoMessage(
+  await reply.message.info(
     interaction,
     formatMessage(words.CurrentVersion, [info.version]),
   );
@@ -120,7 +120,7 @@ async function version(client, interaction) {
 async function author(client, interaction) {
   const words = await getLocalization(interaction.locale, `info`);
 
-  await reply.infoMessage(
+  await reply.message.info(
     interaction,
     formatMessage(words.ProjectOwner, [info.author]),
   );
@@ -133,7 +133,7 @@ async function author(client, interaction) {
 async function license(client, interaction) {
   const words = await getLocalization(interaction.locale, `info`);
 
-  await reply.infoMessage(
+  await reply.message.info(
     interaction,
     formatMessage(words.CurrentLicense, [info.license]),
   );
@@ -146,7 +146,7 @@ async function license(client, interaction) {
 async function repository(client, interaction) {
   const words = await getLocalization(interaction.locale, `info`);
 
-  await reply.infoMessage(
+  await reply.message.info(
     interaction,
     formatMessage(words.CurrentRepository, [
       `${info.repository.domain}/${info.repository.user}/${info.repository.name}`,
