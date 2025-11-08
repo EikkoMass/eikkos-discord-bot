@@ -1,37 +1,49 @@
 import { EmbedBuilder, Colors, MessageFlags } from "discord.js";
 
 const formats = {
-  success: (message) => `:white_check_mark: ${message}`,
-  error: (message) => `:x: ${message}`,
-  info: (message) => `:information_source: ${message}`,
-  warning: (message) => `:warning: ${message}`,
+  success: {
+    embed: {
+      color: Colors.Green,
+      emoji: ":white_check_mark:",
+    },
+  },
+  error: {
+    embed: {
+      color: Colors.Red,
+      emoji: ":x:",
+    },
+  },
+  info: {
+    embed: {
+      color: Colors.Blue,
+      emoji: ":information_source:",
+    },
+  },
+  warning: {
+    embed: {
+      color: Colors.Yellow,
+      emoji: ":warning:",
+    },
+  },
 };
 
 const replies = {
   message: {
     success: async (interaction, message, options = {}) => {
-      options.embed ??= {};
-      options.embed.color ??= Colors.Green;
-
-      await messageBase(interaction, formats.success(message), options);
+      const layout = formats.success;
+      await messageBase(interaction, message, { ...layout, ...options });
     },
     error: async (interaction, message, options = {}) => {
-      options.embed ??= {};
-      options.embed.color ??= Colors.Red;
-
-      await messageBase(interaction, formats.error(message), options);
+      const layout = formats.error;
+      await messageBase(interaction, message, { ...layout, ...options });
     },
     info: async (interaction, message, options = {}) => {
-      options.embed ??= {};
-      options.embed.color ??= Colors.Blue;
-
-      await messageBase(interaction, formats.info(message), options);
+      const layout = formats.info;
+      await messageBase(interaction, message, { ...layout, ...options });
     },
     warning: async (interaction, message, options = {}) => {
-      options.embed ??= {};
-      options.embed.color ??= Colors.Yellow;
-
-      await messageBase(interaction, formats.warning(message), options);
+      const layout = formats.warning;
+      await messageBase(interaction, message, { ...layout, ...options });
     },
     base: messageBase,
   },
@@ -45,8 +57,10 @@ async function messageBase(interaction, message, options = {}) {
 }
 
 function newMessageEmbed(message, options = {}) {
+  const description = options?.emoji ? `${options.emoji} ${message}` : message;
+
   return new EmbedBuilder()
-    .setDescription(message)
+    .setDescription(description)
     .setColor(options?.color ?? Colors.Green);
 }
 

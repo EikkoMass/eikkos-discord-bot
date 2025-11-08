@@ -1,40 +1,42 @@
-import { Client, MessageFlags, EmbedBuilder } from 'discord.js';
-import { useQueue } from 'discord-player';
+import { Client, MessageFlags, EmbedBuilder } from "discord.js";
+import { useQueue } from "discord-player";
+
+import reply from "../../../utils/core/replies.js";
 
 import { getLocalization } from "../../../utils/i18n.js";
 
 export default {
-  
-  name: 'player',
-  tags: ['stop'],
+  name: "player",
+  tags: ["stop"],
 
   /**
    *  @param {Client} client
    *  @param  interaction
-  */
+   */
   callback: async (client, interaction) => {
     try {
-
       const words = await getLocalization(interaction.locale, `stop`);
-      const embed = new EmbedBuilder();
 
-      await interaction.deferReply({ 
-        flags: [ MessageFlags.Ephemeral ],
-      }) ;
-    
+      await interaction.deferReply({
+        flags: [MessageFlags.Ephemeral],
+      });
+
       const queue = useQueue(interaction.guild);
 
-      if (queue?.isPlaying()) 
-      {
+      if (queue?.isPlaying()) {
         queue.node.stop();
-        await interaction.editReply({ embeds: [embed.setDescription(`:rock: ${words.Stopped}`)] }); 
+        await reply.message.base(interaction, words.Stopped, {
+          context: "editReply",
+          embed: { emoji: ":rock:" },
+        });
         return;
       }
 
-      await interaction.editReply({ embeds: [embed.setDescription(`:warning: ${words.NoSongPlaying}`)] });
-
+      await reply.message.warning(interaction, words.NoSongPlaying, {
+        context: "editReply",
+      });
     } catch (err) {
-        console.log(err);
+      console.log(err);
     }
-  }
-}
+  },
+};

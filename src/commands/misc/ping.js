@@ -16,12 +16,15 @@ export default {
 
     const ping = fReply.createdTimestamp - interaction.createdTimestamp;
 
-    reply.message.base(
+    reply.message.success(
       interaction,
-      `🏓 Pong! Client ${ping}ms | Websocket ${client.ws.ping}ms`,
+      `Pong! Client ${ping}ms | Websocket ${client.ws.ping}ms`,
       {
         context: "editReply",
-        embed: { color: Colors.Red },
+        embed: {
+          color: Colors.Red,
+          emoji: "🏓",
+        },
       },
     );
   },
