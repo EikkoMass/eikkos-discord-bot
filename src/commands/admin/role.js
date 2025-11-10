@@ -11,6 +11,8 @@ import ActionRowRole from "../../models/actionRowRole.js";
 import RoleContext from "../../models/roleContext.js";
 import { Types } from "mongoose";
 
+import reply from "../../utils/core/replies.js";
+
 import { getLocalization } from "../../utils/i18n.js";
 
 export default {
@@ -176,10 +178,10 @@ async function add(client, interaction) {
     }
 
     await role.save();
-    interaction.reply({
-      flags: MessageFlags.Ephemeral,
-      content: `${words.RoleAddedEdited}${context ? ` ${words.OnContext} '` + (context.name || words.NotSpecified) + "'" : ""}!`,
-    });
+    await reply.message.success(
+      interaction,
+      `${words.RoleAddedEdited}${context ? ` ${words.OnContext} '` + (context.name || words.NotSpecified) + "'" : ""}!`,
+    );
   } catch (error) {
     console.log(error);
   }
@@ -206,10 +208,7 @@ async function choose(client, interaction) {
     let roles = await ActionRowRole.find(searchParams);
 
     if (!roles?.length) {
-      await interaction.reply({
-        content: words.NoRolesRegisteredOnGuild,
-        flags: MessageFlags.Ephemeral,
-      });
+      await reply.message.error(interaction, words.NoRolesRegisteredOnGuild);
       return;
     }
 
@@ -274,15 +273,9 @@ async function remove(client, interaction) {
       }
     }
 
-    await interaction.reply({
-      content: words.RoleRemoved,
-      flags: MessageFlags.Ephemeral,
-    });
+    await reply.message.success(interaction, words.RoleRemoved);
     return;
   }
 
-  await interaction.reply({
-    content: words.NoRoleFound,
-    flags: MessageFlags.Ephemeral,
-  });
+  await reply.message.error(interaction, words.NoRoleFound);
 }

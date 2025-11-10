@@ -8,6 +8,8 @@ import {
   Colors,
 } from "discord.js";
 
+import reply from "../../utils/core/replies.js";
+
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 import HighlightGuild from "../../models/highlightGuild.js";
@@ -123,14 +125,14 @@ async function enable(client, interaction) {
   );
 
   if (!channel) {
-    return await reply(interaction, words.MissingValidChannel);
+    return await reply.message.error(interaction, words.MissingValidChannel);
   }
 
   highlightGuild.active = true;
   await highlightGuild.save();
 
   highlightGuildCache.set(interaction.guild.id, highlightGuild);
-  return await reply(interaction, words.Enabled);
+  return await reply.message.success(interaction, words.Enabled);
 }
 
 async function config(client, interaction) {
@@ -171,14 +173,7 @@ async function config(client, interaction) {
 
   highlightGuildCache.set(interaction.guild.id, highlight);
 
-  return await reply(interaction, words.Enabled);
-}
-
-async function reply(interaction, message, ephemeral = true) {
-  return await interaction.reply({
-    flags: ephemeral ? [MessageFlags.Ephemeral] : [],
-    embeds: [new EmbedBuilder().setDescription(message)],
-  });
+  return await reply.message.success(interaction, words.Enabled);
 }
 
 async function status(client, interaction) {

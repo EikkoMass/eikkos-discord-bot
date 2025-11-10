@@ -8,6 +8,8 @@ import {
 import DirtyWord from "../../models/dirtyword.js";
 import cache from "../../utils/cache/dirty-word.js";
 
+import reply from "../../utils/core/replies.js";
+
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 export default {
@@ -86,21 +88,15 @@ async function removeDirtyWord(client, interaction) {
   });
 
   if (dirtyWord) {
-    await interaction.reply({
-      flags: [MessageFlags.Ephemeral],
-      embeds: [embed.setDescription(words.Removed)],
-    });
-  } else {
-    await interaction.reply({
-      flags: [MessageFlags.Ephemeral],
-      embeds: [embed.setDescription(words.NotFound)],
-    });
+    await reply.message.success(interaction, words.Removed);
+    return;
   }
+
+  await reply.message.info(interaction, words.NotFound);
 }
 
 async function getCurrentDirtyWord(client, interaction) {
   const words = await getLocalization(interaction.locale, "dirty-word");
-  const embed = new EmbedBuilder();
 
   const cacheObj = cache.result.find(interaction.guild.id);
 
@@ -113,23 +109,19 @@ async function getCurrentDirtyWord(client, interaction) {
       word.length > 1
         ? word.slice(0, word.length / 2) + "*".repeat(word.length / 2)
         : word;
-    await interaction.reply({
-      flags: [MessageFlags.Ephemeral],
-      embeds: [
-        embed.setDescription(formatMessage(words.CurrentWord, [censoredWord])),
-      ],
-    });
-  } else {
-    await interaction.reply({
-      flags: [MessageFlags.Ephemeral],
-      embeds: [embed.setDescription(words.NotFound)],
-    });
+
+    await reply.message.success(
+      interaction,
+      formatMessage(words.CurrentWord, [censoredWord]),
+    );
+    return;
   }
+
+  await reply.message.info(interaction, words.NotFound);
 }
 
 async function setDirtyWord(client, interaction) {
   const words = await getLocalization(interaction.locale, `dirty-word`);
-  const embed = new EmbedBuilder();
 
   const word = interaction.options.get("word")?.value;
   const type = interaction.options.get("type")?.value || 0;
@@ -151,8 +143,5 @@ async function setDirtyWord(client, interaction) {
   }
 
   dirtyWordObj.save();
-  await interaction.reply({
-    embeds: [embed.setDescription(words.Created)],
-    flags: [MessageFlags.Ephemeral],
-  });
+  await reply.message.success(interaction, words.Created);
 }
