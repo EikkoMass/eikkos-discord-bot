@@ -259,9 +259,8 @@ async function show(client, interaction) {
     return;
   }
 
-  interaction.editReply({
-    embeds: [new EmbedBuilder().setDescription(words.NotFoundInServer)],
-    flags: [MessageFlags.Ephemeral],
+  await reply.message.error(interaction, words.NotFoundInServer, {
+    context: "editReply",
   });
 }
 

@@ -5,6 +5,8 @@ import {
   MessageFlags,
 } from "discord.js";
 
+import reply from "../../utils/core/replies.js";
+
 let polls = [];
 
 export default {
@@ -104,10 +106,7 @@ async function createPoll(client, interaction) {
   });
 
   polls.push(message.id);
-  await interaction.reply({
-    content: `Created a new poll!`,
-    flags: [MessageFlags.Ephemeral],
-  });
+  await reply.message.success(interaction, `Created a new poll!`);
 }
 
 async function finishPoll(client, interaction) {
@@ -121,8 +120,5 @@ async function finishPoll(client, interaction) {
 
   polls = [];
 
-  await interaction.reply({
-    content: `Finished pending polls!`,
-    flags: [MessageFlags.Ephemeral],
-  });
+  await reply.message.success(interaction, `Finished pending polls!`);
 }

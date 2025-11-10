@@ -10,6 +10,8 @@ import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import cache from "../../utils/cache/reminder.js";
 import Reminder from "../../models/reminder.js";
 
+import reply from "../../utils/core/replies.js";
+
 import build from "../../utils/components/reminderBuilder.js";
 
 export default {
@@ -152,10 +154,7 @@ async function status(client, interaction) {
     !Array.isArray(cache.get(cacheIdentifier)) ||
     cache.empty(cacheIdentifier)
   ) {
-    interaction.reply({
-      flags: [MessageFlags.Ephemeral],
-      embeds: [new EmbedBuilder().setDescription(words.NotFound)],
-    });
+    await reply.message.error(interaction, words.NotFound);
     return;
   }
 
@@ -188,20 +187,14 @@ async function cancel(client, interaction) {
   const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;
 
   if (!Array.isArray(cache.get(cacheIdentifier))) {
-    interaction.reply({
-      flags: [MessageFlags.Ephemeral],
-      embeds: [new EmbedBuilder().setDescription(words.NotFound)],
-    });
+    await reply.message.error(interaction, words.NotFound);
     return;
   }
 
   let cachedReminder = cache.get(cacheIdentifier, id);
 
   if (!cachedReminder) {
-    interaction.reply({
-      flags: [MessageFlags.Ephemeral],
-      embeds: [new EmbedBuilder().setDescription(words.NotFoundSpecified)],
-    });
+    await reply.message.error(interaction, words.NotFoundSpecified);
     return;
   }
 
@@ -211,8 +204,5 @@ async function cancel(client, interaction) {
   }).catch(() => {});
   cache.remove(cacheIdentifier, id);
 
-  interaction.reply({
-    flags: [MessageFlags.Ephemeral],
-    embeds: [new EmbedBuilder().setDescription(words.Cancelled)],
-  });
+  await reply.message.success(interaction, words.Cancelled);
 }

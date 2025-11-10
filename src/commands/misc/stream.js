@@ -1,115 +1,107 @@
-import {ApplicationCommandOptionType, Client, EmbedBuilder, MessageFlags } from 'discord.js';
-import Stream from '../../models/stream.js';
+import {
+  ApplicationCommandOptionType,
+  Client,
+  EmbedBuilder,
+  MessageFlags,
+} from "discord.js";
+import Stream from "../../models/stream.js";
 
-import { getLocalization,  formatMessage } from "../../utils/i18n.js";
+import reply from "../../utils/core/replies.js";
 
-export default  {
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
+
+export default {
   callback: async (client, interaction) => {
-
-    switch(interaction.options.getSubcommand())
-    {
-      case 'register':
+    switch (interaction.options.getSubcommand()) {
+      case "register":
         await register(client, interaction);
         break;
-      case 'remove':
+      case "remove":
         await remove(client, interaction);
         break;
       default:
-        await interaction.reply({
-          flags: [ MessageFlags.Ephemeral ],
-          embeds: [new EmbedBuilder().setDescription(`Stream command not found!`)]
-        });
+        await reply.message.error(interaction, `Stream command not found!`);
         return;
     }
-
   },
-  name: 'stream',
-  description: 'Manage links to bot stream',
-  devOnly:  true,
+  name: "stream",
+  description: "Manage links to bot stream",
+  devOnly: true,
   options: [
     {
-      name: 'register',
-      description: 'Register an new stream option',
+      name: "register",
+      description: "Register an new stream option",
       type: ApplicationCommandOptionType.Subcommand,
       options: [
         {
-          name: 'title',
-          description: 'Title of the stream',
+          name: "title",
+          description: "Title of the stream",
           type: ApplicationCommandOptionType.String,
-          required: true
-        }, 
+          required: true,
+        },
         {
-          name: 'link',
-          description: 'Link that you want to stream',
+          name: "link",
+          description: "Link that you want to stream",
           type: ApplicationCommandOptionType.String,
-          required: true
-        }, 
+          required: true,
+        },
         {
-          name: 'priority',
-          description: 'How many dices you want to roll?',
-          type: ApplicationCommandOptionType.Boolean
-        }
-      ]
+          name: "priority",
+          description: "How many dices you want to roll?",
+          type: ApplicationCommandOptionType.Boolean,
+        },
+      ],
     },
     {
-      name: 'remove',
-      description: 'Sets a custom value to randomize',
+      name: "remove",
+      description: "Sets a custom value to randomize",
       type: ApplicationCommandOptionType.Subcommand,
       options: [
         {
-          name: 'link',
-          description: 'Link that you want to stream',
+          name: "link",
+          description: "Link that you want to stream",
           type: ApplicationCommandOptionType.String,
-          required: true
-        }
-      ]
-    }
-  ]
-}
+          required: true,
+        },
+      ],
+    },
+  ],
+};
 
 /**
  *  @param {Client} client
  *  @param  interaction
-*/
-async function register(client, interaction)
-{
+ */
+async function register(client, interaction) {
   const words = await getLocalization(interaction.locale, `stream`);
 
   try {
-    const title = interaction.options.get('title')?.value;
-    const link = interaction.options.get('link')?.value;
-    const priority = interaction.options.get('priority')?.value || false;
+    const title = interaction.options.get("title")?.value;
+    const link = interaction.options.get("link")?.value;
+    const priority = interaction.options.get("priority")?.value || false;
     const embed = new EmbedBuilder();
 
     let streamData = await Stream.findOne({
-      link
+      link,
     });
 
-    if(streamData)
-    {
+    if (streamData) {
       streamData.title = title;
       streamData.priority = priority;
 
-      await interaction.reply({
-        flags: [ MessageFlags.Ephemeral ],
-        embeds: [embed.setDescription(words.Edited)]
-      });
+      await reply.message.success(interaction, words.Edited);
       return;
     }
 
     streamData = new Stream({
       link,
       title,
-      priority
+      priority,
     });
 
     await streamData.save();
-    await interaction.reply({
-      flags: [ MessageFlags.Ephemeral ],
-      embeds: [embed.setDescription(words.Registered)]
-    });
-  } catch (e)
-  {
+    await reply.message.success(interaction, words.Registered);
+  } catch (e) {
     console.log(e);
   }
 }
@@ -117,27 +109,22 @@ async function register(client, interaction)
 /**
  *  @param {Client} client
  *  @param  interaction
-*/
-async function remove(client, interaction)
-{
+ */
+async function remove(client, interaction) {
   const words = await getLocalization(interaction.locale, `stream`);
-  
+
   const embed = new EmbedBuilder();
-  const link = interaction.options.get('link')?.value;
+  const link = interaction.options.get("link")?.value;
 
   let result = await Stream.findOneAndDelete({ link });
 
-  if(result)
-  {
-    await interaction.reply({
-      flags: [ MessageFlags.Ephemeral ],
-      embeds: [embed.setDescription(formatMessage(words.Removed,  [result.title]))]
-    });
+  if (result) {
+    await reply.message.success(
+      interaction,
+      formatMessage(words.Removed, [result.title]),
+    );
     return;
   }
 
-  await interaction.reply({
-    flags: [ MessageFlags.Ephemeral ],
-    embeds: [embed.setDescription(words.NotFound)]
-  });
+  await reply.message.error(interaction, words.NotFound);
 }
