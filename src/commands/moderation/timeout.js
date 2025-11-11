@@ -5,8 +5,10 @@ import {
   MessageFlags,
   EmbedBuilder,
 } from "discord.js";
-import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import ms from "ms";
+
+import reply from "../../utils/core/replies.js";
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 export default {
   /**
@@ -28,34 +30,30 @@ export default {
     const targetUser = await interaction.guild.members.fetch(mentionable);
 
     if (!targetUser) {
-      await interaction.editReply({
-        embeds: [embed.setDescription(words.UserNotExists)],
-        flags: [MessageFlags.Ephemeral],
+      await reply.message.error(interaction, words.UserNotExists, {
+        context: "editReply",
       });
       return;
     }
 
     if (targetUser.user.bot) {
-      await interaction.editReply({
-        embeds: [embed.setDescription(words.CantTimeoutBot)],
-        flags: [MessageFlags.Ephemeral],
+      await reply.message.info(interaction, words.CantTimeoutBot, {
+        context: "editReply",
       });
       return;
     }
 
     const msDuration = ms(duration);
     if (isNaN(msDuration)) {
-      await interaction.editReply({
-        embeds: [embed.setDescription(words.ValidTimeoutDuration)],
-        flags: [MessageFlags.Ephemeral],
+      await reply.message.error(interaction, words.ValidTimeoutDuration, {
+        context: "editReply",
       });
       return;
     }
 
     if (msDuration < 5000 || msDuration > 2.419e9) {
-      await interaction.editReply({
-        embeds: [embed.setDescription(words.TimeoutLimit)],
-        flags: [MessageFlags.Ephemeral],
+      await reply.message.error(interaction, words.TimeoutLimit, {
+        context: "editReply",
       });
       return;
     }
@@ -65,17 +63,15 @@ export default {
     const botRolePosition = interaction.guild.members.me.roles.highest.position; // Highest role of the bot;
 
     if (targetUserRolePosition >= requestUserRolePosition) {
-      await interaction.editReply({
-        embeds: [embed.setDescription(words.SameHigherRole)],
-        flags: [MessageFlags.Ephemeral],
+      await reply.message.error(interaction, words.SameHigherRole, {
+        context: "editReply",
       });
       return;
     }
 
     if (targetUserRolePosition >= botRolePosition) {
-      await interaction.editReply({
-        embeds: [embed.setDescription(words.SameHigherRoleBot)],
-        flags: [MessageFlags.Ephemeral],
+      await reply.message.error(interaction, words.SameHigherRoleBot, {
+        context: "editReply",
       });
       return;
     }
@@ -86,33 +82,27 @@ export default {
 
       if (targetUser.isCommunicationDisabled()) {
         await targetUser.timeout(msDuration, reason);
-        await interaction.editReply({
-          embeds: [
-            embed.setDescription(
-              formatMessage(words.Updated, [
-                targetUser,
-                prettyMs(msDuration, { verbose: true }),
-              ]),
-            ),
-          ],
-          flags: [MessageFlags.Ephemeral],
-        });
+        await reply.message.success(
+          interaction,
+          formatMessage(words.Updated, [
+            targetUser,
+            prettyMs(msDuration, { verbose: true }),
+          ]),
+          { context: "editReply" },
+        );
         return;
       }
 
       await targetUser.timeout(msDuration, reason);
-      await interaction.editReply({
-        embeds: [
-          embed.setDescription(
-            formatMessage(words.TimedOut, [
-              targetUser,
-              prettyMs(msDuration, { verbose: true }),
-              reason,
-            ]),
-          ),
-        ],
-        flags: [MessageFlags.Ephemeral],
-      });
+      await reply.message.success(
+        interaction,
+        formatMessage(words.TimedOut, [
+          targetUser,
+          prettyMs(msDuration, { verbose: true }),
+          reason,
+        ]),
+        { context: "editReply" },
+      );
     } catch (e) {
       console.log(`There was an error when timing out: ${e}`);
     }

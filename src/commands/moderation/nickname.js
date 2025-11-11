@@ -1,10 +1,6 @@
-import {
-  PermissionFlagsBits,
-  ApplicationCommandOptionType,
-  EmbedBuilder,
-  MessageFlags,
-  Colors,
-} from "discord.js";
+import { PermissionFlagsBits, ApplicationCommandOptionType } from "discord.js";
+
+import reply from "../../utils/core/replies.js";
 
 export default {
   name: "nickname",
@@ -22,28 +18,16 @@ export default {
 
     try {
       await member.setNickname(nickname);
-      return interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        embeds: [
-          new EmbedBuilder()
-            .setTitle("Success")
-            .setDescription(
-              `Nickname of <@${member.user.id}> changed to *${nickname}*`,
-            )
-            .setColor(Colors.Green),
-        ],
-      });
+      return reply.message.success(
+        interaction,
+        `Nickname of <@${member.user.id}> changed to *${nickname}*`,
+      );
     } catch (error) {
       console.log(error);
-      return interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        embeds: [
-          new EmbedBuilder()
-            .setTitle("Error")
-            .setDescription("An error occurred while changing the nickname.")
-            .setColor(Colors.Red),
-        ],
-      });
+      return reply.message.error(
+        interaction,
+        `An error occurred while changing the nickname of <@${member.user.id}>`,
+      );
     }
   },
 

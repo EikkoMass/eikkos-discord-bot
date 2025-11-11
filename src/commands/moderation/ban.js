@@ -4,6 +4,9 @@ import {
   PermissionFlagsBits,
   EmbedBuilder,
 } from "discord.js";
+
+import reply from "../../utils/core/replies.js";
+
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 export default {
@@ -26,15 +29,15 @@ export default {
     const targetUser = await interaction.guild.members.fetch(targetUserId);
 
     if (!targetUser) {
-      await interaction.editReply({
-        embeds: [embed.setDescription(words.UserNotExists)],
+      await reply.message.error(interaction, words.UserNotExists, {
+        context: "editReply",
       });
       return;
     }
 
     if (targetUser.id === interaction.guild.ownerId) {
-      await interaction.editReply({
-        embeds: [embed.setDescription(words.CannotBanOwner)],
+      await reply.message.info(interaction, words.CannotBanOwner, {
+        context: "editReply",
       });
       return;
     }
@@ -44,15 +47,15 @@ export default {
     const botRolePosition = interaction.guild.members.me.roles.highest.position; // Highest role of the bot;
 
     if (targetUserRolePosition >= requestUserRolePosition) {
-      await interaction.editReply({
-        embeds: [embed.setDescription(words.BanHigherRole)],
+      await reply.message.info(interaction, words.BanHigherRole, {
+        context: "editReply",
       });
       return;
     }
 
     if (targetUserRolePosition >= botRolePosition) {
-      await interaction.editReply({
-        embeds: [embed.setDescription(words.BanHigherRoleBot)],
+      await reply.message.info(interaction, words.BanHigherRoleBot, {
+        context: "editReply",
       });
       return;
     }
@@ -60,16 +63,19 @@ export default {
     //Ban the targetUser
     try {
       await targetUser.ban({ reason });
-      await interaction.editReply({
-        embeds: [
-          embed.setDescription(
-            formatMessage(words.Banned, [targetUser, reason]),
-          ),
-        ],
-      });
+      await reply.message.success(
+        interaction,
+        formatMessage(words.Banned, [targetUser, reason]),
+        {
+          context: "editReply",
+          embed: {
+            emoji: ":page_facing_up:",
+          },
+        },
+      );
     } catch (e) {
-      await interaction.editReply({
-        embeds: [embed.setDescription(words.Error)],
+      await reply.message.error(interaction, words.Error, {
+        context: "editReply",
       });
       console.log(`There was an error when banning: ${e}`);
     }
