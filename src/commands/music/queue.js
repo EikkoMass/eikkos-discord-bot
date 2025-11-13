@@ -2,6 +2,8 @@ import { Client, EmbedBuilder } from "discord.js";
 import getPlayerActionRow from "../../utils/components/playerActionRow.js";
 import { useQueue } from "discord-player";
 
+import reply from "../../utils/core/replies.js";
+
 import { getLocalization } from "../../utils/i18n.js";
 
 export default {
@@ -21,8 +23,8 @@ export default {
     const queue = useQueue(interaction.guild);
 
     if (!queue?.channel || !queue?.currentTrack) {
-      await interaction.editReply({
-        embeds: [new EmbedBuilder().setDescription(words.NoTrack)],
+      await reply.message.error(interaction, words.NoTrack, {
+        context: "editReply",
       });
       return;
     }

@@ -1,36 +1,38 @@
-import { Client, EmbedBuilder, MessageFlags } from 'discord.js';
+import { Client, MessageFlags } from "discord.js";
 
-import { useQueue } from 'discord-player';
+import { useQueue } from "discord-player";
 
 import { getLocalization } from "../../utils/i18n.js";
+import reply from "../../utils/core/replies.js";
 
-export default  {
-  name: 'resume',
-  description: 'resume the paused playback',
+export default {
+  name: "resume",
+  description: "resume the paused playback",
   /**
    *  @param {Client} client
    *  @param  interaction
-  */
+   */
   callback: async (client, interaction) => {
-    await interaction.deferReply({ flags: [ MessageFlags.Ephemeral ] });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const words = await getLocalization(interaction.locale, `resume`);
 
     const queue = useQueue(interaction.guild);
-    const embed = new EmbedBuilder();
 
     if (queue.node.isPlaying()) {
-      await interaction.editReply({
-        embeds: [embed.setDescription(`:warning: ${words.NotPaused}`)],
+      await reply.message.warning(interaction, words.NotPaused, {
+        context: "editReply",
       });
       return;
     }
 
     queue.node.resume();
 
-    await interaction.editReply({
-      embeds: [embed.setDescription(`:fire: ${words.Resumed}`)],
+    await reply.message.success(interaction, words.Resumed, {
+      context: "editReply",
+      embed: {
+        emoji: ":fire:",
+      },
     });
-  }
-
-}
+  },
+};

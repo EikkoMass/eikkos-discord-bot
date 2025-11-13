@@ -1,13 +1,9 @@
-import {
-  Client,
-  ApplicationCommandOptionType,
-  EmbedBuilder,
-  MessageFlags,
-} from "discord.js";
+import { Client, ApplicationCommandOptionType } from "discord.js";
 
 import { useQueue } from "discord-player";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
+import reply from "../../utils/core/replies.js";
 
 export default {
   name: "volume",
@@ -19,29 +15,30 @@ export default {
   callback: async (client, interaction) => {
     await interaction.deferReply();
 
-    const embed = new EmbedBuilder();
     const queue = useQueue(interaction.guild);
     let amount = interaction.options.getNumber("amount", false);
 
     const words = await getLocalization(interaction.locale, `volume`);
 
     if (!amount) {
-      await interaction.editReply({
-        flags: [MessageFlags.Ephemeral],
-        embeds: [
-          embed.setDescription(
-            formatMessage(words.Current, [queue.node.volume]),
-          ),
-        ],
-      });
-      return;
+      return await reply.message.info(
+        interaction,
+        formatMessage(words.Current, [queue.node.volume]),
+        {
+          context: "editReply",
+        },
+      );
     }
 
     queue.node.setVolume(amount);
 
-    await interaction.editReply({
-      embeds: [embed.setDescription(formatMessage(words.Setted, [amount]))],
-    });
+    await reply.message.success(
+      interaction,
+      formatMessage(words.Setted, [amount]),
+      {
+        context: "editReply",
+      },
+    );
   },
 
   options: [

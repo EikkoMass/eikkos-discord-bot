@@ -7,6 +7,8 @@ import {
 import playerConfigs from "../../configs/player.json" with { type: "json" };
 import { QueryType, useMainPlayer } from "discord-player";
 
+import reply from "../../utils/core/replies.js";
+
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 const NAME = "play";
 
@@ -33,8 +35,8 @@ export default {
     const embed = new EmbedBuilder();
 
     if (!channel) {
-      await interaction.editReply({
-        embeds: [embed.setDescription(words.VoiceChannelRequired)],
+      await reply.message.error(interaction, words.VoiceChannelRequired, {
+        context: "editReply",
       });
       return;
     }
@@ -45,7 +47,9 @@ export default {
     });
 
     if (!result.hasTracks()) {
-      await interaction.editReply(words.NoResults);
+      await reply.message.info(interaction, words.NoResults, {
+        context: "editReply",
+      });
       return;
     }
 

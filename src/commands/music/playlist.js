@@ -14,6 +14,8 @@ import getPlaylistEmbeds from "../../utils/components/getPlaylistEmbeds.js";
 import getPaginator from "../../utils/components/getPaginator.js";
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
+import reply from "../../utils/core/replies.js";
+
 export default {
   name: "playlist",
   description: "pre-set playlists to quick play",
@@ -102,7 +104,6 @@ export default {
 };
 
 async function add(client, interaction) {
-  const embed = new EmbedBuilder();
   const words = await getLocalization(interaction.locale, `playlist`);
 
   try {
@@ -117,21 +118,14 @@ async function add(client, interaction) {
       creationDate: Date.now(),
     }).save();
 
-    await interaction.reply({
-      flags: MessageFlags.Ephemeral,
-      embeds: [embed.setDescription(words.Added)],
-    });
+    await reply.message.success(interaction, words.Added);
   } catch (error) {
     console.error(error);
-    await interaction.reply({
-      flags: MessageFlags.Ephemeral,
-      embeds: [embed.setDescription(words.ErrorAdding)],
-    });
+    await reply.message.error(interaction, words.ErrorAdding);
   }
 }
 
 async function remove(client, interaction) {
-  const embed = new EmbedBuilder();
   const words = await getLocalization(interaction.locale, `playlist`);
 
   const id = interaction.options.get("id").value;
@@ -141,20 +135,13 @@ async function remove(client, interaction) {
   });
 
   if (playlist) {
-    return await interaction.reply({
-      flags: MessageFlags.Ephemeral,
-      embeds: [embed.setDescription(words.Removed)],
-    });
+    return await reply.message.success(interaction, words.Removed);
   }
 
-  return await interaction.reply({
-    flags: MessageFlags.Ephemeral,
-    embeds: [embed.setDescription(words.ErrorRemoving)],
-  });
+  return await reply.message.error(interaction, words.ErrorRemoving);
 }
 
 async function list(client, interaction) {
-  const embed = new EmbedBuilder();
   const words = await getLocalization(interaction.locale, `playlist`);
 
   let query = {
@@ -186,10 +173,7 @@ async function list(client, interaction) {
     });
   }
 
-  return await interaction.reply({
-    flags: MessageFlags.Ephemeral,
-    embeds: [embed.setDescription(words.NotFound)],
-  });
+  return await reply.message.error(interaction, words.NotFound);
 }
 
 async function play(client, interaction) {
@@ -203,8 +187,8 @@ async function play(client, interaction) {
   await interaction.deferReply();
 
   if (!channel) {
-    await interaction.editReply({
-      embeds: [embed.setDescription(words.VoiceChannelRequired)],
+    await reply.message.error(interaction, words.VoiceChannelRequired, {
+      context: "editReply",
     });
     return;
   }
@@ -229,8 +213,8 @@ async function play(client, interaction) {
   const playlist = searchResult.playlist;
 
   if (!searchResult || !playlist) {
-    await interaction.editReply({
-      embeds: [embed.setDescription("not found")],
+    await reply.message.error(interaction, words.NotFound, {
+      context: "editReply",
     });
     return;
   }

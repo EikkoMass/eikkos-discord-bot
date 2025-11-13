@@ -1,44 +1,45 @@
-import { Client, EmbedBuilder, MessageFlags } from 'discord.js';
+import { Client, MessageFlags } from "discord.js";
 
-import { useQueue } from 'discord-player';
+import { useQueue } from "discord-player";
 import { getLocalization } from "../../utils/i18n.js";
 
-export default  {
-  name: 'pause',
-  description: 'pause the song on the voice channel',
+import reply from "../../utils/core/replies.js";
+
+export default {
+  name: "pause",
+  description: "pause the song on the voice channel",
   /**
    *  @param {Client} client
    *  @param  interaction
-  */
+   */
   callback: async (client, interaction) => {
-    
     const words = await getLocalization(interaction.locale, `pause`);
 
-    await interaction.deferReply({ flags: [ MessageFlags.Ephemeral ]  });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const queue = useQueue(interaction.guild);
-    const embed = new EmbedBuilder();
 
-    if(!queue?.node)
-    {
-      await interaction.editReply({
-        embeds: [embed.setDescription(":x: " + words.NoQueue)],
+    if (!queue?.node) {
+      await reply.message.error(interaction, words.NoQueue, {
+        context: "editReply",
       });
       return;
     }
 
     if (queue.node.isPaused()) {
-      await interaction.editReply({
-        embeds: [embed.setDescription(":warning: " + words.AlreadyPaused)],
+      await reply.message.warning(interaction, words.AlreadyPaused, {
+        context: "editReply",
       });
       return;
     }
 
     queue.node.pause();
 
-    await interaction.editReply({
-      embeds: [embed.setDescription(":ice_cube: " + words.Paused)],
+    await reply.message.success(interaction, words.Paused, {
+      context: "editReply",
+      embed: {
+        emoji: ":ice_cube:",
+      },
     });
-  }
-
-}
+  },
+};
