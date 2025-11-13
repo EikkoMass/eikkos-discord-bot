@@ -2,12 +2,11 @@ import {
   Client,
   PermissionFlagsBits,
   ApplicationCommandOptionType,
-  EmbedBuilder,
-  MessageFlags,
 } from "discord.js";
 import ms from "ms";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
+import reply from "../../utils/core/replies.js";
 
 export default {
   name: "disconnect",
@@ -18,7 +17,6 @@ export default {
    */
   callback: async (client, interaction) => {
     const words = await getLocalization(interaction.locale, `disconnect`);
-    const embed = new EmbedBuilder();
     const INSTANT = "0 seconds";
 
     let timer = interaction.options.get("timer")?.value || INSTANT;
@@ -47,19 +45,11 @@ export default {
       member.user.id !== interaction.user.id &&
       !member.user.bot
     ) {
-      interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        embeds: [embed.setDescription(words.MissingPermissions)],
-      });
-      return;
+      return await reply.message.error(interaction, words.MissingPermissions);
     }
 
     if (!member?.voice?.channel) {
-      interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        embeds: [embed.setDescription(words.MustBeInVC)],
-      });
-      return;
+      return await reply.message.error(interaction, words.MustBeInVC);
     }
 
     const duration = ms(timer);
@@ -67,19 +57,15 @@ export default {
 
     const formattedDuration = prettyMs(duration, { verbose: true });
 
-    interaction.reply({
-      flags: [MessageFlags.Ephemeral],
-      embeds: [
-        embed.setDescription(
-          timer === INSTANT
-            ? formatMessage(words.DisconnectingUser, [member.id])
-            : formatMessage(words.DisconnectingUserWithDuration, [
-                member.id,
-                timer,
-              ]),
-        ),
-      ],
-    });
+    await reply.message.error(
+      interaction,
+      timer === INSTANT
+        ? formatMessage(words.DisconnectingUser, [member.id])
+        : formatMessage(words.DisconnectingUserWithDuration, [
+            member.id,
+            timer,
+          ]),
+    );
 
     setTimeout(() => {
       member.voice.disconnect();

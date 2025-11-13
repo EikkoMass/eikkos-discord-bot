@@ -19,7 +19,7 @@ export default {
 
     const queue = useQueue(interaction.guild);
 
-    if (queue.isEmpty()) {
+    if (!queue || queue.isEmpty()) {
       await reply.message.error(interaction, words.NoSong, {
         context: "editReply",
       });
