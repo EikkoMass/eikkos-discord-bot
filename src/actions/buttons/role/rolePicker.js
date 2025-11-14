@@ -1,6 +1,8 @@
 import { Client, MessageFlags, EmbedBuilder } from "discord.js";
 import { getLocalization, formatMessage } from "../../../utils/i18n.js";
 
+import reply from "../../../utils/core/replies.js";
+
 export default {
   name: "role",
 
@@ -21,26 +23,33 @@ export default {
       const role = interaction.guild.roles.cache.get(content.roleId);
 
       if (!role) {
-        await interaction.editReply({
-          embeds: [embed.setDescription(words.CouldntFindRole)],
+        return await reply.message.error(interaction, words.CouldntFindRole, {
+          context: "editReply",
         });
-        return;
       }
 
       const hasRole = interaction.member.roles.cache.has(role.id);
 
       if (hasRole) {
         await interaction.member.roles.remove(role);
-        await interaction.editReply({
-          embeds: [embed.setDescription(words.RoleNRemoved, [role])],
-        });
+        await reply.message.success(
+          interaction,
+          formatMessage(words.RoleNRemoved, [role]),
+          {
+            context: "editReply",
+          },
+        );
         return;
       }
 
       await interaction.member.roles.add(role);
-      await interaction.editReply({
-        embeds: [embed.setDescription(words.RoleNAdded, [role])],
-      });
+      await reply.message.success(
+        interaction,
+        formatMessage(words.RoleNAdded, [role]),
+        {
+          context: "editReply",
+        },
+      );
     } catch (err) {
       console.log(err);
     }

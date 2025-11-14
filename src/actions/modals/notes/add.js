@@ -3,6 +3,8 @@ import { getLocalization } from "../../../utils/i18n.js";
 
 import Note from "../../../models/note.js";
 
+import reply from "../../../utils/core/replies.js";
+
 export default {
   name: "notes",
   tags: ["add"],
@@ -35,10 +37,7 @@ export default {
 
       await note.save();
 
-      interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        embeds: [new EmbedBuilder().setDescription(words.Added)],
-      });
+      await reply.message.success(interaction, words.Added);
     } catch (err) {
       console.log(err);
     }

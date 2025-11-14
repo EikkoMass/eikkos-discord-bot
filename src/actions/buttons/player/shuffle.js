@@ -1,4 +1,4 @@
-import { Client, MessageFlags, EmbedBuilder } from "discord.js";
+import { Client, MessageFlags } from "discord.js";
 import { useQueue } from "discord-player";
 
 import reply from "../../../utils/core/replies.js";

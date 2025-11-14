@@ -1,8 +1,10 @@
-import { Client, EmbedBuilder, MessageFlags } from "discord.js";
+import { Client } from "discord.js";
 import { getLocalization } from "../../../utils/i18n.js";
 
 import Note from "../../../models/note.js";
 import { Types } from "mongoose";
+
+import reply from "../../../utils/core/replies.js";
 
 export default {
   name: "notes",
@@ -29,10 +31,7 @@ export default {
       });
 
       if (!note) {
-        return interaction.reply({
-          flags: [MessageFlags.Ephemeral],
-          embeds: [new EmbedBuilder().setDescription(words.NotFound)],
-        });
+        return await reply.message.error(interaction, words.NotFound);
       }
 
       note.title = title ?? note.title;
@@ -41,10 +40,7 @@ export default {
 
       await note.save();
 
-      interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        embeds: [new EmbedBuilder().setDescription(words.Edited)],
-      });
+      await reply.message.success(interaction, words.Edited);
     } catch (err) {
       console.log(err);
     }

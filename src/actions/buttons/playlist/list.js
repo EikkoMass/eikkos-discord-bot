@@ -1,9 +1,4 @@
-import {
-  Client,
-  ButtonStyle,
-  ActionRowBuilder,
-  ButtonBuilder,
-} from "discord.js";
+import { Client } from "discord.js";
 import getPlaylistEmbeds from "../../../utils/components/getPlaylistEmbeds.js";
 import getPaginator from "../../../utils/components/getPaginator.js";
 
