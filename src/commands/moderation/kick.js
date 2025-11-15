@@ -2,7 +2,6 @@ import {
   Client,
   ApplicationCommandOptionType,
   PermissionFlagsBits,
-  EmbedBuilder,
 } from "discord.js";
 
 import reply from "../../utils/core/replies.js";
@@ -15,7 +14,6 @@ export default {
    */
 
   callback: async (client, interaction) => {
-    const embed = new EmbedBuilder();
     const targetUserId = interaction.options.get("target-user").value;
     const reason =
       interaction.options.get("reason")?.value || "No reason provided.";

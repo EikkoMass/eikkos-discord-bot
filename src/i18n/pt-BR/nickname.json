@@ -1,0 +1,4 @@
+{
+  "Success": "Nick de <@{0}> alterado para *{1}*",
+  "Error": "Um erro ocorreu ao alterar o nick de <@{0}>"
+}

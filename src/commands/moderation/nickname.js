@@ -1,6 +1,7 @@
 import { PermissionFlagsBits, ApplicationCommandOptionType } from "discord.js";
 
 import reply from "../../utils/core/replies.js";
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 export default {
   name: "nickname",
@@ -10,6 +11,8 @@ export default {
    *  @param  interaction
    */
   callback: async (client, interaction) => {
+    const words = await getLocalization(interaction.locale, `nickname`);
+
     let member = interaction.options?.get("user")?.value;
     let nickname = interaction.options.get("nickname").value;
 
@@ -20,13 +23,13 @@ export default {
       await member.setNickname(nickname);
       return reply.message.success(
         interaction,
-        `Nickname of <@${member.user.id}> changed to *${nickname}*`,
+        formatMessage(words.Success, [member.user.id, nickname]),
       );
     } catch (error) {
       console.log(error);
       return reply.message.error(
         interaction,
-        `An error occurred while changing the nickname of <@${member.user.id}>`,
+        formatMessage(words.Error, [member.user.id]),
       );
     }
   },
