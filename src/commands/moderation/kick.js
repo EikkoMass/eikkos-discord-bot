@@ -4,6 +4,7 @@ import {
   PermissionFlagsBits,
 } from "discord.js";
 
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
 
 export default {
@@ -14,6 +15,8 @@ export default {
    */
 
   callback: async (client, interaction) => {
+    const words = await getLocalization(interaction.locale, `kick`);
+
     const targetUserId = interaction.options.get("target-user").value;
     const reason =
       interaction.options.get("reason")?.value || "No reason provided.";
@@ -23,24 +26,16 @@ export default {
     const targetUser = await interaction.guild.members.fetch(targetUserId);
 
     if (!targetUser) {
-      await reply.message.error(
-        interaction,
-        "That user doesn't exist in this server.",
-        {
-          context: "editReply",
-        },
-      );
+      await reply.message.error(interaction, words.UserDontExist, {
+        context: "editReply",
+      });
       return;
     }
 
     if (targetUser.id === interaction.guild.ownerId) {
-      await reply.message.info(
-        interaction,
-        "You can't kick that user because they're the server owner.",
-        {
-          context: "editReply",
-        },
-      );
+      await reply.message.info(interaction, words.CantKickOwner, {
+        context: "editReply",
+      });
       return;
     }
 
@@ -49,24 +44,16 @@ export default {
     const botRolePosition = interaction.guild.members.me.roles.highest.position; // Highest role of the bot;
 
     if (targetUserRolePosition >= requestUserRolePosition) {
-      await reply.message.info(
-        interaction,
-        "You can't kick that user because they have same / higher role than you.",
-        {
-          context: "editReply",
-        },
-      );
+      await reply.message.info(interaction, words.CantKickSameHigher, {
+        context: "editReply",
+      });
       return;
     }
 
     if (targetUserRolePosition >= botRolePosition) {
-      await reply.message.info(
-        interaction,
-        "I can't kick that user because they have the same / higher role than me.",
-        {
-          context: "editReply",
-        },
-      );
+      await reply.message.info(interaction, words.CantKickSameHigherBot, {
+        context: "editReply",
+      });
       return;
     }
 
@@ -74,23 +61,15 @@ export default {
     try {
       await targetUser.kick(reason);
 
-      await reply.message.success(
-        interaction,
-        `User ${targetUser} was kicked\nReason: ${reason}`,
-        {
-          context: "editReply",
-        },
-      );
+      await reply.message.success(interaction, words.Kicked, {
+        context: "editReply",
+      });
     } catch (e) {
       console.log(`There was an error when kicking: ${e}`);
 
-      await reply.message.error(
-        interaction,
-        `User ${targetUser} could not be kicked`,
-        {
-          context: "editReply",
-        },
-      );
+      await reply.message.error(interaction, words.KickFailed, {
+        context: "editReply",
+      });
     }
   },
 
