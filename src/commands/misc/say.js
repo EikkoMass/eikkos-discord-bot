@@ -5,6 +5,9 @@ import {
   PermissionFlagsBits,
 } from "discord.js";
 
+import reply from "../../utils/core/replies.js";
+import { getLocalization } from "../../utils/i18n.js";
+
 export default {
   name: "say",
   description: "Makes the bot say something",
@@ -14,15 +17,11 @@ export default {
    *  @param  interaction
    */
   callback: async (client, interaction) => {
+    const words = await getLocalization(interaction.locale, `say`);
     const message = interaction.options.get("message").value;
 
     if (!message) {
-      interaction.reply({
-        embeds: [
-          new EmbedBuilder().setDescription("Please provide a message."),
-        ],
-      });
-      return;
+      return await reply.message.error(interaction, words.ProvideMessage);
     }
 
     await interaction.deferReply();
