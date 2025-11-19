@@ -1,6 +1,6 @@
 import {
   PermissionFlagsBits,
-  ActionRowBuilder,
+  LabelBuilder,
   TextInputBuilder,
   ModalBuilder,
   InteractionContextType,
@@ -26,7 +26,6 @@ export default {
 
     const description = new TextInputBuilder()
       .setCustomId("description")
-      .setLabel(words.WhatToReply)
       .setStyle(TextInputStyle.Paragraph)
       .setRequired(true);
 
@@ -39,7 +38,12 @@ export default {
           hash: crypto.randomUUID(),
         }),
       )
-      .setComponents(new ActionRowBuilder().addComponents(description));
+      .setLabelComponents(
+        new LabelBuilder({
+          label: words.WhatToReply,
+          component: description,
+        }),
+      );
 
     await interaction.showModal(modal);
   },

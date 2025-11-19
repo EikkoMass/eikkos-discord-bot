@@ -2,7 +2,7 @@ import {
   Client,
   InteractionContextType,
   ApplicationCommandType,
-  ActionRowBuilder,
+  LabelBuilder,
   ModalBuilder,
   TextInputStyle,
   TextInputBuilder,
@@ -25,19 +25,16 @@ export default {
 
     const title = new TextInputBuilder()
       .setCustomId("title")
-      .setLabel(words.Title)
       .setStyle(TextInputStyle.Short)
       .setRequired(false);
 
     const description = new TextInputBuilder()
       .setCustomId("description")
-      .setLabel(words.NoteInfo)
       .setStyle(TextInputStyle.Paragraph)
       .setRequired(true);
 
     const img = new TextInputBuilder()
       .setCustomId("img")
-      .setLabel(words.ImageLink)
       .setStyle(TextInputStyle.Short)
       .setRequired(false);
 
@@ -50,10 +47,19 @@ export default {
         }),
       )
       .setTitle(words.NewPublicNote)
-      .setComponents(
-        new ActionRowBuilder().addComponents(title),
-        new ActionRowBuilder().addComponents(description),
-        new ActionRowBuilder().addComponents(img),
+      .setLabelComponents(
+        new LabelBuilder({
+          label: words.Title,
+          component: title,
+        }),
+        new LabelBuilder({
+          label: words.NoteInfo,
+          component: description,
+        }),
+        new LabelBuilder({
+          label: words.ImageLink,
+          component: img,
+        }),
       );
 
     await interaction.showModal(modal);

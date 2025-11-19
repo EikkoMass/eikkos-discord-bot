@@ -22,8 +22,6 @@ export default {
       let content = JSON.parse(interaction.customId);
       let page = content.page;
 
-      console.log(content);
-
       let query = {
         guildId: interaction.guild.id,
         type: content.context,

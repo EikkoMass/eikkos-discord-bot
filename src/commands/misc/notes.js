@@ -1,7 +1,7 @@
 import {
   ApplicationCommandOptionType,
   Client,
-  EmbedBuilder,
+  LabelBuilder,
   MessageFlags,
   ActionRowBuilder,
   ModalBuilder,
@@ -142,19 +142,16 @@ async function manageNote(client, interaction, action, code = null) {
 
   const title = new TextInputBuilder()
     .setCustomId("title")
-    .setLabel(words.Title)
     .setStyle(TextInputStyle.Short)
     .setRequired(false);
 
   const description = new TextInputBuilder()
     .setCustomId("description")
-    .setLabel(words.NoteInfo)
     .setStyle(TextInputStyle.Paragraph)
     .setRequired(true);
 
   const img = new TextInputBuilder()
     .setCustomId("img")
-    .setLabel(words.ImageLink)
     .setStyle(TextInputStyle.Short)
     .setRequired(false);
 
@@ -192,10 +189,19 @@ async function manageNote(client, interaction, action, code = null) {
       }),
     )
     .setTitle(getTitle(words, context, action))
-    .setComponents(
-      new ActionRowBuilder().addComponents(title),
-      new ActionRowBuilder().addComponents(description),
-      new ActionRowBuilder().addComponents(img),
+    .setLabelComponents(
+      new LabelBuilder({
+        label: words.Title,
+        component: title,
+      }),
+      new LabelBuilder({
+        label: words.NoteInfo,
+        component: description,
+      }),
+      new LabelBuilder({
+        label: words.ImageLink,
+        component: img,
+      }),
     );
 
   await interaction.showModal(modal);
