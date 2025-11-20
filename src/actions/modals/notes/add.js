@@ -21,7 +21,19 @@ export default {
 
       const title = interaction.fields?.getField("title")?.value;
       const description = interaction.fields?.getField("description").value;
-      const img = interaction.fields?.getField("img")?.value;
+      let img = null;
+
+      try {
+        let imgObj = interaction.fields?.getUploadedFiles("img");
+
+        if (imgObj) {
+          const value = imgObj.entries()?.next()?.value?.[1];
+
+          if (value?.contentType?.startsWith("image")) {
+            img = value.url || null;
+          }
+        }
+      } catch (err) {}
 
       const words = await getLocalization(interaction.locale, `notes`);
 

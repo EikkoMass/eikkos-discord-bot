@@ -7,6 +7,7 @@ import {
   ModalBuilder,
   TextInputStyle,
   TextInputBuilder,
+  FileUploadBuilder,
 } from "discord.js";
 
 import getNoteEmbeds from "../../utils/components/getNoteEmbeds.js";
@@ -150,10 +151,13 @@ async function manageNote(client, interaction, action, code = null) {
     .setStyle(TextInputStyle.Paragraph)
     .setRequired(true);
 
-  const img = new TextInputBuilder()
+  const img = new FileUploadBuilder()
     .setCustomId("img")
-    .setStyle(TextInputStyle.Short)
+    .setMinValues(1)
+    .setMaxValues(1)
     .setRequired(false);
+
+  let hasImg = false;
 
   if (code) {
     let note = await Note.findOne({
@@ -165,7 +169,7 @@ async function manageNote(client, interaction, action, code = null) {
     if (note) {
       if (note.title) title.setValue(note.title);
       description.setValue(note.text);
-      if (note.img) img.setValue(note.img);
+      hasImg = !!note.img;
     } else {
       await reply.message.error(interaction, words.NotFound);
       return;
@@ -179,6 +183,29 @@ async function manageNote(client, interaction, action, code = null) {
     .toString(36)
     .substring(2, hashSize + 2);
 
+  const labels = [
+    new LabelBuilder({
+      label: words.Title,
+      component: title,
+    }),
+    new LabelBuilder({
+      label: words.NoteInfo,
+      component: description,
+    }),
+  ];
+
+  if (
+    action === noteActionTypes.ADD ||
+    (action === noteActionTypes.EDIT && !hasImg)
+  ) {
+    labels.push(
+      new LabelBuilder({
+        label: words.ImageLink,
+        component: img,
+      }),
+    );
+  }
+
   const modal = new ModalBuilder()
     .setCustomId(
       JSON.stringify({
@@ -189,20 +216,7 @@ async function manageNote(client, interaction, action, code = null) {
       }),
     )
     .setTitle(getTitle(words, context, action))
-    .setLabelComponents(
-      new LabelBuilder({
-        label: words.Title,
-        component: title,
-      }),
-      new LabelBuilder({
-        label: words.NoteInfo,
-        component: description,
-      }),
-      new LabelBuilder({
-        label: words.ImageLink,
-        component: img,
-      }),
-    );
+    .setLabelComponents(labels);
 
   await interaction.showModal(modal);
 }

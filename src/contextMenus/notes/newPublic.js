@@ -6,6 +6,7 @@ import {
   ModalBuilder,
   TextInputStyle,
   TextInputBuilder,
+  FileUploadBuilder,
 } from "discord.js";
 
 import { getLocalization } from "../../utils/i18n.js";
@@ -33,9 +34,10 @@ export default {
       .setStyle(TextInputStyle.Paragraph)
       .setRequired(true);
 
-    const img = new TextInputBuilder()
+    const img = new FileUploadBuilder()
       .setCustomId("img")
-      .setStyle(TextInputStyle.Short)
+      .setMinValues(1)
+      .setMaxValues(1)
       .setRequired(false);
 
     const modal = new ModalBuilder()
