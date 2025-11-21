@@ -1,0 +1,4 @@
+{
+  "HateLevel": "<@{0}> level of hate with <@{1}> is: {2}%\n\n{3}",
+  "LoveLevel": "<@{0}> level of love with <@{1}> is: {2}%\n\n{3}"
+}

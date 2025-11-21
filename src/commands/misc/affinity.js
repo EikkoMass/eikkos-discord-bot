@@ -5,6 +5,7 @@ import {
   EmbedBuilder,
 } from "discord.js";
 
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import { randomize } from "../../utils/core/randomizer.js";
 
 export default {
@@ -74,6 +75,8 @@ export default {
  *  @param  interaction
  */
 async function love(client, interaction) {
+  const words = await getLocalization(interaction.locale, `affinity`);
+
   const user1 = interaction.options?.get("first").value;
   const user2 = interaction.options?.get("second").value;
 
@@ -86,7 +89,12 @@ async function love(client, interaction) {
   let embed = new EmbedBuilder()
     .setTitle("Love percentage")
     .setDescription(
-      `<@${user1}> level of love with <@${user2}> is : ${results.percentage}%\n\n${results.level}`,
+      formatMessage(words.LoveLevel, [
+        user1,
+        user2,
+        results.percentage,
+        results.level,
+      ]),
     );
 
   interaction.reply({
@@ -99,6 +107,8 @@ async function love(client, interaction) {
  *  @param  interaction
  */
 async function hate(client, interaction) {
+  const words = await getLocalization(interaction.locale, `affinity`);
+
   const user1 = interaction.options?.get("first").value;
   const user2 = interaction.options?.get("second").value;
 
@@ -111,7 +121,12 @@ async function hate(client, interaction) {
   let embed = new EmbedBuilder()
     .setTitle("Hate percentage")
     .setDescription(
-      `<@${user1}> level of hate with <@${user2}> is : ${results.percentage}%\n\n${results.level}`,
+      formatMessage(words.HateLevel, [
+        user1,
+        user2,
+        results.percentage,
+        results.level,
+      ]),
     );
 
   interaction.reply({
