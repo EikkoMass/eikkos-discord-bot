@@ -1,6 +1,5 @@
 import { EmbedBuilder } from "discord.js";
 import { getUser } from "../importers/getUser.js";
-import cache from "../cache/user.js";
 
 async function getPlaylistEmbeds(client, playlists) {
   const embeds = [];
@@ -21,7 +20,6 @@ async function getPlaylistEmbeds(client, playlists) {
     embeds.push(embed);
   }
 
-  cache.reset();
   return embeds;
 }
 
