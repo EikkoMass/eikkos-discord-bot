@@ -6,6 +6,8 @@ import {
 } from "discord.js";
 import dotenv from "dotenv";
 
+import { getToken } from "../../utils/authenticators/igdbAuth.js";
+
 dotenv.config();
 
 export default {
@@ -49,11 +51,9 @@ export default {
 async function search(client, interaction) {
   const query = interaction.options?.get("query").value;
 
-  if (
-    query === -1 ||
-    !process.env.IGDB_CLIENT_ID ||
-    !client.igdb.access_token
-  ) {
+  const token = getToken();
+
+  if (query === -1 || !process.env.IGDB_CLIENT_ID || !token.access_token) {
     interaction.reply(
       "Environment variable not defined, could not search for game!",
     );
@@ -64,7 +64,7 @@ async function search(client, interaction) {
     method: "POST",
     headers: {
       "Client-ID": process.env.IGDB_CLIENT_ID,
-      Authorization: `Bearer ${client.igdb.access_token}`,
+      Authorization: `Bearer ${token.access_token}`,
     },
     body: `fields name, summary, genres.*, keywords.*, first_release_date, involved_companies.company.*, cover.*, screenshots.*; limit 1; where id = ${query};`,
   });

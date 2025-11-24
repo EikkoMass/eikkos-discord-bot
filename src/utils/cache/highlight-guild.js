@@ -1,6 +1,9 @@
 let cache = {};
 let search = {};
 
+let autoCleanTimeout;
+let CLEAN_INTERVAL = 1000 * 60 * 60 * 24; // 1 day
+
 export function get(id) {
   return cache[id];
 }
@@ -8,6 +11,13 @@ export function get(id) {
 export function set(id, highlight) {
   search[id] = true;
   cache[id] = highlight;
+
+  if (!autoCleanTimeout) {
+    autoCleanTimeout = setTimeout(() => {
+      autoCleanTimeout = null;
+      reset();
+    }, CLEAN_INTERVAL);
+  }
 }
 
 export function reset() {

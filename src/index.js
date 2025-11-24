@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import { Player } from "discord-player";
 import { DefaultExtractors } from "@discord-player/extractor";
 import { YoutubeiExtractor } from "discord-player-youtubei";
-import authenticateOnIGDB from "./utils/authenticators/igdbAuth.js";
+import igdb from "./utils/authenticators/igdbAuth.js";
 import loadPlayerEvents from "./utils/importers/loadPlayerEvents.js";
 
 dotenv.config();
@@ -50,7 +50,7 @@ const client = new Client({
   if (!process.env.IGDB_CLIENT_ID || !process.env.IGDB_CLIENT_SECRET) {
     console.log(`Missing IGDB credentials, skipping authentication!`);
   } else {
-    await authenticateOnIGDB(client);
+    await igdb.authenticate();
   }
 
   eventHandler(client);

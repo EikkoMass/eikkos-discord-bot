@@ -1,4 +1,5 @@
 import { Client } from "discord.js";
+import { getToken } from "../utils/authenticators/igdbAuth.js";
 
 const QUANTITY_OF_RESULTS = 6;
 
@@ -12,6 +13,8 @@ export default {
    */
   callback: async (client, interaction) => {
     try {
+      const token = getToken();
+
       if (!process.env.IGDB_CLIENT_ID)
         return interaction
           .respond([
@@ -23,7 +26,7 @@ export default {
         method: "POST",
         headers: {
           "Client-ID": process.env.IGDB_CLIENT_ID,
-          Authorization: `Bearer ${client.igdb.access_token}`,
+          Authorization: `Bearer ${token.access_token}`,
         },
         body: `fields name, id; limit ${QUANTITY_OF_RESULTS}; search "${(interaction.options.getFocused() || "").replace('"', '\\"')}";`,
       });
