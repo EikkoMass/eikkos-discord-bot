@@ -33,10 +33,7 @@ export default {
         await cancel(client, interaction);
         break;
       default:
-        await interaction.reply({
-          flags: [MessageFlags.Ephemeral],
-          content: `Reminder command not found!`,
-        });
+        await reply.message.info(interaction, `Reminder command not found!`);
         return;
     }
   },
@@ -113,20 +110,10 @@ async function create(client, interaction) {
 
   const formattedDuration = prettyMs(duration, { verbose: true });
 
-  interaction.reply({
-    flags: [MessageFlags.Ephemeral],
-    content: formatMessage(words.Ping, [formattedDuration]),
-  });
-
-  const embed = new EmbedBuilder();
-
-  embed.setDescription(message || " ").setFooter({
-    iconURL: interaction.member.displayAvatarURL({ size: 256 }),
-    text: formatMessage(words.EventHistory, [
-      interaction.member.displayName || interaction.member.nickname,
-      formattedDuration,
-    ]),
-  });
+  await reply.message.info(
+    interaction,
+    formatMessage(words.Ping, [formattedDuration]),
+  );
 
   let reminderData = new Reminder({
     userId: interaction.member.id,
@@ -139,7 +126,7 @@ async function create(client, interaction) {
     locale: interaction.locale,
   });
 
-  reminderData.save();
+  await reminderData.save();
 
   build(interaction.guild, reminderData);
 }
