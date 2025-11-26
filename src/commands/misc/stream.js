@@ -79,7 +79,6 @@ async function register(client, interaction) {
     const title = interaction.options.get("title")?.value;
     const link = interaction.options.get("link")?.value;
     const priority = interaction.options.get("priority")?.value || false;
-    const embed = new EmbedBuilder();
 
     let streamData = await Stream.findOne({
       link,

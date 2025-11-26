@@ -1,0 +1,4 @@
+{
+  "EnvironmentVariableNotDefined": "Environment variable not defined, could not search for game!",
+  "NotFound": "Game not found, try again later!"
+}

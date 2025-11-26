@@ -7,6 +7,8 @@ import {
 import dotenv from "dotenv";
 
 import { getToken } from "../../utils/authenticators/igdbAuth.js";
+import reply from "../../utils/core/replies.js";
+import { getLocalization } from "../../utils/i18n.js";
 
 dotenv.config();
 
@@ -50,14 +52,15 @@ export default {
  */
 async function search(client, interaction) {
   const query = interaction.options?.get("query").value;
+  const words = await getLocalization(interaction.locale, `game`);
 
   const token = getToken();
 
   if (query === -1 || !process.env.IGDB_CLIENT_ID || !token.access_token) {
-    interaction.reply(
-      "Environment variable not defined, could not search for game!",
+    return await reply.message.info(
+      interaction,
+      words.EnvironmentVariableNotDefined,
     );
-    return;
   }
 
   const res = await fetch(`https://api.igdb.com/v4/games`, {
@@ -71,15 +74,13 @@ async function search(client, interaction) {
 
   if (!res.ok) {
     console.log(games.statusText);
-    interaction.reply("Game not found, try again later!");
-    return;
+    return await reply.message.error(interaction, words.NotFound);
   }
 
   const games = await res.json();
 
   if (!games) {
-    interaction.reply("Game not found, try again later!");
-    return;
+    return await reply.message.error(interaction, words.NotFound);
   }
 
   const fields = [
@@ -127,7 +128,7 @@ async function search(client, interaction) {
     );
   }
 
-  interaction.reply({
+  return await interaction.reply({
     embeds: [embed],
   });
 }

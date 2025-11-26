@@ -33,8 +33,7 @@ export default {
 
     if (activate) {
       if (data) {
-        await reply.message.info(interaction, words.AlreadyActive);
-        return;
+        return await reply.message.info(interaction, words.AlreadyActive);
       } else {
         data = new MuteByGame({
           userId: interaction.user.id,
@@ -54,11 +53,10 @@ export default {
           gameName: gameName,
         });
 
-        await reply.message.success(interaction, words.Disabled);
-        return;
+        return await reply.message.success(interaction, words.Disabled);
       }
 
-      await reply.message.info(interaction, words.AlreadyDisabled);
+      return await reply.message.info(interaction, words.AlreadyDisabled);
     }
   },
 
