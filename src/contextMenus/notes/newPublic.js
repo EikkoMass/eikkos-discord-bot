@@ -10,6 +10,7 @@ import {
 } from "discord.js";
 
 import { getLocalization } from "../../utils/i18n.js";
+import Enum from "../../enums/noteContextEnum.js";
 
 export default {
   name: "New Public Note",
@@ -21,7 +22,7 @@ export default {
    *  @param  interaction
    */
   callback: async (client, interaction) => {
-    const context = 2;
+    const context = Enum.PUBLIC;
     const words = await getLocalization(interaction.locale, `notes`);
 
     const title = new TextInputBuilder()

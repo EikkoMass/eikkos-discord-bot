@@ -17,8 +17,8 @@ import { Types } from "mongoose";
 
 import { getLocalization } from "../../utils/i18n.js";
 import getPaginator from "../../utils/components/getPaginator.js";
-import NoteActionTypes from "../../enums/noteActionTypes.js";
-import noteActionTypes from "../../enums/noteActionTypes.js";
+import Types from "../../enums/noteActionTypes.js";
+import Enum from "../../enums/noteContextEnum.js";
 
 const amount = 10;
 
@@ -103,7 +103,7 @@ export default {
  *  @param  interaction
  */
 async function add(client, interaction) {
-  return manageNote(client, interaction, NoteActionTypes.ADD);
+  return manageNote(client, interaction, Types.ADD);
 }
 
 /**
@@ -112,7 +112,7 @@ async function add(client, interaction) {
  */
 async function edit(client, interaction) {
   const code = interaction.options.get("code").value;
-  return manageNote(client, interaction, NoteActionTypes.EDIT, code);
+  return manageNote(client, interaction, Types.EDIT, code);
 }
 
 /**
@@ -130,13 +130,13 @@ async function manageNote(client, interaction, action, code = null) {
     type: context,
   };
 
-  if (context == 1) {
+  if (context === Enum.PRIVATE) {
     query.userId = interaction.user.id;
   }
 
   let countNotes = await Note.countDocuments(query);
 
-  if (context === 1 && countNotes >= amount) {
+  if (context === Enum.PRIVATE && countNotes >= amount) {
     await reply.message.error(interaction, words.LimitExceeded);
     return;
   }
@@ -176,7 +176,7 @@ async function manageNote(client, interaction, action, code = null) {
     }
   }
 
-  const id = action === noteActionTypes.ADD ? "notes;add;" : "notes;edit;";
+  const id = action === Types.ADD ? "notes;add;" : "notes;edit;";
 
   const hashSize = 6;
   const hash = Math.random()
@@ -194,10 +194,7 @@ async function manageNote(client, interaction, action, code = null) {
     }),
   ];
 
-  if (
-    action === noteActionTypes.ADD ||
-    (action === noteActionTypes.EDIT && !hasImg)
-  ) {
+  if (action === Types.ADD || (action === Types.EDIT && !hasImg)) {
     labels.push(
       new LabelBuilder({
         label: words.ImageLink,
@@ -222,10 +219,14 @@ async function manageNote(client, interaction, action, code = null) {
 }
 
 function getTitle(words, context, action) {
-  if (action === noteActionTypes.ADD) {
-    return context === 1 ? words.NewPrivateNote : words.NewPublicNote;
+  if (action === Types.ADD) {
+    return context === Enum.PRIVATE
+      ? words.NewPrivateNote
+      : words.NewPublicNote;
   } else {
-    return context === 1 ? words.EditPrivateNote : words.EditPublicNote;
+    return context === Enum.PRIVATE
+      ? words.EditPrivateNote
+      : words.EditPublicNote;
   }
 }
 
@@ -243,7 +244,7 @@ async function show(client, interaction) {
     type: context,
   };
 
-  if (context == 1) {
+  if (context === Enum.PRIVATE) {
     query.userId = interaction.user.id;
   }
 
@@ -253,14 +254,14 @@ async function show(client, interaction) {
   const notes = await Note.find(query).sort({ _id: -1 }).limit(amount);
 
   await interaction.deferReply({
-    flags: context === 1 ? [MessageFlags.Ephemeral] : [],
+    flags: context === Enum.PRIVATE ? [MessageFlags.Ephemeral] : [],
   });
 
   if (notes?.length) {
     const embeds = await getNoteEmbeds(client, notes);
     const minPage = 1;
 
-    if (context === 2) {
+    if (context === Enum.PUBLIC) {
       row = getPaginator(
         {
           id: `notes;show;`,

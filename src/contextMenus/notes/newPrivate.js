@@ -12,6 +12,7 @@ import {
 } from "discord.js";
 
 import { getLocalization } from "../../utils/i18n.js";
+import Enum from "../../enums/noteContextEnum.js";
 
 import Note from "../../models/note.js";
 
@@ -27,7 +28,7 @@ export default {
    *  @param  interaction
    */
   callback: async (client, interaction) => {
-    const context = 1;
+    const context = Enum.PRIVATE;
     const words = await getLocalization(interaction.locale, `notes`);
 
     let query = {
