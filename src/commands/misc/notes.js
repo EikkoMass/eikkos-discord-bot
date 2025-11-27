@@ -17,7 +17,7 @@ import { Types } from "mongoose";
 
 import { getLocalization } from "../../utils/i18n.js";
 import getPaginator from "../../utils/components/getPaginator.js";
-import Types from "../../enums/noteActionTypes.js";
+import NoteTypes from "../../enums/noteActionTypes.js";
 import Enum from "../../enums/noteContextEnum.js";
 
 const amount = 10;
@@ -103,7 +103,7 @@ export default {
  *  @param  interaction
  */
 async function add(client, interaction) {
-  return manageNote(client, interaction, Types.ADD);
+  return manageNote(client, interaction, NoteTypes.ADD);
 }
 
 /**
@@ -112,7 +112,7 @@ async function add(client, interaction) {
  */
 async function edit(client, interaction) {
   const code = interaction.options.get("code").value;
-  return manageNote(client, interaction, Types.EDIT, code);
+  return manageNote(client, interaction, NoteTypes.EDIT, code);
 }
 
 /**
@@ -176,7 +176,7 @@ async function manageNote(client, interaction, action, code = null) {
     }
   }
 
-  const id = action === Types.ADD ? "notes;add;" : "notes;edit;";
+  const id = action === NoteTypes.ADD ? "notes;add;" : "notes;edit;";
 
   const hashSize = 6;
   const hash = Math.random()
@@ -194,7 +194,7 @@ async function manageNote(client, interaction, action, code = null) {
     }),
   ];
 
-  if (action === Types.ADD || (action === Types.EDIT && !hasImg)) {
+  if (action === NoteTypes.ADD || (action === NoteTypes.EDIT && !hasImg)) {
     labels.push(
       new LabelBuilder({
         label: words.ImageLink,
@@ -219,7 +219,7 @@ async function manageNote(client, interaction, action, code = null) {
 }
 
 function getTitle(words, context, action) {
-  if (action === Types.ADD) {
+  if (action === NoteTypes.ADD) {
     return context === Enum.PRIVATE
       ? words.NewPrivateNote
       : words.NewPublicNote;
