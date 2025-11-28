@@ -5,6 +5,7 @@ import {
   MessageFlags,
 } from "discord.js";
 import Stream from "../../models/stream.js";
+import cache from "../../utils/cache/activity.js";
 
 import reply from "../../utils/core/replies.js";
 
@@ -84,21 +85,27 @@ async function register(client, interaction) {
       link,
     });
 
+    if (priority) {
+      cache.set({
+        name: title,
+        url: link,
+      });
+    }
+
     if (streamData) {
       streamData.title = title;
-      streamData.priority = priority;
 
-      await reply.message.success(interaction, words.Edited);
-      return;
+      await streamData.save();
+      return await reply.message.success(interaction, words.Edited);
     }
 
     streamData = new Stream({
       link,
       title,
-      priority,
     });
 
     await streamData.save();
+
     await reply.message.success(interaction, words.Registered);
   } catch (e) {
     console.log(e);

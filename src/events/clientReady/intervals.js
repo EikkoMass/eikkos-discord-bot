@@ -1,28 +1,19 @@
-import { ActivityType } from "discord.js";
-import Stream from '../../models/stream.js';
+import Stream from "../../models/stream.js";
+import cache from "../../utils/cache/activity.js";
 
 export default async (client) => {
+  let streams = await Stream.find();
 
-  let stream = await Stream.findOne({ priority: true });
+  if (streams) {
+    let stream = streams[Math.floor(Math.random() * streams.length)];
 
-  if(stream)
-  {
-    stream.priority = false;
-    await stream.save();
-  } else {
-    let streams = await Stream.find();
-
-    if(streams)
-    {
-      stream = streams[Math.floor(Math.random() * streams.length)];
+    if (stream) {
+      cache.set({
+        name: stream.title,
+        url: stream.link,
+      });
     }
   }
 
-  setInterval(() => {
-    client.user.setActivity({
-      name: stream?.title || 'Evt',
-      type: ActivityType.Streaming,
-      url: stream?.link || 'https://www.youtube.com/watch?v=JjjNa8khhww'
-    });
-  }, 10000);
-}
+  setInterval(() => client.user.setActivity(cache.get()), 10000);
+};
