@@ -1,13 +1,20 @@
 import { ActivityType } from "discord.js";
 
-let activity = {
+let defaultActivity = {
   name: "Evt",
   state: "lmao",
   type: ActivityType.Streaming,
   url: "https://www.youtube.com/watch?v=JjjNa8khhww",
 };
 
+let activity = defaultActivity;
+
 export function set(activityObj) {
+  if (!activityObj) {
+    activity = defaultActivity;
+    return;
+  }
+
   activity = { ...activity, ...activityObj };
 }
 

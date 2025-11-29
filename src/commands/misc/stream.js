@@ -119,12 +119,32 @@ async function register(client, interaction) {
 async function remove(client, interaction) {
   const words = await getLocalization(interaction.locale, `stream`);
 
-  const embed = new EmbedBuilder();
   const link = interaction.options.get("link")?.value;
 
   let result = await Stream.findOneAndDelete({ link });
 
   if (result) {
+    let current = cache.get();
+
+    if (current.url === link) {
+      let count = await Stream.countDocuments();
+
+      let stream;
+
+      if (count > 0) {
+        stream = await Stream.findOne().skip(Math.floor(Math.random() * count));
+      }
+
+      if (stream) {
+        cache.set({
+          name: stream.title,
+          url: stream.link,
+        });
+      } else {
+        cache.set();
+      }
+    }
+
     await reply.message.success(
       interaction,
       formatMessage(words.Removed, [result.title]),
