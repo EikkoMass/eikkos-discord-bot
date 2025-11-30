@@ -2,7 +2,7 @@ import { ActivityType } from "discord.js";
 
 let defaultActivity = {
   name: "Evt",
-  state: "lmao",
+  state: "lmfao",
   type: ActivityType.Streaming,
   url: "https://www.youtube.com/watch?v=JjjNa8khhww",
 };

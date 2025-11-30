@@ -1,12 +1,9 @@
-import {
-  ApplicationCommandOptionType,
-  Client,
-  EmbedBuilder,
-  MessageFlags,
-} from "discord.js";
-import Stream from "../../models/stream.js";
-import cache from "../../utils/cache/activity.js";
+import { ApplicationCommandOptionType, Client } from "discord.js";
 
+import getRandomStream from "../../utils/components/getRandomStream.js";
+import Stream from "../../models/stream.js";
+
+import cache from "../../utils/cache/activity.js";
 import reply from "../../utils/core/replies.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
@@ -127,13 +124,7 @@ async function remove(client, interaction) {
     let current = cache.get();
 
     if (current.url === link) {
-      let count = await Stream.countDocuments();
-
-      let stream;
-
-      if (count > 0) {
-        stream = await Stream.findOne().skip(Math.floor(Math.random() * count));
-      }
+      let stream = await getRandomStream();
 
       if (stream) {
         cache.set({
