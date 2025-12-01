@@ -1,5 +1,7 @@
 import { ActivityType } from "discord.js";
 
+let rotation = false;
+
 let defaultActivity = {
   name: "Evt",
   state: "lmfao",
@@ -22,7 +24,17 @@ export function get() {
   return activity;
 }
 
+export function rotate() {
+  return rotation;
+}
+
+export function setRotation(newRotation) {
+  rotation = newRotation;
+}
+
 export default {
   get,
   set,
+  rotate,
+  setRotation,
 };

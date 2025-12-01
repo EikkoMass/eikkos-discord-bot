@@ -17,6 +17,9 @@ export default {
       case "remove":
         await remove(client, interaction);
         break;
+      case "rotate":
+        await rotate(client, interaction);
+        break;
       default:
         await reply.message.error(interaction, `Stream command not found!`);
         return;
@@ -45,7 +48,8 @@ export default {
         },
         {
           name: "priority",
-          description: "How many dices you want to roll?",
+          description:
+            "Want to apply now the new stream? (don't work with rotation enabled)",
           type: ApplicationCommandOptionType.Boolean,
         },
       ],
@@ -59,6 +63,19 @@ export default {
           name: "link",
           description: "Link that you want to stream",
           type: ApplicationCommandOptionType.String,
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "rotate",
+      description: "Set the stream rotation state",
+      type: ApplicationCommandOptionType.Subcommand,
+      options: [
+        {
+          name: "active",
+          description: "you want to rotate the bot stream?",
+          type: ApplicationCommandOptionType.Boolean,
           required: true,
         },
       ],
@@ -144,4 +161,21 @@ async function remove(client, interaction) {
   }
 
   await reply.message.error(interaction, words.NotFound);
+}
+
+/**
+ *  @param {Client} client
+ *  @param  interaction
+ */
+async function rotate(client, interaction) {
+  const words = await getLocalization(interaction.locale, `stream`);
+
+  const active = interaction.options.get("active")?.value;
+
+  cache.setRotation(active);
+
+  return await reply.message.success(
+    interaction,
+    formatMessage(words.ActiveUpdated),
+  );
 }
