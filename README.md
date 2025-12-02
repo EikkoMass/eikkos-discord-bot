@@ -7,8 +7,6 @@ This is a bot that started the development as a study, now became a hobby projec
 
 ## How to build the project
 
-Make sure you have Node.js installed (last version revised: v22.20.0).
-
 - Create an `.env` file into the project, using the file `.env.example` as a template.
   - [`APP_ID` | `string`]
     - Application Id available on the Discord Developer Portal
@@ -20,9 +18,28 @@ Make sure you have Node.js installed (last version revised: v22.20.0).
   - [`testServer` | `string`]
     - tells the bot the id of the `test server` (filling this field will make the bot register the command **ONLY** into the test server, if you don't want this, just keep as an empty string).
   - [ `devs` | `Array<string>` ]
-    - specify to the bot who is the`developer`, important if you want to create debug / experimental commands.
-- Inside the main folder, run the command `node src/index.js` or just `npm start`.
+    - specify to the bot who is the `developer`, important if you want to create debug / experimental commands.
 
+### Running Locally
+
+Make sure you have Node.js installed (last version revised: v24.11.1).
+
+Inside the main folder, run the command `node src/index.js` or just `npm start`.
+
+### Running with Docker
+
+Inside the main folder, run the command to build the Dockerfile:
+
+`docker build -t eikkos-discord-bot .`
+
+after that, create a new container with the command:
+
+`docker run --name bot -p 80:80 eikkos-discord-bot`
+
+your container must be already running, you can manage the bot execution with the commands:
+
+`docker start bot`
+`docker stop bot`
 
 ## Building a Slash Command
 
