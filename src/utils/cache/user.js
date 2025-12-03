@@ -1,7 +1,7 @@
 let userCache = {};
 
 let autoCleanTimeout;
-let CLEAN_INTERVAL = 60000;
+let CLEAN_INTERVAL = 60 * 1000;
 
 export function get(id) {
   return userCache[id];

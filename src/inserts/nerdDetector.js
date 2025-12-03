@@ -1,5 +1,12 @@
-import { Client, Message, AttachmentBuilder, MessageFlags } from "discord.js";
+import {
+  Client,
+  Message,
+  AttachmentBuilder,
+  MessageFlags,
+  EmbedBuilder,
+} from "discord.js";
 import { getRandomNumber } from "../utils/core/randomizer.js";
+import xp from "../utils/xp.js";
 
 export default {
   name: "nerdDetector",
@@ -22,7 +29,7 @@ export default {
       const file = new AttachmentBuilder(
         `src/gifs/${isFire ? "fire" : "nerd"}.gif`,
       );
-      message.reply({
+      await message.reply({
         content: isFire
           ? `"${message.content.toUpperCase()}" 🗣️🗣️🗣️🔥🔥🔥`
           : `'${message.content.toLowerCase()}' ☝☝🤓`,
@@ -30,11 +37,29 @@ export default {
       });
 
       // 1%
-      if (!isFire && Math.floor(Math.random() * 100 + 1) > 99) {
-        message.reply({
+      if (!isFire && getRandomNumber() > 99) {
+        const experience = xp.getRandomXp(25, 35);
+
+        await message.reply({
           flags: [MessageFlags.Ephemeral],
-          content: `((Sorry if you feel offended, nothing personal dude!))`,
+          embeds: [
+            new EmbedBuilder()
+              .setFields([
+                {
+                  name: "XP",
+                  value: `${experience}`,
+                },
+              ])
+              .setDescription("Ok, i feel bad about that. Take some extra xp"),
+          ],
         });
+
+        await xp.give(
+          message.author,
+          message.guild,
+          message.channel,
+          experience,
+        );
       }
     }
   },
