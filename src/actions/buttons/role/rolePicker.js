@@ -13,7 +13,6 @@ export default {
   callback: async (client, interaction) => {
     try {
       const words = await getLocalization(interaction.locale, `role`);
-      const embed = new EmbedBuilder();
 
       await interaction.deferReply({
         flags: [MessageFlags.Ephemeral],
