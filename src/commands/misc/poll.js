@@ -7,7 +7,7 @@ import {
 
 import reply from "../../utils/core/replies.js";
 
-let polls = [];
+let polls = {};
 
 export default {
   /**
@@ -24,11 +24,10 @@ export default {
         await finishPoll(client, interaction);
         break;
       default:
-        await interaction.reply({
-          flags: [MessageFlags.Ephemeral],
-          content: `Poll command not found!`,
-        });
-        return;
+        return await reply.message.error(
+          interaction,
+          `Poll command not found!`,
+        );
     }
   },
   options: [
@@ -105,12 +104,16 @@ async function createPoll(client, interaction) {
     },
   });
 
-  polls.push(message.id);
+  if (!polls[interaction.guild.id]) {
+    polls[interaction.guild.id] = [];
+  }
+
+  polls[interaction.guild.id].push(message.id);
   await reply.message.success(interaction, `Created a new poll!`);
 }
 
 async function finishPoll(client, interaction) {
-  for (let id of polls) {
+  for (let id of polls[interaction.guild.id] || []) {
     let message = await interaction.channel.messages.fetch(id);
     if (message.poll) {
       if (message.poll.expiresTimestamp < Date.now()) continue;

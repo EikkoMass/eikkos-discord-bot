@@ -197,7 +197,7 @@ async function manageNote(client, interaction, action, code = null) {
   if (action === NoteTypes.ADD || (action === NoteTypes.EDIT && !hasImg)) {
     labels.push(
       new LabelBuilder({
-        label: words.ImageLink,
+        label: words.Image,
         component: img,
       }),
     );

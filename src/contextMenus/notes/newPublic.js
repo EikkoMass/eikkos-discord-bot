@@ -60,7 +60,7 @@ export default {
           component: description,
         }),
         new LabelBuilder({
-          label: words.ImageLink,
+          label: words.Image,
           component: img,
         }),
       );
