@@ -1,16 +1,15 @@
-import { Client } from 'discord.js';
-import getTypes from '../enums/noteContextTypes.js';
-
+import { Client } from "discord.js";
+import getTypes from "../utils/autocompletes/notes/contexts.js";
 
 export default {
-  name: 'notes',
-  contexts: ['add', 'show'],
+  name: "notes",
+  contexts: ["add", "show"],
 
   /**
    *  @param {Client} client
    *  @param  interaction
-  */
+   */
   callback: async (client, interaction) => {
-    
-    interaction.respond(await getTypes(interaction)).catch(() => {})}
-}
+    interaction.respond(await getTypes(interaction)).catch(() => {});
+  },
+};

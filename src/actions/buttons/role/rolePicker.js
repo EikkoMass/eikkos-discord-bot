@@ -1,4 +1,4 @@
-import { Client, MessageFlags, EmbedBuilder } from "discord.js";
+import { Client, MessageFlags } from "discord.js";
 import { getLocalization, formatMessage } from "../../../utils/i18n.js";
 
 import reply from "../../../utils/core/replies.js";

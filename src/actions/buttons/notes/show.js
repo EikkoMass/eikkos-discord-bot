@@ -1,12 +1,7 @@
-import {
-  Client,
-  ButtonStyle,
-  ActionRowBuilder,
-  ButtonBuilder,
-} from "discord.js";
+import { Client } from "discord.js";
 import getNoteEmbeds from "../../../utils/components/getNoteEmbeds.js";
 import getPaginator from "../../../utils/components/getPaginator.js";
-import Enum from "../../../enums/noteContextEnum.js";
+import Enum from "../../../enums/notes/contexts.js";
 
 import Note from "../../../models/note.js";
 

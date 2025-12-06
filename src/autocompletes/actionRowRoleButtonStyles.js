@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import getTypes from "../enums/buttonStyles.js";
+import getTypes from "../utils/autocompletes/buttons/styles.js";
 
 export default {
   name: "role",

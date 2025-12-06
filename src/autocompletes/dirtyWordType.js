@@ -1,14 +1,14 @@
-import {Client} from 'discord.js';
-import getTypes from '../enums/dirtyWordTypes.js';
-
+import { Client } from "discord.js";
+import getTypes from "../utils/autocompletes/dirtyWords/types.js";
 
 export default {
-  name: 'dirty-word',
-  contexts: ['register'],
+  name: "dirty-word",
+  contexts: ["register"],
 
   /**
    *  @param {Client} client
    *  @param  interaction
-  */
-  callback: async (client, interaction) => interaction.respond(await getTypes(interaction)).catch(() => {})
-}
+   */
+  callback: async (client, interaction) =>
+    interaction.respond(await getTypes(interaction)).catch(() => {}),
+};

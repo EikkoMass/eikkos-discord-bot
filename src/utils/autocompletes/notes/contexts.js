@@ -1,5 +1,5 @@
-import { getLocalization } from "../utils/i18n.js";
-import Enum from "./noteContextEnum.js";
+import { getLocalization } from "../../i18n.js";
+import Enum from "../../../enums/notes/contexts.js";
 
 async function getTypes(interaction) {
   const words = await getLocalization(interaction.locale, `context-types`);

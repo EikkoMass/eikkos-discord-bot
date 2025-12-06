@@ -12,7 +12,7 @@ import {
 } from "discord.js";
 
 import { getLocalization } from "../../utils/i18n.js";
-import Enum from "../../enums/noteContextEnum.js";
+import Enum from "../../enums/notes/contexts.js";
 
 import Note from "../../models/note.js";
 

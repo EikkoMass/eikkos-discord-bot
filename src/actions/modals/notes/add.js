@@ -1,4 +1,4 @@
-import { Client, EmbedBuilder, MessageFlags } from "discord.js";
+import { Client } from "discord.js";
 import { getLocalization } from "../../../utils/i18n.js";
 
 import Note from "../../../models/note.js";

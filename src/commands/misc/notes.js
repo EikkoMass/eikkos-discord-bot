@@ -17,8 +17,8 @@ import { Types } from "mongoose";
 
 import { getLocalization } from "../../utils/i18n.js";
 import getPaginator from "../../utils/components/getPaginator.js";
-import NoteTypes from "../../enums/noteActionTypes.js";
-import Enum from "../../enums/noteContextEnum.js";
+import NoteTypes from "../../enums/notes/types.js";
+import Enum from "../../enums/notes/contexts.js";
 
 const amount = 10;
 

@@ -1,6 +1,6 @@
 import { ButtonStyle } from "discord.js";
 
-import { getLocalization } from "../utils/i18n.js";
+import { getLocalization } from "../../i18n.js";
 
 async function getTypes(interaction) {
   const words = await getLocalization(interaction.locale, `buttons`);
