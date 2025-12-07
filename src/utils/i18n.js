@@ -1,3 +1,5 @@
+import path from "path";
+
 import languages from "../i18n/languages.json" with { type: "json" };
 const defaultLanguage = "en";
 
@@ -27,15 +29,20 @@ export function formatMessage(message = "", values = []) {
 }
 
 export async function getLocalization(locale, context) {
-  const path = `${getI18n(locale)}/${context}`;
+  const contextPath = path.join(getI18n(locale), context);
 
-  if (localizationCache[path]) return localizationCache[path];
+  if (localizationCache[contextPath]) return localizationCache[contextPath];
 
   const localization = (
-    await import(`../i18n/${path}.json`, { with: { type: "json" } })
+    await import(
+      path.join(import.meta.dirname, "..", "i18n", `${contextPath}.json`),
+      {
+        with: { type: "json" },
+      }
+    )
   ).default;
 
-  localizationCache[path] = localization;
+  localizationCache[contextPath] = localization;
 
   return localization;
 }

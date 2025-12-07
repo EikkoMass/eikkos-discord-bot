@@ -1,10 +1,14 @@
 import path from "path";
 import getAllFiles from "../core/getAllFiles.js";
 
+const actions = {};
+
 export default async (context, exceptions = []) => {
-  let actions = [];
+  if (!actions[context]) actions[context] = [];
+  if (actions[context].length > 0) return actions[context];
+
   const files = getAllFiles(
-    path.join(import.meta.dirname, "..", "..", `actions/${context}`),
+    path.join(import.meta.dirname, "..", "..", "actions", context),
     false,
     true,
   );
@@ -13,8 +17,8 @@ export default async (context, exceptions = []) => {
 
     if (exceptions.includes(actionObject.name)) continue;
 
-    actions.push(actionObject);
+    actions[context].push(actionObject);
   }
 
-  return actions;
+  return actions[context];
 };

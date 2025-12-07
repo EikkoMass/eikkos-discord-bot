@@ -1,8 +1,10 @@
 import path from "path";
 import getAllFiles from "../core/getAllFiles.js";
 
+const localContextMenus = [];
+
 export default async (exceptions = []) => {
-  let localContextMenus = [];
+  if (localContextMenus.length > 0) return localContextMenus;
 
   const contextMenuCategories = getAllFiles(
     path.join(import.meta.dirname, "..", "..", "contextMenus"),
