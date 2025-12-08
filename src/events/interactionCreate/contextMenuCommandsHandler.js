@@ -3,8 +3,7 @@ import getLocalContextMenus from "../../utils/importers/getLocalContextMenus.js"
 import { MessageFlags, EmbedBuilder, Client } from "discord.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
-
-let words;
+import cache from "../../utils/cache/commands/context-menu.js";
 
 /**
  *  @param {Client} client
@@ -13,24 +12,36 @@ let words;
 export default async (client, interaction) => {
   if (!interaction.isContextMenuCommand()) return;
 
-  words = await getLocalization(
-    interaction.locale,
-    `handlers/contextMenuCommands`,
-  );
-
   try {
-    const localCommands = await getLocalContextMenus();
-    const commandObject = localCommands.find(
-      (cmd) => cmd.name === interaction.commandName,
-    );
+    let commandObject = cache.get(interaction.commandName);
+
+    if (!commandObject) {
+      if (cache.searched(interaction.commandName)) return;
+
+      const localCommands = await getLocalContextMenus();
+      commandObject = localCommands.find(
+        (cmd) => cmd.name === interaction.commandName,
+      );
+
+      cache.set(interaction.commandName, commandObject);
+    }
 
     if (!commandObject) return;
 
+    const words = await getLocalization(
+      interaction.locale,
+      `handlers/contextMenuCommands`,
+    );
+
+    const checkers = [
+      checkDevOnly,
+      checkTestOnly,
+      checkUserPermissions,
+      checkBotPermissions,
+    ];
+
     if (
-      checkDevOnly(interaction, commandObject) &&
-      checkTestOnly(interaction, commandObject) &&
-      checkUserPermissions(interaction, commandObject) &&
-      checkBotPermissions(interaction, commandObject)
+      checkers.every((checker) => checker(interaction, commandObject, words))
     ) {
       await commandObject.callback(client, interaction);
     }

@@ -1,4 +1,3 @@
-import Highlight from "../../models/highlight.js";
 import { ButtonStyle, ButtonBuilder, ActionRowBuilder } from "discord.js";
 
 /**

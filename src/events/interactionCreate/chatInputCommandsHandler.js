@@ -3,8 +3,7 @@ import getLocalCommands from "../../utils/importers/getLocalCommands.js";
 import { MessageFlags, EmbedBuilder, Client } from "discord.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
-
-let words;
+import cache from "../../utils/cache/commands/input.js";
 
 /**
  *  @param {Client} client
@@ -12,25 +11,34 @@ let words;
  */
 export default async (client, interaction) => {
   if (!interaction.isChatInputCommand()) return;
-
-  words = await getLocalization(
-    interaction.locale,
-    `handlers/chatInputCommands`,
-  );
-
   try {
-    const localCommands = await getLocalCommands();
-    const commandObject = localCommands.find(
-      (cmd) => cmd.name === interaction.commandName,
+    let commandObject = cache.get(interaction.commandName);
+
+    if (!commandObject) {
+      if (cache.searched(interaction.commandName)) return;
+
+      const localCommands = await getLocalCommands();
+      commandObject = localCommands.find(
+        (cmd) => cmd.name === interaction.commandName,
+      );
+
+      cache.set(interaction.commandName, commandObject);
+    }
+
+    const words = await getLocalization(
+      interaction.locale,
+      `handlers/chatInputCommands`,
     );
 
-    if (!commandObject) return;
+    const checkers = [
+      checkDevOnly,
+      checkTestOnly,
+      checkUserPermissions,
+      checkBotPermissions,
+    ];
 
     if (
-      checkDevOnly(interaction, commandObject) &&
-      checkTestOnly(interaction, commandObject) &&
-      checkUserPermissions(interaction, commandObject) &&
-      checkBotPermissions(interaction, commandObject)
+      checkers.every((checker) => checker(interaction, commandObject, words))
     ) {
       await commandObject.callback(client, interaction);
     }
@@ -39,7 +47,7 @@ export default async (client, interaction) => {
   }
 };
 
-function checkDevOnly(interaction, commandObject) {
+function checkDevOnly(interaction, commandObject, words) {
   return (
     !commandObject.devOnly ||
     config.devs.includes(interaction.member.id) ||
@@ -47,7 +55,7 @@ function checkDevOnly(interaction, commandObject) {
   );
 }
 
-function checkTestOnly(interaction, commandObject) {
+function checkTestOnly(interaction, commandObject, words) {
   return (
     !commandObject.testOnly ||
     interaction.guild.id === config.testServer ||
@@ -55,7 +63,7 @@ function checkTestOnly(interaction, commandObject) {
   );
 }
 
-function checkUserPermissions(interaction, commandObject) {
+function checkUserPermissions(interaction, commandObject, words) {
   if (commandObject.permissionsRequired?.length) {
     for (const permission of commandObject.permissionsRequired) {
       if (!interaction.member.permissions.has(permission))
@@ -66,7 +74,7 @@ function checkUserPermissions(interaction, commandObject) {
   return true;
 }
 
-function checkBotPermissions(interaction, commandObject) {
+function checkBotPermissions(interaction, commandObject, words) {
   if (commandObject.botPermissions?.length) {
     const bot = interaction.guild.members.me;
 
