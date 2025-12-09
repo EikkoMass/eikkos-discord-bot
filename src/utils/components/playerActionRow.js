@@ -1,4 +1,5 @@
 import { ActionRowBuilder, ButtonStyle, ButtonBuilder } from "discord.js";
+import emojis from "../../utils/core/emojis.js";
 
 /**
  * @returns {ActionRowBuilder} actionRow
@@ -15,7 +16,7 @@ export default () => {
           hash,
         }),
       )
-      .setEmoji("<:pause:1391131987195985941>")
+      .setEmoji(emojis.get("pause"))
       .setLabel(" ")
       .setStyle(ButtonStyle.Secondary),
   );
@@ -28,7 +29,7 @@ export default () => {
           hash,
         }),
       )
-      .setEmoji("<:play:1391132094230429736>")
+      .setEmoji(emojis.get("play"))
       .setLabel(" ")
       .setStyle(ButtonStyle.Secondary),
   );
@@ -41,7 +42,7 @@ export default () => {
           hash,
         }),
       )
-      .setEmoji("<:skip_right:1391132023745286296>")
+      .setEmoji(emojis.get("skip"))
       .setLabel(" ")
       .setStyle(ButtonStyle.Secondary),
   );
@@ -54,7 +55,7 @@ export default () => {
           hash,
         }),
       )
-      .setEmoji("<:shuffle:1394480011573985391>")
+      .setEmoji(emojis.get("shuffle"))
       .setLabel(" ")
       .setStyle(ButtonStyle.Secondary),
   );
@@ -67,7 +68,7 @@ export default () => {
           hash,
         }),
       )
-      .setEmoji("<:stop:1391132125281124362>")
+      .setEmoji(emojis.get("stop"))
       .setLabel(" ")
       .setStyle(ButtonStyle.Secondary),
   );

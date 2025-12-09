@@ -1,4 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import emojis from "../../utils/core/emojis.js";
 
 function getPaginatorActionRows(customIdObj, count, page, amount = 10) {
   const minPage = 1;
@@ -18,7 +19,7 @@ function getPaginatorActionRows(customIdObj, count, page, amount = 10) {
         }),
       )
       .setDisabled(page === minPage)
-      .setEmoji("<:before:1405034897004957761>")
+      .setEmoji(emojis.get("before"))
       .setLabel(` `)
       .setStyle(ButtonStyle.Secondary),
   );
@@ -47,7 +48,7 @@ function getPaginatorActionRows(customIdObj, count, page, amount = 10) {
         }),
       )
       .setDisabled(page === maxPage)
-      .setEmoji("<:next:1405034907264094259>")
+      .setEmoji(emojis.get("next"))
       .setLabel(` `)
       .setStyle(ButtonStyle.Secondary),
   );

@@ -1,4 +1,13 @@
 {
-  "testServer": "guild-id",
-  "devs": ["dev-discord-id-1"]
+    "testServer": "guild-id",
+    "devs": ["dev-discord-id-1"],
+    "emojis": {
+        "pause":    { "id": "", "name": "" },
+        "play":     { "id": "", "name": "" },
+        "stop":     { "id": "", "name": "" },
+        "skip":     { "id": "", "name": "" },
+        "shuffle":  { "id": "", "name": "" },
+        "before":   { "id": "", "name": "" },
+        "next":     { "id": "", "name": "" }
+    }
 }
