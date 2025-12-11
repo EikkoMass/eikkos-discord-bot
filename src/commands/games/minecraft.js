@@ -6,7 +6,6 @@ import {
 } from "discord.js";
 import MinecraftServer from "../../models/minecraftServer.js";
 import editions from "../../enums/minecraft/editions.js";
-import { EmojiCache } from "canvacord";
 
 const editionDictionary = [
   {

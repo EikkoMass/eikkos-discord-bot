@@ -6,7 +6,7 @@ import {
 } from "discord.js";
 import dotenv from "dotenv";
 
-import { getToken } from "../../utils/authenticators/igdbAuth.js";
+import { getToken } from "../../utils/authenticators/igdb.js";
 import reply from "../../utils/core/replies.js";
 import { getLocalization } from "../../utils/i18n.js";
 

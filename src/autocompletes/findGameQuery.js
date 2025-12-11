@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import { getToken } from "../utils/authenticators/igdbAuth.js";
+import { getToken } from "../utils/authenticators/igdb.js";
 
 const QUANTITY_OF_RESULTS = 6;
 
