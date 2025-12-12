@@ -1,4 +1,5 @@
 import getAutocompletes from "../../utils/importers/getLocalAutocompletes.js";
+import cache from "../../utils/cache/autocomplete.js";
 import { Client } from "discord.js";
 
 /**
@@ -8,17 +9,26 @@ import { Client } from "discord.js";
 export default async (client, interaction) => {
   if (!interaction.isAutocomplete()) return;
 
-  const autocompletes = await getAutocompletes();
-  const autocomplete = autocompletes.find((cmd) => {
-    if (cmd.name !== interaction.commandName) return false;
-    if (
-      cmd.contexts &&
-      !cmd.contexts.includes(interaction.options.getSubcommand())
-    )
-      return false;
+  let autocomplete = cache.get(interaction.commandName);
 
-    return true;
-  });
+  if (!autocomplete) {
+    if (cache.searched(interaction.commandName)) return;
+
+    const autocompletes = await getAutocompletes();
+
+    autocomplete = autocompletes.find((cmd) => {
+      if (cmd.name !== interaction.commandName) return false;
+      if (
+        cmd.contexts &&
+        !cmd.contexts.includes(interaction.options.getSubcommand())
+      )
+        return false;
+
+      return true;
+    });
+
+    cache.set(interaction.commandName, autocomplete);
+  }
 
   if (!autocomplete) return;
 

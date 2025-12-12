@@ -22,7 +22,6 @@ export default {
     const targetUserId = interaction.options.get("target-user").value;
     const reason =
       interaction.options.get("reason")?.value || words.NoReasonProvided;
-    const embed = new EmbedBuilder();
 
     await interaction.deferReply();
 
