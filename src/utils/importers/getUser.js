@@ -3,7 +3,7 @@ import cache from "../cache/user.js";
 export async function getUser(client, userId) {
   let user = cache.get(userId);
 
-  if (!user) {
+  if (!user && !cache.searched(userId)) {
     try {
       user = await client.users.cache.get(userId, { force: true, cache: true });
       if (user) cache.set(userId, user);

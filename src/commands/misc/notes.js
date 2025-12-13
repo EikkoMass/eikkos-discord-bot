@@ -268,7 +268,7 @@ async function show(client, interaction) {
           context,
         },
         countNotes,
-        1,
+        minPage,
         amount,
       );
     }

@@ -94,7 +94,6 @@ async function use(client, interaction) {
 
 async function register(client, interaction) {
   const words = await getLocalization(interaction.locale, `joke`);
-  const embed = new EmbedBuilder();
   const message = interaction.options.get("message")?.value;
   const targetUserId = interaction.options.get("user")?.value;
 
