@@ -1,5 +1,6 @@
 import getActions from "../../utils/importers/getLocalActions.js";
 import { Client, EmbedBuilder, MessageFlags } from "discord.js";
+import cache from "../../utils/cache/actions.js";
 
 /**
  *  @param {Client} client
@@ -15,15 +16,21 @@ export default async (client, interaction) => {
   if (!interaction.customId) return reply(interaction, `No custom ID found`);
 
   const customId = JSON.parse(interaction.customId);
+  const cacheBase = `${context}_${customId.id}`;
   const splittedId = customId.id.split(";");
 
-  const action = actions.find((cmd) => {
-    if (!customId.id.startsWith(cmd.name + ";")) return false;
-    if (cmd.tags && !cmd.tags.every((tag) => splittedId.includes(tag)))
-      return false;
+  let action = cache.get(cacheBase);
 
-    return true;
-  });
+  if (!action && !cache.searched(cacheBase)) {
+    action = actions.find((cmd) => {
+      if (!customId.id.startsWith(cmd.name + ";")) return false;
+      if (cmd.tags && !cmd.tags.every((tag) => splittedId.includes(tag)))
+        return false;
+
+      return true;
+    });
+    cache.set(cacheBase, action);
+  }
 
   if (!action) return reply(interaction, `No action found`);
 
