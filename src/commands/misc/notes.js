@@ -137,8 +137,7 @@ async function manageNote(client, interaction, action, code = null) {
   let countNotes = await Note.countDocuments(query);
 
   if (context === Enum.PRIVATE && countNotes >= amount) {
-    await reply.message.error(interaction, words.LimitExceeded);
-    return;
+    return await reply.message.error(interaction, words.LimitExceeded);
   }
 
   const title = new TextInputBuilder()
@@ -237,7 +236,7 @@ function getTitle(words, context, action) {
 async function show(client, interaction) {
   const words = await getLocalization(interaction.locale, `notes`);
 
-  const context = interaction.options?.get("context")?.value || 1;
+  const context = interaction.options?.get("context")?.value || Enum.PRIVATE;
 
   let query = {
     guildId: interaction.guild.id,

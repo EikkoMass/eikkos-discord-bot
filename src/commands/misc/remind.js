@@ -141,8 +141,7 @@ async function status(client, interaction) {
     !Array.isArray(cache.get(cacheIdentifier)) ||
     cache.empty(cacheIdentifier)
   ) {
-    await reply.message.error(interaction, words.NotFound);
-    return;
+    return await reply.message.error(interaction, words.NotFound);
   }
 
   const reminders = cache.get(cacheIdentifier);
@@ -174,15 +173,13 @@ async function cancel(client, interaction) {
   const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;
 
   if (!Array.isArray(cache.get(cacheIdentifier))) {
-    await reply.message.error(interaction, words.NotFound);
-    return;
+    return await reply.message.error(interaction, words.NotFound);
   }
 
   let cachedReminder = cache.get(cacheIdentifier, id);
 
   if (!cachedReminder) {
-    await reply.message.error(interaction, words.NotFoundSpecified);
-    return;
+    return await reply.message.error(interaction, words.NotFoundSpecified);
   }
 
   clearTimeout(cachedReminder.timeout);
