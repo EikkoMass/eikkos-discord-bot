@@ -33,8 +33,10 @@ export default {
         await cancel(client, interaction);
         break;
       default:
-        await reply.message.info(interaction, `Reminder command not found!`);
-        return;
+        return await reply.message.info(
+          interaction,
+          `Reminder command not found!`,
+        );
     }
   },
 

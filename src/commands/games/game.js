@@ -16,8 +16,7 @@ export default {
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
       case "search":
-        await search(client, interaction);
-        return;
+        return await search(client, interaction);
       default:
         await interaction.reply({
           flags: [MessageFlags.Ephemeral],

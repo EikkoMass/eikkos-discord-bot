@@ -14,20 +14,15 @@ export default {
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
       case "all":
-        await all(client, interaction);
-        return;
+        return await all(client, interaction);
       case "version":
-        await version(client, interaction);
-        return;
+        return await version(client, interaction);
       case "repository":
-        await repository(client, interaction);
-        return;
+        return await repository(client, interaction);
       case "author":
-        await author(client, interaction);
-        return;
+        return await author(client, interaction);
       case "license":
-        await license(client, interaction);
-        return;
+        return await license(client, interaction);
       default:
         await interaction.reply({
           flags: [MessageFlags.Ephemeral],

@@ -208,8 +208,10 @@ async function choose(client, interaction) {
     let roles = await ActionRowRole.find(searchParams);
 
     if (!roles?.length) {
-      await reply.message.error(interaction, words.NoRolesRegisteredOnGuild);
-      return;
+      return await reply.message.error(
+        interaction,
+        words.NoRolesRegisteredOnGuild,
+      );
     }
 
     roles.forEach((role) =>
@@ -273,8 +275,7 @@ async function remove(client, interaction) {
       }
     }
 
-    await reply.message.success(interaction, words.RoleRemoved);
-    return;
+    return await reply.message.success(interaction, words.RoleRemoved);
   }
 
   await reply.message.error(interaction, words.NoRoleFound);

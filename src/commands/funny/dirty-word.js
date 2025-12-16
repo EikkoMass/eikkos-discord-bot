@@ -88,8 +88,7 @@ async function removeDirtyWord(client, interaction) {
   });
 
   if (dirtyWord) {
-    await reply.message.success(interaction, words.Removed);
-    return;
+    return await reply.message.success(interaction, words.Removed);
   }
 
   await reply.message.info(interaction, words.NotFound);

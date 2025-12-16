@@ -26,11 +26,9 @@ export default {
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommandGroup()) {
       case "server":
-        await server(client, interaction);
-        return;
+        return await server(client, interaction);
       case "player":
-        await player(client, interaction);
-        return;
+        return await player(client, interaction);
       default:
         await interaction.reply({
           flags: [MessageFlags.Ephemeral],
@@ -251,11 +249,9 @@ async function status(client, interaction) {
 async function server(client, interaction) {
   switch (interaction.options.getSubcommand()) {
     case "status":
-      await status(client, interaction);
-      return;
+      return await status(client, interaction);
     case "register":
-      await register(client, interaction);
-      return;
+      return await register(client, interaction);
     default:
       await interaction.reply({
         flags: [MessageFlags.Ephemeral],
@@ -276,8 +272,7 @@ async function server(client, interaction) {
 async function player(client, interaction) {
   switch (interaction.options.getSubcommand()) {
     case "skin":
-      await skin(client, interaction);
-      return;
+      return await skin(client, interaction);
     default:
       await interaction.reply({
         flags: [MessageFlags.Ephemeral],

@@ -21,8 +21,10 @@ export default {
         await rotate(client, interaction);
         break;
       default:
-        await reply.message.error(interaction, `Stream command not found!`);
-        return;
+        return await reply.message.error(
+          interaction,
+          `Stream command not found!`,
+        );
     }
   },
   name: "stream",
@@ -153,11 +155,10 @@ async function remove(client, interaction) {
       }
     }
 
-    await reply.message.success(
+    return await reply.message.success(
       interaction,
       formatMessage(words.Removed, [result.title]),
     );
-    return;
   }
 
   await reply.message.error(interaction, words.NotFound);

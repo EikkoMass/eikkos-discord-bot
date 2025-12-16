@@ -26,20 +26,18 @@ export default {
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
       case "add":
-        await add(client, interaction);
-        return;
+        return await add(client, interaction);
       case "edit":
-        await edit(client, interaction);
-        return;
+        return await edit(client, interaction);
       case "show":
-        await show(client, interaction);
-        return;
+        return await show(client, interaction);
       case "remove":
-        await remove(client, interaction);
-        return;
+        return await remove(client, interaction);
       default:
-        await reply.message.error(interaction, `Note command not found!`);
-        return;
+        return await reply.message.error(
+          interaction,
+          `Note command not found!`,
+        );
     }
   },
   name: "notes",
@@ -170,8 +168,7 @@ async function manageNote(client, interaction, action, code = null) {
       description.setValue(note.text);
       hasImg = !!note.img;
     } else {
-      await reply.message.error(interaction, words.NotFound);
-      return;
+      return await reply.message.error(interaction, words.NotFound);
     }
   }
 
@@ -272,11 +269,10 @@ async function show(client, interaction) {
       );
     }
 
-    interaction.editReply({
+    return interaction.editReply({
       embeds,
       components: row.components?.length ? [row] : [],
     });
-    return;
   }
 
   await reply.message.error(interaction, words.NotFoundInServer, {
@@ -296,8 +292,7 @@ async function remove(client, interaction) {
   const note = await Note.findByIdAndDelete(id).catch(() => {});
 
   if (note) {
-    await reply.message.success(interaction, words.Removed);
-    return;
+    return await reply.message.success(interaction, words.Removed);
   }
 
   await reply.message.error(interaction, words.NotFound);

@@ -29,10 +29,9 @@ export default {
         });
         return;
       } else if (queue.tracks.size < 2) {
-        await reply.message.error(interaction, words.NotEnoughTracks, {
+        return await reply.message.error(interaction, words.NotEnoughTracks, {
           context: "editReply",
         });
-        return;
       }
 
       queue.tracks.shuffle();
