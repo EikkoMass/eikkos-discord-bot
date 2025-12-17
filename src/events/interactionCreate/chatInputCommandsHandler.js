@@ -11,6 +11,12 @@ import cache from "../../utils/cache/commands/input.js";
  */
 export default async (client, interaction) => {
   if (!interaction.isChatInputCommand()) return;
+
+  const words = await getLocalization(
+    interaction.locale,
+    `handlers/chatInputCommands`,
+  );
+
   try {
     let commandObject = cache.get(interaction.commandName);
 
@@ -24,11 +30,6 @@ export default async (client, interaction) => {
 
       cache.set(interaction.commandName, commandObject);
     }
-
-    const words = await getLocalization(
-      interaction.locale,
-      `handlers/chatInputCommands`,
-    );
 
     const checkers = [
       checkDevOnly,

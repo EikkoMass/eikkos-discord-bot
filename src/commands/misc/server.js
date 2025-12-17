@@ -1,4 +1,4 @@
-import { Client, ApplicationCommandOptionType } from "discord.js";
+import { Client, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
 import replies from "../../utils/core/replies.js";
 
 export default {
@@ -11,10 +11,11 @@ export default {
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
       case "image":
-        await image(client, interaction);
-        break;
+        return await image(client, interaction);
+      case "info":
+        return await info(client, interaction);
       default:
-        return await reply.message.error(
+        return await replies.message.error(
           interaction,
           `Server command not found!`,
         );
@@ -25,6 +26,11 @@ export default {
     {
       name: "image",
       description: "image from your server",
+      type: ApplicationCommandOptionType.Subcommand,
+    },
+    {
+      name: "info",
+      description: "info about your server",
       type: ApplicationCommandOptionType.Subcommand,
     },
   ],
@@ -45,4 +51,25 @@ async function image(client, interaction) {
     return await replies.message.error(interaction, "Server icon not found!");
 
   await interaction.reply({ files: [image] });
+}
+
+async function info(client, interaction) {
+  const guild = interaction.guild;
+
+  const embed = new EmbedBuilder()
+    .setTitle(guild.name)
+    .setFields([
+      { name: "Owner", value: `<@${guild.ownerId}>`, inline: true },
+      { name: "Members", value: `${guild.memberCount}`, inline: true },
+      { name: " ", value: ` ` },
+      {
+        name: "Events",
+        value: `${guild.scheduledEvents.cache.size}`,
+        inline: true,
+      },
+      { name: "Locale", value: `${guild.preferredLocale}`, inline: true },
+    ])
+    .setThumbnail(guild.iconURL({ size: 1024 }));
+
+  await interaction.reply({ embeds: [embed] });
 }
