@@ -44,7 +44,6 @@ export default {
           name: "second",
           description: "The second user you want to match",
           type: ApplicationCommandOptionType.User,
-          required: true,
         },
       ],
     },
@@ -63,7 +62,6 @@ export default {
           name: "second",
           description: "The second user you want to match",
           type: ApplicationCommandOptionType.User,
-          required: true,
         },
       ],
     },
@@ -78,7 +76,8 @@ async function love(client, interaction) {
   const words = await getLocalization(interaction.locale, `affinity`);
 
   const user1 = interaction.options?.get("first").value;
-  const user2 = interaction.options?.get("second").value;
+  const user2 =
+    interaction.options?.get("second")?.value || interaction.user.id;
 
   const results = affinityCalc(
     "love",
@@ -110,7 +109,8 @@ async function hate(client, interaction) {
   const words = await getLocalization(interaction.locale, `affinity`);
 
   const user1 = interaction.options?.get("first").value;
-  const user2 = interaction.options?.get("second").value;
+  const user2 =
+    interaction.options?.get("second")?.value || interaction.user.id;
 
   const results = affinityCalc(
     "hate",

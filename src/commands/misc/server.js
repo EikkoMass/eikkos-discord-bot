@@ -59,14 +59,14 @@ async function info(client, interaction) {
   const embed = new EmbedBuilder()
     .setTitle(guild.name)
     .setFields([
-      { name: "Owner", value: `<@${guild.ownerId}>`, inline: true },
       { name: "Members", value: `${guild.memberCount}`, inline: true },
-      { name: " ", value: ` ` },
       {
         name: "Events",
         value: `${guild.scheduledEvents.cache.size}`,
         inline: true,
       },
+      { name: " ", value: ` ` },
+      { name: "Owner", value: `<@${guild.ownerId}>`, inline: true },
       { name: "Locale", value: `${guild.preferredLocale}`, inline: true },
     ])
     .setThumbnail(guild.iconURL({ size: 1024 }));
