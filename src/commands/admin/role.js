@@ -15,97 +15,95 @@ import reply from "../../utils/core/replies.js";
 
 import { getLocalization } from "../../utils/i18n.js";
 
+const OPTS = {
+  add: {
+    name: "add",
+    description: "Add / edit an role to be selected",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "role",
+        required: true,
+        description: "The role that use want to add",
+        type: ApplicationCommandOptionType.Role,
+      },
+      {
+        name: "label",
+        required: true,
+        description: "The name of the role",
+        type: ApplicationCommandOptionType.String,
+      },
+      {
+        name: "style",
+        description: "The role that use want to add",
+        type: ApplicationCommandOptionType.Number,
+        autocomplete: true,
+      },
+      {
+        name: "context",
+        description: "What's the button context",
+        type: ApplicationCommandOptionType.String,
+      },
+    ],
+  },
+  remove: {
+    name: "remove",
+    description: "Removes a role to the selection",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "role",
+        required: true,
+        description: "The role that use want to remove",
+        type: ApplicationCommandOptionType.Role,
+      },
+      {
+        name: "context",
+        description: "What's the button context",
+        type: ApplicationCommandOptionType.String,
+        autocomplete: true,
+      },
+    ],
+  },
+  choose: {
+    name: "choose",
+    description: "Chooses an role around the added",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "context",
+        description: "What's the button context",
+        type: ApplicationCommandOptionType.String,
+        autocomplete: true,
+      },
+    ],
+  },
+};
+
 export default {
+  name: "role",
+  description: "Set a new role.",
+  options: [OPTS.add, OPTS.remove, OPTS.choose],
+
   /**
    *  @param {Client} client
    *  @param  interaction
    */
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "choose":
-        await choose(client, interaction);
-        break;
-      case "add":
-        await add(client, interaction);
-        break;
-      case "remove":
-        await remove(client, interaction);
-        break;
+      case OPTS.choose.name:
+        return await choose(client, interaction);
+      case OPTS.add.name:
+        return await add(client, interaction);
+      case OPTS.remove.name:
+        return await remove(client, interaction);
       default:
-        await interaction.reply({
-          flags: MessageFlags.Ephemeral,
-          content: `Role command not found!`,
-        });
-        return;
+        return await reply.message.error(
+          interaction,
+          `Role command not found!`,
+        );
     }
   },
-
-  name: "role",
-  description: "Set a new role.",
-  options: [
-    {
-      name: "add",
-      description: "Add / edit an role to be selected",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "role",
-          required: true,
-          description: "The role that use want to add",
-          type: ApplicationCommandOptionType.Role,
-        },
-        {
-          name: "label",
-          required: true,
-          description: "The name of the role",
-          type: ApplicationCommandOptionType.String,
-        },
-        {
-          name: "style",
-          description: "The role that use want to add",
-          type: ApplicationCommandOptionType.Number,
-          autocomplete: true,
-        },
-        {
-          name: "context",
-          description: "What's the button context",
-          type: ApplicationCommandOptionType.String,
-        },
-      ],
-    },
-    {
-      name: "remove",
-      description: "Removes a role to the selection",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "role",
-          required: true,
-          description: "The role that use want to remove",
-          type: ApplicationCommandOptionType.Role,
-        },
-        {
-          name: "context",
-          description: "What's the button context",
-          type: ApplicationCommandOptionType.String,
-          autocomplete: true,
-        },
-      ],
-    },
-    {
-      name: "choose",
-      description: "Chooses an role around the added",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "context",
-          description: "What's the button context",
-          type: ApplicationCommandOptionType.String,
-          autocomplete: true,
-        },
-      ],
-    },
-  ],
 };
 
 /**
@@ -125,19 +123,11 @@ async function add(client, interaction) {
       styleParam &&
       (styleParam < ButtonStyle.Primary || styleParam > ButtonStyle.Danger)
     ) {
-      await interaction.reply({
-        flags: MessageFlags.Ephemeral,
-        content: words.InvalidStyleOption,
-      });
-      return;
+      return await reply.message.error(interaction, words.InvalidStyleOption);
     }
 
     if (!interaction.member.permissions.has(PermissionFlagsBits.ManageRoles)) {
-      await interaction.reply({
-        flags: MessageFlags.Ephemeral,
-        content: words.CannotManageRoles,
-      });
-      return;
+      return await reply.message.error(interaction, words.CannotManageRoles);
     }
 
     const searchParams = { guildId: interaction.guild.id, roleId: roleParam };
@@ -278,5 +268,5 @@ async function remove(client, interaction) {
     return await reply.message.success(interaction, words.RoleRemoved);
   }
 
-  await reply.message.error(interaction, words.NoRoleFound);
+  return await reply.message.error(interaction, words.NoRoleFound);
 }

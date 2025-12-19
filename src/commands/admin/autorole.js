@@ -11,6 +11,27 @@ import reply from "../../utils/core/replies.js";
 
 import { getLocalization } from "../../utils/i18n.js";
 
+const OPTS = {
+  configure: {
+    name: "configure",
+    description: "Configure your auto-role for this server.",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "role",
+        description: "The role you want users to get on join.",
+        type: ApplicationCommandOptionType.Role,
+        required: true,
+      },
+    ],
+  },
+  disable: {
+    name: "disable",
+    description: "Disable auto-role in this server.",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+};
+
 export default {
   /**
    *  @param {Client} client
@@ -18,10 +39,10 @@ export default {
    */
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "configure":
+      case OPTS.configure.name:
         await configure(client, interaction);
         break;
-      case "disable":
+      case OPTS.disable.name:
         await disable(client, interaction);
         break;
       default:
@@ -37,26 +58,7 @@ export default {
 
   name: "autorole",
   description: "Manage the server auto-role",
-  options: [
-    {
-      name: "configure",
-      description: "Configure your auto-role for this server.",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "role",
-          description: "The role you want users to get on join.",
-          type: ApplicationCommandOptionType.Role,
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "disable",
-      description: "Disable auto-role in this server.",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-  ],
+  options: [OPTS.configure, OPTS.disable],
   permissionsRequired: [PermissionFlagsBits.Administrator],
   botPermissions: [PermissionFlagsBits.ManageRoles],
 };

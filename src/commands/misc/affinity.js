@@ -8,15 +8,54 @@ import {
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import { randomize } from "../../utils/core/randomizer.js";
 
+const OPTS = {
+  love: {
+    name: "love",
+    description: "How much love they share",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "first",
+        description: "The first user you want to match",
+        type: ApplicationCommandOptionType.User,
+        required: true,
+      },
+      {
+        name: "second",
+        description: "The second user you want to match",
+        type: ApplicationCommandOptionType.User,
+      },
+    ],
+  },
+  hate: {
+    name: "hate",
+    description: "How much they want to crush each other apart",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "first",
+        description: "The first user you want to match",
+        type: ApplicationCommandOptionType.User,
+        required: true,
+      },
+      {
+        name: "second",
+        description: "The second user you want to match",
+        type: ApplicationCommandOptionType.User,
+      },
+    ],
+  },
+};
+
 export default {
   name: "affinity",
   description: "Calculate the affinity (love / hate) between 2 users",
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "love":
+      case OPTS.love.name:
         await love(client, interaction);
         break;
-      case "hate":
+      case OPTS.hate.name:
         await hate(client, interaction);
         break;
       default:
@@ -28,44 +67,7 @@ export default {
     }
   },
 
-  options: [
-    {
-      name: "love",
-      description: "How much love they share",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "first",
-          description: "The first user you want to match",
-          type: ApplicationCommandOptionType.User,
-          required: true,
-        },
-        {
-          name: "second",
-          description: "The second user you want to match",
-          type: ApplicationCommandOptionType.User,
-        },
-      ],
-    },
-    {
-      name: "hate",
-      description: "How much they want to crush each other apart",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "first",
-          description: "The first user you want to match",
-          type: ApplicationCommandOptionType.User,
-          required: true,
-        },
-        {
-          name: "second",
-          description: "The second user you want to match",
-          type: ApplicationCommandOptionType.User,
-        },
-      ],
-    },
-  ],
+  options: [OPTS.love, OPTS.hate],
 };
 
 /**
