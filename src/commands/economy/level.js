@@ -8,8 +8,19 @@ import { Font, RankCardBuilder } from "canvacord";
 import xp from "../../utils/xp.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
+import replies from "../../utils/core/replies.js";
 
 export default {
+  name: "level",
+  description: "Shows your/someone's level",
+  options: [
+    {
+      name: "target-user",
+      description: "The user whose level you want to see.",
+      type: ApplicationCommandOptionType.Mentionable,
+    },
+  ],
+
   /**
    *
    *  @param {Client} client
@@ -19,8 +30,7 @@ export default {
     const words = await getLocalization(interaction.locale, `level`);
 
     if (!interaction.inGuild()) {
-      interaction.reply(words.ServerOnly);
-      return;
+      return await replies.message.error(interaction, words.ServerOnly);
     }
 
     await interaction.deferReply();
@@ -35,12 +45,15 @@ export default {
     });
 
     if (!fetchLevel) {
-      interaction.editReply(
+      return await replies.message.error(
+        interaction,
         mentionedUserId
           ? formatMessage(words.UserNoLevels, [targetUserObj.user.tag])
           : words.NoLevels,
+        {
+          context: "editReply",
+        },
       );
-      return;
     }
 
     let allLevels = await Level.find({ guildId: interaction.guild.id }).select(
@@ -73,14 +86,4 @@ export default {
 
     interaction.editReply({ files: [attachment] });
   },
-
-  name: "level",
-  description: "Shows your/someone's level",
-  options: [
-    {
-      name: "target-user",
-      description: "The user whose level you want to see.",
-      type: ApplicationCommandOptionType.Mentionable,
-    },
-  ],
 };

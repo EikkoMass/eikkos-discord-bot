@@ -3,9 +3,14 @@ import { Client, MessageFlags } from "discord.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
+import replies from "../../utils/core/replies.js";
+
 const dailyAmount = 1000;
 
 export default {
+  name: "daily",
+  description: "Collect your dailies!",
+
   /**
    *
    * @param {Client} client
@@ -15,11 +20,7 @@ export default {
     const words = await getLocalization(interaction.locale, "daily");
 
     if (!interaction.inGuild()) {
-      interaction.reply({
-        content: words.OnlyInsideServer,
-        flags: [MessageFlags.Ephemeral],
-      });
-      return;
+      return replies.message.error(interaction, words.OnlyInsideServer);
     }
 
     try {
@@ -39,7 +40,13 @@ export default {
         const currentDate = new Date().toDateString();
 
         if (lastDailyDate === currentDate) {
-          return interaction.editReply(words.AlreadyCollected);
+          return await replies.message.info(
+            interaction,
+            words.AlreadyCollected,
+            {
+              context: "editReply",
+            },
+          );
         }
 
         user.lastDaily = new Date();
@@ -50,14 +57,16 @@ export default {
       user.balance += dailyAmount;
       await user.save();
 
-      interaction.editReply(
+      return await replies.message.info(
+        interaction,
         formatMessage(words.AddedToBalance, [dailyAmount, user.balance]),
+        {
+          context: "editReply",
+        },
       );
     } catch (e) {
+      await replies.message.error(interaction, `Error with /daily`);
       console.log(`Error with /daily: ${e}`);
     }
   },
-
-  name: "daily",
-  description: "Collect your dailies!",
 };
