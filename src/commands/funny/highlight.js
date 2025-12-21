@@ -3,7 +3,6 @@ import {
   PermissionFlagsBits,
   ApplicationCommandOptionType,
   ChannelType,
-  MessageFlags,
   EmbedBuilder,
   Colors,
 } from "discord.js";
@@ -17,6 +16,44 @@ import Highlight from "../../models/highlight.js";
 
 import highlightGuildCache from "../../utils/cache/highlight-guild.js";
 
+const OPTS = {
+  enable: {
+    name: "enable",
+    description: "turn on the highlight feature",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+  disable: {
+    name: "disable",
+    description: "turn off the highlight feature",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+  config: {
+    name: "config",
+    description: "configurate the highlighting event",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "channel",
+        description: "the channel to highlight messages in",
+        type: ApplicationCommandOptionType.Channel,
+        channel_types: [ChannelType.GuildText],
+        required: true,
+      },
+      {
+        name: "quantity",
+        description: "amount of reactions to create the highlight (min 4)",
+        type: ApplicationCommandOptionType.Integer,
+        min_value: 4,
+      },
+    ],
+  },
+  status: {
+    name: "status",
+    description: "shows the status of the guild's highlights",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+};
+
 export default {
   name: "highlight",
   description: "immortalize a message with enough reactions",
@@ -26,63 +63,22 @@ export default {
    */
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "enable":
-        await enable(client, interaction);
-        break;
-      case "disable":
-        await disable(client, interaction);
-        break;
-      case "status":
-        await status(client, interaction);
-        break;
-      case "config":
-        await config(client, interaction);
-        break;
+      case OPTS.enable.name:
+        return await enable(client, interaction);
+      case OPTS.disable.name:
+        return await disable(client, interaction);
+      case OPTS.status.name:
+        return await status(client, interaction);
+      case OPTS.config.name:
+        return await config(client, interaction);
       default:
-        await interaction.reply({
-          flags: [MessageFlags.Ephemeral],
-          content: `Dirty Word command not found!`,
-        });
-        return;
+        return await reply.message.error(
+          interaction,
+          `Dirty Word command not found!`,
+        );
     }
   },
-  options: [
-    {
-      name: "enable",
-      description: "turn on the highlight feature",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-    {
-      name: "disable",
-      description: "turn off the highlight feature",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-    {
-      name: "config",
-      description: "configurate the highlighting event",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "channel",
-          description: "the channel to highlight messages in",
-          type: ApplicationCommandOptionType.Channel,
-          channel_types: [ChannelType.GuildText],
-          required: true,
-        },
-        {
-          name: "quantity",
-          description: "amount of reactions to create the highlight (min 4)",
-          type: ApplicationCommandOptionType.Integer,
-          min_value: 4,
-        },
-      ],
-    },
-    {
-      name: "status",
-      description: "shows the status of the guild's highlights",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-  ],
+  options: [OPTS.enable, OPTS.disable, OPTS.status, OPTS.config],
   permissionsRequired: [PermissionFlagsBits.ManageChannels],
 };
 
@@ -103,11 +99,11 @@ async function disable(client, interaction) {
   );
 
   if (!result) {
-    return await reply(interaction, words.NotConfigured);
+    return await reply.message.error(interaction, words.NotConfigured);
   }
 
   highlightGuildCache.set(interaction.guild.id, result);
-  return await reply(interaction, words.Disabled);
+  return await reply.message.success(interaction, words.Disabled);
 }
 
 async function enable(client, interaction) {
@@ -117,7 +113,7 @@ async function enable(client, interaction) {
   });
 
   if (!highlightGuild) {
-    return await reply(interaction, words.NotConfigured);
+    return await reply.message.error(interaction, words.NotConfigured);
   }
 
   const channel = await interaction.guild.channels.fetch(

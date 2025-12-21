@@ -1,9 +1,4 @@
-import {
-  Client,
-  ApplicationCommandOptionType,
-  EmbedBuilder,
-  MessageFlags,
-} from "discord.js";
+import { Client, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
 
 import reply from "../../utils/core/replies.js";
 import { getLocalization } from "../../utils/i18n.js";
@@ -11,6 +6,15 @@ import { getLocalization } from "../../utils/i18n.js";
 export default {
   name: "yesno",
   description: "make a question of yes / no to the bot",
+  options: [
+    {
+      name: "doubt",
+      description: "the question you want to do",
+      type: ApplicationCommandOptionType.String,
+      required: true,
+    },
+  ],
+
   /**
    *  @param {Client} client
    *  @param  interaction
@@ -45,12 +49,4 @@ export default {
 
     await reply.message.error(interaction, words.NotAnswering);
   },
-  options: [
-    {
-      name: "doubt",
-      description: "the question you want to do",
-      type: ApplicationCommandOptionType.String,
-      required: true,
-    },
-  ],
 };

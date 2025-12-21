@@ -12,7 +12,46 @@ import reply from "../../utils/core/replies.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
+const OPTS = {
+  current: {
+    name: "current",
+    description: "current word registered on this guild",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+  register: {
+    name: "register",
+    description: "register an bad word on this guild",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "word",
+        description: "bad word",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+      {
+        name: "type",
+        description: "How you can identify the word?",
+        type: ApplicationCommandOptionType.Integer,
+        autocomplete: true,
+      },
+    ],
+  },
+  remove: {
+    name: "remove",
+    description: "remove the word",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+};
+
 export default {
+  name: "dirty-word",
+  description: "Sets an word to auto-ban the user who write.",
+  options: [OPTS.current, OPTS.register, OPTS.remove],
+
+  permissionsRequired: [PermissionFlagsBits.KickMembers],
+  botPermissions: [PermissionFlagsBits.KickMembers],
+
   /**
    *
    *  @param {Client} client
@@ -20,63 +59,23 @@ export default {
    */
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "current":
-        await getCurrentDirtyWord(client, interaction);
-        break;
-      case "register":
-        await setDirtyWord(client, interaction);
-        break;
-      case "remove":
-        await removeDirtyWord(client, interaction);
-        break;
+      case OPTS.current.name:
+        return await getCurrentDirtyWord(client, interaction);
+      case OPTS.register.name:
+        return await setDirtyWord(client, interaction);
+      case OPTS.remove.name:
+        return await removeDirtyWord(client, interaction);
       default:
-        await interaction.reply({
-          flags: [MessageFlags.Ephemeral],
-          content: `Dirty Word command not found!`,
-        });
-        return;
+        return await reply.message.error(
+          interaction,
+          `Dirty Word command not found!`,
+        );
     }
   },
-  options: [
-    {
-      name: "current",
-      description: "current word registered on this guild",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-    {
-      name: "register",
-      description: "register an bad word on this guild",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "word",
-          description: "bad word",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-        {
-          name: "type",
-          description: "How you can identify the word?",
-          type: ApplicationCommandOptionType.Integer,
-          autocomplete: true,
-        },
-      ],
-    },
-    {
-      name: "remove",
-      description: "remove the word",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-  ],
-  name: "dirty-word",
-  description: "Sets an word to auto-ban the user who write.",
-  permissionsRequired: [PermissionFlagsBits.KickMembers],
-  botPermissions: [PermissionFlagsBits.KickMembers],
 };
 
 async function removeDirtyWord(client, interaction) {
   const words = await getLocalization(interaction.locale, "dirty-word");
-  const embed = new EmbedBuilder();
 
   let indexes = cache.index.find(interaction.guild.id);
 

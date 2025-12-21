@@ -12,6 +12,17 @@ import reply from "../../utils/core/replies.js";
 export default {
   name: "nuke",
   description: "nukes away an voice channel",
+  options: [
+    {
+      name: "channel",
+      description: "the channel you want to be nuked",
+      type: ApplicationCommandOptionType.Channel,
+      channel_types: [ChannelType.GuildVoice, ChannelType.GuildStageVoice],
+    },
+  ],
+  permissionsRequired: [PermissionFlagsBits.ManageChannels],
+  botPermissions: [PermissionFlagsBits.ManageChannels],
+
   /**
    *  @param {Client} client
    *  @param  interaction
@@ -28,8 +39,9 @@ export default {
       return await reply.message.error(interaction, words.VCRequired);
     } else if (
       channel &&
-      channel.type !== ChannelType.GuildVoice &&
-      channel.type !== ChannelType.GuildStageVoice
+      ![ChannelType.GuildVoice, ChannelType.GuildStageVoice].includes(
+        channel.type,
+      )
     ) {
       return await reply.message.error(interaction, words.IsNotVC);
     } else if (
@@ -46,14 +58,4 @@ export default {
     );
     channel.delete();
   },
-  options: [
-    {
-      name: "channel",
-      description: "the channel you want to be nuked",
-      type: ApplicationCommandOptionType.Channel,
-      channel_types: [ChannelType.GuildVoice],
-    },
-  ],
-  permissionsRequired: [PermissionFlagsBits.ManageChannels],
-  botPermissions: [PermissionFlagsBits.ManageChannels],
 };

@@ -1,79 +1,72 @@
-import {
-  Client,
-  ApplicationCommandOptionType,
-  MessageFlags,
-  EmbedBuilder,
-} from "discord.js";
+import { Client, ApplicationCommandOptionType } from "discord.js";
 import Joke from "../../models/joke.js";
 
 import reply from "../../utils/core/replies.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
+const OPTS = {
+  for: {
+    name: "for",
+    description: "jokes around about...",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "user",
+        description: "Who will receive the joke?",
+        type: ApplicationCommandOptionType.User,
+        required: true,
+      },
+    ],
+  },
+  register: {
+    name: "register",
+    description: "Register a joke about someone.",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "user",
+        description: "Who will receive the joke?",
+        type: ApplicationCommandOptionType.User,
+        required: true,
+      },
+      {
+        name: "message",
+        description: "What is the joke?",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+    ],
+  },
+};
+
 export default {
   name: "joke",
   description: "Talk the joke you registered.",
+  options: [OPTS.for, OPTS.register],
+
   /**
    *  @param {Client} client
    *  @param  interaction
    */
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "for":
-        use(client, interaction);
-        break;
-      case "register":
-        register(client, interaction);
-        break;
+      case OPTS.for.name:
+        return use(client, interaction);
+      case OPTS.register.name:
+        return register(client, interaction);
       default:
-        await interaction.reply({
-          flags: [MessageFlags.Ephemeral],
-          content: `Joke command not found!`,
-        });
-        return;
+        return await reply.message.error(
+          interaction,
+          `Joke command not found!`,
+        );
     }
   },
-
-  options: [
-    {
-      name: "for",
-      description: "jokes around about...",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "user",
-          description: "Who will receive the joke?",
-          type: ApplicationCommandOptionType.User,
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "register",
-      description: "Register a joke about someone.",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "user",
-          description: "Who will receive the joke?",
-          type: ApplicationCommandOptionType.User,
-          required: true,
-        },
-        {
-          name: "message",
-          description: "What is the joke?",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-      ],
-    },
-  ],
 };
 
 async function use(client, interaction) {
   const words = await getLocalization(interaction.locale, `joke`);
 
-  const embed = new EmbedBuilder();
   const targetUserId = interaction.options.get("user")?.value;
 
   let joke = await Joke.findOne({
@@ -82,7 +75,7 @@ async function use(client, interaction) {
     targetUserId,
   });
 
-  if (joke && joke.message) {
+  if (joke?.message) {
     return await reply.message.base(
       interaction,
       joke.message.replace("{user}", `<@${targetUserId}>`),
