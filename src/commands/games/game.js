@@ -12,37 +12,38 @@ import { getLocalization } from "../../utils/i18n.js";
 
 dotenv.config();
 
+const OPTS = {
+  search: {
+    name: "search",
+    description: "tries to find a game",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "query",
+        description: "the game name you want to search",
+        type: ApplicationCommandOptionType.Number,
+        required: true,
+        autocomplete: true,
+      },
+    ],
+  },
+};
+
 export default {
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "search":
+      case OPTS.search.name:
         return await search(client, interaction);
       default:
-        await interaction.reply({
-          flags: [MessageFlags.Ephemeral],
-          content: `Game command not found!`,
-        });
-        return;
+        return await reply.message.error(
+          interaction,
+          `Game command not found!`,
+        );
     }
   },
   name: "game",
   description: "Command to search games // IGDB",
-  options: [
-    {
-      name: "search",
-      description: "tries to find a game",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "query",
-          description: "the game name you want to search",
-          type: ApplicationCommandOptionType.Number,
-          required: true,
-          autocomplete: true,
-        },
-      ],
-    },
-  ],
+  options: [OPTS.search],
 };
 
 /**
@@ -55,7 +56,7 @@ async function search(client, interaction) {
 
   const token = getToken();
 
-  if (query === -1 || !process.env.IGDB_CLIENT_ID || !token.access_token) {
+  if (query === -1 || !process.env.IGDB_CLIENT_ID || !token?.access_token) {
     return await reply.message.info(
       interaction,
       words.EnvironmentVariableNotDefined,

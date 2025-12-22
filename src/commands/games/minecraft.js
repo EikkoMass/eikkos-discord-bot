@@ -7,6 +7,8 @@ import {
 import MinecraftServer from "../../models/minecraftServer.js";
 import editions from "../../enums/minecraft/editions.js";
 
+import replies from "../../utils/core/replies.js";
+
 const editionDictionary = [
   {
     name: "Java",
@@ -18,6 +20,67 @@ const editionDictionary = [
   },
 ];
 
+const OPTS = {
+  server: {
+    name: "server",
+    description: "Info about the server registered to the guild",
+    type: ApplicationCommandOptionType.SubcommandGroup,
+    options: [
+      {
+        name: "status",
+        description: "Info about the server registered to the guild",
+        type: ApplicationCommandOptionType.Subcommand,
+      },
+      {
+        name: "register",
+        description: "Insert / Edit a server you want to see info about",
+        type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: "address",
+            description:
+              "Server address you want to register, example: myserver.play.io",
+            type: ApplicationCommandOptionType.String,
+            required: true,
+          },
+          {
+            name: "edition",
+            description: "What's the server edition?",
+            type: ApplicationCommandOptionType.Integer,
+            required: true,
+            autocomplete: true,
+          },
+          {
+            name: "name",
+            description: "Server's name",
+            type: ApplicationCommandOptionType.String,
+          },
+        ],
+      },
+    ],
+  },
+  player: {
+    name: "player",
+    description: "Info about the server registered to the guild",
+    type: ApplicationCommandOptionType.SubcommandGroup,
+    options: [
+      {
+        name: "skin",
+        description: "Get the player skin",
+        type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: "query",
+            description: "The player name",
+            type: ApplicationCommandOptionType.String,
+            required: true,
+          },
+        ],
+      },
+    ],
+  },
+};
+
 export default {
   /**
    *  @param {Client} client
@@ -25,82 +88,20 @@ export default {
    */
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommandGroup()) {
-      case "server":
+      case OPTS.server.name:
         return await server(client, interaction);
-      case "player":
+      case OPTS.player.name:
         return await player(client, interaction);
       default:
-        await interaction.reply({
-          flags: [MessageFlags.Ephemeral],
-          embeds: [
-            new EmbedBuilder().setDescription(`Minecraft command not found!`),
-          ],
-        });
-        return;
+        return await replies.message.error(
+          interaction,
+          `Minecraft command not found!`,
+        );
     }
   },
   name: "minecraft",
   description: "Show info about the bot.",
-  options: [
-    {
-      name: "server",
-      description: "Info about the server registered to the guild",
-      type: ApplicationCommandOptionType.SubcommandGroup,
-      options: [
-        {
-          name: "status",
-          description: "Info about the server registered to the guild",
-          type: ApplicationCommandOptionType.Subcommand,
-        },
-        {
-          name: "register",
-          description: "Insert / Edit a server you want to see info about",
-          type: ApplicationCommandOptionType.Subcommand,
-          options: [
-            {
-              name: "address",
-              description:
-                "Server address you want to register, example: myserver.play.io",
-              type: ApplicationCommandOptionType.String,
-              required: true,
-            },
-            {
-              name: "edition",
-              description: "What's the server edition?",
-              type: ApplicationCommandOptionType.Integer,
-              required: true,
-              autocomplete: true,
-            },
-            {
-              name: "name",
-              description: "Server's name",
-              type: ApplicationCommandOptionType.String,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      name: "player",
-      description: "Info about the server registered to the guild",
-      type: ApplicationCommandOptionType.SubcommandGroup,
-      options: [
-        {
-          name: "skin",
-          description: "Get the player skin",
-          type: ApplicationCommandOptionType.Subcommand,
-          options: [
-            {
-              name: "query",
-              description: "The player name",
-              type: ApplicationCommandOptionType.String,
-              required: true,
-            },
-          ],
-        },
-      ],
-    },
-  ],
+  options: [OPTS.server, OPTS.player],
 };
 
 /**
@@ -123,15 +124,10 @@ async function register(client, interaction) {
       server.name = name || server.name;
 
       await server.save();
-      await interaction.reply({
-        embeds: [
-          new EmbedBuilder().setDescription(
-            `Minecraft server register edited successfully!`,
-          ),
-        ],
-        flags: [MessageFlags.Ephemeral],
-      });
-      return;
+      return await replies.message.success(
+        interaction,
+        `Minecraft server register edited successfully!`,
+      );
     }
 
     server = new MinecraftServer({
@@ -141,14 +137,10 @@ async function register(client, interaction) {
       name,
     });
     await server.save();
-    await interaction.reply({
-      embeds: [
-        new EmbedBuilder().setDescription(
-          `Minecraft server created successfully!`,
-        ),
-      ],
-      flags: [MessageFlags.Ephemeral],
-    });
+    return await replies.message.success(
+      interaction,
+      `Minecraft server created successfully!`,
+    );
   } catch (e) {
     console.log(e);
   }
@@ -164,15 +156,10 @@ async function status(client, interaction) {
   });
 
   if (!server) {
-    await interaction.reply({
-      flags: [MessageFlags.Ephemeral],
-      embeds: [
-        new EmbedBuilder().setDescription(
-          `No minecraft server registered in this guild, create a new one with the command '/minecraft server register'.`,
-        ),
-      ],
-    });
-    return;
+    return await replies.message.error(
+      interaction,
+      `No minecraft server registered in this guild, create a new one with the command \`/minecraft server register\`.`,
+    );
   }
 
   const path =
@@ -185,13 +172,10 @@ async function status(client, interaction) {
 
   if (serverInfo.error) {
     console.log(serverInfo.error);
-    await interaction.reply({
-      embeds: [
-        new EmbedBuilder().setDescription(`Error on fetching server info!`),
-      ],
-      flags: [MessageFlags.Ephemeral],
-    });
-    return;
+    return await replies.message.error(
+      interaction,
+      `Error on fetching server info!`,
+    );
   }
 
   let attachment = null;
@@ -253,15 +237,10 @@ async function server(client, interaction) {
     case "register":
       return await register(client, interaction);
     default:
-      await interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        embeds: [
-          new EmbedBuilder().setDescription(
-            `Minecraft server command not found!`,
-          ),
-        ],
-      });
-      return;
+      return await replies.message.error(
+        interaction,
+        `Minecraft server command not found!`,
+      );
   }
 }
 
@@ -274,15 +253,10 @@ async function player(client, interaction) {
     case "skin":
       return await skin(client, interaction);
     default:
-      await interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        embeds: [
-          new EmbedBuilder().setDescription(
-            `Minecraft player command not found!`,
-          ),
-        ],
-      });
-      return;
+      return await replies.message.error(
+        interaction,
+        `Minecraft player command not found!`,
+      );
   }
 }
 
@@ -297,27 +271,19 @@ async function skin(client, interaction) {
   const res = await fetch(`https://playerdb.co/api/player/minecraft/${name}`);
 
   if (!res.ok) {
-    await interaction.reply({
-      embeds: [
-        new EmbedBuilder().setDescription(`Error on fetching player info!`),
-      ],
-      flags: [MessageFlags.Ephemeral],
-    });
-    return;
+    return await replies.message.error(
+      interaction,
+      `Error on fetching player info!`,
+    );
   }
 
   const json = await res.json();
 
   if (!json.success) {
-    await interaction.reply({
-      embeds: [
-        new EmbedBuilder().setDescription(
-          `Could not find the player requested!`,
-        ),
-      ],
-      flags: [MessageFlags.Ephemeral],
-    });
-    return;
+    return await replies.message.error(
+      interaction,
+      `Could not find the player requested!`,
+    );
   }
 
   await interaction.reply(json.data.player.skin_texture);
