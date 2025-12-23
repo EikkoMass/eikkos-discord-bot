@@ -10,56 +10,57 @@ import reply from "../../utils/core/replies.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
+const OPTS = {
+  all: {
+    name: "all",
+    description: "Show all information possible",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+  version: {
+    name: "version",
+    description: "Current version of the bot",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+  license: {
+    name: "license",
+    description: "Current license of the bot",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+  author: {
+    name: "author",
+    description: "Author of the project",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+  repository: {
+    name: "repository",
+    description: "Current repository of the bot",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+};
+
 export default {
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "all":
+      case OPTS.all.name:
         return await all(client, interaction);
-      case "version":
+      case OPTS.version.name:
         return await version(client, interaction);
-      case "repository":
+      case OPTS.repository.name:
         return await repository(client, interaction);
-      case "author":
+      case OPTS.author.name:
         return await author(client, interaction);
-      case "license":
+      case OPTS.license.name:
         return await license(client, interaction);
       default:
-        await interaction.reply({
-          flags: [MessageFlags.Ephemeral],
-          content: `Info command not found!`,
-        });
-        return;
+        return await reply.message.error(
+          interaction,
+          `Info command not found!`,
+        );
     }
   },
   name: "info",
   description: "Show info about the bot.",
-  options: [
-    {
-      name: "all",
-      description: "Show all information possible",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-    {
-      name: "version",
-      description: "Current version of the bot",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-    {
-      name: "license",
-      description: "Current license of the bot",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-    {
-      name: "author",
-      description: "Author of the project",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-    {
-      name: "repository",
-      description: "Current repository of the bot",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-  ],
+  options: [OPTS.all, OPTS.version, OPTS.repository, OPTS.author, OPTS.license],
 };
 
 /**
