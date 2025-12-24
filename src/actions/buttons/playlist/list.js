@@ -1,6 +1,7 @@
 import { Client } from "discord.js";
 import getPlaylistEmbeds from "../../../utils/components/getPlaylistEmbeds.js";
 import getPaginator from "../../../utils/components/getPaginator.js";
+import discord from "../../../configs/discord.json" with { type: "json" };
 
 import Playlist from "../../../models/playlist.js";
 
@@ -17,7 +18,6 @@ export default {
       let content = JSON.parse(interaction.customId);
 
       let page = content.page;
-      let amount = 10;
 
       let query = {
         guildId: interaction.guild.id,
@@ -26,8 +26,8 @@ export default {
       let count = await Playlist.countDocuments(query);
       let playlists = await Playlist.find(query)
         .sort({ _id: -1 })
-        .skip((page - 1) * amount)
-        .limit(amount);
+        .skip((page - 1) * discord.embeds.max)
+        .limit(discord.embeds.max);
 
       await interaction.deferUpdate();
       await interaction.message.edit({
@@ -39,7 +39,7 @@ export default {
             },
             count,
             page,
-            amount,
+            discord.embeds.max,
           ),
         ],
       });

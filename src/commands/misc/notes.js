@@ -19,8 +19,7 @@ import { getLocalization } from "../../utils/i18n.js";
 import getPaginator from "../../utils/components/getPaginator.js";
 import NoteTypes from "../../enums/notes/types.js";
 import Enum from "../../enums/notes/contexts.js";
-
-const amount = 10;
+import discord from "../../configs/discord.json" with { type: "json" };
 
 export default {
   callback: async (client, interaction) => {
@@ -134,7 +133,7 @@ async function manageNote(client, interaction, action, code = null) {
 
   let countNotes = await Note.countDocuments(query);
 
-  if (context === Enum.PRIVATE && countNotes >= amount) {
+  if (context === Enum.PRIVATE && countNotes >= discord.embeds.max) {
     return await reply.message.error(interaction, words.LimitExceeded);
   }
 
@@ -247,7 +246,9 @@ async function show(client, interaction) {
   let row = new ActionRowBuilder();
 
   let countNotes = await Note.countDocuments(query);
-  const notes = await Note.find(query).sort({ _id: -1 }).limit(amount);
+  const notes = await Note.find(query)
+    .sort({ _id: -1 })
+    .limit(discord.embeds.max);
 
   await interaction.deferReply({
     flags: context === Enum.PRIVATE ? [MessageFlags.Ephemeral] : [],
@@ -265,7 +266,7 @@ async function show(client, interaction) {
         },
         countNotes,
         minPage,
-        amount,
+        discord.embeds.max,
       );
     }
 

@@ -1,6 +1,7 @@
 import { Client, EmbedBuilder } from "discord.js";
 import getPlayerActionRow from "../../utils/components/playerActionRow.js";
 import { useQueue } from "discord-player";
+import discord from "../../configs/discord.json" with { type: "json" };
 
 import reply from "../../utils/core/replies.js";
 
@@ -18,8 +19,6 @@ export default {
 
     await interaction.deferReply();
 
-    const MAX_TRACKS_DISPLAYED = 10;
-
     const queue = useQueue(interaction.guild);
 
     if (!queue?.channel || !queue?.currentTrack) {
@@ -35,7 +34,7 @@ export default {
 
     if (queue.tracks.size > 0) {
       let nextTracks = queue.tracks.data
-        .slice(0, MAX_TRACKS_DISPLAYED)
+        .slice(0, discord.embeds.max)
         .map(
           (track, i) =>
             `\`${i + 1})\` \`${track.duration}\` ${track.title} [${track.requestedBy.displayName}]`,

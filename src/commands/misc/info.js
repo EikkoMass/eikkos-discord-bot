@@ -39,6 +39,10 @@ const OPTS = {
 };
 
 export default {
+  name: "info",
+  description: "Show info about the bot.",
+  options: [OPTS.all, OPTS.version, OPTS.repository, OPTS.author, OPTS.license],
+
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
       case OPTS.all.name:
@@ -58,9 +62,6 @@ export default {
         );
     }
   },
-  name: "info",
-  description: "Show info about the bot.",
-  options: [OPTS.all, OPTS.version, OPTS.repository, OPTS.author, OPTS.license],
 };
 
 /**

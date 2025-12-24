@@ -1,64 +1,59 @@
-import {
-  Client,
-  ApplicationCommandOptionType,
-  EmbedBuilder,
-  MessageFlags,
-} from "discord.js";
+import { Client, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
 
 import { getLocalization } from "../../utils/i18n.js";
+import replies from "../../utils/core/replies.js";
+import discord from "../../configs/discord.json" with { type: "json" };
+
+const JIKAN_API_URL = "https://api.jikan.moe/v4";
+const OPTS = {
+  search: {
+    name: "search",
+    description: "Find the anime you want",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "query",
+        description: "Anime search by name",
+        type: ApplicationCommandOptionType.Integer,
+        autocomplete: true,
+        required: true,
+      },
+    ],
+  },
+  character: {
+    name: "character",
+    description: "Show the characters from the specified anime",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "query",
+        description: "Anime search by name",
+        type: ApplicationCommandOptionType.Integer,
+        autocomplete: true,
+        required: true,
+      },
+    ],
+  },
+};
 
 export default {
   name: "anime",
   description: "Anime related commands",
+  options: [OPTS.search, OPTS.character],
+
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "search":
-        await search(client, interaction);
-        break;
-      case "character":
-        await character(client, interaction);
-        break;
+      case OPTS.search.name:
+        return await search(client, interaction);
+      case OPTS.character.name:
+        return await character(client, interaction);
       default:
-        await interaction.reply({
-          flags: [MessageFlags.Ephemeral],
-          embeds: [
-            new EmbedBuilder().setDescription(`Anime command not found!`),
-          ],
-        });
-        return;
+        return await replies.message.error(
+          interaction,
+          `Anime command not found!`,
+        );
     }
   },
-
-  options: [
-    {
-      name: "search",
-      description: "Find the anime you want",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "query",
-          description: "Anime search by name",
-          type: ApplicationCommandOptionType.Integer,
-          autocomplete: true,
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "character",
-      description: "Show the characters from the specified anime",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "query",
-          description: "Anime search by name",
-          type: ApplicationCommandOptionType.Integer,
-          autocomplete: true,
-          required: true,
-        },
-      ],
-    },
-  ],
 };
 
 /**
@@ -71,13 +66,10 @@ async function search(client, interaction) {
   let embed = new EmbedBuilder();
   const malId = interaction.options?.get("query").value;
 
-  const res = await fetch(`https://api.jikan.moe/v4/anime/${malId}`);
+  const res = await fetch(`${JIKAN_API_URL}/anime/${malId}`);
 
   if (!res.ok) {
-    interaction.reply({
-      embeds: [embed.setDescription(words.SearchFailed)],
-    });
-    return;
+    return await replies.message.error(interaction, words.SearchFailed);
   }
 
   const anime = await res.json();
@@ -116,22 +108,17 @@ async function search(client, interaction) {
  */
 async function character(client, interaction) {
   const words = await getLocalization(interaction.locale, `anime`);
-  const CHARACTER_LIMIT = 10;
 
-  let embed = new EmbedBuilder();
   const malId = interaction.options?.get("query").value;
 
-  const res = await fetch(`https://api.jikan.moe/v4/anime/${malId}/characters`);
+  const res = await fetch(`${JIKAN_API_URL}/anime/${malId}/characters`);
 
   if (!res.ok) {
-    interaction.reply({
-      embeds: [embed.setDescription(words.SearchFailed)],
-    });
-    return;
+    return await replies.error.message(interaction, words.SearchFailed);
   }
 
   const anime = await res.json();
-  anime.data = anime.data.slice(0, CHARACTER_LIMIT);
+  anime.data = anime.data.slice(0, discord.embeds.max);
 
   const characters = [];
 

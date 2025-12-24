@@ -1,7 +1,13 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import emojis from "../../utils/core/emojis.js";
+import discord from "../../configs/discord.json" with { type: "json" };
 
-function getPaginatorActionRows(customIdObj, count, page, amount = 10) {
+function getPaginatorActionRows(
+  customIdObj,
+  count,
+  page,
+  amount = discord.embeds.max,
+) {
   const minPage = 1;
   const maxPage = Math.ceil(count / amount);
   const lastPage = Math.max(minPage, page - 1);

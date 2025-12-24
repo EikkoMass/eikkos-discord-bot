@@ -9,9 +9,26 @@ import reply from "../../utils/core/replies.js";
 
 import { getLocalization } from "../../utils/i18n.js";
 
+const OPTS = {
+  game: {
+    name: "game",
+    description: "game name you want to config",
+    type: ApplicationCommandOptionType.String,
+    required: true,
+    autocomplete: true,
+  },
+  activate: {
+    name: "activate",
+    description: "if you want the option enabled or disabled",
+    type: ApplicationCommandOptionType.Boolean,
+  },
+};
+
 export default {
   name: "mute-by-game",
   description: "play a song on the voice channel",
+  options: [OPTS.game, OPTS.activate],
+  botPermissions: [PermissionFlagsBits.MuteMembers],
 
   /**
    *  @param {Client} client
@@ -59,20 +76,4 @@ export default {
       return await reply.message.info(interaction, words.AlreadyDisabled);
     }
   },
-
-  options: [
-    {
-      name: "game",
-      description: "game name you want to config",
-      type: ApplicationCommandOptionType.String,
-      required: true,
-      autocomplete: true,
-    },
-    {
-      name: "activate",
-      description: "if you want the option enabled or disabled",
-      type: ApplicationCommandOptionType.Boolean,
-    },
-  ],
-  botPermissions: [PermissionFlagsBits.MuteMembers],
 };

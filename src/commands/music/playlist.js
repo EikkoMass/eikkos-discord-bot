@@ -9,6 +9,7 @@ import Playlist from "../../models/playlist.js";
 
 import { useMainPlayer, QueryType } from "discord-player";
 import playerConfigs from "../../configs/player.json" with { type: "json" };
+import discord from "../../configs/discord.json" with { type: "json" };
 
 import getPlaylistEmbeds from "../../utils/components/getPlaylistEmbeds.js";
 import getPaginator from "../../utils/components/getPaginator.js";
@@ -149,13 +150,12 @@ async function list(client, interaction) {
   };
 
   const page = 1;
-  const amount = 10;
 
   let count = await Playlist.countDocuments(query);
   let playlists = await Playlist.find(query)
     .sort({ _id: -1 })
-    .skip((page - 1) * amount)
-    .limit(amount);
+    .skip((page - 1) * discord.embeds.max)
+    .limit(discord.embeds.max);
 
   if (count > 0) {
     return await interaction.reply({
@@ -167,7 +167,7 @@ async function list(client, interaction) {
           },
           count,
           1,
-          amount,
+          discord.embeds.max,
         ),
       ],
     });

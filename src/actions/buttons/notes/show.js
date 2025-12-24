@@ -2,6 +2,7 @@ import { Client } from "discord.js";
 import getNoteEmbeds from "../../../utils/components/getNoteEmbeds.js";
 import getPaginator from "../../../utils/components/getPaginator.js";
 import Enum from "../../../enums/notes/contexts.js";
+import discord from "../../../configs/discord.json" with { type: "json" };
 
 import Note from "../../../models/note.js";
 
@@ -27,12 +28,11 @@ export default {
         query.userId = interaction.user.id;
       }
 
-      let amount = 10;
       let countNotes = await Note.countDocuments(query);
       let notes = await Note.find(query)
         .sort({ _id: -1 })
-        .skip((page - 1) * amount)
-        .limit(amount);
+        .skip((page - 1) * discord.embeds.max)
+        .limit(discord.embeds.max);
 
       const embeds = await getNoteEmbeds(client, notes);
       await interaction.deferUpdate();
@@ -46,7 +46,7 @@ export default {
             },
             countNotes,
             page,
-            amount,
+            discord.embeds.max,
           ),
         ],
       });
