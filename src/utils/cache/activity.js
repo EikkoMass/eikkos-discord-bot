@@ -6,7 +6,7 @@ let defaultActivity = {
   name: "Evt",
   state: "lmfao",
   type: ActivityType.Streaming,
-  url: "https://www.youtube.com/watch?v=JjjNa8khhww",
+  url: "https://www.youtube.com/watch?v=0l_GFQvISEM",
 };
 
 let activity = defaultActivity;
