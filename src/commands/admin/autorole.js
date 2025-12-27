@@ -2,8 +2,6 @@ import {
   ApplicationCommandOptionType,
   PermissionFlagsBits,
   Client,
-  MessageFlags,
-  EmbedBuilder,
 } from "discord.js";
 import AutoRole from "../../models/autorole.js";
 
@@ -33,6 +31,12 @@ const OPTS = {
 };
 
 export default {
+  name: "autorole",
+  description: "Manage the server auto-role",
+  options: [OPTS.configure, OPTS.disable],
+  permissionsRequired: [PermissionFlagsBits.Administrator],
+  botPermissions: [PermissionFlagsBits.ManageRoles],
+
   /**
    *  @param {Client} client
    *  @param interaction
@@ -40,39 +44,23 @@ export default {
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
       case OPTS.configure.name:
-        await configure(client, interaction);
-        break;
+        return await configure(client, interaction);
       case OPTS.disable.name:
-        await disable(client, interaction);
-        break;
+        return await disable(client, interaction);
       default:
-        await interaction.reply({
-          flags: MessageFlags.Ephemeral,
-          embeds: [
-            new EmbedBuilder().setDescription(`Auto role command not found!`),
-          ],
-        });
-        return;
+        return await reply.message.error(
+          interaction,
+          `Auto role command not found!`,
+        );
     }
   },
-
-  name: "autorole",
-  description: "Manage the server auto-role",
-  options: [OPTS.configure, OPTS.disable],
-  permissionsRequired: [PermissionFlagsBits.Administrator],
-  botPermissions: [PermissionFlagsBits.ManageRoles],
 };
 
 async function configure(client, interaction) {
-  const embed = new EmbedBuilder();
   const words = await getLocalization(interaction.locale, "auto-role");
 
   if (!interaction.inGuild()) {
-    interaction.reply({
-      flags: MessageFlags.Ephemeral,
-      embeds: [embed.setDescription(words.OnlyInsideServer)],
-    });
-    return;
+    return reply.message.error(interaction, words.OnlyInsideServer);
   }
 
   const targetRoleId = interaction.options.get("role").value;
