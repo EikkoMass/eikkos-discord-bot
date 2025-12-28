@@ -1,0 +1,16 @@
+{
+  "EditedSuccessfully": "servidor de Minecraft registrado editado com sucesso!",
+  "CreatedSuccessfully": "servidor de Minecraft criado com sucesso!",
+  "MissingServer": "Nenhum servidor de Minecraft registrado nessa guilda, crie um novo com o comando `/minecraft server register`.",
+  "ErrorFetchingServer": "Erro ao buscar informações do servidor!",
+  "Status": "Status",
+  "Version": "Versão",
+  "Description": "Descrição",
+  "Address": "Endereço",
+  "NumberPlayers": "Número de jogadores",
+  "Edition": "Edição",
+  "ServerCommandNotFound": "Comando de servidor de Minecraft não encontrado!",
+  "PlayerCommandNotFound": "Comando de jogador de Minecraft não encontrado!",
+  "ErrorFetching": "Erro ao buscar informações do jogador!",
+  "PlayerNotFound": "Não foi possível encontrar o jogador solicitado!"
+}

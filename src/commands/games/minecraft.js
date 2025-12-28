@@ -7,6 +7,7 @@ import {
 import MinecraftServer from "../../models/minecraftServer.js";
 import editions from "../../enums/minecraft/editions.js";
 
+import { getLocalization } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
 
 const editionDictionary = [
@@ -109,6 +110,8 @@ export default {
  *  @param  interaction
  */
 async function register(client, interaction) {
+  const words = await getLocalization(interaction.locale, "minecraft");
+
   try {
     const name = interaction.options.get("name")?.value;
     const address = interaction.options.get("address")?.value;
@@ -126,7 +129,7 @@ async function register(client, interaction) {
       await server.save();
       return await replies.message.success(
         interaction,
-        `Minecraft server register edited successfully!`,
+        words.EditedSuccessfully,
       );
     }
 
@@ -139,7 +142,7 @@ async function register(client, interaction) {
     await server.save();
     return await replies.message.success(
       interaction,
-      `Minecraft server created successfully!`,
+      words.CreatedSuccessfully,
     );
   } catch (e) {
     console.log(e);
@@ -151,15 +154,14 @@ async function register(client, interaction) {
  *  @param  interaction
  */
 async function status(client, interaction) {
+  const words = await getLocalization(interaction.locale, "minecraft");
+
   let server = await MinecraftServer.findOne({
     guildId: interaction.guild.id,
   });
 
   if (!server) {
-    return await replies.message.error(
-      interaction,
-      `No minecraft server registered in this guild, create a new one with the command \`/minecraft server register\`.`,
-    );
+    return await replies.message.error(interaction, words.MissingServer);
   }
 
   const path =
@@ -172,10 +174,7 @@ async function status(client, interaction) {
 
   if (serverInfo.error) {
     console.log(serverInfo.error);
-    return await replies.message.error(
-      interaction,
-      `Error on fetching server info!`,
-    );
+    return await replies.message.error(interaction, words.ErrorFetchingServer);
   }
 
   let attachment = null;
@@ -191,22 +190,22 @@ async function status(client, interaction) {
 
   const infoFields = [
     {
-      name: "Status",
+      name: words.Status,
       value: serverInfo.online ? `🟢 Online` : `🔴 Offline`,
       inline: true,
     },
-    { name: `Version`, value: serverInfo.version || "N/A", inline: true },
-    { name: "Description", value: serverInfo.motd?.raw[0] || "None" },
-    { name: "Address", value: server.address },
+    { name: words.Version, value: serverInfo.version || "N/A", inline: true },
+    { name: words.Description, value: serverInfo.motd?.raw[0] || "None" },
+    { name: words.Address, value: server.address },
     {
-      name: "Number of player",
+      name: words.NumberPlayers,
       value: serverInfo.players
         ? `${serverInfo.players.online}/${serverInfo.players.max}`
         : "0/0",
       inline: true,
     },
     {
-      name: `Edition`,
+      name: words.Edition,
       value:
         editionDictionary.find((edition) => edition.value === server.edition)
           ?.name || "Not found",
@@ -231,6 +230,8 @@ async function status(client, interaction) {
  *  @param  interaction
  */
 async function server(client, interaction) {
+  const words = await getLocalization(interaction.locale, "minecraft");
+
   switch (interaction.options.getSubcommand()) {
     case "status":
       return await status(client, interaction);
@@ -239,7 +240,7 @@ async function server(client, interaction) {
     default:
       return await replies.message.error(
         interaction,
-        `Minecraft server command not found!`,
+        words.ServerCommandNotFound,
       );
   }
 }
@@ -249,13 +250,15 @@ async function server(client, interaction) {
  *  @param  interaction
  */
 async function player(client, interaction) {
+  const words = await getLocalization(interaction.locale, "minecraft");
+
   switch (interaction.options.getSubcommand()) {
     case "skin":
       return await skin(client, interaction);
     default:
       return await replies.message.error(
         interaction,
-        `Minecraft player command not found!`,
+        words.PlayerCommandNotFound,
       );
   }
 }
@@ -265,25 +268,21 @@ async function player(client, interaction) {
  *  @param  interaction
  */
 async function skin(client, interaction) {
+  const words = await getLocalization(interaction.locale, "minecraft");
+
   const query = interaction.options?.get("query").value || "";
   const name = query.split("/")[0];
 
   const res = await fetch(`https://playerdb.co/api/player/minecraft/${name}`);
 
   if (!res.ok) {
-    return await replies.message.error(
-      interaction,
-      `Error on fetching player info!`,
-    );
+    return await replies.message.error(interaction, words.ErrorFetching);
   }
 
   const json = await res.json();
 
   if (!json.success) {
-    return await replies.message.error(
-      interaction,
-      `Could not find the player requested!`,
-    );
+    return await replies.message.error(interaction, words.PlayerNotFound);
   }
 
   await interaction.reply(json.data.player.skin_texture);

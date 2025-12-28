@@ -1,0 +1,16 @@
+{
+  "EditedSuccessfully": "Minecraft server register edited successfully!",
+  "CreatedSuccessfully": "Minecraft server created successfully!",
+  "MissingServer": "No minecraft server registered in this guild, create a new one with the command `/minecraft server register`.",
+  "ErrorFetchingServer": "Error on fetching server info!",
+  "Status": "Status",
+  "Version": "Version",
+  "Description": "Description",
+  "Address": "Address",
+  "NumberPlayers": "Number of players",
+  "Edition": "Edition",
+  "ServerCommandNotFound": "Minecraft server command not found!",
+  "PlayerCommandNotFound": "Minecraft player command not found!",
+  "ErrorFetching": "Error on fetching player info!",
+  "PlayerNotFound": "Could not find the player requested!"
+}
