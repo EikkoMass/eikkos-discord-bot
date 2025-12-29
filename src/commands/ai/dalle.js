@@ -14,6 +14,12 @@ export default {
       type: ApplicationCommandOptionType.String,
       required: true,
     },
+    {
+      name: "show",
+      description: "wants the return to show the requested prompt",
+      type: ApplicationCommandOptionType.Boolean,
+      required: false,
+    },
   ],
   /**
    *  @param {Client} client
@@ -22,6 +28,7 @@ export default {
   callback: async (client, interaction) => {
     const px = 1024;
     const prompt = interaction.options.get("prompt")?.value;
+    const show = interaction.options.get("show")?.value;
 
     if (!prompt) {
       interaction.reply({
@@ -56,13 +63,16 @@ export default {
     if (response) {
       const embed = new EmbedBuilder()
         .setTitle(`OpenAI generated image`)
-        .setDescription(`Prompt: \`${prompt}\``)
         .setColor(Colors.Blurple)
         .setImage(response.data[0].url)
         .setFooter({
           text: new Date().toDateString(),
           iconURL: interaction.member.displayAvatarURL({ size: 256 }),
         });
+
+      if (show === undefined || show) {
+        embed.setDescription(`Prompt: \`${prompt}\``);
+      }
 
       interaction.channel.send({
         embeds: [embed],

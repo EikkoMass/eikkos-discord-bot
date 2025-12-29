@@ -20,6 +20,7 @@ export default {
   callback: async (client, interaction) => {
     const imgFormat = "jpeg";
     let prompt = interaction.options.get("prompt")?.value;
+    const show = interaction.options.get("show")?.value;
 
     if (!prompt) {
       interaction.reply({
@@ -62,13 +63,16 @@ export default {
     if (response.status === 200) {
       const embed = new EmbedBuilder()
         .setTitle(`Stable Diffusion image`)
-        .setDescription(`Prompt: \`${prompt}\``)
         .setColor(Colors.Blurple)
         .setImage(`attachment://sd.${imgFormat}`)
         .setFooter({
           text: new Date().toDateString(),
           iconURL: interaction.member.displayAvatarURL({ size: 256 }),
         });
+
+      if (show === undefined || show) {
+        embed.setDescription(`Prompt: \`${prompt}\``);
+      }
 
       interaction.channel.send({
         embeds: [embed],
@@ -99,6 +103,12 @@ export default {
       description: "the prompt you want to generate",
       type: ApplicationCommandOptionType.String,
       required: true,
+    },
+    {
+      name: "show",
+      description: "wants the return to show the requested prompt",
+      type: ApplicationCommandOptionType.Boolean,
+      required: false,
     },
   ],
 };
