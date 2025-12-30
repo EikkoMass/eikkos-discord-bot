@@ -1,0 +1,5 @@
+{
+  "ValidInput": "You need to send an valid input",
+  "MissingApiKey": "Missing API key",
+  "Generating": "Generating the image, please wait!"
+}

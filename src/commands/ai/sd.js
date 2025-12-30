@@ -1,12 +1,14 @@
 import {
   Client,
   ApplicationCommandOptionType,
-  MessageFlags,
   EmbedBuilder,
   Colors,
 } from "discord.js";
 import { Buffer } from "node:buffer";
 import dotenv from "dotenv";
+
+import reply from "../../utils/core/replies.js";
+import { getLocalization } from "../../utils/i18n.js";
 
 dotenv.config();
 
@@ -18,30 +20,21 @@ export default {
    *  @param  interaction
    */
   callback: async (client, interaction) => {
+    const words = await getLocalization(interaction.locale, "sd");
+
     const imgFormat = "jpeg";
     let prompt = interaction.options.get("prompt")?.value;
     const show = interaction.options.get("show")?.value;
 
     if (!prompt) {
-      interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        content: "You need to send an valid input",
-      });
-      return;
+      return await reply.message.error(interaction, words.ValidInput);
     }
 
     if (!process.env.STABLE_DIFFUSION_API_KEY) {
-      interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        content: "Missing API key",
-      });
-      return;
+      return await reply.message.error(interaction, words.MissingApiKey);
     }
 
-    interaction.reply({
-      flags: [MessageFlags.Ephemeral],
-      content: `Generating the image, please wait!`,
-    });
+    await reply.message.info(interaction, words.Generating);
 
     const formData = new FormData();
 

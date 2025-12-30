@@ -1,0 +1,5 @@
+{
+  "ValidInput": "Você precisa enviar um valor válido",
+  "MissingApiKey": "Chave de API não foi encontrada",
+  "Generating": "Gerando a imagem, por favor aguarde!"
+}

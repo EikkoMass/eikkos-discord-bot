@@ -2,6 +2,9 @@ import { Client, ApplicationCommandOptionType, MessageFlags } from "discord.js";
 import OpenAI from "openai";
 import dotenv from "dotenv";
 
+import reply from "../../utils/core/replies.js";
+import { getLocalization } from "../../utils/i18n.js";
+
 dotenv.config();
 
 export default {
@@ -26,30 +29,21 @@ export default {
    *  @param  interaction
    */
   callback: async (client, interaction) => {
+    const words = await getLocalization(interaction.locale, "dalle");
+
     const px = 1024;
     const prompt = interaction.options.get("prompt")?.value;
     const show = interaction.options.get("show")?.value;
 
     if (!prompt) {
-      interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        content: "You need to send an valid input",
-      });
-      return;
+      return await reply.message.error(interaction, words.ValidInput);
     }
 
     if (!process.env.OPENAI_API_KEY) {
-      interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        content: "Missing API key",
-      });
-      return;
+      return await reply.message.error(interaction, words.MissingApiKey);
     }
 
-    interaction.reply({
-      flags: [MessageFlags.Ephemeral],
-      content: `Generating the image, please wait!`,
-    });
+    await reply.message.info(interaction, words.Generating);
 
     const response = await new OpenAI({
       OPENAI_API_KEY: process.env.OPENAI_API_KEY,
