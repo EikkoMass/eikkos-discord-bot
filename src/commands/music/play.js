@@ -25,6 +25,7 @@ export default {
     await interaction.deferReply({
       flags: [MessageFlags.Ephemeral],
     });
+    
     const link = interaction.options.get("song")?.value;
     let volume = interaction.options.get("volume")?.value || 100;
 

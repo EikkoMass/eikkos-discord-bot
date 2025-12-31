@@ -1,7 +1,7 @@
 {
-  "Added": "Playlist adicionada com sucesso",
+  "Added": "Playlist `{0}` adicionada com sucesso",
   "ErrorAdding": "Erro ao adicionar playlist!",
-  "Removed": "Playlist removida com sucesso",
+  "Removed": "Playlist `{0}` removida com sucesso",
   "ErrorRemoving": "Erro ao remover playlist!",
   "NotFound": "Nenhuma playlist encontrada!"
 }

@@ -59,8 +59,12 @@ export default {
     );
 
     for (let i = 0; i < attempts; i++) {
-      await targetMember.voice.setChannel(voiceChannels.random());
-      await delay(secondsBetweenChanges * ONE_SEC);
+      try {
+        await targetMember.voice?.setChannel?.(voiceChannels.random());
+        await delay(secondsBetweenChanges * ONE_SEC);
+      } catch (error) {
+        break;
+      }
     }
 
     await targetMember.voice.setChannel(finalChannel);

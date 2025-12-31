@@ -68,7 +68,9 @@ export default {
     );
 
     setTimeout(() => {
-      member.voice.disconnect();
+      try {
+        member.voice?.disconnect?.();
+      } catch (error) {}
     }, duration);
   },
 

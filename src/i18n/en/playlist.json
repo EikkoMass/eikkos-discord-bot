@@ -1,7 +1,7 @@
 {
-  "Added": "Playlist added successfully",
+  "Added": "Playlist `{0}` added successfully",
   "ErrorAdding": "Error adding playlist!",
-  "Removed": "Playlist removed successfully",
+  "Removed": "Playlist `{0}` removed successfully",
   "ErrorRemoving": "Error removing playlist!",
   "NotFound": "No playlists found!"
 }

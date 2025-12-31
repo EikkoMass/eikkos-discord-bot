@@ -119,7 +119,10 @@ async function add(client, interaction) {
       creationDate: Date.now(),
     }).save();
 
-    await reply.message.success(interaction, words.Added);
+    await reply.message.success(
+      interaction,
+      formatMessage(words.Added, [name]),
+    );
   } catch (error) {
     console.error(error);
     await reply.message.error(interaction, words.ErrorAdding);
@@ -136,7 +139,7 @@ async function remove(client, interaction) {
   });
 
   if (playlist) {
-    return await reply.message.success(interaction, words.Removed);
+    return await reply.message.success(interaction, formatMessage(words.Removed, [playlist.name]));
   }
 
   return await reply.message.error(interaction, words.ErrorRemoving);
