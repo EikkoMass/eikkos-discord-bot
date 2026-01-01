@@ -1,7 +1,7 @@
 {
   "Edited": "Registro de Stream editado!",
   "Registered": "Link de Stream registrado!",
-  "Removed": "Stream '{0}' removido com sucesso!",
+  "Removed": "Stream `{0}` removido com sucesso!",
   "NotFound": "Stream não encontrada!",
   "ActiveUpdated": "Rotação de stream atualizada com sucesso!"
 }

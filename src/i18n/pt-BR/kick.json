@@ -3,6 +3,6 @@
   "CantKickOwner": "Você não pode expulsar esse usuário porque ele é o dono do servidor.",
   "CantKickSameHigher": "Você não pode expulsar esse usuário porque ele tem um cargo mais alto ou igual ao seu.",
   "CantKickSameHigherBot": "Eu não posso expulsar esse usuário porque ele tem o mesmo / cargo mais alto que eu.",
-  "Kicked": "Usuário {0} foi expulso\nMotivo: {1}",
+  "Kicked": "Usuário {0} foi expulso\nMotivo: `{1}`",
   "KickFailed": "Não foi possível expulsar o usuário {0}"
 }

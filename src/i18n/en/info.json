@@ -1,8 +1,8 @@
 {
-  "CurrentVersion": "Current version: {0}",
+  "CurrentVersion": "Current version: `{0}`",
   "ProjectOwner": "The author of the project is {0}",
-  "CurrentLicense": "Current license: {0}",
-  "CurrentRepository": "Project repository: {0}",
+  "CurrentLicense": "Current license: `{0}`",
+  "CurrentRepository": "Project repository: `{0}`",
   "Version": "Version",
   "License": "License",
   "Author": "Author",

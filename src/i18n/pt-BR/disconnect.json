@@ -1,7 +1,7 @@
 {
   "MissingPermissions": "Não há permissões suficientes para usar este comando.",
   "MustBeInVC": "O usuário deve estar em um canal de voz.",
-  "DisconnectingUserWithDuration": "Desconectando usuário <@{0}> em '{1}'",
+  "DisconnectingUserWithDuration": "Desconectando usuário <@{0}> em `{1}`",
   "DisconnectingUser": "Desconectando usuário <@{0}>",
 
   "Hours": "horas",

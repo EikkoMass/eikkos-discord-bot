@@ -1,7 +1,7 @@
 {
   "Removed": "Bad word removed successfully!",
   "NotFound": "No bad word registered on this guild",
-  "CurrentWord": "The current bad word is {0}.",
+  "CurrentWord": "The current bad word is `{0}`.",
   "Created": "Created the new word!",
   "ExactWord": "Exact Word",
   "ContainsWord": "Contains Word"
