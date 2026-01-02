@@ -21,16 +21,69 @@ import NoteTypes from "../../enums/notes/types.js";
 import Enum from "../../enums/notes/contexts.js";
 import discord from "../../configs/discord.json" with { type: "json" };
 
+const OPTS = {
+  add: {
+    name: "add",
+    description: "Register your note.",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "context",
+        description: "where you want to register",
+        type: ApplicationCommandOptionType.Integer,
+        autocomplete: true,
+      },
+    ],
+  },
+  edit: {
+    name: "edit",
+    description: "Edit an existing note.",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "code",
+        description: "where you want to register",
+        type: ApplicationCommandOptionType.String,
+      },
+    ],
+  },
+  show: {
+    name: "show",
+    description: "Show the notes (from the guild or your privates)",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "context",
+        description: "from where you want to see",
+        type: ApplicationCommandOptionType.Integer,
+        autocomplete: true,
+      },
+    ],
+  },
+  remove: {
+    name: "remove",
+    description: "removes an note by their ID",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "id",
+        description: "note id (on the footer of the note)",
+        type: ApplicationCommandOptionType.String,
+      },
+    ],
+  },
+};
+
 export default {
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "add":
+      case OPTS.add.name:
         return await add(client, interaction);
-      case "edit":
+      case OPTS.edit.name:
         return await edit(client, interaction);
-      case "show":
+      case OPTS.show.name:
         return await show(client, interaction);
-      case "remove":
+      case OPTS.remove.name:
         return await remove(client, interaction);
       default:
         return await reply.message.error(
@@ -41,58 +94,7 @@ export default {
   },
   name: "notes",
   description: "Manage your notes by guild",
-  options: [
-    {
-      name: "add",
-      description: "Register your note.",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "context",
-          description: "where you want to register",
-          type: ApplicationCommandOptionType.Integer,
-          autocomplete: true,
-        },
-      ],
-    },
-    {
-      name: "edit",
-      description: "Edit an existing note.",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "code",
-          description: "where you want to register",
-          type: ApplicationCommandOptionType.String,
-        },
-      ],
-    },
-    {
-      name: "show",
-      description: "Show the notes (from the guild or your privates)",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "context",
-          description: "from where you want to see",
-          type: ApplicationCommandOptionType.Integer,
-          autocomplete: true,
-        },
-      ],
-    },
-    {
-      name: "remove",
-      description: "removes an note by their ID",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "id",
-          description: "note id (on the footer of the note)",
-          type: ApplicationCommandOptionType.String,
-        },
-      ],
-    },
-  ],
+  options: [OPTS.add, OPTS.edit, OPTS.show, OPTS.remove],
 };
 
 /**

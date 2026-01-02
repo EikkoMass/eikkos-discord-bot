@@ -20,10 +20,9 @@ export default {
     const queue = useQueue(interaction.guild);
 
     if (queue.node.isPlaying()) {
-      await reply.message.warning(interaction, words.NotPaused, {
+      return await reply.message.warning(interaction, words.NotPaused, {
         context: "editReply",
       });
-      return;
     }
 
     queue.node.resume();

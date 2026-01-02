@@ -2,7 +2,6 @@ import {
   PollLayoutType,
   Client,
   ApplicationCommandOptionType,
-  MessageFlags,
 } from "discord.js";
 
 import reply from "../../utils/core/replies.js";

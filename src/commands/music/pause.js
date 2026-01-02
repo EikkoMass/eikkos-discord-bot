@@ -20,17 +20,15 @@ export default {
     const queue = useQueue(interaction.guild);
 
     if (!queue?.node) {
-      await reply.message.error(interaction, words.NoQueue, {
+      return await reply.message.error(interaction, words.NoQueue, {
         context: "editReply",
       });
-      return;
     }
 
     if (queue.node.isPaused()) {
-      await reply.message.warning(interaction, words.AlreadyPaused, {
+      return await reply.message.warning(interaction, words.AlreadyPaused, {
         context: "editReply",
       });
-      return;
     }
 
     queue.node.pause();

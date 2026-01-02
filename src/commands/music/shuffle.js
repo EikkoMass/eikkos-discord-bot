@@ -18,12 +18,11 @@ export default {
     const queue = useQueue(interaction.guild);
 
     if (!queue || queue.isEmpty()) {
-      await reply.message.error(interaction, words.NoSong, {
+      return await reply.message.error(interaction, words.NoSong, {
         context: "editReply",
       });
-      return;
     } else if (queue.tracks.size < 2) {
-      await reply.message.warning(interaction, words.NotEnoughTracks, {
+      return await reply.message.warning(interaction, words.NotEnoughTracks, {
         context: "editReply",
       });
     }

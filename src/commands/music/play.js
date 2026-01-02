@@ -25,7 +25,7 @@ export default {
     await interaction.deferReply({
       flags: [MessageFlags.Ephemeral],
     });
-    
+
     const link = interaction.options.get("song")?.value;
     let volume = interaction.options.get("volume")?.value || 100;
 
@@ -36,10 +36,13 @@ export default {
     const embed = new EmbedBuilder();
 
     if (!channel) {
-      await reply.message.error(interaction, words.VoiceChannelRequired, {
-        context: "editReply",
-      });
-      return;
+      return await reply.message.error(
+        interaction,
+        words.VoiceChannelRequired,
+        {
+          context: "editReply",
+        },
+      );
     }
 
     const result = await player.search(link, {
@@ -48,10 +51,9 @@ export default {
     });
 
     if (!result.hasTracks()) {
-      await reply.message.info(interaction, words.NoResults, {
+      return await reply.message.info(interaction, words.NoResults, {
         context: "editReply",
       });
-      return;
     }
 
     try {

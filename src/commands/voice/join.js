@@ -1,6 +1,6 @@
 import { Client } from "discord.js";
 import playerConfigs from "../../configs/player.json" with { type: "json" };
-import { QueryType, useMainPlayer } from "discord-player";
+import { useMainPlayer } from "discord-player";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
