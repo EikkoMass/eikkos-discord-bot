@@ -9,10 +9,6 @@ const schema = new Schema({
     type: String,
     required: true,
   },
-  structure: {
-    type: Number,
-    required: true,
-  },
   creationDate: {
     type: Date,
     required: true,
@@ -20,10 +16,10 @@ const schema = new Schema({
   expirationDate: {
     type: Date,
   },
-  message: {
+  title: {
     type: String,
   },
-  reference: {
+  message: {
     type: String,
   },
 });

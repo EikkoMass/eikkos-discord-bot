@@ -1,0 +1,39 @@
+import { Client } from "discord.js";
+import Notify from "../models/notify.js";
+
+export default {
+  name: "notify",
+  contexts: ["send"],
+  /**
+   *  @param {Client} client
+   *  @param  interaction
+   */
+  callback: async (client, interaction) => {
+    try {
+      const search = interaction.options.getFocused();
+
+      var notifications = await Notify.find({
+        guildId: interaction.guild.id,
+        $or: [
+          { title: { $regex: `.*${search}.*`, $options: "i" } },
+          { message: { $regex: `.*${search}.*`, $options: "i" } },
+        ],
+      }).limit(25);
+
+      if (notifications) {
+        let options = notifications.map((notification) => {
+          return {
+            name:
+              notification.title ??
+              notification.message ??
+              notification._id.toString(),
+            value: notification._id.toString(),
+          };
+        });
+        interaction.respond(options.slice(0, 25)).catch(() => {});
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+};
