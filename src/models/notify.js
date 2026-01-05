@@ -18,6 +18,7 @@ const schema = new Schema({
   },
   title: {
     type: String,
+    required: true,
   },
   message: {
     type: String,

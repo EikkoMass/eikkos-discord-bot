@@ -14,6 +14,12 @@ const OPTS = {
     type: ApplicationCommandOptionType.Subcommand,
     options: [
       {
+        name: "title",
+        required: true,
+        description: "The notification title",
+        type: ApplicationCommandOptionType.String,
+      },
+      {
         name: "message",
         required: true,
         description: "The notification message you want to send",
@@ -48,7 +54,7 @@ const OPTS = {
     type: ApplicationCommandOptionType.Subcommand,
     options: [
       {
-        name: "message",
+        name: "title",
         description: "The saved notification you want",
         type: ApplicationCommandOptionType.String,
         autocomplete: true,
@@ -87,9 +93,11 @@ export default {
 
 async function add(client, interaction) {
   try {
+    const title = interaction.options.get("title")?.value;
     const message = interaction.options.get("message")?.value;
 
     const notify = new Notify({
+      title,
       message,
       guildId: interaction.guild.id,
       channelId: interaction.channel.id,
@@ -181,7 +189,7 @@ async function show(client, interaction) {
 }
 
 async function send(client, interaction) {
-  const id = interaction.options.get("message")?.value;
+  const id = interaction.options.get("title")?.value;
 
   const notify = await Notify.findById(id);
 

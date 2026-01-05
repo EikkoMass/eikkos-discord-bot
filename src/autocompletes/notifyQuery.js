@@ -25,7 +25,6 @@ export default {
           return {
             name:
               notification.title ??
-              notification.message ??
               notification._id.toString(),
             value: notification._id.toString(),
           };
