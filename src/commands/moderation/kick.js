@@ -17,7 +17,7 @@ export default {
   callback: async (client, interaction) => {
     const words = await getLocalization(interaction.locale, `kick`);
 
-    const targetUserId = interaction.options.get("target-user").value;
+    const targetUserId = interaction.options.get("target").value;
     const reason =
       interaction.options.get("reason")?.value || "No reason provided.";
 
@@ -79,10 +79,10 @@ export default {
   // testOnly: Boolean,
   options: [
     {
-      name: "target-user",
+      name: "target",
       description: "The user you want to kick.",
       required: true,
-      type: ApplicationCommandOptionType.Mentionable,
+      type: ApplicationCommandOptionType.User,
     },
     {
       name: "reason",

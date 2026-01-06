@@ -19,7 +19,7 @@ export default {
   callback: async (client, interaction) => {
     const words = await getLocalization(interaction.locale, `ban`);
 
-    const targetUserId = interaction.options.get("target-user").value;
+    const targetUserId = interaction.options.get("target").value;
     const reason =
       interaction.options.get("reason")?.value || words.NoReasonProvided;
 
@@ -86,10 +86,10 @@ export default {
   // testOnly: Boolean,
   options: [
     {
-      name: "target-user",
+      name: "target",
       description: "The user you want to ban.",
       required: true,
-      type: ApplicationCommandOptionType.Mentionable,
+      type: ApplicationCommandOptionType.User,
     },
     {
       name: "reason",

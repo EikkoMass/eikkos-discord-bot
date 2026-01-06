@@ -15,9 +15,9 @@ export default {
   description: "Shows your/someone's level",
   options: [
     {
-      name: "target-user",
+      name: "target",
       description: "The user whose level you want to see.",
-      type: ApplicationCommandOptionType.Mentionable,
+      type: ApplicationCommandOptionType.User,
     },
   ],
 
@@ -35,7 +35,7 @@ export default {
 
     await interaction.deferReply();
 
-    const mentionedUserId = interaction.options.get("target-user")?.value;
+    const mentionedUserId = interaction.options.get("target")?.value;
     const targetUserId = mentionedUserId || interaction.member.id;
     const targetUserObj = await interaction.guild.members.fetch(targetUserId);
 

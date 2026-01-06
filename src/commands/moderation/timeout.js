@@ -20,7 +20,7 @@ export default {
     const embed = new EmbedBuilder();
     const words = await getLocalization(interaction.locale, `timeout`);
 
-    const mentionable = interaction.options.get("target-user").value;
+    const mentionable = interaction.options.get("target").value;
     const duration = interaction.options.get("duration").value;
     const reason =
       interaction.options.get("reason")?.value || words.NoReasonProvided;
@@ -112,9 +112,9 @@ export default {
   description: "Timeout a user.",
   options: [
     {
-      name: "target-user",
+      name: "target",
       description: "The user you want to timeout",
-      type: ApplicationCommandOptionType.Mentionable,
+      type: ApplicationCommandOptionType.User,
       required: true,
     },
     {
