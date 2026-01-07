@@ -1,5 +1,8 @@
 {
   "embeds": {
     "max": 10
+  },
+  "autocompletes": {
+    "max": 25
   }
 }

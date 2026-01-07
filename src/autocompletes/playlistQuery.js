@@ -1,6 +1,8 @@
 import { Client } from "discord.js";
 import Playlist from "../models/playlist.js";
 
+import discord from "../configs/discord.json" with { type: "json" };
+
 export default {
   name: "playlist",
   contexts: ["play"],
@@ -15,13 +17,15 @@ export default {
       var playlists = await Playlist.find({
         guildId: interaction.guild.id,
         name: { $regex: `.*${search}.*`, $options: "i" },
-      }).limit(25);
+      }).limit(discord.autocompletes.max);
 
       if (playlists) {
         let options = playlists.map((playlist) => {
           return { name: playlist.name, value: playlist.link };
         });
-        interaction.respond(options.slice(0, 25)).catch(() => {});
+        interaction
+          .respond(options.slice(0, discord.autocompletes.max))
+          .catch(() => {});
       }
     } catch (err) {
       console.log(err);

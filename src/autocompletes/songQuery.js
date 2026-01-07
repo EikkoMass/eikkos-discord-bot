@@ -1,6 +1,8 @@
 import { Client } from "discord.js";
 import { QueryType, useMainPlayer } from "discord-player";
 
+import discord from "../configs/discord.json" with { type: "json" };
+
 const player = useMainPlayer();
 
 export default {
@@ -24,7 +26,9 @@ export default {
         let options = results.tracks.map((track) => {
           return { name: track.title, value: track.url };
         });
-        interaction.respond(options.slice(0, 25)).catch(() => {});
+        interaction
+          .respond(options.slice(0, discord.autocompletes.max))
+          .catch(() => {});
       }
     } catch (err) {
       console.log(err);
