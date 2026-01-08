@@ -1,7 +1,7 @@
 import { Client, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
 import Notify from "../../models/notify.js";
 
-import { getLocalization } from "../../utils/i18n.js";
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
 import discord from "../../configs/discord.json" with { type: "json" };
 import getNotifyEmbeds from "../../utils/components/getNotifyEmbeds.js";
@@ -92,6 +92,8 @@ export default {
 };
 
 async function add(client, interaction) {
+  const words = await getLocalization(interaction.locale, "notify");
+
   try {
     const title = interaction.options.get("title")?.value;
     const message = interaction.options.get("message")?.value;
@@ -109,42 +111,43 @@ async function add(client, interaction) {
 
     return await replies.message.success(
       interaction,
-      `Notify notification added successfully!`,
+      formatMessage(words.Added, [title]),
     );
   } catch (e) {
     return await replies.message.error(
       interaction,
-      `An error occurred while adding the Notify notification: ${e.message}`,
+      formatMessage(words.ErrorAdding, [e.message]),
     );
   }
 }
 
 async function remove(client, interaction) {
+  const words = await getLocalization(interaction.locale, "notify");
+
   try {
     const id = interaction.options.get("id")?.value;
 
     const notify = await Notify.findOneAndDelete({ _id: id });
 
     if (!notify) {
-      return await replies.message.error(
-        interaction,
-        `Notify notification not found!`,
-      );
+      return await replies.message.error(interaction, words.NotFound);
     }
 
     return await replies.message.success(
       interaction,
-      `Notify notification added successfully!`,
+      formatMessage(words.Removed, [notify.title]),
     );
   } catch (e) {
     return await replies.message.error(
       interaction,
-      `An error occurred while removing the Notify notification \`${id}\``,
+      formatMessage(words.ErrorRemoving, [id]),
     );
   }
 }
 
 async function show(client, interaction) {
+  const words = await getLocalization(interaction.locale, "notify");
+
   try {
     const query = {
       guildId: interaction.guild.id,
@@ -159,10 +162,7 @@ async function show(client, interaction) {
       .limit(discord.embeds.max);
 
     if (!notify || notify.length === 0) {
-      return await replies.message.error(
-        interaction,
-        `No Notify register found!`,
-      );
+      return await replies.message.error(interaction, words.RegisterNotFound);
     }
 
     console.log(notify);
@@ -181,23 +181,18 @@ async function show(client, interaction) {
     });
   } catch (e) {
     console.log(e);
-    return await replies.message.error(
-      interaction,
-      `An error occurred while showing the Notify notifications`,
-    );
+    return await replies.message.error(interaction, words.ErrorShowing);
   }
 }
 
 async function send(client, interaction) {
+  const words = await getLocalization(interaction.locale, "notify");
   const id = interaction.options.get("title")?.value;
 
   const notify = await Notify.findById(id);
 
   if (!notify || !notify.message) {
-    return await replies.message.error(
-      interaction,
-      `Notify notification not found!`,
-    );
+    return await replies.message.error(interaction, words.NotFound);
   }
 
   await interaction.deferReply();

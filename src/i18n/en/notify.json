@@ -1,0 +1,9 @@
+{
+  "Added": "Notification `{0}` added successfully!",
+  "ErrorAdding": "An error occurred while trying to add notification: {0}",
+  "NotFound": "Notification not found",
+  "Removed": "Notification `{0}` removed successfully!",
+  "ErrorRemoving": "An error occurred while removing the notification `{0}`",
+  "RegisterNotFound": "No notification register found!",
+  "ErrorShowing": "An error occurred while trying to show the notifications"
+}
