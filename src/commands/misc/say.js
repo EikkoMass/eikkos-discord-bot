@@ -1,6 +1,5 @@
 import {
   Client,
-  EmbedBuilder,
   ApplicationCommandOptionType,
   PermissionFlagsBits,
 } from "discord.js";

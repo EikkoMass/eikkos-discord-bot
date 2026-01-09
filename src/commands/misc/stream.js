@@ -14,6 +14,9 @@ export default {
       case "register":
         await register(client, interaction);
         break;
+      case "set":
+        await set(client, interaction);
+        break;
       case "remove":
         await remove(client, interaction);
         break;
@@ -57,13 +60,32 @@ export default {
       ],
     },
     {
+      name: "set",
+      description: "Set a new stream (without saving it // disables rotation)",
+      type: ApplicationCommandOptionType.Subcommand,
+      options: [
+        {
+          name: "title",
+          description: "Title of the stream",
+          type: ApplicationCommandOptionType.String,
+          required: true,
+        },
+        {
+          name: "link",
+          description: "Link that you want to stream",
+          type: ApplicationCommandOptionType.String,
+          required: true,
+        },
+      ],
+    },
+    {
       name: "remove",
-      description: "Sets a custom value to randomize",
+      description: "Remove the stream you want",
       type: ApplicationCommandOptionType.Subcommand,
       options: [
         {
           name: "link",
-          description: "Link that you want to stream",
+          description: "the link of the stream you want to remove",
           type: ApplicationCommandOptionType.String,
           required: true,
         },
@@ -121,6 +143,28 @@ async function register(client, interaction) {
     });
 
     await streamData.save();
+
+    await reply.message.success(interaction, words.Registered);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+/**
+ *  @param {Client} client
+ *  @param  interaction
+ */
+async function set(client, interaction) {
+  const words = await getLocalization(interaction.locale, `stream`);
+
+  try {
+    const title = interaction.options.get("title")?.value;
+    const link = interaction.options.get("link")?.value;
+    cache.setRotation(false);
+    cache.set({
+      name: title,
+      url: link,
+    });
 
     await reply.message.success(interaction, words.Registered);
   } catch (e) {

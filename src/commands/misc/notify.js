@@ -165,7 +165,6 @@ async function show(client, interaction) {
       return await replies.message.error(interaction, words.RegisterNotFound);
     }
 
-    console.log(notify);
     return await interaction.reply({
       embeds: await getNotifyEmbeds(client, notify),
       components: [
