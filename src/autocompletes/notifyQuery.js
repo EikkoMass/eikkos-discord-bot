@@ -17,8 +17,7 @@ export default {
       var notifications = await Notify.find({
         guildId: interaction.guild.id,
         $or: [
-          { title: { $regex: `.*${search}.*`, $options: "i" } },
-          { message: { $regex: `.*${search}.*`, $options: "i" } },
+          { title: { $regex: `.*${search}.*`, $options: "i" } }
         ],
       }).limit(discord.autocompletes.max);
 
@@ -30,7 +29,7 @@ export default {
           };
         });
         interaction
-          .respond(options.slice(0, discord.autocompletes.max))
+          .respond(options)
           .catch(() => {});
       }
     } catch (err) {

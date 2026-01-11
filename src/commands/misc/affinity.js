@@ -1,9 +1,4 @@
-import {
-  Client,
-  ApplicationCommandOptionType,
-  MessageFlags,
-  EmbedBuilder,
-} from "discord.js";
+import { Client, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import { randomize } from "../../utils/core/randomizer.js";
