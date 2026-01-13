@@ -185,9 +185,16 @@ async function cancel(client, interaction) {
   }
 
   clearTimeout(cachedReminder.timeout);
-  const res = await Reminder.findByIdAndDelete({
+  const remind = await Reminder.findById({
     _id: cachedReminder._id,
-  }).catch(() => {});
+  });
+
+  if (remind.guildId !== interaction.guild.id) {
+    return await reply.message.error(interaction, words.NotFoundSpecified);
+  }
+
+  await Reminder.deleteOne({ _id: cachedReminder._id });
+
   cache.remove(cacheIdentifier, id);
 
   await reply.message.success(interaction, words.Cancelled);
