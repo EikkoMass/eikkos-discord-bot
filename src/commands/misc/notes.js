@@ -292,9 +292,14 @@ async function remove(client, interaction) {
 
   const words = await getLocalization(interaction.locale, `notes`);
 
-  const note = await Note.findByIdAndDelete(id).catch(() => {});
+  const note = await Note.findById(id);
+
+  if (note.guildId !== interaction.guild.id || (note.type === Enum.PRIVATE && note.userId !== interaction.user.id)) {
+    return await reply.message.error(interaction, words.NotFound);
+  }
 
   if (note) {
+    await Note.deleteOne({ _id: note._id });
     return await reply.message.success(interaction, words.Removed);
   }
 

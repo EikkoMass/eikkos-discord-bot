@@ -1,9 +1,4 @@
-import {
-  ApplicationCommandOptionType,
-  EmbedBuilder,
-  Client,
-  MessageFlags,
-} from "discord.js";
+import { ApplicationCommandOptionType, EmbedBuilder, Client } from "discord.js";
 import info from "../../../package.json" with { type: "json" };
 
 import reply from "../../utils/core/replies.js";
