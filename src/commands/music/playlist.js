@@ -134,12 +134,14 @@ async function remove(client, interaction) {
 
   const id = interaction.options.get("id").value;
 
-  const playlist = await Playlist.findByIdAndDelete({ _id: id }).catch((e) => {
-    console.log(e);
-  });
+  const playlist = await Playlist.findById({ _id: id });
 
-  if (playlist) {
-    return await reply.message.success(interaction, formatMessage(words.Removed, [playlist.name]));
+  if (playlist && playlist.guildId === interaction.guild.id) {
+    await playlist.deleteOne();
+    return await reply.message.success(
+      interaction,
+      formatMessage(words.Removed, [playlist.name]),
+    );
   }
 
   return await reply.message.error(interaction, words.ErrorRemoving);
