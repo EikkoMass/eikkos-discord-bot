@@ -24,7 +24,7 @@ This is a bot that started the development as a study, now became a hobby projec
 
 ### Running Locally
 
-Make sure you have Node.js installed (last version revised: v24.11.1).
+Make sure you have Node.js installed (last version revised: v24.13.0).
 
 Inside the main folder, run the command `node src/index.js` or just `npm start`.
 
