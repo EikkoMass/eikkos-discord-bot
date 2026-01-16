@@ -31,6 +31,10 @@ export default {
     });
 
     if (message)
-      setTimeout(async () => await message.delete(), track.durationMS);
+      setTimeout(async () => {
+        try {
+          await message.delete();
+        } catch (error) {}
+      }, track.durationMS);
   },
 };
