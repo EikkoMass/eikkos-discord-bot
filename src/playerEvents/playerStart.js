@@ -1,4 +1,4 @@
-import { EmbedBuilder, MessageFlags } from "discord.js";
+import { EmbedBuilder, MessageFlags, Colors } from "discord.js";
 import { GuildQueue, Track } from "discord-player";
 import getPlayerActionRow from "../utils/components/playerActionRow.js";
 
@@ -22,6 +22,7 @@ export default {
       .setDescription(`${track.title} - ${queue.currentTrack.author}`)
       .setThumbnail(track.thumbnail)
       .setFooter({ text: `${words.Duration}: ${track.duration}` })
+      .setColor(Colors.Blurple)
       .setURL(track.url);
 
     let message = await queue.metadata.channel.send({
