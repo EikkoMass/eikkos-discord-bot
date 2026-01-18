@@ -3,7 +3,7 @@ import { useQueue } from "discord-player";
 
 import reply from "../../../utils/core/replies.js";
 
-import { getLocalization } from "../../../utils/i18n.js";
+import { getLocalization, formatMessage } from "../../../utils/i18n.js";
 
 export default {
   name: "player",
