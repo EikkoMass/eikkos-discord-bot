@@ -182,7 +182,7 @@ async function list(client, interaction) {
 }
 
 async function play(client, interaction) {
-  const words = await getLocalization(interaction.locale, `play`);
+  const words = await getLocalization(interaction.locale, `playlist`);
 
   const embed = new EmbedBuilder();
   let link = interaction.options.get("name")?.value;

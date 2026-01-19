@@ -3,5 +3,7 @@
   "ErrorAdding": "Error adding playlist!",
   "Removed": "Playlist `{0}` removed successfully",
   "ErrorRemoving": "Error removing playlist!",
-  "NotFound": "No playlists found!"
+  "NotFound": "No playlists found!",
+  "VoiceChannelRequired": "You need to be in a voice channel!",
+  "PlaylistAdded": "Playlist added - {0} tracks"
 }
