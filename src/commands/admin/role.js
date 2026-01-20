@@ -8,6 +8,7 @@ import {
 } from "discord.js";
 import ActionRowRole from "../../models/actionRowRole.js";
 import RoleContext from "../../models/roleContext.js";
+import actions from "../../configs/actions.json" with { type: "json" };
 import { Types } from "mongoose";
 
 import reply from "../../utils/core/replies.js";
@@ -208,7 +209,7 @@ async function choose(client, interaction) {
         new ButtonBuilder()
           .setCustomId(
             JSON.stringify({
-              id: "role;",
+              id: actions.role.main,
               roleId: role.roleId,
               hash: crypto.randomUUID(),
             }),

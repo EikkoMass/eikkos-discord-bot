@@ -3,6 +3,7 @@ import getNoteEmbeds from "../../../utils/components/getNoteEmbeds.js";
 import getPaginator from "../../../utils/components/getPaginator.js";
 import Enum from "../../../enums/notes/contexts.js";
 import discord from "../../../configs/discord.json" with { type: "json" };
+import actions from "../../../configs/actions.json" with { type: "json" };
 
 import Note from "../../../models/note.js";
 
@@ -41,7 +42,7 @@ export default {
         components: [
           getPaginator(
             {
-              id: `notes;show;`,
+              id: actions.notes.show,
               context: content.context,
             },
             countNotes,

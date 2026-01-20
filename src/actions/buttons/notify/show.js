@@ -2,6 +2,7 @@ import { Client } from "discord.js";
 import getNotifyEmbeds from "../../../utils/components/getNotifyEmbeds.js";
 import getPaginator from "../../../utils/components/getPaginator.js";
 import discord from "../../../configs/discord.json" with { type: "json" };
+import actions from "../../../configs/actions.json" with { type: "json" };
 
 import Notify from "../../../models/notify.js";
 
@@ -43,7 +44,7 @@ export default {
         components: [
           getPaginator(
             {
-              id: `notify;show;`,
+              id: actions.notify.show,
             },
             count,
             page,

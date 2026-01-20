@@ -1,5 +1,6 @@
 import { ActionRowBuilder, ButtonStyle, ButtonBuilder } from "discord.js";
 import emojis from "../../utils/core/emojis.js";
+import actions from "../../configs/actions.json" with { type: "json" };
 
 /**
  * @returns {ActionRowBuilder} actionRow
@@ -12,7 +13,7 @@ export default () => {
     new ButtonBuilder()
       .setCustomId(
         JSON.stringify({
-          id: `player;pause;`,
+          id: actions.player.pause,
           hash,
         }),
       )
@@ -25,7 +26,7 @@ export default () => {
     new ButtonBuilder()
       .setCustomId(
         JSON.stringify({
-          id: `player;play;`,
+          id: actions.player.play,
           hash,
         }),
       )
@@ -38,7 +39,7 @@ export default () => {
     new ButtonBuilder()
       .setCustomId(
         JSON.stringify({
-          id: `player;skip;`,
+          id: actions.player.skip,
           hash,
         }),
       )
@@ -51,7 +52,7 @@ export default () => {
     new ButtonBuilder()
       .setCustomId(
         JSON.stringify({
-          id: `player;shuffle;`,
+          id: actions.player.shuffle,
           hash,
         }),
       )
@@ -64,7 +65,7 @@ export default () => {
     new ButtonBuilder()
       .setCustomId(
         JSON.stringify({
-          id: `player;stop;`,
+          id: actions.player.stop,
           hash,
         }),
       )

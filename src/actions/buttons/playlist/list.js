@@ -2,6 +2,7 @@ import { Client } from "discord.js";
 import getPlaylistEmbeds from "../../../utils/components/getPlaylistEmbeds.js";
 import getPaginator from "../../../utils/components/getPaginator.js";
 import discord from "../../../configs/discord.json" with { type: "json" };
+import actions from "../../../configs/actions.json" with { type: "json" };
 
 import Playlist from "../../../models/playlist.js";
 
@@ -35,7 +36,7 @@ export default {
         components: [
           getPaginator(
             {
-              id: "playlist;list;",
+              id: actions.playlist.list,
             },
             count,
             page,

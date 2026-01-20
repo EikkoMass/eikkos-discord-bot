@@ -20,6 +20,7 @@ import getPaginator from "../../utils/components/getPaginator.js";
 import NoteTypes from "../../enums/notes/types.js";
 import Enum from "../../enums/notes/contexts.js";
 import discord from "../../configs/discord.json" with { type: "json" };
+import actions from "../../configs/actions.json" with { type: "json" };
 
 const OPTS = {
   add: {
@@ -173,7 +174,7 @@ async function manageNote(client, interaction, action, code = null) {
     }
   }
 
-  const id = action === NoteTypes.ADD ? "notes;add;" : "notes;edit;";
+  const id = action === NoteTypes.ADD ? actions.notes.add : actions.notes.edit;
 
   const hashSize = 6;
   const hash = Math.random()
@@ -263,7 +264,7 @@ async function show(client, interaction) {
     if (context === Enum.PUBLIC) {
       row = getPaginator(
         {
-          id: `notes;show;`,
+          id: actions.notes.show,
           context,
         },
         countNotes,
@@ -294,7 +295,10 @@ async function remove(client, interaction) {
 
   const note = await Note.findById(id);
 
-  if (note.guildId !== interaction.guild.id || (note.type === Enum.PRIVATE && note.userId !== interaction.user.id)) {
+  if (
+    note.guildId !== interaction.guild.id ||
+    (note.type === Enum.PRIVATE && note.userId !== interaction.user.id)
+  ) {
     return await reply.message.error(interaction, words.NotFound);
   }
 

@@ -10,12 +10,68 @@ import Playlist from "../../models/playlist.js";
 import { useMainPlayer, QueryType } from "discord-player";
 import playerConfigs from "../../configs/player.json" with { type: "json" };
 import discord from "../../configs/discord.json" with { type: "json" };
+import actions from "../../configs/actions.json" with { type: "json" };
 
 import getPlaylistEmbeds from "../../utils/components/getPlaylistEmbeds.js";
 import getPaginator from "../../utils/components/getPaginator.js";
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 import reply from "../../utils/core/replies.js";
+
+const OPTS = {
+  play: {
+    name: "play",
+    description: "play the selected playlist",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "name",
+        description: "name of the saved playlist you want.",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+        autocomplete: true,
+      },
+    ],
+  },
+  add: {
+    name: "add",
+    description: "adds a playlist context",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "name",
+        description: "name scope to the playlist",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+      {
+        name: "link",
+        description: "link to the playlist",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+    ],
+  },
+  remove: {
+    name: "remove",
+    description: "removes a playlist context",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "id",
+        description:
+          "playlist id  you want to remove (check with '/playlist list')",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+    ],
+  },
+  list: {
+    name: "list",
+    description: "show guild's playlists",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+};
 
 export default {
   name: "playlist",
@@ -26,82 +82,22 @@ export default {
    */
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "add":
-        await add(client, interaction);
-        break;
-      case "play":
-        await play(client, interaction);
-        break;
-      case "remove":
-        await remove(client, interaction);
-        break;
-      case "list":
-        await list(client, interaction);
-        break;
+      case OPTS.add.name:
+        return await add(client, interaction);
+      case OPTS.play.name:
+        return await play(client, interaction);
+      case OPTS.remove.name:
+        return await remove(client, interaction);
+      case OPTS.list.name:
+        return await list(client, interaction);
       default:
-        await interaction.reply({
-          flags: MessageFlags.Ephemeral,
-          embeds: [
-            new EmbedBuilder().setDescription(`Playlist command not found!`),
-          ],
-        });
-        return;
+        return await reply.message.error(
+          interaction,
+          `Playlist command not found!`,
+        );
     }
   },
-  options: [
-    {
-      name: "play",
-      description: "play the selected playlist",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "name",
-          description: "name of the saved playlist you want.",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-          autocomplete: true,
-        },
-      ],
-    },
-    {
-      name: "add",
-      description: "adds a playlist context",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "name",
-          description: "name scope to the playlist",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-        {
-          name: "link",
-          description: "link to the playlist",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "remove",
-      description: "removes a playlist context",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "id",
-          description:
-            "playlist id  you want to remove (check with '/playlist list')",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "list",
-      description: "show guild's playlists",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-  ],
+  options: [OPTS.add, OPTS.list, OPTS.play, OPTS.remove],
 };
 
 async function add(client, interaction) {
@@ -168,7 +164,7 @@ async function list(client, interaction) {
       components: [
         getPaginator(
           {
-            id: "playlist;list;",
+            id: actions.playlist.list,
           },
           count,
           1,
@@ -189,7 +185,9 @@ async function play(client, interaction) {
   let channel = interaction.member?.voice?.channel;
   let player = useMainPlayer();
 
-  await interaction.deferReply();
+  await interaction.deferReply({
+    flags: [MessageFlags.Ephemeral],
+  });
 
   if (!channel) {
     await reply.message.error(interaction, words.VoiceChannelRequired, {
@@ -234,7 +232,6 @@ async function play(client, interaction) {
     .setURL(playlist.url);
 
   await interaction.editReply({
-    flags: MessageFlags.Ephemeral,
     embeds: [embed],
   });
 }

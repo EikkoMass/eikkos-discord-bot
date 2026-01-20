@@ -4,6 +4,8 @@ import Notify from "../../models/notify.js";
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
 import discord from "../../configs/discord.json" with { type: "json" };
+import actions from "../../configs/actions.json" with { type: "json" };
+
 import getNotifyEmbeds from "../../utils/components/getNotifyEmbeds.js";
 import getPaginator from "../../utils/components/getPaginator.js";
 
@@ -170,7 +172,7 @@ async function show(client, interaction) {
       components: [
         getPaginator(
           {
-            id: `notify;show;`,
+            id: actions.notify.show,
           },
           count,
           page,

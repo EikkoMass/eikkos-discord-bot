@@ -1,0 +1,23 @@
+{
+  "playlist": {
+    "list": "playlist;list;"
+  },
+  "notes": {
+    "add": "notes;add;",
+    "edit": "notes;edit;",
+    "show": "notes;show;"
+  },
+  "notify": {
+    "show": "notify;show;"
+  },
+  "player": {
+    "play": "player;play;",
+    "pause": "player;pause;",
+    "stop": "player;stop;",
+    "skip": "player;skip;",
+    "shuffle": "player;shuffle;"
+  },
+  "role": {
+    "main": "role;"
+  }
+}

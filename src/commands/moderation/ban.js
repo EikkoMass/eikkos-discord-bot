@@ -2,7 +2,6 @@ import {
   Client,
   ApplicationCommandOptionType,
   PermissionFlagsBits,
-  EmbedBuilder,
 } from "discord.js";
 
 import reply from "../../utils/core/replies.js";
