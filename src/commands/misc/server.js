@@ -1,6 +1,8 @@
 import { Client, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
 import replies from "../../utils/core/replies.js";
 
+import { getLocalization } from "../../utils/i18n.js";
+
 export default {
   name: "server",
   description: "commands about your server",
@@ -37,37 +39,33 @@ export default {
 };
 
 async function image(client, interaction) {
+  const words = await getLocalization(interaction.locale, `server`);
   const guild = interaction.guild;
-
-  if (!guild)
-    return await replies.message.error(
-      interaction,
-      "Server not found! (How did this happen?)",
-    );
 
   const image = guild.iconURL({ size: 1024 });
 
   if (!image)
-    return await replies.message.error(interaction, "Server icon not found!");
+    return await replies.message.error(interaction, words.IconNotFound);
 
   await interaction.reply({ files: [image] });
 }
 
 async function info(client, interaction) {
+  const words = await getLocalization(interaction.locale, `server`);
   const guild = interaction.guild;
 
   const embed = new EmbedBuilder()
     .setTitle(guild.name)
     .setFields([
-      { name: "Members", value: `${guild.memberCount}`, inline: true },
+      { name: words.Members, value: `${guild.memberCount}`, inline: true },
       {
-        name: "Events",
+        name: words.Events,
         value: `${guild.scheduledEvents.cache.size}`,
         inline: true,
       },
       { name: " ", value: ` ` },
-      { name: "Owner", value: `<@${guild.ownerId}>`, inline: true },
-      { name: "Locale", value: `${guild.preferredLocale}`, inline: true },
+      { name: words.Owner, value: `<@${guild.ownerId}>`, inline: true },
+      { name: words.Locale, value: `${guild.preferredLocale}`, inline: true },
     ])
     .setThumbnail(guild.iconURL({ size: 1024 }));
 
