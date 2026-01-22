@@ -1,6 +1,5 @@
 import { Client, Message } from "discord.js";
 import xp from "../utils/xp.js";
-import Level from "../models/level.js";
 const cooldowns = new Set();
 
 export default {
