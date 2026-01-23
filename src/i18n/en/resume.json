@@ -1,4 +1,6 @@
 {
   "NotPaused": "The playback is not paused.",
-  "Resumed": "Playback resumed."
+  "Resumed": "Playback resumed.",
+  "QueueEmpty": "The queue is empty! Try adding new tracks",
+  "AlreadyPlaying": "The song are already playing"
 }

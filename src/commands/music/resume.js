@@ -19,6 +19,12 @@ export default {
 
     const queue = useQueue(interaction.guild);
 
+    if (!queue) {
+      return await reply.message.error(interaction, words.QueueEmpty, {
+        context: "editReply",
+      });
+    }
+
     if (queue.node.isPlaying()) {
       return await reply.message.warning(interaction, words.NotPaused, {
         context: "editReply",

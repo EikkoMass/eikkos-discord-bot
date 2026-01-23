@@ -7,7 +7,7 @@ import { getLocalization } from "../../../utils/i18n.js";
 
 export default {
   name: "player",
-  tags: ["play"],
+  tags: ["resume"],
 
   /**
    *  @param {Client} client
@@ -15,25 +15,29 @@ export default {
    */
   callback: async (client, interaction) => {
     try {
-      const words = await getLocalization(interaction.locale, `play`);
-
-      await interaction.deferReply({
-        flags: [MessageFlags.Ephemeral],
-      });
+      const words = await getLocalization(interaction.locale, `resume`);
 
       const queue = useQueue(interaction.guild);
 
-      if (queue.node.isPlaying()) {
-        await reply.message.error(interaction, words.AlreadyPlaying, {
+      if (!queue) {
+        return await reply.message.error(interaction, words.QueueEmpty, {
           context: "editReply",
         });
-        return;
+      }
+
+      if (queue.node.isPlaying()) {
+        return await reply.message.error(interaction, words.AlreadyPlaying, {
+          context: "editReply",
+        });
       }
 
       queue.node.resume();
-      await reply.message.success(interaction, words.Resumed, {
-        context: "editReply",
-      });
+
+      // await reply.message.success(interaction, words.Resumed, {
+      //   context: "editReply",
+      // });
+      await interaction.deferUpdate();
+
       return;
     } catch (err) {
       console.log(err);

@@ -26,7 +26,7 @@ export default () => {
     new ButtonBuilder()
       .setCustomId(
         JSON.stringify({
-          id: actions.player.play,
+          id: actions.player.resume,
           hash,
         }),
       )

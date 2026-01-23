@@ -1,4 +1,6 @@
 {
   "NotPaused": "A lista não está pausada.",
-  "Resumed": "Lista de faixas retomada."
+  "Resumed": "Lista de faixas retomada.",
+  "QueueEmpty": "A listagem esta vazia! Tente adicionar novas faixas",
+  "AlreadyPlaying": "Músicas já estão sendo tocadas"
 }
