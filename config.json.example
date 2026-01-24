@@ -8,6 +8,8 @@
         "skip":     { "id": "", "name": "" },
         "shuffle":  { "id": "", "name": "" },
         "before":   { "id": "", "name": "" },
-        "next":     { "id": "", "name": "" }
+        "next":     { "id": "", "name": "" },
+        "first":    { "id": "", "name": "" },
+        "last":     { "id": "", "name": "" }
     }
 }

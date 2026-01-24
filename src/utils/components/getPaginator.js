@@ -20,6 +20,21 @@ function getPaginatorActionRows(
       .setCustomId(
         JSON.stringify({
           ...customIdObj,
+          page: minPage,
+          hash: crypto.randomUUID(),
+        }),
+      )
+      .setDisabled(page === minPage)
+      .setEmoji(emojis.get("first"))
+      .setLabel(` `)
+      .setStyle(ButtonStyle.Secondary),
+  );
+
+  row.components.push(
+    new ButtonBuilder()
+      .setCustomId(
+        JSON.stringify({
+          ...customIdObj,
           page: lastPage,
           hash: crypto.randomUUID(),
         }),
@@ -55,6 +70,21 @@ function getPaginatorActionRows(
       )
       .setDisabled(page === maxPage)
       .setEmoji(emojis.get("next"))
+      .setLabel(` `)
+      .setStyle(ButtonStyle.Secondary),
+  );
+
+  row.components.push(
+    new ButtonBuilder()
+      .setCustomId(
+        JSON.stringify({
+          ...customIdObj,
+          page: maxPage,
+          hash: crypto.randomUUID(),
+        }),
+      )
+      .setDisabled(page === maxPage)
+      .setEmoji(emojis.get("last"))
       .setLabel(` `)
       .setStyle(ButtonStyle.Secondary),
   );
