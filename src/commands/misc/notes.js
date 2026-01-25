@@ -13,7 +13,7 @@ import {
 import getNoteEmbeds from "../../utils/components/getNoteEmbeds.js";
 import reply from "../../utils/core/replies.js";
 import Note from "../../models/note.js";
-import { Types } from "mongoose";
+import { Types as MongooseTypes } from "mongoose";
 
 import { getLocalization } from "../../utils/i18n.js";
 import getPaginator from "../../utils/components/getPaginator.js";
@@ -162,7 +162,7 @@ async function manageNote(client, interaction, action, code = null) {
     let note = await Note.findOne({
       userId: interaction.user.id,
       guildId: interaction.guild.id,
-      _id: new Types.ObjectId(`${code}`),
+      _id: new MongooseTypes.ObjectId(`${code}`),
     });
 
     if (note) {

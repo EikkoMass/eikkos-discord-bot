@@ -12,6 +12,8 @@ export default {
    * @param {Track} track
    */
   callback: async (queue, track) => {
+    if (track.queryType === "tts") return;
+
     const words = await getLocalization(
       queue.metadata.preferredLocale,
       "playerEvents/playerStart",

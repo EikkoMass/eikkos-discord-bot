@@ -6,6 +6,7 @@ import { Player } from "discord-player";
 import { DefaultExtractors } from "@discord-player/extractor";
 // import { YoutubeiExtractor } from "discord-player-youtubei";
 import { YoutubeSabrExtractor } from "discord-player-googlevideo";
+import { TTSExtractor } from "discord-player-tts";
 import igdb from "./utils/authenticators/igdb.js";
 import loadPlayerEvents from "./utils/importers/loadPlayerEvents.js";
 
@@ -43,6 +44,8 @@ const client = new Client({
   await player.extractors.register(YoutubeSabrExtractor, {
     authentication: process.env.YT_CREDENTIAL,
   });
+
+  await player.extractors.register(TTSExtractor);
 
   await player.extractors.loadMulti(DefaultExtractors);
   await loadPlayerEvents(player.events);
