@@ -24,7 +24,6 @@ const OPTS = {
 export default {
   name: "tts",
   description: "Text-to-Speech command",
-  devOnly: true,
   options: [OPTS.join, OPTS.leave],
 
   /**
@@ -53,22 +52,22 @@ async function join(client, interaction) {
   const CACHE_REF = `${interaction.guild.id}`;
   const ttsCache = cache.get(CACHE_REF);
 
-  if (ttsCache) {
-    if (cache.includes(CACHE_REF, interaction.user.id)) {
-      return await replies.message.info(interaction, `already joined`);
-    }
-
-    ttsCache.push(interaction.user.id);
-    cache.set(CACHE_REF, ttsCache);
-  } else {
+  if (!ttsCache) {
     const contextEvent = async (message) => await event(client, message);
 
     client.on("messageCreate", contextEvent);
     cache.set(CACHE_REF, contextEvent);
     cache.addUser(CACHE_REF, interaction.user.id);
+
+    play(channel, " ");
+  } else {
+    if (cache.includes(CACHE_REF, interaction.user.id)) {
+      return await replies.message.info(interaction, `already joined`);
+    }
+
+    cache.addUser(CACHE_REF, interaction.user.id);
   }
 
-  play(channel, " ");
   return await replies.message.success(interaction, `joined successfully`);
 }
 
