@@ -6,6 +6,7 @@ import {
 } from "discord.js";
 import playerConfigs from "../../configs/player.json" with { type: "json" };
 import { QueryType, useMainPlayer } from "discord-player";
+import Enum from "../../enums/player/contexts.js";
 
 import reply from "../../utils/core/replies.js";
 
@@ -65,6 +66,7 @@ export default {
             metadata: {
               channel: interaction.channel,
               preferredLocale: interaction.locale,
+              context: Enum.MUSIC
             },
             volume,
             ...playerConfigs,

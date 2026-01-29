@@ -11,6 +11,7 @@ import { useMainPlayer, QueryType } from "discord-player";
 import playerConfigs from "../../configs/player.json" with { type: "json" };
 import discord from "../../configs/discord.json" with { type: "json" };
 import actions from "../../configs/actions.json" with { type: "json" };
+import Enum from "../../enums/player/contexts.js";
 
 import getPlaylistEmbeds from "../../utils/components/getPlaylistEmbeds.js";
 import getPaginator from "../../utils/components/getPaginator.js";
@@ -206,6 +207,7 @@ async function play(client, interaction) {
       metadata: {
         channel: interaction.channel,
         preferredLocale: interaction.locale,
+        context: Enum.MUSIC,
       },
       ...playerConfigs,
     },

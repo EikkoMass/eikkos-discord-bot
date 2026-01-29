@@ -4,6 +4,7 @@ import { useMainPlayer, useQueue } from "discord-player";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
+import Enum from "../../enums/player/contexts.js";
 
 import Tts from "../../models/tts.js";
 
@@ -151,6 +152,7 @@ function play(voice, message, channel, locale) {
       metadata: {
         channel: channel,
         preferredLocale: locale,
+        context: Enum.TTS
       },
       leaveOnStop: false,
       pauseOnEmpty: true,
