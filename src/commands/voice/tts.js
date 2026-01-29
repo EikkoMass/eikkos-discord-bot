@@ -1,11 +1,14 @@
-import { Client, ApplicationCommandOptionType, MessageFlags } from "discord.js";
+import { Client, ApplicationCommandOptionType, ChannelType } from "discord.js";
 
 import { useMainPlayer, useQueue } from "discord-player";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
 
-import cache from "../../utils/cache/tts.js";
+import Tts from "../../models/tts.js";
+
+import sessionCache from "../../utils/cache/ttsSession.js";
+import ttsCache from "../../utils/cache/tts.js";
 import guildCache from "../../utils/cache/guild.js";
 
 const OPTS = {
@@ -14,9 +17,28 @@ const OPTS = {
     description: "Join the voice channel with tts",
     type: ApplicationCommandOptionType.Subcommand,
   },
+  channel: {
+    name: "channel",
+    description: "set the text channel you want to chat with tts",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "id",
+        description: "the channel you want",
+        type: ApplicationCommandOptionType.Channel,
+        channelTypes: [ChannelType.GuildText],
+        required: true,
+      },
+    ],
+  },
   leave: {
     name: "leave",
     description: "leave the tts voice channel poll",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+  shutdown: {
+    name: "shutdown",
+    description: "force the tts session to end",
     type: ApplicationCommandOptionType.Subcommand,
   },
 };
@@ -24,7 +46,7 @@ const OPTS = {
 export default {
   name: "tts",
   description: "Text-to-Speech command",
-  options: [OPTS.join, OPTS.leave],
+  options: [OPTS.join, OPTS.channel, OPTS.leave, OPTS.shutdown],
 
   /**
    *  @param {Client} client
@@ -36,6 +58,10 @@ export default {
         return await join(client, interaction);
       case OPTS.leave.name:
         return await leave(client, interaction);
+      case OPTS.shutdown.name:
+        return await shutdown(client, interaction);
+      case OPTS.channel.name:
+        return await channel(client, interaction);
       default:
         return await replies.message.error(
           interaction,
@@ -46,26 +72,47 @@ export default {
 };
 
 async function join(client, interaction) {
-  const channel = interaction.member?.voice?.channel;
-  if (!channel) return;
+  const vc = interaction.member?.voice?.channel;
+  if (!vc)
+    return await replies.message.info(
+      interaction,
+      `you need to be in a voice channel`,
+    );
 
   const CACHE_REF = `${interaction.guild.id}`;
-  const ttsCache = cache.get(CACHE_REF);
+  const session = sessionCache.get(CACHE_REF);
+  let tts = ttsCache.get(CACHE_REF);
 
-  if (!ttsCache) {
+  if (!tts && !ttsCache.searched(CACHE_REF)) {
+    tts = await Tts.findOne({ guildId: CACHE_REF });
+    ttsCache.set(CACHE_REF, tts);
+  }
+
+  if (!tts) {
+    return await replies.message.error(
+      interaction,
+      `configuration of guild's tts required`,
+    );
+  }
+
+  if (!session) {
     const contextEvent = async (message) => await event(client, message);
 
     client.on("messageCreate", contextEvent);
-    cache.set(CACHE_REF, contextEvent);
-    cache.addUser(CACHE_REF, interaction.user.id);
+    sessionCache.set(CACHE_REF, contextEvent, [interaction.user.id]);
 
-    play(channel, " ");
+    play(
+      vc,
+      " ",
+      interaction.guild.channels.cache.get(tts.channelId),
+      interaction.guild.locale,
+    );
   } else {
-    if (cache.includes(CACHE_REF, interaction.user.id)) {
+    if (sessionCache.includes(CACHE_REF, interaction.user.id)) {
       return await replies.message.info(interaction, `already joined`);
     }
 
-    cache.addUser(CACHE_REF, interaction.user.id);
+    sessionCache.addUser(CACHE_REF, interaction.user.id);
   }
 
   return await replies.message.success(interaction, `joined successfully`);
@@ -74,17 +121,17 @@ async function join(client, interaction) {
 async function leave(client, interaction) {
   const CACHE_REF = `${interaction.guild.id}`;
 
-  const ttsCache = cache.get(CACHE_REF);
+  const session = sessionCache.get(CACHE_REF);
 
-  if (!ttsCache || !cache.includes(CACHE_REF, interaction.user.id)) {
+  if (!session || !sessionCache.includes(CACHE_REF, interaction.user.id)) {
     return await replies.message.info(interaction, `already leaved`);
   }
 
-  let result = cache.removeUser(CACHE_REF, interaction.user.id);
+  let result = sessionCache.removeUser(CACHE_REF, interaction.user.id);
 
   if (!result) {
-    client.off("messageCreate", ttsCache);
-    cache.set(CACHE_REF, null);
+    client.off("messageCreate", session.event);
+    sessionCache.resetOne(CACHE_REF);
 
     let queue = useQueue(interaction.guild);
     queue.delete();
@@ -96,11 +143,15 @@ async function leave(client, interaction) {
   );
 }
 
-function play(voice, message) {
+function play(voice, message, channel, locale) {
   const player = useMainPlayer();
 
   player.play(voice, `tts:${message}`, {
     nodeOptions: {
+      metadata: {
+        channel: channel,
+        preferredLocale: locale,
+      },
       leaveOnStop: false,
       pauseOnEmpty: true,
       leaveOnEmpty: false,
@@ -112,23 +163,85 @@ function play(voice, message) {
 async function event(client, message) {
   const TTS_REF = `${message.guildId}`;
 
-  if (message.author.bot || !cache.includes(TTS_REF, message.author.id)) return;
+  let tts = ttsCache.get(TTS_REF);
+
+  if (!tts && !ttsCache.searched(TTS_REF)) {
+    tts = await Tts.findOne({ guildId: TTS_REF });
+    ttsCache.set(TTS_REF, tts);
+  }
+  if (!tts) return;
+  if (tts.channelId !== message.channelId) return;
+
+  if (message.author.bot || !sessionCache.includes(TTS_REF, message.author.id))
+    return;
 
   const GUILD_ID = `${message.guildId}`;
 
   let guild = guildCache.get(GUILD_ID);
 
-  if (!guild) {
-    if (!guildCache.searched(GUILD_ID)) {
-      guild = client.guilds.cache.get(message.guildId);
-      guildCache.set(GUILD_ID, guild);
-    } else return;
+  if (!guild && !guildCache.searched(GUILD_ID)) {
+    guild = client.guilds.cache.get(message.guildId);
+    guildCache.set(GUILD_ID, guild);
   }
+
+  if (!guild) return;
 
   const member = guild.members.cache.get(message.author.id);
   const voice = member?.voice?.channel;
 
   if (!voice) return;
 
-  play(voice, message.content);
+  play(
+    voice,
+    message.content,
+    guild.channels.cache.get(tts.channelId),
+    guild.preferredLocale,
+  );
+}
+
+async function channel(client, interaction) {
+  const CACHE_REF = `${interaction.guild.id}`;
+  const channel = interaction.options.get("id").value;
+
+  let tts = await Tts.findOne({ guildId: CACHE_REF });
+
+  if (tts) {
+    tts.channelId = channel;
+    tts.active = true;
+  } else {
+    tts = new Tts({
+      guildId: interaction.guild.id,
+      channelId: channel,
+      active: true,
+    });
+  }
+
+  await tts.save();
+
+  ttsCache.set(CACHE_REF, tts);
+  return await replies.message.success(
+    interaction,
+    `changed channel to <#${channel}>`,
+  );
+}
+
+async function shutdown(client, interaction) {
+  const CACHE_REF = `${interaction.guild.id}`;
+
+  let session = sessionCache.get(CACHE_REF);
+
+  if (!session) {
+    return await replies.message.error(interaction, `no active session found`);
+  }
+
+  client.off("messageCreate", session.event);
+  sessionCache.resetOne(CACHE_REF);
+
+  let queue = useQueue(interaction.guild);
+  queue.delete();
+
+  return await replies.message.success(
+    interaction,
+    `shutdown the tts session successfully`,
+  );
 }
