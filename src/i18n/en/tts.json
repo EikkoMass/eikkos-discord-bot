@@ -1,0 +1,11 @@
+{
+  "ChangedChannel": "Changed the context channel to <#{0}>",
+  "VcRequired": "You need to be in a voice channel to use this command",
+  "ConfigRequired": "Configuration of guild's TTS required",
+  "AlreadyJoined": "Already joined the TTS session",
+  "Joined": "Joined successfully the TTS session",
+  "AlreadyLeft": "Already left the TTS session",
+  "Left": "Left successfully the TTS session",
+  "NoSession": "No active TTS session found",
+  "Shutdown": "Shutting down the TTS session"
+}

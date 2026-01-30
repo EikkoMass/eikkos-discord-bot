@@ -73,6 +73,7 @@ export default {
 };
 
 async function join(client, interaction) {
+  const words = await getLocalization(interaction.locale, `tts`);
   const vc = interaction.member?.voice?.channel;
   if (!vc)
     return await replies.message.info(
@@ -90,10 +91,7 @@ async function join(client, interaction) {
   }
 
   if (!tts) {
-    return await replies.message.error(
-      interaction,
-      `configuration of guild's tts required`,
-    );
+    return await replies.message.error(interaction, words.ConfigRequired);
   }
 
   if (!session) {
@@ -110,22 +108,23 @@ async function join(client, interaction) {
     );
   } else {
     if (sessionCache.includes(CACHE_REF, interaction.user.id)) {
-      return await replies.message.info(interaction, `already joined`);
+      return await replies.message.info(interaction, words.AlreadyJoined);
     }
 
     sessionCache.addUser(CACHE_REF, interaction.user.id);
   }
 
-  return await replies.message.success(interaction, `joined successfully`);
+  return await replies.message.success(interaction, words.Joined);
 }
 
 async function leave(client, interaction) {
+  const words = await getLocalization(interaction.locale, `tts`);
   const CACHE_REF = `${interaction.guild.id}`;
 
   const session = sessionCache.get(CACHE_REF);
 
   if (!session || !sessionCache.includes(CACHE_REF, interaction.user.id)) {
-    return await replies.message.info(interaction, `already leaved`);
+    return await replies.message.info(interaction, words.AlreadyLeft);
   }
 
   let result = sessionCache.removeUser(CACHE_REF, interaction.user.id);
@@ -138,13 +137,10 @@ async function leave(client, interaction) {
     queue.delete();
   }
 
-  return await replies.message.success(
-    interaction,
-    `left the tts voice channel`,
-  );
+  return await replies.message.success(interaction, words.Left);
 }
 
-function play(voice, message, channel, locale) {
+async function play(voice, message, channel, locale) {
   const player = useMainPlayer();
 
   player.play(voice, `tts:${message}`, {
@@ -152,7 +148,7 @@ function play(voice, message, channel, locale) {
       metadata: {
         channel: channel,
         preferredLocale: locale,
-        context: Enum.TTS
+        context: Enum.TTS,
       },
       leaveOnStop: false,
       pauseOnEmpty: true,
@@ -202,6 +198,7 @@ async function event(client, message) {
 }
 
 async function channel(client, interaction) {
+  const words = await getLocalization(interaction.locale, `tts`);
   const CACHE_REF = `${interaction.guild.id}`;
   const channel = interaction.options.get("id").value;
 
@@ -223,17 +220,18 @@ async function channel(client, interaction) {
   ttsCache.set(CACHE_REF, tts);
   return await replies.message.success(
     interaction,
-    `changed channel to <#${channel}>`,
+    formatMessage(words.ChangedChannel, [channel]),
   );
 }
 
 async function shutdown(client, interaction) {
+  const words = await getLocalization(interaction.locale, `tts`);
   const CACHE_REF = `${interaction.guild.id}`;
 
   let session = sessionCache.get(CACHE_REF);
 
   if (!session) {
-    return await replies.message.error(interaction, `no active session found`);
+    return await replies.message.error(interaction, words.NoSession);
   }
 
   client.off("messageCreate", session.event);
@@ -242,8 +240,5 @@ async function shutdown(client, interaction) {
   let queue = useQueue(interaction.guild);
   queue.delete();
 
-  return await replies.message.success(
-    interaction,
-    `shutdown the tts session successfully`,
-  );
+  return await replies.message.success(interaction, words.Shutdown);
 }
