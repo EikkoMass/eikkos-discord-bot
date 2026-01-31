@@ -2,5 +2,6 @@
   "Playing": "Playing",
   "Trackss": "Track(s)",
   "NoTrack": "There's no track playing.",
-  "NextTracks": "Next Tracks"
+  "NextTracks": "Next Tracks",
+  "ListLayout": "`{0})` `{1}` {2} [{3}]"
 }

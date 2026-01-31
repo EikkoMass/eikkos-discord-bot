@@ -34,6 +34,17 @@ const OPTS = {
   },
 };
 
+const affinityEmojis = {
+  [`${OPTS.love.name}`]: {
+    filled: ":heart:",
+    empty: ":black_heart:",
+  },
+  [`${OPTS.hate.name}`]: {
+    filled: ":broken_heart:",
+    empty: ":black_heart:",
+  },
+};
+
 export default {
   name: "affinity",
   description: "Calculate the affinity (love / hate) between 2 users",
@@ -121,17 +132,6 @@ async function hate(client, interaction) {
 }
 
 function affinityCalc(type, user1, user2) {
-  const affinityEmojis = {
-    [`${OPTS.love.name}`]: {
-      filled: ":heart:",
-      empty: ":black_heart:",
-    },
-    [`${OPTS.hate.name}`]: {
-      filled: ":broken_heart:",
-      empty: ":black_heart:",
-    },
-  };
-
   const emojis = affinityEmojis[type];
 
   let affinity = Math.round(randomize(user1 + user2) * 100);

@@ -5,7 +5,7 @@ import discord from "../../configs/discord.json" with { type: "json" };
 
 import reply from "../../utils/core/replies.js";
 
-import { getLocalization } from "../../utils/i18n.js";
+import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 export default {
   name: "queue",
@@ -35,9 +35,13 @@ export default {
     if (queue.tracks.size > 0) {
       let nextTracks = queue.tracks.data
         .slice(0, discord.embeds.max)
-        .map(
-          (track, i) =>
-            `\`${i + 1})\` \`${track.duration}\` ${track.title} [${track.requestedBy.displayName}]`,
+        .map((track, i) =>
+          formatMessage(words.ListLayout, [
+            `${i + 1}`,
+            track.duration,
+            track.title,
+            track.requestedBy.displayName,
+          ]),
         )
         .join(" \n\n");
 

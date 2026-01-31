@@ -2,5 +2,6 @@
   "Playing": "Tocando",
   "Trackss": "Música(s)",
   "NoTrack": "Não possui nenhuma música tocando.",
-  "NextTracks": "Próximas Músicas"
+  "NextTracks": "Próximas Músicas",
+  "ListLayout": "`{0})` `{1}` {2} [{3}]"
 }
