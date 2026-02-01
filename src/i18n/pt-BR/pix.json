@@ -1,0 +1,13 @@
+{
+  "UserNotFound": "Nenhum usuario encontrado, tente registrar seus dados com /pix register (...)",
+  "PixInfoCreated": "Informações do usuário Pix criadas com sucesso!",
+  "Creating": "Criando sua solicitação Pix, por favor aguarde!",
+  "PixInfoEdited": "Dados Pix editados com sucesso!",
+  "Error": "Erro",
+  "ErrorN": "Erro: {0}",
+  "Title": "Solicitação de Pix - {0}",
+  "Target": "Para o Usuário",
+  "Date": "Data",
+  "Value": "Valor",
+  "CurrencyFormat": "R$ {0}"
+}

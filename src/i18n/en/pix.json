@@ -1,0 +1,13 @@
+{
+  "UserNotFound": "No user found, try to register your data with /pix register (...)",
+  "PixInfoCreated": "Pix user info created successfully!",
+  "Creating": "Creating your pix request, please wait!",
+  "PixInfoEdited": "Pix data edited successfully!",
+  "Error": "Error",
+  "ErrorN": "Error: {0}",
+  "Title": "Pix Request - {0}",
+  "Target": "To User",
+  "Date": "Date",
+  "Value": "Value",
+  "CurrencyFormat": "$ {0}"
+}
