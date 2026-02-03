@@ -6,7 +6,7 @@
   "author": "Eric Henrique Massaneiro",
   "type": "module",
   "repository": {
-    "domain": "https://github.com",
+    "domain": "https://codeberg.org",
     "user": "EikkoMass",
     "name": "eikkos-discord-bot"
   },

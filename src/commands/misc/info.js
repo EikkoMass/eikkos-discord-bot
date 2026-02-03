@@ -66,8 +66,11 @@ export default {
 async function all(client, interaction) {
   const words = await getLocalization(interaction.locale, `info`);
 
-  const avatar = await fetch(`https://github.com/${info.repository.user}.png`);
-  const bufferImg = await avatar.arrayBuffer();
+  const userReq = await fetch(
+    `https://codeberg.org/api/v1/users/${info.repository.user}`,
+  );
+
+  const user = await userReq.json();
 
   const infoFields = [
     { name: words.Version, value: info.version },
@@ -84,11 +87,10 @@ async function all(client, interaction) {
     .setDescription(info.description)
     .setColor("Random")
     .addFields(infoFields)
-    .setThumbnail(`attachment://avatar.png`);
+    .setThumbnail(user.avatar_url);
 
   await interaction.reply({
     embeds: [embed],
-    files: [{ attachment: Buffer.from(bufferImg), name: `avatar.png` }],
   });
 }
 
