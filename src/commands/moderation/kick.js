@@ -18,8 +18,7 @@ export default {
     const words = await getLocalization(interaction.locale, `kick`);
 
     const targetUserId = interaction.options.get("target").value;
-    const reason =
-      interaction.options.get("reason")?.value || "No reason provided.";
+    const reason = interaction.options.get("reason")?.value || words.NoReason;
 
     await interaction.deferReply();
 

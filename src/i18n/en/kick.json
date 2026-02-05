@@ -4,5 +4,6 @@
   "CantKickSameHigher": "You can't kick that user because they have a higher or equal role than you.",
   "CantKickSameHigherBot": "I can't kick that user because they have the same / higher role than me.",
   "Kicked": "User {0} was kicked\nReason: `{1}`",
-  "KickFailed": "User {0} could not be kicked"
+  "KickFailed": "User {0} could not be kicked",
+  "NoReason": "No reason provided."
 }
