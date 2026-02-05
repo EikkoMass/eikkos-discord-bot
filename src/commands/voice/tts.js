@@ -75,11 +75,7 @@ export default {
 async function join(client, interaction) {
   const words = await getLocalization(interaction.locale, `tts`);
   const vc = interaction.member?.voice?.channel;
-  if (!vc)
-    return await replies.message.info(
-      interaction,
-      `you need to be in a voice channel`,
-    );
+  if (!vc) return await replies.message.info(interaction, words.VcRequired);
 
   const CACHE_REF = `${interaction.guild.id}`;
   const session = sessionCache.get(CACHE_REF);
