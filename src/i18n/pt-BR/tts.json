@@ -1,9 +1,9 @@
 {
-  "ChangedChannel": "Contexto de canal de voz alterado para <#{0}>",
+  "ChangedChannel": "Contexto de canal de texto alterado para <#{0}>",
   "VcRequired": "Você precisa estar em um canal de voz para usar este comando",
   "ConfigRequired": "Necessário configurar o TTS da guilda",
   "AlreadyJoined": "Já entrou na sessão de TTS",
-  "Joined": "Entrou com sucesso na sessão de TTS",
+  "Joined": "Entrou com sucesso na sessão de TTS, use o canal de texto <#{0}> para falar",
   "AlreadyLeft": "Já saiu da sessão de TTS",
   "Left": "Saiu com sucesso da sessão de TTS",
   "NoSession": "Nenhuma sessão de TTS encontrada",

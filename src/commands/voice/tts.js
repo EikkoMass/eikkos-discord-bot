@@ -110,7 +110,10 @@ async function join(client, interaction) {
     sessionCache.addUser(CACHE_REF, interaction.user.id);
   }
 
-  return await replies.message.success(interaction, words.Joined);
+  return await replies.message.success(
+    interaction,
+    formatMessage(words.Joined, [tts.channelId]),
+  );
 }
 
 async function leave(client, interaction) {

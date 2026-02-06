@@ -3,7 +3,7 @@
   "VcRequired": "You need to be in a voice channel to use this command",
   "ConfigRequired": "Configuration of guild's TTS required",
   "AlreadyJoined": "Already joined the TTS session",
-  "Joined": "Joined successfully the TTS session",
+  "Joined": "Joined successfully the TTS session, use the channel <#{0}> to speak",
   "AlreadyLeft": "Already left the TTS session",
   "Left": "Left successfully the TTS session",
   "NoSession": "No active TTS session found",
