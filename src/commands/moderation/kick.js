@@ -4,7 +4,7 @@ import {
   PermissionFlagsBits,
 } from "discord.js";
 
-import { getLocalization, formatMessage } from "../../utils/i18n.js";
+import { getLocalization } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
 
 export default {

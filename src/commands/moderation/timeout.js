@@ -2,7 +2,6 @@ import {
   Client,
   ApplicationCommandOptionType,
   PermissionFlagsBits,
-  MessageFlags,
   EmbedBuilder,
 } from "discord.js";
 import ms from "ms";

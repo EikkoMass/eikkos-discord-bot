@@ -91,7 +91,9 @@ async function join(client, interaction) {
   }
 
   if (!session) {
-    const contextEvent = async (message) => await event(client, message);
+    const contextEvent = async function (message) {
+      await event(this, message);
+    };
 
     client.on("messageCreate", contextEvent);
     sessionCache.set(CACHE_REF, contextEvent, [interaction.user.id]);
