@@ -2,6 +2,8 @@ import { Client, Message } from "discord.js";
 import DirtyWord from "../models/dirtyword.js";
 import cache from "../utils/cache/dirty-word.js";
 
+import Enum from "../enums/dirtyWord/types.js";
+
 export default {
   name: "dirtyWord",
   description: "Detects messages containing dirty words",
@@ -31,7 +33,8 @@ export default {
       const word = dirtyWordObj.word.toLowerCase();
 
       if (
-        (dirtyWordObj.type === 1 && currentMessage.includes(word)) ||
+        (dirtyWordObj.type === Enum.CONTAINS &&
+          currentMessage.includes(word)) ||
         currentMessage === word
       ) {
         const targetUser = await message.guild.members.fetch(message.author.id);

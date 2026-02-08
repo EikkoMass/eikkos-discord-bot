@@ -160,6 +160,8 @@ async function play(voice, message, channel, locale) {
 }
 
 async function event(client, message) {
+  if (message.author.bot) return;
+
   const TTS_REF = `${message.guildId}`;
 
   let tts = ttsCache.get(TTS_REF);
@@ -168,10 +170,11 @@ async function event(client, message) {
     tts = await Tts.findOne({ guildId: TTS_REF });
     ttsCache.set(TTS_REF, tts);
   }
-  if (!tts) return;
-  if (tts.channelId !== message.channelId) return;
-
-  if (message.author.bot || !sessionCache.includes(TTS_REF, message.author.id))
+  if (
+    !tts ||
+    tts.channelId !== message.channelId ||
+    !sessionCache.includes(TTS_REF, message.author.id)
+  )
     return;
 
   const GUILD_ID = `${message.guildId}`;
