@@ -12,24 +12,41 @@ export function getRandomXp(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export async function give(user, guild, channel, amount, callbacks = {}) {
-  const CACHE_REF = `${guild.id}${user.id}`;
+export async function give(
+  user,
+  guild,
+  channel,
+  amount,
+  callbacks = {},
+  silent = false,
+) {
+  const userId = Number.isNaN(user) ? user.id : user;
+  const guildId = Number.isNaN(guild) ? guild.id : guild;
+
+  const CACHE_REF = `${guildId}${userId}`;
 
   try {
     let level = cache.get(CACHE_REF);
 
     if (!level) {
       level = await Level.findOne({
-        userId: user.id,
-        guildId: guild.id,
+        userId: userId,
+        guildId: guildId,
       });
 
       if (!level) {
         level = new Level({
-          userId: user.id,
-          guildId: guild.id,
+          userId: userId,
+          guildId: guildId,
           xp: amount,
         });
+
+        let levelCalc = calc(level.level);
+
+        while (level.xp > levelCalc) {
+          level.level += 1;
+          levelCalc = calc(level.level);
+        }
 
         await level.save();
         cache.set(CACHE_REF, level);
@@ -40,14 +57,21 @@ export async function give(user, guild, channel, amount, callbacks = {}) {
 
     level.xp += amount;
 
-    if (level.xp > calc(level.level)) {
-      level.xp = 0;
-      level.level += 1;
+    let levelCalc = calc(level.level);
+    let levelUp = false;
 
+    while (level.xp > levelCalc) {
+      console.log(levelCalc);
+      levelUp = true;
+      level.level += 1;
+      levelCalc = calc(level.level);
+    }
+
+    if (levelUp && !silent) {
       channel.send({
         embeds: [
           new EmbedBuilder().setDescription(
-            `<@${user.id}> you have leveled up to **level ${level.level}**`,
+            `<@${userId}> you have leveled up to **level ${level.level}**`,
           ),
         ],
       });
