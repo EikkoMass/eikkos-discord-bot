@@ -39,6 +39,7 @@ export async function give(
           userId: userId,
           guildId: guildId,
           xp: amount,
+          level: 1,
         });
 
         let levelCalc = calc(level.level);
@@ -61,7 +62,6 @@ export async function give(
     let levelUp = false;
 
     while (level.xp > levelCalc) {
-      console.log(levelCalc);
       levelUp = true;
       level.level += 1;
       levelCalc = calc(level.level);

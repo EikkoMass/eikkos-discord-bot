@@ -11,7 +11,7 @@ export default {
   options: [
     {
       name: "give",
-      description: "The user whose level you want to see.",
+      description: "Add XP to a user.",
       type: ApplicationCommandOptionType.Subcommand,
       options: [
         {
@@ -45,6 +45,8 @@ export default {
 };
 
 async function give(client, interaction) {
+  const words = await getLocalization(interaction.locale, `xp`);
+
   let userId = interaction.options.get("user")?.value || interaction.member.id;
   let amount = interaction.options.get("amount")?.value || 100;
 
@@ -57,8 +59,8 @@ async function give(client, interaction) {
     true,
   );
 
-  replies.message.success(
+  await replies.message.success(
     interaction,
-    `Successfully gave ${amount} XP to <@${userId}>`,
+    formatMessage(words.SuccessfullyXP, [amount, userId]),
   );
 }
