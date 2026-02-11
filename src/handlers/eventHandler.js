@@ -1,10 +1,11 @@
 import getAllFiles from "../utils/core/getAllFiles.js";
-import cache from "../utils/cache/event.js";
 import path from "path";
 
-export default async (client) => {
+async function addEventListeners(client) {
+  const cache = {};
+
   const eventFolders = getAllFiles(
-    path.join(import.meta.dirname, "..", "events"),
+    path.join(import.meta.dirname, "..", "events", "discord"),
     true,
   );
 
@@ -14,7 +15,7 @@ export default async (client) => {
 
     const eventName = eventFolder?.replace(/\\/g, "/").split("/").pop();
 
-    let event = cache.get(eventName);
+    let event = cache[eventName];
 
     if (!event) {
       try {
@@ -23,9 +24,11 @@ export default async (client) => {
         event = (await import(`../utils/events/default.js`)).default;
       }
 
-      cache.set(eventName, event);
+      cache[eventName] = event;
     }
 
     client.on(eventName, event(client, eventFiles));
   }
-};
+}
+
+export default addEventListeners;

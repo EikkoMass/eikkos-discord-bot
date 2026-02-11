@@ -1,7 +1,7 @@
-import config from "../../../config.json" with { type: "json" };
-import getLocalContextMenus from "../../utils/importers/getLocalContextMenus.js";
-import getApplicationCommands from "../../utils/importers/getApplicationCommands.js";
-import areContextMenusDifferent from "../../utils/validators/areContextMenusDifferent.js";
+import config from "../../../../config.json" with { type: "json" };
+import getLocalContextMenus from "../../../utils/importers/getLocalContextMenus.js";
+import getApplicationCommands from "../../../utils/importers/getApplicationCommands.js";
+import areContextMenusDifferent from "../../../utils/validators/areContextMenusDifferent.js";
 import { ApplicationCommandType } from "discord.js";
 
 export default async (client) => {

@@ -1,6 +1,6 @@
-import getActions from "../../utils/importers/getLocalActions.js";
+import getActions from "../../../utils/importers/getLocalActions.js";
 import { Client, EmbedBuilder, MessageFlags } from "discord.js";
-import cache from "../../utils/cache/actions.js";
+import cache from "../../../utils/cache/actions.js";
 
 /**
  *  @param {Client} client

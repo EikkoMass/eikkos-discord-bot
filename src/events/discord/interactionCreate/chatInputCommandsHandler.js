@@ -1,16 +1,21 @@
-import config from "../../../config.json" with { type: "json" };
-import getLocalContextMenus from "../../utils/importers/getLocalContextMenus.js";
+import config from "../../../../config.json" with { type: "json" };
+import getLocalCommands from "../../../utils/importers/getLocalCommands.js";
 import { MessageFlags, EmbedBuilder, Client } from "discord.js";
 
-import { getLocalization, formatMessage } from "../../utils/i18n.js";
-import cache from "../../utils/cache/commands/context-menu.js";
+import { getLocalization, formatMessage } from "../../../utils/i18n.js";
+import cache from "../../../utils/cache/commands/input.js";
 
 /**
  *  @param {Client} client
  *  @param  interaction
  */
 export default async (client, interaction) => {
-  if (!interaction.isContextMenuCommand()) return;
+  if (!interaction.isChatInputCommand()) return;
+
+  const words = await getLocalization(
+    interaction.locale,
+    `handlers/chatInputCommands`,
+  );
 
   try {
     let commandObject = cache.get(interaction.commandName);
@@ -18,20 +23,13 @@ export default async (client, interaction) => {
     if (!commandObject) {
       if (cache.searched(interaction.commandName)) return;
 
-      const localCommands = await getLocalContextMenus();
+      const localCommands = await getLocalCommands();
       commandObject = localCommands.find(
         (cmd) => cmd.name === interaction.commandName,
       );
 
       cache.set(interaction.commandName, commandObject);
     }
-
-    if (!commandObject) return;
-
-    const words = await getLocalization(
-      interaction.locale,
-      `handlers/contextMenuCommands`,
-    );
 
     const checkers = [
       checkDevOnly,
@@ -50,7 +48,7 @@ export default async (client, interaction) => {
   }
 };
 
-function checkDevOnly(interaction, commandObject) {
+function checkDevOnly(interaction, commandObject, words) {
   return (
     !commandObject.devOnly ||
     config.devs.includes(interaction.member.id) ||
@@ -58,7 +56,7 @@ function checkDevOnly(interaction, commandObject) {
   );
 }
 
-function checkTestOnly(interaction, commandObject) {
+function checkTestOnly(interaction, commandObject, words) {
   return (
     !commandObject.testOnly ||
     interaction.guild.id === config.testServer ||
@@ -66,7 +64,7 @@ function checkTestOnly(interaction, commandObject) {
   );
 }
 
-function checkUserPermissions(interaction, commandObject) {
+function checkUserPermissions(interaction, commandObject, words) {
   if (commandObject.permissionsRequired?.length) {
     for (const permission of commandObject.permissionsRequired) {
       if (!interaction.member.permissions.has(permission))
@@ -77,7 +75,7 @@ function checkUserPermissions(interaction, commandObject) {
   return true;
 }
 
-function checkBotPermissions(interaction, commandObject) {
+function checkBotPermissions(interaction, commandObject, words) {
   if (commandObject.botPermissions?.length) {
     const bot = interaction.guild.members.me;
 

@@ -1,7 +1,7 @@
-import config from "../../../config.json" with { type: "json" };
-import getLocalCommands from "../../utils/importers/getLocalCommands.js";
-import getApplicationCommands from "../../utils/importers/getApplicationCommands.js";
-import areCommandsDifferent from "../../utils/validators/areCommandsDifferent.js";
+import config from "../../../../config.json" with { type: "json" };
+import getLocalCommands from "../../../utils/importers/getLocalCommands.js";
+import getApplicationCommands from "../../../utils/importers/getApplicationCommands.js";
+import areCommandsDifferent from "../../../utils/validators/areCommandsDifferent.js";
 
 export default async (client) => {
   try {

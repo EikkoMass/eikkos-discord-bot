@@ -1,5 +1,5 @@
 import { Client, Guild } from "discord.js";
-import Reminder from "../../models/reminder.js";
+import Reminder from "../../../models/reminder.js";
 
 /**
  *  @param {Client} client

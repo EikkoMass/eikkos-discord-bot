@@ -1,4 +1,4 @@
-import getLocalInserts from "../../utils/importers/getLocalInserts.js";
+import getLocalInserts from "../../../utils/importers/getLocalInserts.js";
 
 import { Client, Message } from "discord.js";
 
@@ -38,7 +38,7 @@ export default async (client, message) => {
 };
 
 async function importComparator(type) {
-  return (await import(`../../utils/comparators/${type}.js`)).default;
+  return (await import(`../../../utils/comparators/${type}.js`)).default;
 }
 
 async function filterAsync(callback) {

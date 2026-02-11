@@ -19,6 +19,10 @@ export default {
 
       const queue = useQueue(interaction.guild);
 
+      await interaction.deferReply({
+        flags: [MessageFlags.Ephemeral],
+      });
+
       if (!queue) {
         return await reply.message.error(interaction, words.QueueEmpty, {
           context: "editReply",
@@ -33,10 +37,9 @@ export default {
 
       queue.node.resume();
 
-      // await reply.message.success(interaction, words.Resumed, {
-      //   context: "editReply",
-      // });
-      await interaction.deferUpdate();
+      await reply.message.success(interaction, words.Resumed, {
+        context: "editReply",
+      });
 
       return;
     } catch (err) {

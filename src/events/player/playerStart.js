@@ -1,9 +1,9 @@
 import { EmbedBuilder, MessageFlags, Colors } from "discord.js";
 import { GuildQueue, Track } from "discord-player";
-import getPlayerActionRow from "../utils/components/playerActionRow.js";
+import getPlayerActionRow from "../../utils/components/playerActionRow.js";
 
-import { getLocalization } from "../utils/i18n.js";
-import Enum from "../enums/player/contexts.js";
+import { getLocalization } from "../../utils/i18n.js";
+import Enum from "../../enums/player/contexts.js";
 
 export default {
   name: "playerStart",

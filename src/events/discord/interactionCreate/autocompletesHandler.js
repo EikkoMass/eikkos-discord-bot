@@ -1,5 +1,5 @@
-import getAutocompletes from "../../utils/importers/getLocalAutocompletes.js";
-import cache from "../../utils/cache/autocomplete.js";
+import getAutocompletes from "../../../utils/importers/getLocalAutocompletes.js";
+import cache from "../../../utils/cache/autocomplete.js";
 import { Client } from "discord.js";
 
 /**

@@ -1,6 +1,6 @@
 import { Client } from "discord.js";
-import Reminder from "../../models/reminder.js";
-import build from "../../utils/components/reminderBuilder.js";
+import Reminder from "../../../models/reminder.js";
+import build from "../../../utils/components/reminderBuilder.js";
 
 /**
  *  @param {Client} client

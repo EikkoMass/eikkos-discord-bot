@@ -3,7 +3,7 @@ import getAllFiles from "../core/getAllFiles.js";
 
 export default async (eventListener) => {
   const files = getAllFiles(
-    path.join(import.meta.dirname, "..", "..", "playerEvents"),
+    path.join(import.meta.dirname, "..", "..", "events", "player"),
   );
 
   if (!files) return;

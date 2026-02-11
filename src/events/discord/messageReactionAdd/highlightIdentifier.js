@@ -1,11 +1,11 @@
-import HighlightGuild from "../../models/highlightGuild.js";
-import Highlight from "../../models/highlight.js";
+import HighlightGuild from "../../../models/highlightGuild.js";
+import Highlight from "../../../models/highlight.js";
 
-import highlightGuildCache from "../../utils/cache/highlight-guild.js";
-import highlightCache from "../../utils/cache/highlight.js";
+import highlightGuildCache from "../../../utils/cache/highlight-guild.js";
+import highlightCache from "../../../utils/cache/highlight.js";
 
-import getHighlightEmbed from "../../utils/components/getHighlightEmbed.js";
-import getHighlightMessageButton from "../../utils/components/getHighlightMessageButton.js";
+import getHighlightEmbed from "../../../utils/components/getHighlightEmbed.js";
+import getHighlightMessageButton from "../../../utils/components/getHighlightMessageButton.js";
 
 export default async (client, reaction, user) => {
   if (reaction.partial) {
