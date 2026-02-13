@@ -2,6 +2,7 @@ import {
   Client,
   ApplicationCommandOptionType,
   AttachmentBuilder,
+  PermissionFlagsBits,
 } from "discord.js";
 import Level from "../../models/level.js";
 import { Font, RankCardBuilder } from "canvacord";
@@ -23,6 +24,25 @@ export default {
           name: "target",
           description: "The user whose level you want to see.",
           type: ApplicationCommandOptionType.User,
+        },
+      ],
+    },
+    {
+      name: "give",
+      description: "Add XP to a user.",
+      type: ApplicationCommandOptionType.Subcommand,
+      options: [
+        {
+          name: "user",
+          description: "The user whose xp you want to give.",
+          type: ApplicationCommandOptionType.User,
+          required: true,
+        },
+        {
+          name: "amount",
+          description: "The amount of xp you want to give.",
+          type: ApplicationCommandOptionType.Integer,
+          required: true,
         },
       ],
     },
@@ -107,20 +127,34 @@ async function show(client, interaction) {
 }
 
 async function give(client, interaction) {
-  
-  const userId = interaction.options.get("target")?.value || interaction.member.id;
+  const words = await getLocalization(interaction.locale, `level`);
+
+  if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+    return await reply.message.error(interaction, words.AdminExclusiveCommand);
+  }
+
+  const userId =
+    interaction.options.get("user")?.value || interaction.member.id;
   const amount = interaction.options.get("amount")?.value || 1;
 
-  let xpToLvl = 
-  
+  const level = await Level.findOne({
+    userId,
+    guildId: interaction.guild.id,
+  });
+
+  let lvlToXp = xp.calc(level.level + amount);
+
   await xp.give(
     userId,
     interaction.guild.id,
     interaction.channel,
-    amount,
+    lvlToXp - level.xp,
     {},
     true,
   );
-  
-  
+
+  await replies.message.success(
+    interaction,
+    formatMessage(words.SuccessfullyLevel, [amount, userId]),
+  );
 }

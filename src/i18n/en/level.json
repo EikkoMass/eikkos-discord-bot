@@ -1,5 +1,7 @@
 {
   "UserNoLevels": "{0} doesn't have any levels yet. Try again when they chat a little more.",
   "NoLevels": "You don't have any levels yet. Chat a little more and try again.",
-  "ServerOnly": "You can only run this command inside a server"
+  "ServerOnly": "You can only run this command inside a server",
+  "SuccessfullyLevel": "Successfully gave **{0}** Levels to <@{1}>",
+  "AdminExclusiveCommand": "This command is exclusive to administrators."
 }

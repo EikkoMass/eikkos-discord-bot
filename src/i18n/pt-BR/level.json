@@ -1,5 +1,7 @@
 {
   "UserNoLevels": "{0} ainda não tem nenhum nível. Tente conversar um pouco mais.",
   "NoLevels": "Você ainda não tem nenhum nível. Converse um pouco mais e tente novamente.",
-  "ServerOnly": "Você só pode executar este comando dentro de um servidor"
+  "ServerOnly": "Você só pode executar este comando dentro de um servidor",
+  "SuccessfullyLevel": "Adicionado **{0}** níveis para o usuario <@{1}>",
+  "AdminExclusiveCommand": "Esse comando é exclusivo para administradores."
 }
