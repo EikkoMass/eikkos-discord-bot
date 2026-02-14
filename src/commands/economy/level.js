@@ -36,13 +36,11 @@ export default {
           name: "user",
           description: "The user whose xp you want to give.",
           type: ApplicationCommandOptionType.User,
-          required: true,
         },
         {
           name: "amount",
           description: "The amount of xp you want to give.",
           type: ApplicationCommandOptionType.Integer,
-          required: true,
         },
       ],
     },
@@ -142,13 +140,19 @@ async function give(client, interaction) {
     guildId: interaction.guild.id,
   });
 
-  let lvlToXp = xp.calc(level.level + amount);
+  let xpToGive;
+
+  if (level) {
+    xpToGive = xp.calc(level.level + amount) - level.xp;
+  } else {
+    xpToGive = xp.calc(amount);
+  }
 
   await xp.give(
     userId,
     interaction.guild.id,
     interaction.channel,
-    lvlToXp - level.xp,
+    xpToGive,
     {},
     true,
   );
