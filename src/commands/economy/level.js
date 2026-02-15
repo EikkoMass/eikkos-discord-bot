@@ -11,40 +11,42 @@ import xp from "../../utils/xp.js";
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
 
+const OPTS = {
+  show: {
+    name: "show",
+    description: "shows your/someone's level",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "target",
+        description: "The user whose level you want to see.",
+        type: ApplicationCommandOptionType.User,
+      },
+    ],
+  },
+  give: {
+    name: "give",
+    description: "Add XP to a user.",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "user",
+        description: "The user whose xp you want to give.",
+        type: ApplicationCommandOptionType.User,
+      },
+      {
+        name: "amount",
+        description: "The amount of xp you want to give.",
+        type: ApplicationCommandOptionType.Integer,
+      },
+    ],
+  },
+};
+
 export default {
   name: "level",
   description: "Manage your/someone's level",
-  options: [
-    {
-      name: "show",
-      description: "shows your/someone's level",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "target",
-          description: "The user whose level you want to see.",
-          type: ApplicationCommandOptionType.User,
-        },
-      ],
-    },
-    {
-      name: "give",
-      description: "Add XP to a user.",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "user",
-          description: "The user whose xp you want to give.",
-          type: ApplicationCommandOptionType.User,
-        },
-        {
-          name: "amount",
-          description: "The amount of xp you want to give.",
-          type: ApplicationCommandOptionType.Integer,
-        },
-      ],
-    },
-  ],
+  options: [OPTS.give, OPTS.show],
 
   /**
    *
@@ -53,10 +55,10 @@ export default {
    */
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "show":
+      case OPTS.show.name:
         await show(client, interaction);
         break;
-      case "give":
+      case OPTS.give.name:
         await give(client, interaction);
         break;
     }
