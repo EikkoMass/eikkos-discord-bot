@@ -4,31 +4,33 @@ import xp from "../../utils/xp.js";
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
 
+const OPTS = {
+  give: {
+    name: "give",
+    description: "Add XP to a user.",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "user",
+        description: "The user whose xp you want to give.",
+        type: ApplicationCommandOptionType.User,
+        required: true,
+      },
+      {
+        name: "amount",
+        description: "The amount of xp you want to give.",
+        type: ApplicationCommandOptionType.Integer,
+        required: true,
+      },
+    ],
+  },
+};
+
 export default {
   name: "xp",
   devOnly: true,
   description: "Manage guild's xp",
-  options: [
-    {
-      name: "give",
-      description: "Add XP to a user.",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "user",
-          description: "The user whose xp you want to give.",
-          type: ApplicationCommandOptionType.User,
-          required: true,
-        },
-        {
-          name: "amount",
-          description: "The amount of xp you want to give.",
-          type: ApplicationCommandOptionType.Integer,
-          required: true,
-        },
-      ],
-    },
-  ],
+  options: [OPTS.give],
 
   /**
    *
@@ -37,7 +39,7 @@ export default {
    */
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "give":
+      case OPTS.give.name:
         await give(client, interaction);
         break;
     }
