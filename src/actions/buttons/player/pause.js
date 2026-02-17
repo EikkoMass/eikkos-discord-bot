@@ -17,30 +17,20 @@ export default {
     try {
       const words = await getLocalization(interaction.locale, `pause`);
 
-      await interaction.deferReply({
-        flags: [MessageFlags.Ephemeral],
-      });
-
       const queue = useQueue(interaction.guild);
 
       if (!queue?.node) {
-        await reply.message.error(interaction, words.NoQueue, {
-          context: "editReply",
-        });
+        await reply.message.error(interaction, words.NoQueue);
         return;
       }
 
       if (!queue.node.isPlaying()) {
-        await reply.message.error(interaction, words.AlreadyPaused, {
-          context: "editReply",
-        });
+        await reply.message.error(interaction, words.AlreadyPaused);
         return;
       }
 
       queue.node.pause();
-      await reply.message.success(interaction, words.Paused, {
-        context: "editReply",
-      });
+      await interaction.deferUpdate();
     } catch (err) {
       console.log(err);
     }

@@ -17,24 +17,15 @@ export default {
     try {
       const words = await getLocalization(interaction.locale, `stop`);
 
-      await interaction.deferReply({
-        flags: [MessageFlags.Ephemeral],
-      });
-
       const queue = useQueue(interaction.guild);
 
       if (queue?.isPlaying()) {
         queue.node.stop();
-        await reply.message.base(interaction, words.Stopped, {
-          context: "editReply",
-          embed: { emoji: ":rock:" },
-        });
+        await interaction.deferUpdate();
         return;
       }
 
-      await reply.message.warning(interaction, words.NoSongPlaying, {
-        context: "editReply",
-      });
+      await reply.message.warning(interaction, words.NoSongPlaying);
     } catch (err) {
       console.log(err);
     }

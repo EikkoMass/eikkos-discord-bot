@@ -19,29 +19,17 @@ export default {
 
       const queue = useQueue(interaction.guild);
 
-      await interaction.deferReply({
-        flags: [MessageFlags.Ephemeral],
-      });
-
       if (!queue) {
-        return await reply.message.error(interaction, words.QueueEmpty, {
-          context: "editReply",
-        });
+        return await reply.message.error(interaction, words.QueueEmpty);
       }
 
       if (queue.node.isPlaying()) {
-        return await reply.message.error(interaction, words.AlreadyPlaying, {
-          context: "editReply",
-        });
+        return await reply.message.error(interaction, words.AlreadyPlaying);
       }
 
       queue.node.resume();
 
-      await reply.message.success(interaction, words.Resumed, {
-        context: "editReply",
-      });
-
-      return;
+      await interaction.deferUpdate();
     } catch (err) {
       console.log(err);
     }

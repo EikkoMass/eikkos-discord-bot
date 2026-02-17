@@ -17,26 +17,15 @@ export default {
     try {
       const words = await getLocalization(interaction.locale, `skip`);
 
-      await interaction.deferReply({
-        flags: [MessageFlags.Ephemeral],
-      });
-
       const queue = useQueue(interaction.guild);
 
       if (!queue || queue.isEmpty()) {
-        await reply.message.error(interaction, words.NoSong, {
-          context: "editReply",
-        });
+        await reply.message.error(interaction, words.NoSong);
         return;
       }
 
       queue.node.skip();
-      await reply.message.success(interaction, words.Skipped, {
-        context: "editReply",
-        embed: {
-          emoji: ":fast_forward:",
-        },
-      });
+      await interaction.deferUpdate();
     } catch (err) {
       console.log(err);
     }
