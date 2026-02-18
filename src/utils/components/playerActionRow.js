@@ -17,7 +17,7 @@ export default () => {
           hash,
         }),
       )
-      .setEmoji(emojis.get("pause"))
+      .setEmoji(emojis.get("pause", "⏸️"))
       .setLabel(" ")
       .setStyle(ButtonStyle.Secondary),
   );
@@ -30,7 +30,7 @@ export default () => {
           hash,
         }),
       )
-      .setEmoji(emojis.get("play"))
+      .setEmoji(emojis.get("play", "▶️"))
       .setLabel(" ")
       .setStyle(ButtonStyle.Secondary),
   );
@@ -43,7 +43,7 @@ export default () => {
           hash,
         }),
       )
-      .setEmoji(emojis.get("skip"))
+      .setEmoji(emojis.get("skip", "⏭️"))
       .setLabel(" ")
       .setStyle(ButtonStyle.Secondary),
   );
@@ -56,7 +56,7 @@ export default () => {
           hash,
         }),
       )
-      .setEmoji(emojis.get("shuffle"))
+      .setEmoji(emojis.get("shuffle", "🔀"))
       .setLabel(" ")
       .setStyle(ButtonStyle.Secondary),
   );
@@ -69,7 +69,7 @@ export default () => {
           hash,
         }),
       )
-      .setEmoji(emojis.get("stop"))
+      .setEmoji(emojis.get("stop", "⏹️"))
       .setLabel(" ")
       .setStyle(ButtonStyle.Secondary),
   );

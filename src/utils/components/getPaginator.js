@@ -25,7 +25,7 @@ function getPaginatorActionRows(
         }),
       )
       .setDisabled(page === minPage)
-      .setEmoji(emojis.get("first"))
+      .setEmoji(emojis.get("first", "⏪"))
       .setLabel(` `)
       .setStyle(ButtonStyle.Secondary),
   );
@@ -40,7 +40,7 @@ function getPaginatorActionRows(
         }),
       )
       .setDisabled(page === minPage)
-      .setEmoji(emojis.get("before"))
+      .setEmoji(emojis.get("before", "◀️"))
       .setLabel(` `)
       .setStyle(ButtonStyle.Secondary),
   );
@@ -69,7 +69,7 @@ function getPaginatorActionRows(
         }),
       )
       .setDisabled(page === maxPage)
-      .setEmoji(emojis.get("next"))
+      .setEmoji(emojis.get("next", "▶️"))
       .setLabel(` `)
       .setStyle(ButtonStyle.Secondary),
   );
@@ -84,7 +84,7 @@ function getPaginatorActionRows(
         }),
       )
       .setDisabled(page === maxPage)
-      .setEmoji(emojis.get("last"))
+      .setEmoji(emojis.get("last", "⏩"))
       .setLabel(` `)
       .setStyle(ButtonStyle.Secondary),
   );
