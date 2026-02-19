@@ -1,80 +1,55 @@
-const dirtyWordCache = {
-  search: [],
-  result: [],
-};
+let search = {};
+let cache = {};
 
-export function findResultIndex(key) {
-  return dirtyWordCache.result.findIndex((dirty) => dirty.guildId === key);
+let autoCleanTimeout;
+let TTL = 60 * 60 * 1000;
+
+export function get(key) {
+  return cache[key];
 }
 
-export function findSearchIndex(key) {
-  return dirtyWordCache.search.findIndex((dirty) => dirty === key);
+export function searched(key) {
+  return search[key];
 }
 
-export function findIndexes(key) {
-  return {
-    result: findResultIndex(key),
-    search: findSearchIndex(key),
-  };
-}
+export function set(key, value) {
+  cache[key] = value;
+  search[key] = value;
 
-export function findResult(key) {
-  return dirtyWordCache.result.find((dirty) => dirty.guildId === key);
-}
-
-export function updateResult(key, content) {
-  let attributes = Object.keys(content);
-  let index = findResultIndex(key);
-
-  if (index < 0 || !dirtyWordCache?.result[index]) return;
-
-  for (let attribute of attributes) {
-    dirtyWordCache.result[index][attribute] = content[attribute];
-    console.log(dirtyWordCache.result[index]);
+  if (!autoCleanTimeout) {
+    autoCleanTimeout = setTimeout(() => {
+      autoCleanTimeout = null;
+      reset();
+    }, TTL);
   }
 }
 
-export function removeSearchIndex(index) {
-  dirtyWordCache.search.splice(index, 1);
+export function addWord(key, value) {
+  if (!cache[key]) cache[key] = [];
+  cache[key].push(value);
 }
 
-export function removeResultIndex(index) {
-  dirtyWordCache.result.splice(index, 1);
+export function removeWord(key, value) {
+  if (!cache[key]?.length) reset(key);
+  cache[key].splice(cache[key].indexOf(value), 1);
 }
 
-export function addResult(obj) {
-  dirtyWordCache.result.push(obj);
+export function resetOne(key) {
+  cache[key] = null;
+  search[key] = false;
 }
 
-export function addSearch(obj) {
-  dirtyWordCache.search.push(obj);
-}
-
-export function existsSearch(key) {
-  return dirtyWordCache.result.some((dirty) => dirty === key);
+export function reset() {
+  cache = {};
+  search = {};
 }
 
 export default {
-  result: {
-    add: addResult,
-    find: findResult,
-    update: updateResult,
-    index: {
-      find: findResultIndex,
-      remove: removeResultIndex,
-    },
-  },
-
-  search: {
-    add: addSearch,
-    exists: existsSearch,
-    index: {
-      find: findSearchIndex,
-      remove: removeSearchIndex,
-    },
-  },
-
-  index: {
-    find: findIndexes,
-  },
+  get,
+  set,
+  searched,
+  resetOne,
+  addWord,
+  removeWord,
+  reset,
 };

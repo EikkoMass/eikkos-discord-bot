@@ -17,28 +17,32 @@ export default {
    */
   callback: async (client, message) => {
     try {
-      let dirtyWordObj = cache.result.find(message.guild.id);
-      let alreadySearchedOnDB = cache.search.exists(message.guild.id);
+      const CACHE_REF = `${message.guild.id}`;
+      let dirtyWords = cache.get(CACHE_REF);
 
-      if (!dirtyWordObj && !alreadySearchedOnDB) {
-        dirtyWordObj = await DirtyWord.findOne({ guildId: message.guild.id });
-        cache.search.add(`${message.guild.id}`);
+      if (!dirtyWords && !cache.searched(CACHE_REF)) {
+        dirtyWords = await DirtyWord.find({ guildId: message.guild.id });
 
-        if (!dirtyWordObj) return;
+        cache.set(CACHE_REF, dirtyWords);
+      }
 
-        cache.result.add(dirtyWordObj);
-      } else if (!dirtyWordObj) return;
+      if (!dirtyWords) return;
 
       const currentMessage = message.content?.toLowerCase();
-      const word = dirtyWordObj.word.toLowerCase();
 
-      if (
-        (dirtyWordObj.type === Enum.CONTAINS &&
-          currentMessage.includes(word)) ||
-        currentMessage === word
-      ) {
-        const targetUser = await message.guild.members.fetch(message.author.id);
-        targetUser.kick("Bad word identified >:( ").catch(() => {});
+      for (const dWord of dirtyWords) {
+        const word = dWord.word.toLowerCase();
+
+        if (
+          (dWord.type === Enum.CONTAINS && currentMessage.includes(word)) ||
+          currentMessage === word
+        ) {
+          const targetUser = await message.guild.members.fetch(
+            message.author.id,
+          );
+
+          targetUser.kick("Bad word identified >:( ").catch(() => {});
+        }
       }
     } catch (e) {
       console.log(e);

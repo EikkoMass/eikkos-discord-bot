@@ -19,5 +19,8 @@
   },
   "role": {
     "main": "role;"
+  },
+  "dirtyword": {
+    "list": "dirtyword;list;"
   }
 }

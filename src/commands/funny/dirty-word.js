@@ -1,20 +1,22 @@
 import {
   ApplicationCommandOptionType,
   Client,
-  MessageFlags,
-  EmbedBuilder,
   PermissionFlagsBits,
 } from "discord.js";
 import DirtyWord from "../../models/dirtyword.js";
 import cache from "../../utils/cache/dirty-word.js";
 
 import reply from "../../utils/core/replies.js";
+import discord from "../../configs/discord.json" with { type: "json" };
+import actions from "../../configs/actions.json" with { type: "json" };
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
+import getPaginator from "../../utils/components/getPaginator.js";
+import getDirtyWordEmbeds from "../../utils/components/getDirtyWordEmbeds.js";
 
 const OPTS = {
-  current: {
-    name: "current",
+  list: {
+    name: "list",
     description: "current word registered on this guild",
     type: ApplicationCommandOptionType.Subcommand,
   },
@@ -41,13 +43,21 @@ const OPTS = {
     name: "remove",
     description: "remove the word",
     type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "id",
+        description: "id of the word register",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+    ],
   },
 };
 
 export default {
   name: "dirty-word",
   description: "Sets an word to auto-ban the user who write.",
-  options: [OPTS.current, OPTS.register, OPTS.remove],
+  options: [OPTS.list, OPTS.register, OPTS.remove],
 
   permissionsRequired: [PermissionFlagsBits.KickMembers],
   botPermissions: [PermissionFlagsBits.KickMembers],
@@ -59,12 +69,12 @@ export default {
    */
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case OPTS.current.name:
-        return await getCurrentDirtyWord(client, interaction);
+      case OPTS.list.name:
+        return await list(client, interaction);
       case OPTS.register.name:
-        return await setDirtyWord(client, interaction);
+        return await register(client, interaction);
       case OPTS.remove.name:
-        return await removeDirtyWord(client, interaction);
+        return await remove(client, interaction);
       default:
         return await reply.message.error(
           interaction,
@@ -74,72 +84,80 @@ export default {
   },
 };
 
-async function removeDirtyWord(client, interaction) {
+async function remove(client, interaction) {
   const words = await getLocalization(interaction.locale, "dirty-word");
+  const CACHE_REF = `${interaction.guild.id}`;
 
-  let indexes = cache.index.find(interaction.guild.id);
+  const id = interaction.options.get("id").value;
 
-  if (indexes.result > -1) cache.result.index.remove(indexes.result);
-  if (indexes.search > -1) cache.search.index.remove(indexes.search);
+  let dWord = await DirtyWord.findById(id);
 
-  let dirtyWord = await DirtyWord.findOneAndDelete({
-    guildId: interaction.guild.id,
-  });
-
-  if (dirtyWord) {
+  if (dWord && interaction.guild.id === dWord.guildId) {
+    cache.removeWord(CACHE_REF, dWord);
+    await DirtyWord.deleteOne({ _id: dWord._id });
     return await reply.message.success(interaction, words.Removed);
   }
 
   await reply.message.info(interaction, words.NotFound);
 }
 
-async function getCurrentDirtyWord(client, interaction) {
+async function list(client, interaction) {
   const words = await getLocalization(interaction.locale, "dirty-word");
 
-  const cacheObj = cache.result.find(interaction.guild.id);
+  const page = 1;
+  const query = { guildId: interaction.guild.id };
 
-  const dirtyWordObj =
-    cacheObj || (await DirtyWord.findOne({ guildId: interaction.guild.id }));
+  const count = await DirtyWord.countDocuments(query);
+  const dWords = await DirtyWord.find(query)
+    .sort({ _id: -1 })
+    .skip((page - 1) * discord.embeds.max)
+    .limit(discord.embeds.max);
 
-  if (dirtyWordObj) {
-    const word = dirtyWordObj.word;
-    const censoredWord =
-      word.length > 1
-        ? word.slice(0, word.length / 2) + "*".repeat(word.length / 2)
-        : word;
-
-    await reply.message.success(
-      interaction,
-      formatMessage(words.CurrentWord, [censoredWord]),
-    );
-    return;
+  if (!dWords || dWords.length === 0) {
+    return await reply.message.error(interaction, words.NotFound);
   }
 
-  await reply.message.info(interaction, words.NotFound);
+  return await interaction.reply({
+    embeds: await getDirtyWordEmbeds(client, dWords),
+    components: [
+      getPaginator(
+        {
+          id: actions.dirtyword.list,
+        },
+        count,
+        page,
+        discord.embeds.max,
+      ),
+    ],
+  });
 }
 
-async function setDirtyWord(client, interaction) {
+async function register(client, interaction) {
   const words = await getLocalization(interaction.locale, `dirty-word`);
+  const CACHE_REF = `${interaction.guild.id}`;
 
   const word = interaction.options.get("word")?.value;
   const type = interaction.options.get("type")?.value || 0;
 
-  let dirtyWordObj = await DirtyWord.findOne({ guildId: interaction.guild.id });
+  let dirtyWordObj = await DirtyWord.findOne({
+    guildId: interaction.guild.id,
+    word,
+    type,
+  });
 
   if (dirtyWordObj) {
-    dirtyWordObj.word = word;
-    dirtyWordObj.type = type;
-    let index = cache.result.update(interaction.guild.id, {
+    return await reply.message.error(interaction, words.AlreadyExists);
+  } else {
+    dirtyWordObj = new DirtyWord({
+      guildId: interaction.guild.id,
       word,
       type,
+      creationDate: new Date(),
     });
-  } else {
-    const newDirtyWord = { guildId: interaction.guild.id, word, type };
 
-    dirtyWordObj = new DirtyWord(newDirtyWord);
-    cache.result.add(newDirtyWord);
+    await dirtyWordObj.save();
+
+    cache.addWord(CACHE_REF, dirtyWordObj);
+    return await reply.message.success(interaction, words.Created);
   }
-
-  dirtyWordObj.save();
-  await reply.message.success(interaction, words.Created);
 }

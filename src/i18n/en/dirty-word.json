@@ -4,5 +4,6 @@
   "CurrentWord": "The current bad word is `{0}`.",
   "Created": "Created the new word!",
   "ExactWord": "Exact Word",
-  "ContainsWord": "Contains Word"
+  "ContainsWord": "Contains Word",
+  "AlreadyExists": "This word already exists!"
 }

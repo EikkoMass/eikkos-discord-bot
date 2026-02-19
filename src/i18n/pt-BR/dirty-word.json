@@ -4,5 +4,6 @@
   "CurrentWord": "A atual palavra feia é `{0}`.",
   "Created": "Criada a nova palavra feia!",
   "ExactWord": "Palavra Exata",
-  "ContainsWord": "Contém a Palavra"
+  "ContainsWord": "Contém a Palavra",
+  "AlreadyExists": "Essa palavra já existe!"
 }
