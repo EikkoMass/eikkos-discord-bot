@@ -93,7 +93,10 @@ async function remove(client, interaction) {
   let dWord = await DirtyWord.findById(id);
 
   if (dWord && interaction.guild.id === dWord.guildId) {
-    cache.removeWord(CACHE_REF, dWord);
+    if (cache.get(CACHE_REF)) {
+      cache.removeWord(CACHE_REF, dWord);
+    }
+
     await DirtyWord.deleteOne({ _id: dWord._id });
     return await reply.message.success(interaction, words.Removed);
   }
@@ -157,7 +160,10 @@ async function register(client, interaction) {
 
     await dirtyWordObj.save();
 
-    cache.addWord(CACHE_REF, dirtyWordObj);
+    if (cache.get(CACHE_REF)) {
+      cache.addWord(CACHE_REF, dirtyWordObj);
+    }
+
     return await reply.message.success(interaction, words.Created);
   }
 }

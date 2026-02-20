@@ -42,6 +42,7 @@ export default {
           );
 
           targetUser.kick("Bad word identified >:( ").catch(() => {});
+          return;
         }
       }
     } catch (e) {

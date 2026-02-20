@@ -4,7 +4,6 @@ const dirtyWordSchema = new Schema({
   guildId: {
     type: String,
     required: true,
-    unique: true,
   },
   word: {
     type: String,

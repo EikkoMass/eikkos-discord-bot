@@ -2,7 +2,7 @@ let search = {};
 let cache = {};
 
 let autoCleanTimeout;
-let TTL = 60 * 60 * 1000;
+let TTL = 60 * 60 * 1000 * 24;
 
 export function get(key) {
   return cache[key];
@@ -30,8 +30,8 @@ export function addWord(key, value) {
 }
 
 export function removeWord(key, value) {
-  if (!cache[key]?.length) reset(key);
-  cache[key].splice(cache[key].indexOf(value), 1);
+  cache[key]?.splice(cache[key].indexOf(value), 1);
+  if (!cache[key]?.length) resetOne(key);
 }
 
 export function resetOne(key) {

@@ -20,8 +20,8 @@ export async function give(
   callbacks = {},
   silent = false,
 ) {
-  const userId = Number.isNaN(user) ? user.id : user;
-  const guildId = Number.isNaN(guild) ? guild.id : guild;
+  const userId = !isNumeric(user) ? user.id : user;
+  const guildId = !isNumeric(guild) ? guild.id : guild;
 
   const CACHE_REF = `${guildId}${userId}`;
 
@@ -86,6 +86,12 @@ export async function give(
   } catch (e) {
     console.log(`Error giving XP: ${e}`);
   }
+}
+
+function isNumeric(str) {
+  if (typeof str === "number") return true;
+  if (typeof str !== "string") return false;
+  return !isNaN(str) && !isNaN(parseInt(str));
 }
 
 export default {
