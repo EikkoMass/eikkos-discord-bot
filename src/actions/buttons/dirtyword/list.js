@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import getPlaylistEmbeds from "../../../utils/components/getPlaylistEmbeds.js";
+import getDirtyWordEmbeds from "../../../utils/components/getDirtyWordEmbeds.js";
 import getPaginator from "../../../utils/components/getPaginator.js";
 import discord from "../../../configs/discord.json" with { type: "json" };
 import actions from "../../../configs/actions.json" with { type: "json" };
@@ -25,14 +25,14 @@ export default {
       };
 
       let count = await DirtyWord.countDocuments(query);
-      let playlists = await DirtyWord.find(query)
+      let dWords = await DirtyWord.find(query)
         .sort({ _id: -1 })
         .skip((page - 1) * discord.embeds.max)
         .limit(discord.embeds.max);
 
       await interaction.deferUpdate();
       await interaction.message.edit({
-        embeds: await getPlaylistEmbeds(client, playlists),
+        embeds: await getDirtyWordEmbeds(client, interaction, dWords),
         components: [
           getPaginator(
             {

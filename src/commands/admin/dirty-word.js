@@ -121,7 +121,7 @@ async function list(client, interaction) {
   }
 
   return await interaction.reply({
-    embeds: await getDirtyWordEmbeds(client, dWords),
+    embeds: await getDirtyWordEmbeds(client, interaction, dWords),
     components: [
       getPaginator(
         {
@@ -149,21 +149,21 @@ async function register(client, interaction) {
   });
 
   if (dirtyWordObj) {
-    return await reply.message.error(interaction, words.AlreadyExists);
-  } else {
-    dirtyWordObj = new DirtyWord({
-      guildId: interaction.guild.id,
-      word,
-      type,
-      creationDate: new Date(),
-    });
-
-    await dirtyWordObj.save();
-
-    if (cache.get(CACHE_REF)) {
-      cache.addWord(CACHE_REF, dirtyWordObj);
-    }
-
-    return await reply.message.success(interaction, words.Created);
+    return await reply.message.info(interaction, words.AlreadyExists);
   }
+
+  dirtyWordObj = new DirtyWord({
+    guildId: interaction.guild.id,
+    word,
+    type,
+    creationDate: new Date(),
+  });
+
+  await dirtyWordObj.save();
+
+  if (cache.get(CACHE_REF)) {
+    cache.addWord(CACHE_REF, dirtyWordObj);
+  }
+
+  return await reply.message.success(interaction, words.Created);
 }
