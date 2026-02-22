@@ -117,7 +117,7 @@ async function list(client, interaction) {
     .limit(discord.embeds.max);
 
   if (!dWords || dWords.length === 0) {
-    return await reply.message.error(interaction, words.NotFound);
+    return await reply.message.error(interaction, words.NotFoundAny);
   }
 
   return await interaction.reply({

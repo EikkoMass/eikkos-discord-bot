@@ -1,6 +1,7 @@
 {
   "Removed": "Palavra feia removida com sucesso!",
-  "NotFound": "Nenhuma palavra feia registrada nesse servidor.",
+  "NotFound": "Registro de palavra feia não encontrado",
+  "NotFoundAny": "Nenhuma palavra feia registrada nesse servidor.",
   "CurrentWord": "A atual palavra feia é `{0}`.",
   "Created": "Criada a nova palavra feia!",
   "ExactWord": "Palavra Exata",
