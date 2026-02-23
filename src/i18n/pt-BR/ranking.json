@@ -1,0 +1,9 @@
+{
+  "ServerOnly": "Você só pode executar este comando em um servidor.",
+  "NoUserLevel": "Não há usuários com nível neste servidor",
+  "Level": "Level",
+  "XP": "XP",
+  "Joined": "Entrou",
+  "UserNotFound": "Não encontrado no servidor",
+  "Undefined": "Indefinido"
+}

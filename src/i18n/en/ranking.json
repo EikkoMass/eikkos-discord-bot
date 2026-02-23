@@ -1,0 +1,9 @@
+{
+  "ServerOnly": "You can only run this command inside a server.",
+  "NoUserLevel": "There is no users with level on this guild",
+  "Level": "Level",
+  "XP": "XP",
+  "Joined": "Joined",
+  "UserNotFound": "Not found in the guild",
+  "Undefined": "Undefined"
+}

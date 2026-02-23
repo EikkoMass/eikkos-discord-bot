@@ -1,5 +1,6 @@
 import { EmbedBuilder, Client, MessageFlags } from "discord.js";
 import Level from "../../models/level.js";
+import { getLocalization } from "../../utils/i18n.js";
 
 import replies from "../../utils/core/replies.js";
 
@@ -11,11 +12,10 @@ export default {
    *  @param  interaction
    */
   callback: async (client, interaction) => {
+    const words = await getLocalization(interaction.locale, `ranking`);
+
     if (!interaction.inGuild()) {
-      return await replies.message.error(
-        interaction,
-        "You can only run this command inside a server.",
-      );
+      return await replies.message.error(interaction, words.ServerOnly);
     }
 
     const rankedUsers = await Level.find({ guildId: interaction.guild.id })
@@ -26,10 +26,7 @@ export default {
       });
 
     if (!rankedUsers?.length) {
-      return await replies.message.error(
-        interaction,
-        `There is no users with level on this guild`,
-      );
+      return await replies.message.error(interaction, words.UserNotFound);
     }
 
     const embeds = [];
@@ -40,7 +37,7 @@ export default {
           rankedUsers[i].userId,
         );
 
-        embeds.push(buildUserEmbed(true, rankedUsers[i], i, user));
+        embeds.push(buildUserEmbed(words, true, rankedUsers[i], i, user));
         continue;
       } catch (noGuildMemberFound) {
         // console.log('not a guild member anymore')
@@ -52,7 +49,7 @@ export default {
           cache: true,
         });
 
-        embeds.push(buildUserEmbed(false, rankedUsers[i], i, user));
+        embeds.push(buildUserEmbed(words, false, rankedUsers[i], i, user));
         continue;
       } catch (noGuildMemberFound) {
         // console.log('not a discord user anymore')
@@ -60,10 +57,10 @@ export default {
 
       embeds.push(
         new EmbedBuilder()
-          .setTitle(`${i === 0 ? "👑" : i + 1} Undefined`)
+          .setTitle(`${i === 0 ? "👑" : i + 1} ${words.Undefined}`)
           .setFields([
-            { name: "Level", value: `${rankedUsers[i].level}` },
-            { name: "XP", value: `${rankedUsers[i].xp}` },
+            { name: words.Level, value: `${rankedUsers[i].level}` },
+            { name: words.XP, value: `${rankedUsers[i].xp}` },
           ])
           .setURL(`https://discord.com/users/${rankedUsers[i].userId}`)
           .setThumbnail(
@@ -86,15 +83,13 @@ export default {
   description: `Show the top ${QUANTITY_OF_USERS} users on the ranking`,
 };
 
-function buildUserEmbed(isGuildMember, userRank, rank, user) {
+function buildUserEmbed(words, isGuildMember, userRank, rank, user) {
   const userFields = [
-    { name: "Level", value: `${userRank.level}` },
-    { name: "XP", value: `${userRank.xp}` },
+    { name: words.Level, value: `${userRank.level}` },
+    { name: words.XP, value: `${userRank.xp}` },
     {
-      name: "🌐 Joined",
-      value: isGuildMember
-        ? user.joinedAt.toDateString()
-        : "Not found in the guild",
+      name: `🌐 ${words.Joined}`,
+      value: isGuildMember ? user.joinedAt.toDateString() : words.UserNotFound,
     },
   ];
 
