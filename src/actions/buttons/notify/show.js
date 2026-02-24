@@ -5,6 +5,7 @@ import discord from "../../../configs/discord.json" with { type: "json" };
 import actions from "../../../configs/actions.json" with { type: "json" };
 
 import Notify from "../../../models/notify.js";
+import { getLocalization } from "../../../utils/i18n.js";
 
 export default {
   name: "notify",
@@ -15,6 +16,8 @@ export default {
    *  @param  interaction
    */
   callback: async (client, interaction) => {
+    const words = await getLocalization(interaction.locale, `notify`);
+
     try {
       let content = JSON.parse(interaction.customId);
 
@@ -31,10 +34,7 @@ export default {
         .limit(discord.embeds.max);
 
       if (!notify || notify.length === 0) {
-        return await replies.message.error(
-          interaction,
-          `No Notify register found!`,
-        );
+        return await replies.message.error(interaction, words.NotFound);
       }
 
       const embeds = await getNotifyEmbeds(client, notify);
