@@ -92,7 +92,7 @@ async function join(client, interaction) {
 
   if (!session) {
     const contextEvent = async function (message) {
-      await event(this, message);
+      await event(this, interaction.guild, message);
     };
 
     client.on("messageCreate", contextEvent);
@@ -159,7 +159,7 @@ async function play(voice, message, channel, locale) {
   });
 }
 
-async function event(client, message) {
+async function event(client, guild, message) {
   if (message.author.bot) return;
 
   const TTS_REF = `${message.guildId}`;
@@ -170,28 +170,18 @@ async function event(client, message) {
     tts = await Tts.findOne({ guildId: TTS_REF });
     ttsCache.set(TTS_REF, tts);
   }
-  if (
-    !tts ||
-    tts.channelId !== message.channelId ||
-    !sessionCache.includes(TTS_REF, message.author.id)
-  )
-    return;
-
-  const GUILD_ID = `${message.guildId}`;
-
-  let guild = guildCache.get(GUILD_ID);
-
-  if (!guild && !guildCache.searched(GUILD_ID)) {
-    guild = client.guilds.cache.get(message.guildId);
-    guildCache.set(GUILD_ID, guild);
-  }
-
-  if (!guild) return;
 
   const member = guild.members.cache.get(message.author.id);
   const voice = member?.voice?.channel;
 
   if (!voice) return;
+
+  if (
+    !tts ||
+    (tts.channelId !== message.channelId && voice.id !== message.channelId) ||
+    !sessionCache.includes(TTS_REF, message.author.id)
+  )
+    return;
 
   play(
     voice,
