@@ -86,20 +86,17 @@ async function rollCustom(client, interaction) {
 
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
-  let result = null;
+  let numbers = [];
 
   for (let i = 0; i < quantity; i++) {
     let randomized = Math.floor(
       Math.random() * (maxFloored - minCeiled + 1) + minCeiled,
     );
 
-    if (!result) {
-      result = `${randomized}`;
-      continue;
-    }
-
-    result += ` / ${randomized}`;
+    numbers.push(`${randomized}`);
   }
+
+  let result = numbers.join(` / `);
 
   setTimeout(
     () =>
@@ -115,7 +112,6 @@ async function roll(client, interaction) {
 
   const sub = interaction.options.getSubcommand();
   const quantity = interaction.options.get("quantity")?.value || 1;
-  let result = null;
 
   await interaction.reply({
     embeds: [
@@ -125,17 +121,15 @@ async function roll(client, interaction) {
     ],
   });
   const maxFloored = Number.parseInt(sub.replace(/[^\d]+/g, ""));
+  let numbers = [];
 
   for (let i = 0; i < quantity; i++) {
     let randomized = Math.floor(Math.random() * maxFloored + 1);
 
-    if (!result) {
-      result = `${randomized}`;
-      continue;
-    }
-
-    result += ` / ${randomized}`;
+    numbers.push(`${randomized}`);
   }
+
+  let result = numbers.join(` / `);
 
   setTimeout(
     () =>
