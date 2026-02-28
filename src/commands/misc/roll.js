@@ -80,9 +80,14 @@ async function rollCustom(client, interaction) {
   min = min ? Number.parseInt(min) : 1;
   max = max ? Number.parseInt(max) : 1000000;
 
-  await interaction.reply({
+  const res = await interaction.reply({
     embeds: [new EmbedBuilder().setDescription(words.CustomDiceReturns)],
+    withResponse: true,
   });
+
+  const message = await interaction.channel.messages.fetch(
+    res.resource.message.id,
+  );
 
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
@@ -100,7 +105,7 @@ async function rollCustom(client, interaction) {
 
   setTimeout(
     () =>
-      interaction.channel.send({
+      message.edit({
         embeds: [new EmbedBuilder().setDescription(`:game_die: ${result}`)],
       }),
     SUSPENSE_TIMEOUT_MS,
@@ -113,12 +118,13 @@ async function roll(client, interaction) {
   const sub = interaction.options.getSubcommand();
   const quantity = interaction.options.get("quantity")?.value || 1;
 
-  await interaction.reply({
+  const res = await interaction.reply({
     embeds: [
       new EmbedBuilder().setDescription(
         formatMessage(words.DDiceReturns, [sub]),
       ),
     ],
+    withResponse: true,
   });
   const maxFloored = Number.parseInt(sub.replace(/[^\d]+/g, ""));
   let numbers = [];
@@ -129,11 +135,15 @@ async function roll(client, interaction) {
     numbers.push(`${randomized}`);
   }
 
+  const message = await interaction.channel.messages.fetch(
+    res.resource.message.id,
+  );
+
   let result = numbers.join(` / `);
 
   setTimeout(
     () =>
-      interaction.channel.send({
+      message.edit({
         embeds: [new EmbedBuilder().setDescription(`:game_die: ${result}`)],
       }),
     SUSPENSE_TIMEOUT_MS,
