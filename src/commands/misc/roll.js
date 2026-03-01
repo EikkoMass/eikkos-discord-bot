@@ -2,18 +2,22 @@ import {
   ApplicationCommandOptionType,
   EmbedBuilder,
   MessageFlags,
+  Colors,
 } from "discord.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
+import discord from "../../configs/discord.json" with { type: "json" };
 
 const SUSPENSE_TIMEOUT_MS = 3000;
 
 const rolls = [4, 6, 8, 10, 12, 20, 100];
+const maxValues = discord.embeds.max;
 
 const quantity = {
   name: "quantity",
   description: "How many dices you want to roll?",
   type: ApplicationCommandOptionType.Integer,
+  max_value: maxValues,
 };
 
 const getRollType = (amount) => {
@@ -91,22 +95,26 @@ async function rollCustom(client, interaction) {
 
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
-  let numbers = [];
+  let embeds = [];
 
   for (let i = 0; i < quantity; i++) {
     let randomized = Math.floor(
       Math.random() * (maxFloored - minCeiled + 1) + minCeiled,
     );
 
-    numbers.push(`${randomized}`);
-  }
+    const layout = getLayout(randomized, maxFloored);
 
-  let result = numbers.join(` / `);
+    embeds.push(
+      new EmbedBuilder()
+        .setDescription(`${layout.emoji} \` ${randomized} \``)
+        .setColor(layout.color),
+    );
+  }
 
   setTimeout(
     () =>
       message.edit({
-        embeds: [new EmbedBuilder().setDescription(`:game_die: ${result}`)],
+        embeds,
       }),
     SUSPENSE_TIMEOUT_MS,
   );
@@ -127,25 +135,50 @@ async function roll(client, interaction) {
     withResponse: true,
   });
   const maxFloored = Number.parseInt(sub.replace(/[^\d]+/g, ""));
-  let numbers = [];
-
-  for (let i = 0; i < quantity; i++) {
-    let randomized = Math.floor(Math.random() * maxFloored + 1);
-
-    numbers.push(`${randomized}`);
-  }
+  let embeds = [];
 
   const message = await interaction.channel.messages.fetch(
     res.resource.message.id,
   );
 
-  let result = numbers.join(` / `);
+  for (let i = 0; i < quantity; i++) {
+    let randomized = Math.floor(Math.random() * maxFloored + 1);
+
+    const layout = getLayout(randomized, maxFloored);
+
+    embeds.push(
+      new EmbedBuilder()
+        .setDescription(`${layout.emoji} \` ${randomized} \``)
+        .setColor(layout.color),
+    );
+  }
 
   setTimeout(
     () =>
       message.edit({
-        embeds: [new EmbedBuilder().setDescription(`:game_die: ${result}`)],
+        embeds,
       }),
     SUSPENSE_TIMEOUT_MS,
   );
+}
+
+function getLayout(randomized, maxFloored) {
+  const percentage = Math.floor((randomized / maxFloored) * 100);
+
+  if (percentage < 33) {
+    return {
+      color: Colors.Red,
+      emoji: ":skull:",
+    };
+  } else if (percentage >= 33 && percentage < 77) {
+    return {
+      color: Colors.Yellow,
+      emoji: ":warning:",
+    };
+  } else {
+    return {
+      color: Colors.Green,
+      emoji: ":white_check_mark:",
+    };
+  }
 }
