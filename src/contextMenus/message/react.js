@@ -3,6 +3,7 @@ import {
   InteractionContextType,
   ApplicationCommandType,
 } from "discord.js";
+import emojis from "../../utils/core/emojis.js";
 
 export default {
   name: "React message",
@@ -21,7 +22,7 @@ export default {
     await interaction.deferReply();
     await interaction.deleteReply();
 
-    await message.react("👍");
-    await message.react("👎");
+    await message.react(emojis.get("upvote", "👍"));
+    await message.react(emojis.get("downvote", "👎"));
   },
 };

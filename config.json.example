@@ -10,6 +10,8 @@
         "before":   { "id": "", "name": "" },
         "next":     { "id": "", "name": "" },
         "first":    { "id": "", "name": "" },
-        "last":     { "id": "", "name": "" }
+        "last":     { "id": "", "name": "" },
+        "upvote":   { "id": "", "name": "" },
+        "downvote": { "id": "", "name": "" }
     }
 }

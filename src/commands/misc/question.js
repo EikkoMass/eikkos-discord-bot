@@ -1,6 +1,7 @@
 import { Client, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
 
 import { getLocalization } from "../../utils/i18n.js";
+import emojis from "../../utils/core/emojis.js";
 
 export default {
   name: "question",
@@ -28,8 +29,8 @@ export default {
       ],
     });
 
-    await message.react("👍");
-    await message.react("👎");
+    await message.react(emojis.get("upvote", "👍"));
+    await message.react(emojis.get("downvote", "👎"));
   },
 
   options: [

@@ -12,6 +12,11 @@ import cache from "../../../utils/cache/commands/context-menu.js";
 export default async (client, interaction) => {
   if (!interaction.isContextMenuCommand()) return;
 
+  const words = await getLocalization(
+    interaction.locale,
+    `handlers/contextMenuCommands`,
+  );
+
   try {
     let commandObject = cache.get(interaction.commandName);
 
@@ -27,11 +32,6 @@ export default async (client, interaction) => {
     }
 
     if (!commandObject) return;
-
-    const words = await getLocalization(
-      interaction.locale,
-      `handlers/contextMenuCommands`,
-    );
 
     const checkers = [
       checkDevOnly,
