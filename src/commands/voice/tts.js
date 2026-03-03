@@ -37,6 +37,16 @@ const OPTS = {
     description: "leave the tts voice channel poll",
     type: ApplicationCommandOptionType.Subcommand,
   },
+  enable: {
+    name: "enable",
+    description: "enable the tts session",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+  disable: {
+    name: "disable",
+    description: "Disable the tts session",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
   shutdown: {
     name: "shutdown",
     description: "force the tts session to end",
@@ -47,7 +57,14 @@ const OPTS = {
 export default {
   name: "tts",
   description: "Text-to-Speech command",
-  options: [OPTS.join, OPTS.channel, OPTS.leave, OPTS.shutdown],
+  options: [
+    OPTS.join,
+    OPTS.channel,
+    OPTS.leave,
+    OPTS.shutdown,
+    OPTS.enable,
+    OPTS.disable,
+  ],
 
   /**
    *  @param {Client} client
@@ -61,6 +78,10 @@ export default {
         return await leave(client, interaction);
       case OPTS.shutdown.name:
         return await shutdown(client, interaction);
+      case OPTS.enable.name:
+        return await enable(client, interaction);
+      case OPTS.disable.name:
+        return await disable(client, interaction);
       case OPTS.channel.name:
         return await channel(client, interaction);
       default:
@@ -88,6 +109,13 @@ async function join(client, interaction) {
 
   if (!tts) {
     return await replies.message.error(interaction, words.ConfigRequired);
+  }
+
+  if (!tts.active) {
+    return await replies.message.error(
+      interaction,
+      "TTS desabilitado, use o comando `/tts enable` para habilitar",
+    );
   }
 
   if (!session) {
@@ -171,15 +199,16 @@ async function event(client, guild, message) {
     ttsCache.set(TTS_REF, tts);
   }
 
+  if (!tts || !tts.active) return;
+
   const member = guild.members.cache.get(message.author.id);
   const voice = member?.voice?.channel;
 
   if (!voice) return;
 
   if (
-    !tts ||
-    (tts.channelId !== message.channelId && voice.id !== message.channelId) ||
-    !sessionCache.includes(TTS_REF, message.author.id)
+    !sessionCache.includes(TTS_REF, message.author.id) ||
+    (tts.channelId !== message.channelId && voice.id !== message.channelId)
   )
     return;
 
@@ -235,4 +264,46 @@ async function shutdown(client, interaction) {
   queue.delete();
 
   return await replies.message.success(interaction, words.Shutdown);
+}
+
+async function enable(client, interaction) {
+  const words = await getLocalization(interaction.locale, `tts`);
+  const CACHE_REF = `${interaction.guild.id}`;
+
+  let tts = await Tts.findOne({ guildId: CACHE_REF });
+
+  if (!tts) {
+    ttsCache.resetOne(CACHE_REF);
+    return await replies.message.error(interaction, words.MissingConfig);
+  }
+
+  if (tts.active) {
+    return await replies.message.error(interaction, words.AlreadyEnabled);
+  }
+
+  tts.active = true;
+  ttsCache.set(CACHE_REF, tts);
+  await tts.save();
+  return await replies.message.success(interaction, words.Enabled);
+}
+
+async function disable(client, interaction) {
+  const words = await getLocalization(interaction.locale, `tts`);
+  const CACHE_REF = `${interaction.guild.id}`;
+
+  let tts = await Tts.findOne({ guildId: CACHE_REF });
+
+  if (!tts) {
+    ttsCache.resetOne(CACHE_REF);
+    return await replies.message.error(interaction, words.MissingConfig);
+  }
+
+  if (!tts.active) {
+    return await replies.message.error(interaction, words.AlreadyDisabled);
+  }
+
+  tts.active = false;
+  ttsCache.set(CACHE_REF, tts);
+  await tts.save();
+  return await replies.message.success(interaction, words.Disabled);
 }

@@ -7,5 +7,10 @@
   "AlreadyLeft": "Already left the TTS session",
   "Left": "Left successfully the TTS session",
   "NoSession": "No active TTS session found",
-  "Shutdown": "Shutting down the TTS session"
+  "Shutdown": "Shutting down the TTS session",
+  "Enabled": "TTS enabled successfully",
+  "Disabled": "TTS disabled successfully",
+  "AlreadyEnabled": "TTS is already enabled",
+  "AlreadyDisabled": "TTS is already disabled",
+  "MissingConfig": "There is no TTS configuration for this server, use the command `/tts channel` to create one"
 }
