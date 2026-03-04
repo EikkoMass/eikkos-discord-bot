@@ -1,3 +1,5 @@
 {
-  "SuccessfullyXP": "Adicionado com sucesso {0} XP para <@{1}>"
+  "SuccessfullyXP": "Adicionado com sucesso {0} XP para <@{1}>",
+  "NoLevelFound": "Nenhum level encontrado para este usuário",
+  "CurrentXP": "XP atual de usuário <@{0}>: {1}"
 }

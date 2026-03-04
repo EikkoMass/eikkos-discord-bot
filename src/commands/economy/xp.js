@@ -4,6 +4,9 @@ import xp from "../../utils/xp.js";
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
 
+import Level from "../../models/level.js";
+import cache from "../../utils/cache/level.js";
+
 const OPTS = {
   give: {
     name: "give",
@@ -24,13 +27,25 @@ const OPTS = {
       },
     ],
   },
+  show: {
+    name: "show",
+    description: "shows your/someone's xp",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "target",
+        description: "The user whose xp you want to see.",
+        type: ApplicationCommandOptionType.User,
+      },
+    ],
+  },
 };
 
 export default {
   name: "xp",
   devOnly: true,
   description: "Manage guild's xp",
-  options: [OPTS.give],
+  options: [OPTS.give, OPTS.show],
 
   /**
    *
@@ -40,8 +55,9 @@ export default {
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
       case OPTS.give.name:
-        await give(client, interaction);
-        break;
+        return await give(client, interaction);
+      case OPTS.show.name:
+        return await show(client, interaction);
     }
   },
 };
@@ -64,5 +80,33 @@ async function give(client, interaction) {
   await replies.message.success(
     interaction,
     formatMessage(words.SuccessfullyXP, [amount, userId]),
+  );
+}
+
+async function show(client, interaction) {
+  const words = await getLocalization(interaction.locale, `xp`);
+
+  let userId =
+    interaction.options.get("target")?.value || interaction.member.id;
+  const guildId = interaction.guild.id;
+  const CACHE_REF = `${guildId}-${userId}`;
+
+  let level = cache.get(CACHE_REF);
+
+  if (!level) {
+    level = await Level.findOne({ guildId, userId });
+
+    if (!level) {
+      return await replies.message.error(interaction, words.NoLevelFound);
+    }
+
+    cache.set(CACHE_REF, level);
+  }
+
+  const userXp = level.xp;
+
+  await replies.message.success(
+    interaction,
+    formatMessage(words.CurrentXP, [userId, userXp]),
   );
 }
