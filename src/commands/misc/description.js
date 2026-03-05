@@ -1,5 +1,5 @@
 import { Client, ApplicationCommandOptionType } from "discord.js";
-import Joke from "../../models/joke.js";
+import Description from "../../models/description.js";
 
 import reply from "../../utils/core/replies.js";
 
@@ -8,12 +8,12 @@ import { getLocalization, formatMessage } from "../../utils/i18n.js";
 const OPTS = {
   for: {
     name: "for",
-    description: "jokes around about...",
+    description: "descriptions around about...",
     type: ApplicationCommandOptionType.Subcommand,
     options: [
       {
         name: "user",
-        description: "Who will receive the joke?",
+        description: "Who will receive the description?",
         type: ApplicationCommandOptionType.User,
         required: true,
       },
@@ -21,18 +21,18 @@ const OPTS = {
   },
   register: {
     name: "register",
-    description: "Register a joke about someone.",
+    description: "Register a description about someone.",
     type: ApplicationCommandOptionType.Subcommand,
     options: [
       {
         name: "user",
-        description: "Who will receive the joke?",
+        description: "Who will receive the description?",
         type: ApplicationCommandOptionType.User,
         required: true,
       },
       {
         name: "message",
-        description: "What is the joke?",
+        description: "What is the description?",
         type: ApplicationCommandOptionType.String,
         required: true,
       },
@@ -41,8 +41,8 @@ const OPTS = {
 };
 
 export default {
-  name: "joke",
-  description: "Talk the joke you registered.",
+  name: "description",
+  description: "Add a private description about someone.",
   options: [OPTS.for, OPTS.register],
 
   /**
@@ -58,48 +58,48 @@ export default {
       default:
         return await reply.message.error(
           interaction,
-          `Joke command not found!`,
+          `description command not found!`,
         );
     }
   },
 };
 
 async function use(client, interaction) {
-  const words = await getLocalization(interaction.locale, `joke`);
+  const words = await getLocalization(interaction.locale, `description`);
 
   const targetUserId = interaction.options.get("user")?.value;
 
-  let joke = await Joke.findOne({
+  let description = await Description.findOne({
     userId: interaction.member.id,
     guildId: interaction.guild.id,
     targetUserId,
   });
 
-  if (joke?.message) {
+  if (description?.message) {
     return await reply.message.base(
       interaction,
-      joke.message.replace("{user}", `<@${targetUserId}>`),
+      description.message.replace("{user}", `<@${targetUserId}>`),
     );
   }
 
-  return await reply.message.error(interaction, words.NoJokeRegistered);
+  return await reply.message.error(interaction, words.NoRegistered);
 }
 
 async function register(client, interaction) {
-  const words = await getLocalization(interaction.locale, `joke`);
+  const words = await getLocalization(interaction.locale, `description`);
   const message = interaction.options.get("message")?.value;
   const targetUserId = interaction.options.get("user")?.value;
 
-  let joke = await Joke.findOne({
+  let description = await description.findOne({
     userId: interaction.member.id,
     guildId: interaction.guild.id,
     targetUserId,
   });
 
-  if (joke) {
-    joke.message = message;
+  if (description) {
+    description.message = message;
   } else {
-    joke = new Joke({
+    description = new Description({
       userId: interaction.member.id,
       guildId: interaction.guild.id,
       targetUserId: targetUserId,
@@ -107,10 +107,10 @@ async function register(client, interaction) {
     });
   }
 
-  await joke.save();
+  await description.save();
 
   return await reply.message.success(
     interaction,
-    formatMessage(words.JokeCreated, [interaction.member.id, targetUserId]),
+    formatMessage(words.Created, [interaction.member.id, targetUserId]),
   );
 }
