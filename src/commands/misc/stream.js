@@ -8,19 +8,92 @@ import reply from "../../utils/core/replies.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
+const OPTS = {
+  register: {
+    name: "register",
+    description: "Register an new stream option",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "title",
+        description: "Title of the stream",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+      {
+        name: "link",
+        description: "Link that you want to stream",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+      {
+        name: "priority",
+        description:
+          "Want to apply now the new stream? (don't work with rotation enabled)",
+        type: ApplicationCommandOptionType.Boolean,
+      },
+    ],
+  },
+  set: {
+    name: "set",
+    description: "Set a new stream (without saving it // disables rotation)",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "title",
+        description: "Title of the stream",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+      {
+        name: "link",
+        description: "Link that you want to stream",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+    ],
+  },
+  remove: {
+    name: "remove",
+    description: "Remove the stream you want",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "link",
+        description: "the link of the stream you want to remove",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+    ],
+  },
+  rotate: {
+    name: "rotate",
+    description: "Set the stream rotation state",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "active",
+        description: "you want to rotate the bot stream?",
+        type: ApplicationCommandOptionType.Boolean,
+        required: true,
+      },
+    ],
+  },
+};
+
 export default {
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "register":
+      case OPTS.register.name:
         await register(client, interaction);
         break;
-      case "set":
+      case OPTS.set.name:
         await set(client, interaction);
         break;
-      case "remove":
+      case OPTS.remove.name:
         await remove(client, interaction);
         break;
-      case "rotate":
+      case OPTS.rotate.name:
         await rotate(client, interaction);
         break;
       default:
@@ -33,78 +106,7 @@ export default {
   name: "stream",
   description: "Manage links to bot stream",
   devOnly: true,
-  options: [
-    {
-      name: "register",
-      description: "Register an new stream option",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "title",
-          description: "Title of the stream",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-        {
-          name: "link",
-          description: "Link that you want to stream",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-        {
-          name: "priority",
-          description:
-            "Want to apply now the new stream? (don't work with rotation enabled)",
-          type: ApplicationCommandOptionType.Boolean,
-        },
-      ],
-    },
-    {
-      name: "set",
-      description: "Set a new stream (without saving it // disables rotation)",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "title",
-          description: "Title of the stream",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-        {
-          name: "link",
-          description: "Link that you want to stream",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "remove",
-      description: "Remove the stream you want",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "link",
-          description: "the link of the stream you want to remove",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "rotate",
-      description: "Set the stream rotation state",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "active",
-          description: "you want to rotate the bot stream?",
-          type: ApplicationCommandOptionType.Boolean,
-          required: true,
-        },
-      ],
-    },
-  ],
+  options: [OPTS.register, OPTS.set, OPTS.remove, OPTS.rotate],
 };
 
 /**

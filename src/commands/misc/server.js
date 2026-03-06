@@ -3,6 +3,19 @@ import replies from "../../utils/core/replies.js";
 
 import { getLocalization } from "../../utils/i18n.js";
 
+const OPTS = {
+  image: {
+    name: "image",
+    description: "image from your server",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+  info: {
+    name: "info",
+    description: "info about your server",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+};
+
 export default {
   name: "server",
   description: "commands about your server",
@@ -12,9 +25,9 @@ export default {
    */
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "image":
+      case OPTS.image.name:
         return await image(client, interaction);
-      case "info":
+      case OPTS.info.name:
         return await info(client, interaction);
       default:
         return await replies.message.error(
@@ -24,18 +37,7 @@ export default {
     }
   },
 
-  options: [
-    {
-      name: "image",
-      description: "image from your server",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-    {
-      name: "info",
-      description: "info about your server",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-  ],
+  options: [OPTS.image, OPTS.info],
 };
 
 async function image(client, interaction) {
