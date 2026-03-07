@@ -10,7 +10,6 @@ import Tts from "../../models/tts.js";
 
 import sessionCache from "../../utils/cache/ttsSession.js";
 import ttsCache from "../../utils/cache/tts.js";
-import guildCache from "../../utils/cache/guild.js";
 
 const OPTS = {
   join: {
@@ -112,10 +111,7 @@ async function join(client, interaction) {
   }
 
   if (!tts.active) {
-    return await replies.message.error(
-      interaction,
-      "TTS desabilitado, use o comando `/tts enable` para habilitar",
-    );
+    return await replies.message.error(interaction, words.TtsAreDisabled);
   }
 
   if (!session) {

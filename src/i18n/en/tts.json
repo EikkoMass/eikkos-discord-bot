@@ -12,5 +12,6 @@
   "Disabled": "TTS disabled successfully",
   "AlreadyEnabled": "TTS is already enabled",
   "AlreadyDisabled": "TTS is already disabled",
-  "MissingConfig": "There is no TTS configuration for this server, use the command `/tts channel` to create one"
+  "MissingConfig": "There is no TTS configuration for this server, use the command `/tts channel` to create one",
+  "TtsAreDisabled": "TTS is disabled, use the command `/tts enable` to enable it"
 }
