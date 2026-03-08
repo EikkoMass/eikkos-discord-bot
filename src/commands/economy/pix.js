@@ -10,15 +10,67 @@ import Pix from "../../models/pix.js";
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
 
+const OPTS = {
+  register: {
+    name: "register",
+    description: "Your account data",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "key",
+        description: "Your pix key",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+      {
+        name: "name",
+        description: "Your name",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+      {
+        name: "city",
+        description: "Your city",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+    ],
+  },
+  request: {
+    name: "request",
+    description: "Request a pix to someone",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "value",
+        description: "How much you want to pay",
+        type: ApplicationCommandOptionType.Number,
+        required: true,
+        min_value: 0.01,
+      },
+      {
+        name: "user",
+        description: "user that you want to request the value",
+        type: ApplicationCommandOptionType.User,
+      },
+      {
+        name: "description",
+        description: "Your transaction description",
+        type: ApplicationCommandOptionType.String,
+      },
+    ],
+  },
+};
+
 export default {
   // Heavily inspired by https://github.com/EnssureIT/faz-um-pix
 
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "request":
+      case OPTS.request.name:
         await request(client, interaction);
         break;
-      case "register":
+      case OPTS.register.name:
         await register(client, interaction);
         break;
       default:
@@ -32,57 +84,7 @@ export default {
 
   name: "pix",
   description: "Send a pix to someone!",
-  options: [
-    {
-      name: "register",
-      description: "Your account data",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "key",
-          description: "Your pix key",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-        {
-          name: "name",
-          description: "Your name",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-        {
-          name: "city",
-          description: "Your city",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "request",
-      description: "Request a pix to someone",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "value",
-          description: "How much you want to pay",
-          type: ApplicationCommandOptionType.Number,
-          required: true,
-          min_value: 0.01,
-        },
-        {
-          name: "user",
-          description: "user that you want to request the value",
-          type: ApplicationCommandOptionType.User,
-        },
-        {
-          name: "description",
-          description: "Your transaction description",
-          type: ApplicationCommandOptionType.String,
-        },
-      ],
-    },
-  ],
+  options: [OPTS.register, OPTS.request],
 };
 
 function getSafeLength(obj) {
