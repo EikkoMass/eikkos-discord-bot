@@ -1,5 +1,6 @@
 {
   "SuccessfullyXP": "Adicionado com sucesso {0} XP para <@{1}>",
   "NoLevelFound": "Nenhum level encontrado para este usuário",
-  "CurrentXP": "XP atual de usuário <@{0}>: {1}"
+  "CurrentXP": "XP atual de usuário <@{0}>: {1}",
+  "AdminExclusiveCommand": "Este comando é exclusivo para administradores."
 }

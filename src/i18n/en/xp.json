@@ -1,5 +1,6 @@
 {
   "SuccessfullyXP": "Successfully gave {0} XP to <@{1}>",
   "NoLevelFound": "No level found for this user",
-  "CurrentXP": "Current XP of user <@{0}>: {1}"
+  "CurrentXP": "Current XP of user <@{0}>: {1}",
+  "AdminExclusiveCommand": "This command is exclusive to administrators."
 }

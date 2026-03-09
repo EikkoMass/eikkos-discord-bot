@@ -1,4 +1,8 @@
-import { Client, ApplicationCommandOptionType } from "discord.js";
+import {
+  Client,
+  ApplicationCommandOptionType,
+  PermissionFlagsBits,
+} from "discord.js";
 import xp from "../../utils/xp.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
@@ -67,6 +71,10 @@ async function give(client, interaction) {
 
   let userId = interaction.options.get("user")?.value || interaction.member.id;
   let amount = interaction.options.get("amount")?.value || 100;
+
+  if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+    return await reply.message.error(interaction, words.AdminExclusiveCommand);
+  }
 
   await xp.give(
     userId,
