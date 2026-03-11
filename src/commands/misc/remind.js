@@ -14,6 +14,50 @@ import reply from "../../utils/core/replies.js";
 
 import build from "../../utils/components/reminderBuilder.js";
 
+const OPTS = {
+  create: {
+    name: "create",
+    description: "creates a new reminder",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "time",
+        description: "the time out to remind (30 minutes , 1 hour , 1 day)",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+      {
+        name: "message",
+        description: "What you want to remind?",
+        type: ApplicationCommandOptionType.String,
+      },
+      {
+        name: "user",
+        description: "Who will receive the message?",
+        type: ApplicationCommandOptionType.User,
+      },
+    ],
+  },
+  status: {
+    name: "status",
+    description: "show a list of your current reminders",
+    type: ApplicationCommandOptionType.Subcommand,
+  },
+  cancel: {
+    name: "cancel",
+    description: "Cancel an active reminder",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "id",
+        description: "The id of the pending reminder",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+    ],
+  },
+};
+
 export default {
   name: "reminder",
   description: "Reminds you something later.",
@@ -23,13 +67,13 @@ export default {
    */
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
-      case "create":
+      case OPTS.create.name:
         await create(client, interaction);
         break;
-      case "status":
+      case OPTS.status.name:
         await status(client, interaction);
         break;
-      case "cancel":
+      case OPTS.cancel.name:
         await cancel(client, interaction);
         break;
       default:
@@ -40,49 +84,7 @@ export default {
     }
   },
 
-  options: [
-    {
-      name: "create",
-      description: "creates a new reminder",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "time",
-          description: "the time out to remind (30 minutes , 1 hour , 1 day)",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-        {
-          name: "message",
-          description: "What you want to remind?",
-          type: ApplicationCommandOptionType.String,
-        },
-        {
-          name: "user",
-          description: "Who will receive the message?",
-          type: ApplicationCommandOptionType.User,
-        },
-      ],
-    },
-    {
-      name: "status",
-      description: "show a list of your current reminders",
-      type: ApplicationCommandOptionType.Subcommand,
-    },
-    {
-      name: "cancel",
-      description: "Cancel an active reminder",
-      type: ApplicationCommandOptionType.Subcommand,
-      options: [
-        {
-          name: "id",
-          description: "The id of the pending reminder",
-          type: ApplicationCommandOptionType.String,
-          required: true,
-        },
-      ],
-    },
-  ],
+  options: [OPTS.create, OPTS.status, OPTS.cancel],
 };
 
 async function create(client, interaction) {
