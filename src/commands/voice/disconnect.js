@@ -11,6 +11,21 @@ import reply from "../../utils/core/replies.js";
 export default {
   name: "disconnect",
   description: "Disconnects the user from the voice channel",
+  options: [
+    {
+      name: "user",
+      description: "the user you want to disconnect",
+      type: ApplicationCommandOptionType.User,
+      required: false,
+    },
+    {
+      name: "timer",
+      description:
+        "the time to disconnect the user (30 minutes , 1 hour , 1 day)",
+      type: ApplicationCommandOptionType.String,
+      required: false,
+    },
+  ],
   /**
    *  @param {Client} client
    *  @param  interaction
@@ -73,20 +88,4 @@ export default {
       } catch (error) {}
     }, duration);
   },
-
-  options: [
-    {
-      name: "user",
-      description: "the user you want to disconnect",
-      type: ApplicationCommandOptionType.User,
-      required: false,
-    },
-    {
-      name: "timer",
-      description:
-        "the time to disconnect the user (30 minutes , 1 hour , 1 day)",
-      type: ApplicationCommandOptionType.String,
-      required: false,
-    },
-  ],
 };

@@ -15,6 +15,8 @@ import { getLocalization } from "../../utils/i18n.js";
 import discord from "../../configs/discord.json" with { type: "json" };
 import Enum from "../../enums/notes/contexts.js";
 
+import replies from "../../utils/core/replies.js";
+
 import Note from "../../models/note.js";
 
 export default {
@@ -39,11 +41,7 @@ export default {
     let countNotes = await Note.countDocuments(query);
 
     if (countNotes >= discord.embeds.max) {
-      interaction.reply({
-        flags: [MessageFlags.Ephemeral],
-        embeds: [new EmbedBuilder().setDescription(words.LimitExceeded)],
-      });
-      return;
+      return await replies.message.error(interaction, words.LimitExceeded);
     }
 
     const title = new TextInputBuilder()
