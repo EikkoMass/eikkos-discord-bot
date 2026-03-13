@@ -2,6 +2,8 @@ import { Client, Message } from "discord.js";
 import xp from "../utils/xp.js";
 const cooldowns = new Set();
 
+const MESSAGE_COOLDOWN = 6000;
+
 export default {
   name: "giveUserXP",
   description: "calculates the user leveling",
@@ -24,7 +26,7 @@ export default {
         cooldowns.add(message.author.id);
         setTimeout(() => {
           cooldowns.delete(message.author.id);
-        }, 6000);
+        }, MESSAGE_COOLDOWN);
       },
     });
   },

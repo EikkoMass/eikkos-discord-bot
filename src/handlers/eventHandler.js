@@ -9,6 +9,8 @@ async function addEventListeners(client) {
     true,
   );
 
+  const IMPORT_BASE = "../utils/events";
+
   for (const eventFolder of eventFolders) {
     const eventFiles = getAllFiles(eventFolder, false, true);
     eventFiles.sort((a, b) => a > b);
@@ -19,9 +21,9 @@ async function addEventListeners(client) {
 
     if (!event) {
       try {
-        event = (await import(`../utils/events/${eventName}.js`)).default;
+        event = (await import(`${IMPORT_BASE}/${eventName}.js`)).default;
       } catch (error) {
-        event = (await import(`../utils/events/default.js`)).default;
+        event = (await import(`${IMPORT_BASE}/default.js`)).default;
       }
 
       cache[eventName] = event;

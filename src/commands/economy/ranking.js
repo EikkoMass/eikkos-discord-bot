@@ -7,6 +7,8 @@ import replies from "../../utils/core/replies.js";
 const QUANTITY_OF_USERS = 5;
 
 export default {
+  name: "ranking",
+  description: `Show the top ${QUANTITY_OF_USERS} users on the ranking`,
   /**
    *  @param {Client} client
    *  @param  interaction
@@ -78,9 +80,6 @@ export default {
       embeds,
     });
   },
-
-  name: "ranking",
-  description: `Show the top ${QUANTITY_OF_USERS} users on the ranking`,
 };
 
 function buildUserEmbed(words, isGuildMember, userRank, rank, user) {
