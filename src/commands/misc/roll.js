@@ -11,7 +11,7 @@ import discord from "../../configs/discord.json" with { type: "json" };
 const SUSPENSE_TIMEOUT_MS = 3000;
 
 const rolls = [4, 6, 8, 10, 12, 20, 100];
-const maxValues = discord.embeds.max;
+const maxValues = discord.embeds.max - 1;
 
 const quantity = {
   name: "quantity",
@@ -95,16 +95,20 @@ async function rollCustom(client, interaction) {
 
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
-  let embeds = [];
+  let rolls = [];
+  let sum = 0;
+  let maxSum = maxFloored * quantity;
 
   for (let i = 0; i < quantity; i++) {
     let randomized = Math.floor(
       Math.random() * (maxFloored - minCeiled + 1) + minCeiled,
     );
 
+    sum += randomized;
+
     const layout = getLayout(randomized, maxFloored);
 
-    embeds.push(
+    rolls.push(
       new EmbedBuilder()
         .setDescription(`${layout.emoji} \` ${randomized} \``)
         .setColor(layout.color),
@@ -114,7 +118,13 @@ async function rollCustom(client, interaction) {
   setTimeout(
     () =>
       message.edit({
-        embeds,
+        embeds: [
+          new EmbedBuilder()
+            .setTitle(`Roll ${quantity}d${max}`)
+            .setDescription(`📃 \` ${sum} \`/\` ${maxSum} \``)
+            .setColor(getLayout(sum, maxSum).color),
+          ...rolls,
+        ],
       }),
     SUSPENSE_TIMEOUT_MS,
   );
@@ -135,7 +145,8 @@ async function roll(client, interaction) {
     withResponse: true,
   });
   const maxFloored = Number.parseInt(sub.replace(/[^\d]+/g, ""));
-  let embeds = [];
+  let rolls = [];
+  let sum = 0;
 
   const message = await interaction.channel.messages.fetch(
     res.resource.message.id,
@@ -143,10 +154,11 @@ async function roll(client, interaction) {
 
   for (let i = 0; i < quantity; i++) {
     let randomized = Math.floor(Math.random() * maxFloored + 1);
+    sum += randomized;
 
     const layout = getLayout(randomized, maxFloored);
 
-    embeds.push(
+    rolls.push(
       new EmbedBuilder()
         .setDescription(`${layout.emoji} \` ${randomized} \``)
         .setColor(layout.color),
@@ -156,7 +168,13 @@ async function roll(client, interaction) {
   setTimeout(
     () =>
       message.edit({
-        embeds,
+        embeds: [
+          new EmbedBuilder()
+            .setTitle(`Roll ${quantity}d${maxFloored}`)
+            .setDescription(`📃 \` ${sum} \`/\` ${maxFloored * quantity} \``)
+            .setColor(getLayout(sum, maxFloored * quantity).color),
+          ...rolls,
+        ],
       }),
     SUSPENSE_TIMEOUT_MS,
   );
