@@ -26,7 +26,7 @@ export default {
     const ONE_SEC = 1000;
 
     if (secondsBetweenChanges < 0) {
-      return await reply.message.error(interaction, words.DelayMustBePositive);
+      secondsBetweenChanges = 0;
     }
 
     if (targetMember.user.id === interaction.user.id) {
