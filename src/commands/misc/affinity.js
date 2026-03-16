@@ -1,7 +1,7 @@
 import { Client, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
-import { randomize } from "../../utils/core/randomizer.js";
+import { getSeeded } from "../../utils/core/randomizer.js";
 
 import replies from "../../utils/core/replies.js";
 
@@ -134,7 +134,7 @@ async function hate(client, interaction) {
 function affinityCalc(type, user1, user2) {
   const emojis = affinityEmojis[type];
 
-  let affinity = Math.round(randomize(user1 + user2) * 100);
+  let affinity = Math.round(getSeeded(user1 + user2) * 100);
 
   if (type === OPTS.hate.name) {
     affinity = 100 - affinity;

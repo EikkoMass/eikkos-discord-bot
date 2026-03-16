@@ -5,7 +5,7 @@ import {
   MessageFlags,
   EmbedBuilder,
 } from "discord.js";
-import { getRandomNumber } from "../utils/core/randomizer.js";
+import { getRandom } from "../utils/core/randomizer.js";
 import xp from "../utils/xp.js";
 
 export default {
@@ -22,9 +22,9 @@ export default {
     if (message.author.bot) return;
 
     // 3%
-    if (message.content?.length > 3 && getRandomNumber() > 97) {
+    if (message.content?.length > 3 && getRandom() > 97) {
       // 15%
-      const isFire = getRandomNumber() > 85;
+      const isFire = getRandom() > 85;
 
       const file = new AttachmentBuilder(
         `src/gifs/${isFire ? "fire" : "nerd"}.gif`,
@@ -37,8 +37,8 @@ export default {
       });
 
       // 1%
-      if (!isFire && getRandomNumber() > 99) {
-        const experience = xp.getRandomXp(25, 35);
+      if (!isFire && getRandom() > 99) {
+        const experience = getRandom(25, 35);
 
         await message.reply({
           flags: [MessageFlags.Ephemeral],

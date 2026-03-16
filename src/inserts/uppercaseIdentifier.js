@@ -1,5 +1,5 @@
 import { Client, Message } from "discord.js";
-import { getRandomNumber } from "../utils/core/randomizer.js";
+import { getRandom } from "../utils/core/randomizer.js";
 
 export default {
   name: "uppercaseIdentifier",
@@ -17,7 +17,7 @@ export default {
   callback: async (client, message) => {
     if (!message.inGuild() || message.author.bot) return;
 
-    if (getRandomNumber() > 60)
+    if (getRandom() > 60)
       await message.reply("Keep your voice down! >_>");
   },
 };

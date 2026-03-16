@@ -1,4 +1,5 @@
 import { Client, Message } from "discord.js";
+import { getRandom } from "../utils/core/randomizer.js";
 import xp from "../utils/xp.js";
 const cooldowns = new Set();
 
@@ -19,7 +20,7 @@ export default {
    *  @param {Message} message
    */
   callback: async (client, message) => {
-    const xpToGive = xp.getRandomXp(5, 15);
+    const xpToGive = getRandom(5, 15);
 
     await xp.give(message.author, message.guild, message.channel, xpToGive, {
       after: (level) => {
