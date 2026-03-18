@@ -20,7 +20,7 @@
     "bgutils-js": "^3.2.0",
     "canvacord": "^6.0.4",
     "discord-player": "^7.2.0",
-    "discord-player-googlevideo": "^0.2.4",
+    "discord-player-googlevideo": "^0.2.5",
     "discord-player-tts": "^1.0.9",
     "discord-player-youtubei": "^2.0.0",
     "discord.js": "^14.25.1",
@@ -33,13 +33,5 @@
     "play-dl": "^1.9.7",
     "pretty-ms": "^9.3.0",
     "youtube-dl-exec": "^3.1.3"
-  },
-  "overrides": {
-    "discord-player-googlevideo": {
-      "bgutils-js": "^3.2.0",
-      "googlevideo": "^4.0.4",
-      "jsdom": "^28.1.0",
-      "youtubei.js": "^17.0.1"
-    }
   }
 }
