@@ -1,6 +1,7 @@
 import { Client, MessageFlags } from "discord.js";
 
 import { useQueue } from "discord-player";
+import cache from "../../utils/cache/queue.js";
 
 import { getLocalization } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
@@ -23,6 +24,11 @@ export default {
       return await reply.message.error(interaction, words.NoSong, {
         context: "editReply",
       });
+    }
+
+    if (cache.get(CACHE_REF)) {
+      await cache.get(CACHE_REF)();
+      cache.resetOne(CACHE_REF);
     }
 
     queue.node.skip();

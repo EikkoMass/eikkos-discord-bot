@@ -2,6 +2,8 @@ import { EmbedBuilder, MessageFlags, Colors } from "discord.js";
 import { GuildQueue, Track } from "discord-player";
 import getPlayerActionRow from "../../utils/components/playerActionRow.js";
 
+import cache from "../../utils/cache/queue.js";
+
 import { getLocalization } from "../../utils/i18n.js";
 import Enum from "../../enums/player/contexts.js";
 
@@ -14,6 +16,13 @@ export default {
    */
   callback: async (queue, track) => {
     if (queue.metadata.context === Enum.TTS) return;
+
+    const CACHE_REF = `${queue.metadata.guild}`;
+    console.log(CACHE_REF);
+    if (cache.get(CACHE_REF)) {
+      await cache.get(CACHE_REF)();
+      cache.resetOne(CACHE_REF);
+    }
 
     const words = await getLocalization(
       queue.metadata.preferredLocale,
@@ -34,11 +43,16 @@ export default {
       components: [getPlayerActionRow()],
     });
 
-    if (message)
-      setTimeout(async () => {
-        try {
-          await message.delete();
-        } catch (error) {}
-      }, track.durationMS);
+    if (message) {
+      cache.set(
+        CACHE_REF,
+        async () => {
+          try {
+            await message.delete();
+          } catch (error) {}
+        },
+        track.durationMS,
+      );
+    }
   },
 };

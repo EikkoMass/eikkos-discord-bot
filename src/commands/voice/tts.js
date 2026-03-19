@@ -125,6 +125,7 @@ async function join(client, interaction) {
     play(
       vc,
       " ",
+      interaction.guild.id,
       interaction.guild.channels.cache.get(tts.channelId),
       interaction.guild.locale,
     );
@@ -165,12 +166,13 @@ async function leave(client, interaction) {
   return await replies.message.success(interaction, words.Left);
 }
 
-async function play(voice, message, channel, locale) {
+async function play(voice, message, guildId, channel, locale) {
   const player = useMainPlayer();
 
   player.play(voice, `tts:${message}`, {
     nodeOptions: {
       metadata: {
+        guild: guildId,
         channel: channel,
         preferredLocale: locale,
         context: Enum.TTS,

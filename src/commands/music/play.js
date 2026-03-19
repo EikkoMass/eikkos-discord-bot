@@ -64,9 +64,10 @@ export default {
         {
           nodeOptions: {
             metadata: {
+              guild: interaction.guild.id,
               channel: interaction.channel,
               preferredLocale: interaction.locale,
-              context: Enum.MUSIC
+              context: Enum.MUSIC,
             },
             volume,
             ...playerConfigs,

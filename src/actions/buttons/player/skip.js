@@ -2,6 +2,7 @@ import { Client, MessageFlags } from "discord.js";
 import { useQueue } from "discord-player";
 
 import reply from "../../../utils/core/replies.js";
+import cache from "../../../utils/cache/queue.js";
 
 import { getLocalization } from "../../../utils/i18n.js";
 
@@ -22,6 +23,13 @@ export default {
       if (!queue || queue.isEmpty()) {
         await reply.message.error(interaction, words.NoSong);
         return;
+      }
+
+      const CACHE_REF = `${interaction.guild.id}`;
+
+      if (cache.get(CACHE_REF)) {
+        await cache.get(CACHE_REF)();
+        cache.resetOne(CACHE_REF);
       }
 
       queue.node.skip();

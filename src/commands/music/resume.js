@@ -1,6 +1,7 @@
 import { Client, MessageFlags } from "discord.js";
 
 import { useQueue } from "discord-player";
+import cache from "../../utils/cache/queue.js";
 
 import { getLocalization } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
@@ -32,6 +33,11 @@ export default {
     }
 
     queue.node.resume();
+
+    cache.newTimeout(
+      `${interaction.guild.id}`,
+      queue.node.estimatedDuration - queue.node.streamTime,
+    );
 
     await reply.message.success(interaction, words.Resumed, {
       context: "editReply",

@@ -33,6 +33,8 @@ export default {
 
     queue.node.pause();
 
+    cache.cancelTimeout(`${interaction.guild.id}`);
+
     await reply.message.success(interaction, words.Paused, {
       context: "editReply",
       embed: {

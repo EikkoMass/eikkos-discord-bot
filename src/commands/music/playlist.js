@@ -205,6 +205,7 @@ async function play(client, interaction) {
   const { queue, track, searchResult } = await player.play(channel, result, {
     nodeOptions: {
       metadata: {
+        guild: interaction.guild.id,
         channel: interaction.channel,
         preferredLocale: interaction.locale,
         context: Enum.MUSIC,
