@@ -1,4 +1,6 @@
-import {Client, MessageFlags, InteractionContextType, ApplicationCommandType} from 'discord.js';
+import { Client, MessageFlags, InteractionContextType, ApplicationCommandType } from 'discord.js';
+import discord from "../../configs/discord.json" with { type: "json" };
+
 
 export default {
   name: "Get Avatar",
@@ -12,7 +14,7 @@ export default {
   callback: async (client, interaction) => {
     return interaction.reply({
       flags: [ MessageFlags.Ephemeral ],
-      content: interaction.targetUser.displayAvatarURL({ size: 256 })
+      content: interaction.targetUser.displayAvatarURL({ size: discord.avatar.size })
     })
   }
 }

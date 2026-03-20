@@ -4,5 +4,8 @@
   },
   "autocompletes": {
     "max": 25
+  },
+  "avatar": {
+    "size": 256
   }
 }

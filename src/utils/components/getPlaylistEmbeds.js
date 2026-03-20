@@ -1,6 +1,8 @@
 import { EmbedBuilder } from "discord.js";
 import { getUser } from "../importers/getUser.js";
 
+import discord from "../../configs/discord.json" with { type: "json" };
+
 async function getPlaylistEmbeds(client, playlists) {
   const embeds = [];
 
@@ -14,7 +16,7 @@ async function getPlaylistEmbeds(client, playlists) {
       .setTimestamp(playlist.creationDate)
       .setFooter({
         text: playlist._id.toString(),
-        iconURL: owner.displayAvatarURL({ size: 256 }),
+        iconURL: owner.displayAvatarURL({ size: discord.avatar.size }),
       });
 
     embeds.push(embed);

@@ -3,6 +3,7 @@ import Level from "../../models/level.js";
 import { getLocalization } from "../../utils/i18n.js";
 
 import replies from "../../utils/core/replies.js";
+import discord from "../../configs/discord.json" with { type: "json" };
 
 const QUANTITY_OF_USERS = 5;
 
@@ -96,7 +97,7 @@ function buildUserEmbed(words, isGuildMember, userRank, rank, user) {
     .setTitle(
       `[ ${rank === 0 ? "👑" : rank + 1} ] ${user.displayName || user.nickname}`,
     )
-    .setThumbnail(user.displayAvatarURL({ size: 256 }))
+    .setThumbnail(user.displayAvatarURL({ size: discord.avatar.size }))
     .setFields(userFields)
     .setURL(`https://discord.com/users/${userRank.userId}`)
     .setColor([

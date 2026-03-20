@@ -11,6 +11,8 @@ import xp from "../../utils/xp.js";
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
 
+import discord from "../../configs/discord.json" with { type: "json" };
+
 const OPTS = {
   show: {
     name: "show",
@@ -112,7 +114,9 @@ async function show(client, interaction) {
   let currentRank =
     allLevels.findIndex((lvl) => lvl.userId === targetUserId) + 1;
   const rank = new RankCardBuilder()
-    .setAvatar(targetUserObj.user.displayAvatarURL({ size: 256 }))
+    .setAvatar(
+      targetUserObj.user.displayAvatarURL({ size: discord.avatar.size }),
+    )
     .setRank(currentRank)
     .setLevel(fetchLevel.level)
     .setCurrentXP(fetchLevel.xp)

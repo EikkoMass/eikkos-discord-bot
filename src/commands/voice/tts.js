@@ -53,6 +53,8 @@ const OPTS = {
   },
 };
 
+const EVENT_NAME = "messageCreate";
+
 export default {
   name: "tts",
   description: "Text-to-Speech command",
@@ -119,7 +121,7 @@ async function join(client, interaction) {
       await event(this, interaction.guild, message);
     };
 
-    client.on("messageCreate", contextEvent);
+    client.on(EVENT_NAME, contextEvent);
     sessionCache.set(CACHE_REF, contextEvent, [interaction.user.id]);
 
     play(
@@ -156,7 +158,7 @@ async function leave(client, interaction) {
   let result = sessionCache.removeUser(CACHE_REF, interaction.user.id);
 
   if (!result) {
-    client.off("messageCreate", session.event);
+    client.off(EVENT_NAME, session.event);
     sessionCache.resetOne(CACHE_REF);
 
     let queue = useQueue(interaction.guild);
@@ -255,7 +257,7 @@ async function shutdown(client, interaction) {
     return await replies.message.error(interaction, words.NoSession);
   }
 
-  client.off("messageCreate", session.event);
+  client.off(EVENT_NAME, session.event);
   sessionCache.resetOne(CACHE_REF);
 
   let queue = useQueue(interaction.guild);

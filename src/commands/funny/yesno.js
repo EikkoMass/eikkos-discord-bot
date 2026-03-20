@@ -3,6 +3,8 @@ import { Client, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
 import reply from "../../utils/core/replies.js";
 import { getLocalization } from "../../utils/i18n.js";
 
+import discord from "../../configs/discord.json" with { type: "json" };
+
 export default {
   name: "yesno",
   description: "make a question of yes / no to the bot",
@@ -38,7 +40,9 @@ export default {
         .setDescription(question)
         .setFooter({
           text: new Date().toDateString(),
-          iconURL: interaction.member.displayAvatarURL({ size: 256 }),
+          iconURL: interaction.member.displayAvatarURL({
+            size: discord.avatar.size,
+          }),
         });
 
       interaction.reply({

@@ -1,6 +1,8 @@
 import { EmbedBuilder } from "discord.js";
 import { getUser } from "../importers/getUser.js";
 
+import discord from "../../configs/discord.json" with { type: "json" };
+
 async function getNotifyEmbeds(client, notify) {
   const embeds = [];
 
@@ -13,7 +15,7 @@ async function getNotifyEmbeds(client, notify) {
       .setColor("Random")
       .setFooter({
         text: n._id.toString(),
-        iconURL: user.displayAvatarURL({ size: 256 }),
+        iconURL: user.displayAvatarURL({ size: discord.avatar.size }),
       });
 
     if (n.message) {

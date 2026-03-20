@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import reply from "../../utils/core/replies.js";
 import { getLocalization } from "../../utils/i18n.js";
 
+import discord from "../../configs/discord.json" with { type: "json" };
+
 dotenv.config();
 
 export default {
@@ -61,7 +63,9 @@ export default {
         .setImage(response.data[0].url)
         .setFooter({
           text: new Date().toDateString(),
-          iconURL: interaction.member.displayAvatarURL({ size: 256 }),
+          iconURL: interaction.member.displayAvatarURL({
+            size: discord.avatar.size,
+          }),
         });
 
       if (show === undefined || show) {

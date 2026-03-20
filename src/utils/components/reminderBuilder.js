@@ -4,6 +4,8 @@ import cache from "../cache/reminder.js";
 import { formatMessage, getLocalization } from "../i18n.js";
 import prettyMs from "pretty-ms";
 
+import discord from "../../configs/discord.json" with { type: "json" };
+
 /**
  *  @param {Guild} guild
  *  @param {Reminder} reminder
@@ -40,7 +42,7 @@ export default async (guild, reminder) => {
   const words = await getLocalization(reminder.locale, `remind`);
 
   embed.setDescription(reminder.message || " ").setFooter({
-    iconURL: member.displayAvatarURL({ size: 256 }),
+    iconURL: member.displayAvatarURL({ size: discord.avatar.size }),
     text: formatMessage(words.EventHistory, [
       member.displayName || member.nickname,
       prettyMs(dynDuration < 0 ? dynDuration * -1 : dynDuration, {
