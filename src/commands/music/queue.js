@@ -4,6 +4,7 @@ import { useQueue } from "discord-player";
 import discord from "../../configs/discord.json" with { type: "json" };
 
 import reply from "../../utils/core/replies.js";
+import { msToMinSec } from "../../utils/core/dateTimeFormatter.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
@@ -53,8 +54,11 @@ export default {
           iconURL: client.user.avatarURL({ size: 1024 }),
         });
     } else {
+      const time = queue.node.streamTime;
+      const duration = queue.node.estimatedDuration;
+
       currentTrackEmbed.setFooter({
-        text: `${queue.currentTrack.duration}`,
+        text: `${msToMinSec(time)} / ${msToMinSec(duration)} [${Math.floor((time / duration) * 100)}%]`,
         iconURL: (queue.currentTrack?.requestedBy || client.user).avatarURL({
           size: 1024,
         }),

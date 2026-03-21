@@ -18,7 +18,7 @@ export default {
     if (queue.metadata.context === Enum.TTS) return;
 
     const CACHE_REF = `${queue.metadata.guild}`;
-    console.log(CACHE_REF);
+
     if (cache.get(CACHE_REF)) {
       await cache.get(CACHE_REF)();
       cache.resetOne(CACHE_REF);
