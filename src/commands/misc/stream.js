@@ -85,17 +85,13 @@ export default {
   callback: async (client, interaction) => {
     switch (interaction.options.getSubcommand()) {
       case OPTS.register.name:
-        await register(client, interaction);
-        break;
+        return await register(client, interaction);
       case OPTS.set.name:
-        await set(client, interaction);
-        break;
+        return await set(client, interaction);
       case OPTS.remove.name:
-        await remove(client, interaction);
-        break;
+        return await remove(client, interaction);
       case OPTS.rotate.name:
-        await rotate(client, interaction);
-        break;
+        return await rotate(client, interaction);
       default:
         return await reply.message.error(
           interaction,
