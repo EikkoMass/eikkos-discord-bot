@@ -4,7 +4,7 @@ import { useQueue } from "discord-player";
 import discord from "../../configs/discord.json" with { type: "json" };
 
 import reply from "../../utils/core/replies.js";
-import { msToMinSec } from "../../utils/core/dateTimeFormatter.js";
+import { msToTime } from "../../utils/core/dateTimeFormatter.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
@@ -33,6 +33,19 @@ export default {
     let currentTrackEmbed = new EmbedBuilder().setColor([20, 240, 20]);
     let nextTracksEmbed;
 
+    const time = queue.node.streamTime;
+    const duration = queue.node.estimatedDuration;
+
+    const current = msToTime(time);
+    const total = msToTime(duration, current.contains.hours);
+
+    currentTrackEmbed.setFooter({
+      text: `${current.time} / ${total.time} [${Math.floor((time / duration) * 100)}%]`,
+      iconURL: (queue.currentTrack?.requestedBy || client.user).avatarURL({
+        size: 1024,
+      }),
+    });
+
     if (queue.tracks.size > 0) {
       let nextTracks = queue.tracks.data
         .slice(0, discord.embeds.max)
@@ -50,19 +63,9 @@ export default {
         .setTitle(" ")
         .setFields([{ name: words.NextTracks, value: nextTracks }])
         .setFooter({
-          text: `${queue.tracks.size} ${words.Trackss} - ${queue.durationFormatted}`,
+          text: `${queue.tracks.size} ${words.Trackss} - ${msToTime(queue.estimatedDuration, true).time}`,
           iconURL: client.user.avatarURL({ size: 1024 }),
         });
-    } else {
-      const time = queue.node.streamTime;
-      const duration = queue.node.estimatedDuration;
-
-      currentTrackEmbed.setFooter({
-        text: `${msToMinSec(time)} / ${msToMinSec(duration)} [${Math.floor((time / duration) * 100)}%]`,
-        iconURL: (queue.currentTrack?.requestedBy || client.user).avatarURL({
-          size: 1024,
-        }),
-      });
     }
 
     currentTrackEmbed
