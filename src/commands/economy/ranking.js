@@ -97,7 +97,7 @@ function buildUserEmbed(words, isGuildMember, userRank, rank, user) {
     .setTitle(
       `[ ${rank === 0 ? "👑" : rank + 1} ] ${user.displayName || user.nickname}`,
     )
-    .setThumbnail(user.displayAvatarURL({ size: discord.avatar.size }))
+    .setThumbnail(user.displayAvatarURL({ size: discord.avatar.size.medium }))
     .setFields(userFields)
     .setURL(`https://discord.com/users/${userRank.userId}`)
     .setColor([

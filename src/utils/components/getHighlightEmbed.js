@@ -1,5 +1,5 @@
-import Highlight from "../../models/highlight.js";
 import { User, EmbedBuilder, Colors } from "discord.js";
+import discord from "../../configs/discord.json" with { type: "json" };
 
 /**
  *  @param  {Highlight} highlight
@@ -9,7 +9,7 @@ async function getHighlightEmbed(highlight, user) {
   const embed = new EmbedBuilder()
     .setAuthor({
       name: `${user.username} (${user.id})`,
-      iconURL: user.avatarURL({ size: 1024 }),
+      iconURL: user.avatarURL({ size: discord.avatar.size.large }),
     })
     .setDescription(highlight.message || " ")
     .setFooter({

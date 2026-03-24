@@ -15,7 +15,7 @@ async function getNotifyEmbeds(client, notify) {
       .setColor("Random")
       .setFooter({
         text: n._id.toString(),
-        iconURL: user.displayAvatarURL({ size: discord.avatar.size }),
+        iconURL: user.displayAvatarURL({ size: discord.avatar.size.medium }),
       });
 
     if (n.message) {

@@ -64,7 +64,7 @@ export default {
         .setFooter({
           text: new Date().toDateString(),
           iconURL: interaction.member.displayAvatarURL({
-            size: discord.avatar.size,
+            size: discord.avatar.size.medium,
           }),
         });
 

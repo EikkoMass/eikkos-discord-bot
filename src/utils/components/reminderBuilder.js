@@ -42,7 +42,7 @@ export default async (guild, reminder) => {
   const words = await getLocalization(reminder.locale, `remind`);
 
   embed.setDescription(reminder.message || " ").setFooter({
-    iconURL: member.displayAvatarURL({ size: discord.avatar.size }),
+    iconURL: member.displayAvatarURL({ size: discord.avatar.size.medium }),
     text: formatMessage(words.EventHistory, [
       member.displayName || member.nickname,
       prettyMs(dynDuration < 0 ? dynDuration * -1 : dynDuration, {

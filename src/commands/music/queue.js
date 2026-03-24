@@ -42,7 +42,7 @@ export default {
     currentTrackEmbed.setFooter({
       text: `${current.time} / ${total.time} [${Math.floor((time / duration) * 100)}%]`,
       iconURL: (queue.currentTrack?.requestedBy || client.user).avatarURL({
-        size: 1024,
+        size: discord.avatar.size.large,
       }),
     });
 
@@ -64,7 +64,7 @@ export default {
         .setFields([{ name: words.NextTracks, value: nextTracks }])
         .setFooter({
           text: `${queue.tracks.size} ${words.Trackss} - ${msToTime(queue.estimatedDuration, true).time}`,
-          iconURL: client.user.avatarURL({ size: 1024 }),
+          iconURL: client.user.avatarURL({ size: discord.avatar.size.large }),
         });
     }
 

@@ -6,6 +6,11 @@
     "max": 25
   },
   "avatar": {
-    "size": 256
+    "size": {
+      "small": 64,
+      "medium": 256,
+      "big": 512,
+      "large": 1024
+    }
   }
 }

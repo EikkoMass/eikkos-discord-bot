@@ -15,7 +15,7 @@ async function getNoteEmbeds(client, notes) {
       .setTimestamp(note.creationDate)
       .setFooter({
         text: note._id.toString(),
-        iconURL: owner.displayAvatarURL({ size: discord.avatar.size }),
+        iconURL: owner.displayAvatarURL({ size: discord.avatar.size.medium }),
       });
 
     if (note.title) embed.setTitle(note.title);

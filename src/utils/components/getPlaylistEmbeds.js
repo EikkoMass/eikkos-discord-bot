@@ -16,7 +16,7 @@ async function getPlaylistEmbeds(client, playlists) {
       .setTimestamp(playlist.creationDate)
       .setFooter({
         text: playlist._id.toString(),
-        iconURL: owner.displayAvatarURL({ size: discord.avatar.size }),
+        iconURL: owner.displayAvatarURL({ size: discord.avatar.size.medium }),
       });
 
     embeds.push(embed);

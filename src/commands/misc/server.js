@@ -1,6 +1,8 @@
 import { Client, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
 import replies from "../../utils/core/replies.js";
 
+import discord from "../../configs/discord.json" with { type: "json" };
+
 import { getLocalization } from "../../utils/i18n.js";
 
 const OPTS = {
@@ -44,7 +46,7 @@ async function image(client, interaction) {
   const words = await getLocalization(interaction.locale, `server`);
   const guild = interaction.guild;
 
-  const image = guild.iconURL({ size: 1024 });
+  const image = guild.iconURL({ size: discord.avatar.size.large });
 
   if (!image)
     return await replies.message.error(interaction, words.IconNotFound);
@@ -69,7 +71,7 @@ async function info(client, interaction) {
       { name: words.Owner, value: `<@${guild.ownerId}>`, inline: true },
       { name: words.Locale, value: `${guild.preferredLocale}`, inline: true },
     ])
-    .setThumbnail(guild.iconURL({ size: 1024 }));
+    .setThumbnail(guild.iconURL({ size: discord.avatar.size.large }));
 
   await interaction.reply({ embeds: [embed] });
 }

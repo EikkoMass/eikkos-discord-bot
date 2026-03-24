@@ -115,7 +115,7 @@ async function show(client, interaction) {
     allLevels.findIndex((lvl) => lvl.userId === targetUserId) + 1;
   const rank = new RankCardBuilder()
     .setAvatar(
-      targetUserObj.user.displayAvatarURL({ size: discord.avatar.size }),
+      targetUserObj.user.displayAvatarURL({ size: discord.avatar.size.medium }),
     )
     .setRank(currentRank)
     .setLevel(fetchLevel.level)
