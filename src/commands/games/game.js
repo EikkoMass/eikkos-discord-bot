@@ -85,7 +85,7 @@ async function search(client, interaction) {
 
   const fields = [
     {
-      name: "Keywords",
+      name: words.Keywords,
       value: (games[0].keywords.length > 10
         ? games[0].keywords.splice(0, 10)
         : games[0].keywords
@@ -94,17 +94,17 @@ async function search(client, interaction) {
         .join(", "),
     },
     {
-      name: "Release Date",
+      name: words.ReleaseDate,
       value: new Date(games[0].first_release_date * 1000).toDateString(),
       inline: true,
     },
     {
-      name: "Genres",
+      name: words.Genres,
       value: games[0].genres.map((tag) => tag.name).join(", "),
       inline: true,
     },
     {
-      name: "Companies",
+      name: words.Companies,
       value: games[0].involved_companies
         .map((tag) => tag.company.name)
         .join(", "),

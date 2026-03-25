@@ -1,4 +1,8 @@
 {
   "EnvironmentVariableNotDefined": "Environment variable not defined, could not search for game!",
-  "NotFound": "Game not found, try again later!"
+  "NotFound": "Game not found, try again later!",
+  "Keywords": "Keywords",
+  "ReleaseDate": "Release Date",
+  "Genres": "Genres",
+  "Companies": "Companies"
 }
