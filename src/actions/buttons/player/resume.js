@@ -30,7 +30,7 @@ export default {
 
       queue.node.resume();
 
-      cache.newTimeout(
+      cache.timeout.create(
         `${interaction.guild.id}`,
         queue.node.estimatedDuration - queue.node.streamTime,
       );

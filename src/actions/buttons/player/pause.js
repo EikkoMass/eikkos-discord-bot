@@ -32,7 +32,7 @@ export default {
 
       queue.node.pause();
 
-      cache.cancelTimeout(`${interaction.guild.id}`);
+      cache.timeout.cancel(`${interaction.guild.id}`);
 
       await interaction.deferUpdate();
     } catch (err) {

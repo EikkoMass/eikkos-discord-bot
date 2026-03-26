@@ -10,7 +10,7 @@ function set(key, value, ttl) {
   cache[key] = value;
   search[key] = true;
 
-  newTimeout(key, ttl);
+  create(key, ttl);
 }
 
 function searched(key) {
@@ -25,21 +25,25 @@ export function reset() {
 export function resetOne(id) {
   cache[id] = null;
   search[id] = false;
-  cancelTimeout(id);
+  cancel(id);
 }
 
-function newTimeout(key, ttl) {
+function create(key, ttl) {
   if (timeout[key]) {
     clearTimeout(timeout[key]);
   }
 
-  timeout[key] = setTimeout(() => {
-    cache[key]?.();
-    resetOne(key);
+  timeout[key] = setTimeout(async () => {
+    await event(key);
   }, ttl);
 }
 
-function cancelTimeout(key) {
+async function event(key) {
+  await cache[key]?.();
+  resetOne(key);
+}
+
+function cancel(key) {
   if (timeout[key]) {
     clearTimeout(timeout[key]);
     timeout[key] = null;
@@ -52,6 +56,8 @@ export default {
   searched,
   reset,
   resetOne,
-  cancelTimeout,
-  newTimeout,
+  timeout: {
+    cancel,
+    create,
+  },
 };
