@@ -29,9 +29,9 @@ const SEC = 60;
 const MS = 1000;
 
 export function msToTime(ms, verbose = false) {
-  const hours = Math.floor((ms / (MS * SEC * MIN)) % HOUR);
-  const minutes = Math.floor(ms / (MS * SEC));
-  const seconds = ((ms % (MS * SEC)) / MS).toFixed(0);
+  let hours = Math.floor(ms / (MS * SEC * MIN));
+  let minutes = Math.floor(ms / (MS * SEC));
+  let seconds = ((ms % (MS * SEC)) / MS).toFixed(0);
 
   let time = [];
   let contains = {
@@ -42,6 +42,9 @@ export function msToTime(ms, verbose = false) {
 
   if (contains.hours) {
     time.push((hours < 10 ? "0" : "") + hours);
+    minutes = Math.floor(minutes % MIN);
+  } else {
+    minutes = Math.floor(minutes);
   }
 
   time.push((minutes < 10 ? "0" : "") + minutes);

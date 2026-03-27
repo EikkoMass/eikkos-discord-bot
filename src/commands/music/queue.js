@@ -23,10 +23,9 @@ export default {
     const queue = useQueue(interaction.guild);
 
     if (!queue?.channel || !queue?.currentTrack) {
-      await reply.message.error(interaction, words.NoTrack, {
+      return await reply.message.error(interaction, words.NoTrack, {
         context: "editReply",
       });
-      return;
     }
 
     const embeds = [];
@@ -39,12 +38,19 @@ export default {
     const current = msToTime(time);
     const total = msToTime(duration, current.contains.hours);
 
-    currentTrackEmbed.setFooter({
-      text: `${current.time} / ${total.time} [${Math.floor((time / duration) * 100)}%]`,
-      iconURL: (queue.currentTrack?.requestedBy || client.user).avatarURL({
-        size: discord.avatar.size.large,
-      }),
-    });
+    currentTrackEmbed
+      .setTitle(words.Playing)
+      .setDescription(queue.currentTrack.description)
+      .setURL(queue.currentTrack.url)
+      .setImage(queue.currentTrack.thumbnail)
+      .setFooter({
+        text: `${current.time} / ${total.time} [${Math.floor((time / duration) * 100)}%]`,
+        iconURL: (queue.currentTrack?.requestedBy || client.user).avatarURL({
+          size: discord.avatar.size.large,
+        }),
+      });
+
+    embeds.push(currentTrackEmbed);
 
     if (queue.tracks.size > 0) {
       let nextTracks = queue.tracks.data
@@ -66,16 +72,9 @@ export default {
           text: `${queue.tracks.size} ${words.Trackss} - ${msToTime(queue.estimatedDuration, true).time}`,
           iconURL: client.user.avatarURL({ size: discord.avatar.size.large }),
         });
+
+      embeds.push(nextTracksEmbed);
     }
-
-    currentTrackEmbed
-      .setTitle(words.Playing)
-      .setDescription(queue.currentTrack.description)
-      .setURL(queue.currentTrack.url)
-      .setImage(queue.currentTrack.thumbnail);
-
-    embeds.push(currentTrackEmbed);
-    if (nextTracksEmbed) embeds.push(nextTracksEmbed);
 
     await interaction.editReply({
       embeds: embeds,
