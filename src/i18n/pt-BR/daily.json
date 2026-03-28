@@ -1,5 +1,6 @@
 {
   "AddedToBalance": "{0} foi adicionado a sua balança. Sua balança esta com {1}",
   "AlreadyCollected": "Você ja resgatou sua recompensa diária hoje. Volte amanhã!",
-  "OnlyInsideServer": "Você pode rodar esse comando apenas dentro de um servidor."
+  "OnlyInsideServer": "Você pode rodar esse comando apenas dentro de um servidor.",
+  "ErrorDaily": "Erro ao executar o comando /daily"
 }

@@ -65,7 +65,7 @@ export default {
         },
       );
     } catch (e) {
-      await replies.message.error(interaction, `Error with /daily`);
+      await replies.message.error(interaction, words.ErrorDaily);
       console.log(`Error with /daily: ${e}`);
     }
   },

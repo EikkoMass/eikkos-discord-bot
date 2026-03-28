@@ -21,10 +21,10 @@ export default {
   callback: async (client, message) => {
     if (message.author.bot) return;
 
-    // 3%
-    if (message.content?.length > 3 && getRandom() > 97) {
-      // 15%
-      const isFire = getRandom() > 85;
+    // 1%
+    if (message.content?.length > 3 && getRandom() > 99) {
+      // 20%
+      const isFire = getRandom() > 80;
 
       const file = new AttachmentBuilder(
         `src/gifs/${isFire ? "fire" : "nerd"}.gif`,
@@ -36,8 +36,8 @@ export default {
         files: [file],
       });
 
-      // 1%
-      if (!isFire && getRandom() > 99) {
+      // 3%
+      if (!isFire && getRandom() > 97) {
         const experience = getRandom(25, 35);
 
         await message.reply({
