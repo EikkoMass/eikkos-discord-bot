@@ -83,7 +83,7 @@ async function love(client, interaction) {
   );
 
   let embed = new EmbedBuilder()
-    .setTitle("Love percentage")
+    .setTitle(words.LovePercentage)
     .setDescription(
       formatMessage(words.LoveLevel, [
         user1,
@@ -116,7 +116,7 @@ async function hate(client, interaction) {
   );
 
   let embed = new EmbedBuilder()
-    .setTitle("Hate percentage")
+    .setTitle(words.HatePercentage)
     .setDescription(
       formatMessage(words.HateLevel, [
         user1,
