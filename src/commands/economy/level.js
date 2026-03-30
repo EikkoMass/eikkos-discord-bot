@@ -92,7 +92,7 @@ async function show(client, interaction) {
         ? formatMessage(words.UserNoLevels, [targetUserObj.user.tag])
         : words.NoLevels,
       {
-        context: "editReply",
+        context: discord.replies.edit,
       },
     );
   }

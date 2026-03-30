@@ -4,6 +4,7 @@ import { useQueue } from "discord-player";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
+import discord from "../../configs/discord.json";
 
 export default {
   name: "volume",
@@ -25,7 +26,7 @@ export default {
         interaction,
         formatMessage(words.Current, [queue.node.volume]),
         {
-          context: "editReply",
+          context: discord.replies.edit,
         },
       );
     }
@@ -36,7 +37,7 @@ export default {
       interaction,
       formatMessage(words.Setted, [amount]),
       {
-        context: "editReply",
+        context: discord.replies.edit,
       },
     );
   },

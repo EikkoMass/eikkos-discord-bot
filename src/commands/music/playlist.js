@@ -192,7 +192,7 @@ async function play(client, interaction) {
 
   if (!channel) {
     await reply.message.error(interaction, words.VoiceChannelRequired, {
-      context: "editReply",
+      context: discord.replies.edit,
     });
     return;
   }
@@ -220,7 +220,7 @@ async function play(client, interaction) {
 
   if (!searchResult || !playlist) {
     await reply.message.error(interaction, words.NotFound, {
-      context: "editReply",
+      context: discord.replies.edit,
     });
     return;
   }

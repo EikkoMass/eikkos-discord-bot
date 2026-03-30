@@ -280,7 +280,7 @@ async function show(client, interaction) {
   }
 
   await reply.message.error(interaction, words.NotFoundInServer, {
-    context: "editReply",
+    context: discord.replies.edit,
   });
 }
 

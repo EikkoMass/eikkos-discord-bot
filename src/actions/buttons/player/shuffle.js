@@ -5,6 +5,8 @@ import reply from "../../../utils/core/replies.js";
 
 import { getLocalization, formatMessage } from "../../../utils/i18n.js";
 
+import discord from "../../../configs/discord.json" with { type: "json" };
+
 export default {
   name: "player",
   tags: ["shuffle"],
@@ -25,12 +27,12 @@ export default {
 
       if (!queue || queue.isEmpty()) {
         await reply.message.error(interaction, words.NoSong, {
-          context: "editReply",
+          context: discord.replies.edit,
         });
         return;
       } else if (queue.tracks.size < 2) {
         return await reply.message.error(interaction, words.NotEnoughTracks, {
-          context: "editReply",
+          context: discord.replies.edit,
         });
       }
 
@@ -40,7 +42,7 @@ export default {
         interaction,
         formatMessage(words.Shuffled, [queue.tracks.size]),
         {
-          context: "editReply",
+          context: discord.replies.edit,
           embed: {
             emoji: ":arrows_clockwise:",
           },

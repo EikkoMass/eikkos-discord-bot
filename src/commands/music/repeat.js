@@ -4,6 +4,8 @@ import { useQueue } from "discord-player";
 import { getLocalization } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
 
+import discord from "../../configs/discord.json" with { type: "json" };
+
 export default {
   name: "repeat",
   description: "repeat the current songs on the queue",
@@ -22,7 +24,7 @@ export default {
 
     if (!queue || queue.isEmpty()) {
       await reply.message.error(interaction, words.NoSong, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
@@ -30,7 +32,7 @@ export default {
     queue.setRepeatMode(repeatOption);
 
     await reply.message.success(interaction, words.CommandApplied, {
-      context: "editReply",
+      context: discord.replies.edit,
       embed: {
         emoji: ":repeat:",
       },

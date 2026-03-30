@@ -9,6 +9,8 @@ import ms from "ms";
 import reply from "../../utils/core/replies.js";
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
+import discord from "../../configs/discord.json" with { type: "json" };
+
 export default {
   /**
    *
@@ -30,14 +32,14 @@ export default {
 
     if (!targetUser) {
       await reply.message.error(interaction, words.UserNotExists, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
 
     if (targetUser.user.bot) {
       await reply.message.info(interaction, words.CantTimeoutBot, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
@@ -45,14 +47,14 @@ export default {
     const msDuration = ms(duration);
     if (isNaN(msDuration)) {
       await reply.message.error(interaction, words.ValidTimeoutDuration, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
 
     if (msDuration < 5000 || msDuration > 2.419e9) {
       await reply.message.error(interaction, words.TimeoutLimit, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
@@ -63,14 +65,14 @@ export default {
 
     if (targetUserRolePosition >= requestUserRolePosition) {
       await reply.message.error(interaction, words.SameHigherRole, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
 
     if (targetUserRolePosition >= botRolePosition) {
       await reply.message.error(interaction, words.SameHigherRoleBot, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
@@ -87,7 +89,7 @@ export default {
             targetUser,
             prettyMs(msDuration, { verbose: true }),
           ]),
-          { context: "editReply" },
+          { context: discord.replies.edit },
         );
         return;
       }
@@ -100,7 +102,7 @@ export default {
           prettyMs(msDuration, { verbose: true }),
           reason,
         ]),
-        { context: "editReply" },
+        { context: discord.replies.edit },
       );
     } catch (e) {
       console.log(`There was an error when timing out: ${e}`);

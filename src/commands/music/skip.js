@@ -6,6 +6,8 @@ import cache from "../../utils/cache/queue.js";
 import { getLocalization } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
 
+import discord from "../../configs/discord.json";
+
 export default {
   name: "skip",
   description: "skip the current song on the playlist",
@@ -22,7 +24,7 @@ export default {
 
     if (!queue || queue.isEmpty()) {
       return await reply.message.error(interaction, words.NoSong, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
     }
 
@@ -34,7 +36,7 @@ export default {
     queue.node.skip();
 
     await reply.message.success(interaction, words.Skipped, {
-      context: "editReply",
+      context: discord.replies.edit,
     });
   },
 };

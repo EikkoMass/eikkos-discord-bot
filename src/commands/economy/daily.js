@@ -4,6 +4,7 @@ import { Client, MessageFlags } from "discord.js";
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
 import replies from "../../utils/core/replies.js";
+import discord from "../../configs/discord.json" with { type: "json" };
 
 const dailyAmount = 1000;
 
@@ -44,7 +45,7 @@ export default {
             interaction,
             words.AlreadyCollected,
             {
-              context: "editReply",
+              context: discord.replies.edit,
             },
           );
         }
@@ -61,7 +62,7 @@ export default {
         interaction,
         formatMessage(words.AddedToBalance, [dailyAmount, user.balance]),
         {
-          context: "editReply",
+          context: discord.replies.edit,
         },
       );
     } catch (e) {

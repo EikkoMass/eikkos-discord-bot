@@ -8,6 +8,8 @@ import reply from "../../utils/core/replies.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
+import discord from "../../configs/discord.json";
+
 export default {
   /**
    *
@@ -28,14 +30,14 @@ export default {
 
     if (!targetUser) {
       await reply.message.error(interaction, words.UserNotExists, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
 
     if (targetUser.id === interaction.guild.ownerId) {
       await reply.message.info(interaction, words.CannotBanOwner, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
@@ -46,14 +48,14 @@ export default {
 
     if (targetUserRolePosition >= requestUserRolePosition) {
       await reply.message.info(interaction, words.BanHigherRole, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
 
     if (targetUserRolePosition >= botRolePosition) {
       await reply.message.info(interaction, words.BanHigherRoleBot, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
@@ -65,7 +67,7 @@ export default {
         interaction,
         formatMessage(words.Banned, [targetUser, reason]),
         {
-          context: "editReply",
+          context: discord.replies.edit,
           embed: {
             emoji: ":page_facing_up:",
           },
@@ -73,7 +75,7 @@ export default {
       );
     } catch (e) {
       await reply.message.error(interaction, words.Error, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       console.log(`There was an error when banning: ${e}`);
     }

@@ -6,6 +6,8 @@ import cache from "../../utils/cache/queue.js";
 import { getLocalization } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
 
+import discord from "../../configs/discord.json";
+
 export default {
   name: "resume",
   description: "resume the paused playback",
@@ -22,13 +24,13 @@ export default {
 
     if (!queue) {
       return await reply.message.error(interaction, words.QueueEmpty, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
     }
 
     if (queue.node.isPlaying()) {
       return await reply.message.warning(interaction, words.NotPaused, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
     }
 
@@ -40,7 +42,7 @@ export default {
     );
 
     await reply.message.success(interaction, words.Resumed, {
-      context: "editReply",
+      context: discord.replies.edit,
       embed: {
         emoji: ":fire:",
       },

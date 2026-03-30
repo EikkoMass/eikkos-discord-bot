@@ -9,6 +9,7 @@ import { QueryType, useMainPlayer } from "discord-player";
 import Enum from "../../enums/player/contexts.js";
 
 import reply from "../../utils/core/replies.js";
+import discord from "../../configs/discord.json" with { type: "json" };
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 const NAME = "play";
@@ -41,7 +42,7 @@ export default {
         interaction,
         words.VoiceChannelRequired,
         {
-          context: "editReply",
+          context: discord.replies.edit,
         },
       );
     }
@@ -53,7 +54,7 @@ export default {
 
     if (!result.hasTracks()) {
       return await reply.message.info(interaction, words.NoResults, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
     }
 

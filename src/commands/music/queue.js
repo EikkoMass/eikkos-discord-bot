@@ -24,7 +24,7 @@ export default {
 
     if (!queue?.channel || !queue?.currentTrack) {
       return await reply.message.error(interaction, words.NoTrack, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
     }
 

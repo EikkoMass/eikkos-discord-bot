@@ -1,6 +1,8 @@
 import { Colors } from "discord.js";
 import reply from "../../utils/core/replies.js";
 
+import discord from "../../configs/discord.json" with { type: "json" };
+
 export default {
   name: "ping",
   description: "Replies with the bot ping!!",
@@ -20,7 +22,7 @@ export default {
       interaction,
       `Pong! Client ${ping}ms | Websocket ${client.ws.ping}ms`,
       {
-        context: "editReply",
+        context: discord.replies.edit,
         embed: {
           color: Colors.Red,
           emoji: "🏓",

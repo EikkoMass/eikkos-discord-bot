@@ -4,6 +4,8 @@ import { useQueue } from "discord-player";
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
 
+import discord from "../../configs/discord.json";
+
 export default {
   name: "shuffle",
   description: "shuffles the current playlist",
@@ -19,11 +21,11 @@ export default {
 
     if (!queue || queue.isEmpty()) {
       return await reply.message.error(interaction, words.NoSong, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
     } else if (queue.tracks.size < 2) {
       return await reply.message.warning(interaction, words.NotEnoughTracks, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
     }
 
@@ -33,7 +35,7 @@ export default {
       interaction,
       formatMessage(words.Shuffled, [queue.tracks.size]),
       {
-        context: "editReply",
+        context: discord.replies.edit,
         embed: {
           emoji: ":arrows_clockwise:",
         },

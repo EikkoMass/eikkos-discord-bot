@@ -2,6 +2,7 @@ import { Client, MessageFlags } from "discord.js";
 import { getLocalization, formatMessage } from "../../../utils/i18n.js";
 
 import reply from "../../../utils/core/replies.js";
+import discord from "../../../configs/discord.json" with { type: "json" };
 
 export default {
   name: "role",
@@ -23,7 +24,7 @@ export default {
 
       if (!role) {
         return await reply.message.error(interaction, words.CouldntFindRole, {
-          context: "editReply",
+          context: discord.replies.edit,
         });
       }
 
@@ -35,7 +36,7 @@ export default {
           interaction,
           formatMessage(words.RoleNRemoved, [role]),
           {
-            context: "editReply",
+            context: discord.replies.edit,
           },
         );
         return;
@@ -46,7 +47,7 @@ export default {
         interaction,
         formatMessage(words.RoleNAdded, [role]),
         {
-          context: "editReply",
+          context: discord.replies.edit,
         },
       );
     } catch (err) {

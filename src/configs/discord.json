@@ -12,5 +12,9 @@
       "big": 512,
       "large": 1024
     }
+  },
+  "replies": {
+    "new": "reply",
+    "edit": "editReply"
   }
 }

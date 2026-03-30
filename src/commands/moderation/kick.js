@@ -6,6 +6,7 @@ import {
 
 import { getLocalization } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
+import discord from "../../configs/discord.json" with { type: "json" };
 
 export default {
   /**
@@ -26,14 +27,14 @@ export default {
 
     if (!targetUser) {
       await reply.message.error(interaction, words.UserDontExist, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
 
     if (targetUser.id === interaction.guild.ownerId) {
       await reply.message.info(interaction, words.CantKickOwner, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
@@ -44,14 +45,14 @@ export default {
 
     if (targetUserRolePosition >= requestUserRolePosition) {
       await reply.message.info(interaction, words.CantKickSameHigher, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
 
     if (targetUserRolePosition >= botRolePosition) {
       await reply.message.info(interaction, words.CantKickSameHigherBot, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
       return;
     }
@@ -61,13 +62,13 @@ export default {
       await targetUser.kick(reason);
 
       await reply.message.success(interaction, words.Kicked, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
     } catch (e) {
       console.log(`There was an error when kicking: ${e}`);
 
       await reply.message.error(interaction, words.KickFailed, {
-        context: "editReply",
+        context: discord.replies.edit,
       });
     }
   },
