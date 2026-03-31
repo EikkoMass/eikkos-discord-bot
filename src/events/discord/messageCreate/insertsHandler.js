@@ -1,4 +1,4 @@
-import getLocalInserts from "../../../utils/importers/getLocalInserts.js";
+import getLocal from "../../../utils/importers/getLocal.js";
 
 import { Client, Message } from "discord.js";
 
@@ -9,7 +9,7 @@ const comparatorsCache = {};
  *  @param {Message} message
  */
 export default async (client, message) => {
-  const localInserts = await getLocalInserts();
+  const localInserts = await getLocal("inserts");
   try {
     const insertObjects = await filterAsync.call(localInserts, async (cmd) => {
       let type = cmd?.type || "equals";

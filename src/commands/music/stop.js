@@ -5,7 +5,7 @@ import { useQueue } from "discord-player";
 import { getLocalization } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
 
-import discord from "../../configs/discord.json";
+import discord from "../../configs/discord.json" with { type: "json" };;
 
 export default {
   name: "stop",
