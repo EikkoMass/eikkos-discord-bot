@@ -9,21 +9,25 @@ async function addEventListeners(client) {
     true,
   );
 
-  const IMPORT_BASE = "../utils/events";
+  const IMPORT_BASE = path.join("..", "utils", "events");
 
   for (const eventFolder of eventFolders) {
     const eventFiles = getAllFiles(eventFolder, false, true);
     eventFiles.sort((a, b) => a > b);
 
-    const eventName = eventFolder?.replace(/\\/g, "/").split("/").pop();
+    const eventName = eventFolder
+      ?.replace(/\\/g, path.sep)
+      .split(path.sep)
+      .pop();
 
     let event = cache[eventName];
 
     if (!event) {
       try {
-        event = (await import(`${IMPORT_BASE}/${eventName}.js`)).default;
+        event = (await import(path.join(IMPORT_BASE, `${eventName}.js`)))
+          .default;
       } catch (error) {
-        event = (await import(`${IMPORT_BASE}/default.js`)).default;
+        event = (await import(path.join(IMPORT_BASE, `default.js`))).default;
       }
 
       cache[eventName] = event;

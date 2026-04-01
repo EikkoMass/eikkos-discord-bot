@@ -1,4 +1,4 @@
-import { EmbedBuilder, Client, MessageFlags } from "discord.js";
+import { EmbedBuilder, Client } from "discord.js";
 import Level from "../../models/level.js";
 import { getLocalization } from "../../utils/i18n.js";
 
