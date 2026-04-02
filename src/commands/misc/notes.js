@@ -122,7 +122,7 @@ async function edit(client, interaction) {
  *  @param {string} code
  */
 async function manageNote(client, interaction, action, code = null) {
-  const context = interaction.options?.get("context")?.value || 1;
+  const context = interaction.options?.get("context")?.value || Enum.PRIVATE;
   const words = await getLocalization(interaction.locale, `notes`);
 
   let query = {

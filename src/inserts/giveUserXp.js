@@ -20,7 +20,7 @@ export default {
    *  @param {Message} message
    */
   callback: async (client, message) => {
-    const xpToGive = getRandom(5, 15);
+    const xpToGive = getRandom(5, 10);
 
     await xp.give(message.author, message.guild, message.channel, xpToGive, {
       after: (level) => {
