@@ -5,6 +5,8 @@ import { getLocalization } from "../../utils/i18n.js";
 
 import discord from "../../configs/discord.json" with { type: "json" };
 
+const API_URL = "https://yesno.wtf/api";
+
 export default {
   name: "yesno",
   description: "make a question of yes / no to the bot",
@@ -30,7 +32,7 @@ export default {
       return await reply.message.error(interaction, words.NoQuestionMark);
     }
 
-    const res = await fetch("https://yesno.wtf/api");
+    const res = await fetch(API_URL);
 
     if (res.ok) {
       const json = await res.json();

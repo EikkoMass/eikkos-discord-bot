@@ -22,5 +22,8 @@
   },
   "dirtyword": {
     "list": "dirtyword;list;"
+  },
+  "reply": {
+    "main": "reply;"
   }
 }

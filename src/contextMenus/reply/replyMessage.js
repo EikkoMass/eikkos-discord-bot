@@ -9,6 +9,7 @@ import {
 } from "discord.js";
 
 import { getLocalization } from "../../utils/i18n.js";
+import actions from "../../configs/actions.json" with { type: "json" };
 
 export default {
   name: "Reply Message",
@@ -33,7 +34,7 @@ export default {
       .setTitle(words.Title)
       .setCustomId(
         JSON.stringify({
-          id: "reply;",
+          id: actions.reply.main,
           messageId: interaction.targetMessage.id,
           hash: crypto.randomUUID(),
         }),
