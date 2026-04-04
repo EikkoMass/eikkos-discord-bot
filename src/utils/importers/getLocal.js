@@ -21,7 +21,6 @@ async function getLocal(context, exceptions = []) {
 }
 
 async function iimport(filePath, context, exceptions) {
-  console.log(filePath);
   const iFile = (await import(filePath)).default;
 
   if (exceptions.includes(iFile.name)) return;
