@@ -3,20 +3,32 @@ import path from "path";
 
 const imports = {};
 
-export default async (context, exceptions = []) => {
+async function getLocal(context, exceptions = []) {
   if (imports[context]) return imports[context];
-
-  imports[context] = [];
+  const CACHE_REF = context.split(path.sep)[0];
 
   const mainPath = path.join(import.meta.dirname, "..", "..", context);
-  const files = fs.readdirSync(mainPath);
+  const files = fs.readdirSync(mainPath, { withFileTypes: true });
   for (const file of files) {
-    const iFile = (await import(path.join(mainPath, file))).default;
-
-    if (exceptions.includes(iFile.name)) continue;
-
-    imports[context].push(iFile);
+    if (file.isDirectory()) {
+      await getLocal(path.join(context, file.name), exceptions);
+    } else {
+      await iimport(path.join(mainPath, file.name), context, exceptions);
+    }
   }
 
-  return imports[context];
-};
+  return imports[CACHE_REF];
+}
+
+async function iimport(filePath, context, exceptions) {
+  console.log(filePath);
+  const iFile = (await import(filePath)).default;
+
+  if (exceptions.includes(iFile.name)) return;
+
+  const CACHE_REF = context.split(path.sep)[0];
+  if (!imports[CACHE_REF]) imports[CACHE_REF] = [];
+  imports[CACHE_REF].push(iFile);
+}
+
+export default getLocal;

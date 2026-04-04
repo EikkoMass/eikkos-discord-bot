@@ -1,6 +1,7 @@
-import getActions from "../../../utils/importers/getLocalActions.js";
+import getLocal from "../../../utils/importers/getLocal.js";
 import { Client, EmbedBuilder, MessageFlags } from "discord.js";
 import cache from "../../../utils/cache/actions.js";
+import path from "path";
 
 /**
  *  @param {Client} client
@@ -11,8 +12,8 @@ export default async (client, interaction) => {
 
   if (!context) return;
 
-  let actions = await getActions(context);
-
+  let actions = await getLocal(path.join("actions", context), []);
+  console.log(path.join("actions", context));
   if (!interaction.customId) return reply(interaction, `No custom ID found`);
 
   const customId = JSON.parse(interaction.customId);

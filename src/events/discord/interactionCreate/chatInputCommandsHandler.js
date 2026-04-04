@@ -1,5 +1,5 @@
 import config from "../../../../config.json" with { type: "json" };
-import getLocalCommands from "../../../utils/importers/getLocalCommands.js";
+import getLocal from "../../../utils/importers/getLocal.js";
 import { MessageFlags, EmbedBuilder, Client } from "discord.js";
 
 import { getLocalization, formatMessage } from "../../../utils/i18n.js";
@@ -23,7 +23,7 @@ export default async (client, interaction) => {
     if (!commandObject) {
       if (cache.searched(interaction.commandName)) return;
 
-      const localCommands = await getLocalCommands();
+      const localCommands = await getLocal("commands");
       commandObject = localCommands.find(
         (cmd) => cmd.name === interaction.commandName,
       );

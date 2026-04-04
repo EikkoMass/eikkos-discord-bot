@@ -1,11 +1,12 @@
 import config from "../../../../config.json" with { type: "json" };
-import getLocalCommands from "../../../utils/importers/getLocalCommands.js";
+import getLocal from "../../../utils/importers/getLocal.js";
 import getApplicationCommands from "../../../utils/importers/getApplicationCommands.js";
 import areCommandsDifferent from "../../../utils/validators/areCommandsDifferent.js";
 
 export default async (client) => {
   try {
-    const localCommands = await getLocalCommands();
+    const localCommands = await getLocal("commands", []);
+
     // Add testServer as a second parameter if you want to register only on a specific guild
     const applicationCommands = await getApplicationCommands(
       client,

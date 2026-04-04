@@ -1,12 +1,13 @@
 import config from "../../../../config.json" with { type: "json" };
-import getLocalContextMenus from "../../../utils/importers/getLocalContextMenus.js";
+import getLocal from "../../../utils/importers/getLocal.js";
 import getApplicationCommands from "../../../utils/importers/getApplicationCommands.js";
 import areContextMenusDifferent from "../../../utils/validators/areContextMenusDifferent.js";
 import { ApplicationCommandType } from "discord.js";
 
 export default async (client) => {
   try {
-    const localContexts = await getLocalContextMenus();
+    const localContexts = await getLocal("contextMenus");
+
     // Add testServer as a second parameter if you want to register only on a specific guild
     const applicationCommands = await getApplicationCommands(
       client,

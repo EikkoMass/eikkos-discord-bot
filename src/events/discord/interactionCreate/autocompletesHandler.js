@@ -1,4 +1,4 @@
-import getAutocompletes from "../../../utils/importers/getLocalAutocompletes.js";
+import getLocal from "../../../utils/importers/getLocal.js";
 import cache from "../../../utils/cache/autocomplete.js";
 import { Client } from "discord.js";
 
@@ -14,7 +14,7 @@ export default async (client, interaction) => {
   if (!autocomplete) {
     if (cache.searched(interaction.commandName)) return;
 
-    const autocompletes = await getAutocompletes();
+    const autocompletes = await getLocal("autocompletes");
 
     autocomplete = autocompletes.find((cmd) => {
       if (cmd.name !== interaction.commandName) return false;
