@@ -3,15 +3,15 @@ import path from "path";
 
 const imports = {};
 
-async function getLocal(context, exceptions = []) {
-  if (imports[context]) return imports[context];
+async function getLocal(context, exceptions = [], cache = true) {
+  if (cache && imports[context]) return imports[context];
   const CACHE_REF = context.split(path.sep)[0];
 
   const mainPath = path.join(import.meta.dirname, "..", "..", context);
   const files = fs.readdirSync(mainPath, { withFileTypes: true });
   for (const file of files) {
     if (file.isDirectory()) {
-      await getLocal(path.join(context, file.name), exceptions);
+      await getLocal(path.join(context, file.name), exceptions, false);
     } else {
       await iimport(path.join(mainPath, file.name), context, exceptions);
     }

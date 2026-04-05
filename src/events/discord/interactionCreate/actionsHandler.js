@@ -13,7 +13,7 @@ export default async (client, interaction) => {
   if (!context) return;
 
   let actions = await getLocal(path.join("actions", context), []);
-  console.log(path.join("actions", context));
+
   if (!interaction.customId) return reply(interaction, `No custom ID found`);
 
   const customId = JSON.parse(interaction.customId);
