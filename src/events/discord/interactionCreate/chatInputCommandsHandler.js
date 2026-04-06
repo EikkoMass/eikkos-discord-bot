@@ -1,4 +1,6 @@
 import config from "../../../../config.json" with { type: "json" };
+import actionTypes from "../../../configs/actionTypes.json" with { type: "json" };
+
 import getLocal from "../../../utils/importers/getLocal.js";
 import { MessageFlags, EmbedBuilder, Client } from "discord.js";
 
@@ -23,7 +25,7 @@ export default async (client, interaction) => {
     if (!commandObject) {
       if (cache.searched(interaction.commandName)) return;
 
-      const localCommands = await getLocal("commands");
+      const localCommands = await getLocal(actionTypes.commands);
       commandObject = localCommands.find(
         (cmd) => cmd.name === interaction.commandName,
       );
