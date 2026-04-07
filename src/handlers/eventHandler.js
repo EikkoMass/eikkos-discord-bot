@@ -2,8 +2,6 @@ import getAllFiles from "../utils/core/getAllFiles.js";
 import path from "path";
 
 async function addEventListeners(client) {
-  const cache = {};
-
   const eventFolders = getAllFiles(
     path.join(import.meta.dirname, "..", "events", "discord"),
     true,
@@ -20,17 +18,12 @@ async function addEventListeners(client) {
       .split(path.sep)
       .pop();
 
-    let event = cache[eventName];
+    let event;
 
-    if (!event) {
-      try {
-        event = (await import(path.join(IMPORT_BASE, `${eventName}.js`)))
-          .default;
-      } catch (error) {
-        event = (await import(path.join(IMPORT_BASE, `default.js`))).default;
-      }
-
-      cache[eventName] = event;
+    try {
+      event = (await import(path.join(IMPORT_BASE, `${eventName}.js`))).default;
+    } catch (error) {
+      event = (await import(path.join(IMPORT_BASE, `default.js`))).default;
     }
 
     client.on(eventName, event(client, eventFiles));
