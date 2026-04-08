@@ -7,6 +7,7 @@ import {
 } from "discord.js";
 import { getRandom } from "../utils/core/randomizer.js";
 import xp from "../utils/xp.js";
+import { getLocalization } from "../utils/i18n.js";
 
 export default {
   name: "nerdDetector",
@@ -38,6 +39,10 @@ export default {
 
       // 3%
       if (!isFire && getRandom() > 97) {
+        const words = await getLocalization(
+          message.guild.preferredLocale,
+          "nerd-detector",
+        );
         const experience = getRandom(25, 35);
 
         await message.reply({
@@ -50,7 +55,7 @@ export default {
                   value: `${experience}`,
                 },
               ])
-              .setDescription("Ok, i feel bad about that. Take some extra xp"),
+              .setDescription(words.FeelsBad),
           ],
         });
 
