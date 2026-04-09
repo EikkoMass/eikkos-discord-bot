@@ -1,7 +1,8 @@
 import { Client, Message } from "discord.js";
 import { getRandom } from "../utils/core/randomizer.js";
 import xp from "../utils/xp.js";
-const cooldowns = new Set();
+import cache from "../utils/cache/xp.js";
+import origins from "../enums/xp/origins.js";
 
 const MESSAGE_COOLDOWN = 6000;
 
@@ -13,7 +14,9 @@ export default {
   match: (message) =>
     !message.author.bot &&
     message.inGuild() &&
-    !cooldowns.has(message.author.id),
+    !cache.searched(
+      `${message.guild.id}_${message.author.id}_${origins.COMMENT}`,
+    ),
 
   /**
    *  @param {Client} client
@@ -24,9 +27,11 @@ export default {
 
     await xp.give(message.author, message.guild, message.channel, xpToGive, {
       after: (level) => {
-        cooldowns.add(message.author.id);
+        const CACHE_REF = `${message.guild.id}_${message.author.id}_${origins.COMMENT}`;
+
+        cache.set(CACHE_REF, xpToGive);
         setTimeout(() => {
-          cooldowns.delete(message.author.id);
+          cache.resetOne(CACHE_REF);
         }, MESSAGE_COOLDOWN);
       },
     });
