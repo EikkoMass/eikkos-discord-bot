@@ -139,16 +139,16 @@ async function status(client, interaction) {
   const words = await getLocalization(interaction.locale, `remind`);
 
   const embeds = [];
-  const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;
+  const CACHE_REF = `${interaction.member.id}$${interaction.guild.id}`;
 
   if (
-    !Array.isArray(cache.get(cacheIdentifier)) ||
-    cache.empty(cacheIdentifier)
+    !Array.isArray(cache.get(CACHE_REF)) ||
+    cache.empty(CACHE_REF)
   ) {
     return await reply.message.error(interaction, words.NotFound);
   }
 
-  const reminders = cache.get(cacheIdentifier);
+  const reminders = cache.get(CACHE_REF);
   for (let data of reminders) {
     const user = await interaction.guild.members.fetch(
       data.reminder.receiverId,
@@ -174,13 +174,13 @@ async function cancel(client, interaction) {
   const words = await getLocalization(interaction.locale, `remind`);
 
   let id = interaction.options.get("id")?.value;
-  const cacheIdentifier = `${interaction.member.id}$${interaction.guild.id}`;
+  const CACHE_REF = `${interaction.member.id}$${interaction.guild.id}`;
 
-  if (!Array.isArray(cache.get(cacheIdentifier))) {
+  if (!Array.isArray(cache.get(CACHE_REF))) {
     return await reply.message.error(interaction, words.NotFound);
   }
 
-  let cachedReminder = cache.get(cacheIdentifier, id);
+  let cachedReminder = cache.get(CACHE_REF, id);
 
   if (!cachedReminder) {
     return await reply.message.error(interaction, words.NotFoundSpecified);
@@ -197,7 +197,7 @@ async function cancel(client, interaction) {
 
   await Reminder.deleteOne({ _id: cachedReminder._id });
 
-  cache.remove(cacheIdentifier, id);
+  cache.remove(CACHE_REF, id);
 
   await reply.message.success(interaction, words.Cancelled);
 }
