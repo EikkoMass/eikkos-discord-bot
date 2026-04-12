@@ -1,4 +1,5 @@
 {
-  "CustomDiceReturns":"O(s) Dado(s) customizado(s) retornaram...",
-  "DDiceReturns":"O(s) dado(s) {0} retornaram..."
+  "CustomDiceReturns": "O(s) Dado(s) customizado(s) retornaram...",
+  "DDiceReturns": "O(s) dado(s) {0} retornaram...",
+  "Roll": "Lançamento de dado(s)"
 }

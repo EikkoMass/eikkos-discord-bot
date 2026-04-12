@@ -120,7 +120,7 @@ async function rollCustom(client, interaction) {
       message.edit({
         embeds: [
           new EmbedBuilder()
-            .setTitle(`Roll ${quantity}d${max}`)
+            .setTitle(`${words.Roll} ${quantity}d${max}`)
             .setDescription(`📃 \` ${sum} \`/\` ${maxSum} \``)
             .setColor(getLayout(sum, maxSum).color),
           ...rolls,

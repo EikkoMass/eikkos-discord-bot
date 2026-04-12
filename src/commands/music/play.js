@@ -13,6 +13,10 @@ import discord from "../../configs/discord.json" with { type: "json" };
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 const NAME = "play";
+const vol = {
+  min: 0,
+  max: 100,
+};
 
 export default {
   name: NAME,
@@ -29,9 +33,11 @@ export default {
     });
 
     const link = interaction.options.get("song")?.value;
-    let volume = interaction.options.get("volume")?.value || 100;
+    let volume = interaction.options.get("volume")?.value || vol.max;
 
-    if (volume > 100 || volume < 0) volume = 100;
+    if (volume > vol.max || volume < vol.min) {
+      volume = vol.max;
+    }
 
     const channel = interaction.member?.voice?.channel;
     const player = useMainPlayer();

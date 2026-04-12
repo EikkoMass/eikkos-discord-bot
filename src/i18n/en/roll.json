@@ -1,4 +1,5 @@
 {
-  "CustomDiceReturns":"The custom dice(s) returns...",
-  "DDiceReturns":"The {0} dice(s) returns..."
+  "CustomDiceReturns": "The custom dice(s) returns...",
+  "DDiceReturns": "The {0} dice(s) returns...",
+  "Roll": "Dice Roll"
 }

@@ -191,10 +191,9 @@ async function play(client, interaction) {
   });
 
   if (!channel) {
-    await reply.message.error(interaction, words.VoiceChannelRequired, {
+    return await reply.message.error(interaction, words.VoiceChannelRequired, {
       context: discord.replies.edit,
     });
-    return;
   }
 
   const result = await player.search(link, {

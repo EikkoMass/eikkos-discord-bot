@@ -1,9 +1,4 @@
-import {
-  ApplicationCommandOptionType,
-  EmbedBuilder,
-  Client,
-  MessageFlags,
-} from "discord.js";
+import { ApplicationCommandOptionType, EmbedBuilder, Client } from "discord.js";
 import dotenv from "dotenv";
 
 import { getToken } from "../../utils/authenticators/igdb.js";
@@ -73,7 +68,7 @@ async function search(client, interaction) {
   });
 
   if (!res.ok) {
-    console.log(games.statusText);
+    console.log(`[Game] - ${res.statusText}`);
     return await reply.message.error(interaction, words.NotFound);
   }
 

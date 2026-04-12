@@ -74,7 +74,7 @@ export default {
       default:
         return await reply.message.error(
           interaction,
-          `Dirty Word command not found!`,
+          `Highlight command not found!`,
         );
     }
   },
