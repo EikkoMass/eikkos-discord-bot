@@ -10,7 +10,7 @@ import { TTSExtractor } from "discord-player-tts";
 import igdb from "./utils/authenticators/igdb.js";
 import loadPlayerEvents from "./utils/importers/loadPlayerEvents.js";
 
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const client = new Client({
   intents: [
