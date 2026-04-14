@@ -12,8 +12,6 @@ import { getLocalization } from "../../utils/i18n.js";
 
 import discord from "../../configs/discord.json" with { type: "json" };
 
-dotenv.config({ quiet: true });
-
 export default {
   name: "sd",
   description: "send a prompt to stable diffusion",

@@ -5,8 +5,6 @@ import { getToken } from "../../utils/authenticators/igdb.js";
 import reply from "../../utils/core/replies.js";
 import { getLocalization } from "../../utils/i18n.js";
 
-dotenv.config({ quiet: true });
-
 const OPTS = {
   search: {
     name: "search",
