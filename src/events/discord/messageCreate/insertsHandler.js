@@ -2,6 +2,7 @@ import getLocal from "../../../utils/importers/getLocal.js";
 import actionTypes from "../../../configs/actionTypes.json" with { type: "json" };
 
 import { Client, Message } from "discord.js";
+import path from "path";
 
 const comparatorsCache = {};
 
@@ -39,7 +40,7 @@ export default async (client, message) => {
 };
 
 async function importComparator(type) {
-  return (await import(`../../../utils/comparators/${type}.js`)).default;
+  return (await import(path.join('..', '..', '..', 'utils', 'comparators', `${type}.js`))).default;
 }
 
 async function filterAsync(callback) {
