@@ -7,7 +7,7 @@ async function addEventListeners(client) {
     true,
   );
 
-  const IMPORT_BASE = path.join("..", "utils", "events");
+  const IMPORT_BASE = path.join("..", "utils", "bridges");
 
   for (const eventFolder of eventFolders) {
     const eventFiles = getAllFiles(eventFolder, false, true);
@@ -18,15 +18,16 @@ async function addEventListeners(client) {
       .split(path.sep)
       .pop();
 
-    let event;
+    let bridge;
 
     try {
-      event = (await import(path.join(IMPORT_BASE, `${eventName}.js`))).default;
+      bridge = (await import(path.join(IMPORT_BASE, `${eventName}.js`)))
+        .default;
     } catch (error) {
-      event = (await import(path.join(IMPORT_BASE, `default.js`))).default;
+      bridge = (await import(path.join(IMPORT_BASE, `default.js`))).default;
     }
 
-    client.on(eventName, event(client, eventFiles));
+    client.on(eventName, bridge(client, eventFiles));
   }
 }
 
