@@ -1,6 +1,5 @@
 import { Client } from "discord.js";
-
-const QUANTITY_OF_RESULTS = 6;
+import discord from "../configs/discord.json" with { type: "json" };
 
 export default {
   name: "anime",
@@ -13,7 +12,7 @@ export default {
   callback: async (client, interaction) => {
     try {
       const req = await fetch(
-        `https://api.jikan.moe/v4/anime?q=${interaction.options.getFocused()}&limit=${QUANTITY_OF_RESULTS}`,
+        `https://api.jikan.moe/v4/anime?q=${interaction.options.getFocused()}&limit=${discord.autocompletes.max}`,
         { method: "GET" },
       );
 

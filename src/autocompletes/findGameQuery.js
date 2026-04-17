@@ -1,7 +1,6 @@
 import { Client } from "discord.js";
 import { getToken } from "../utils/authenticators/igdb.js";
-
-const QUANTITY_OF_RESULTS = 6;
+import discord from "../configs/discord.json" with { type: "json" };
 
 export default {
   name: "game",
@@ -28,7 +27,7 @@ export default {
           "Client-ID": process.env.IGDB_CLIENT_ID,
           Authorization: `Bearer ${token.access_token}`,
         },
-        body: `fields name, id; limit ${QUANTITY_OF_RESULTS}; search "${(interaction.options.getFocused() || "").replace('"', '\\"')}";`,
+        body: `fields name, id; limit ${discord.autocompletes.max}; search "${(interaction.options.getFocused() || "").replace('"', '\\"')}";`,
       });
 
       const games = await req.json();
