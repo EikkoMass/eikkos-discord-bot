@@ -1,7 +1,5 @@
 import {
   Client,
-  EmbedBuilder,
-  MessageFlags,
   InteractionContextType,
   ApplicationCommandType,
   LabelBuilder,
@@ -13,6 +11,8 @@ import {
 
 import { getLocalization } from "../../utils/i18n.js";
 import discord from "../../configs/discord.json" with { type: "json" };
+import actions from "../../configs/actions.json" with { type: "json" };
+
 import Enum from "../../enums/notes/contexts.js";
 
 import replies from "../../utils/core/replies.js";
@@ -63,7 +63,7 @@ export default {
     const modal = new ModalBuilder()
       .setCustomId(
         JSON.stringify({
-          id: "notes;add;",
+          id: actions.notes.add,
           context,
           hash: crypto.randomUUID(),
         }),

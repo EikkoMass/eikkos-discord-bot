@@ -9,6 +9,8 @@ import {
   FileUploadBuilder,
 } from "discord.js";
 
+import actions from "../../configs/actions.json" with { type: "json" };
+
 import { getLocalization } from "../../utils/i18n.js";
 import Enum from "../../enums/notes/contexts.js";
 
@@ -44,7 +46,7 @@ export default {
     const modal = new ModalBuilder()
       .setCustomId(
         JSON.stringify({
-          id: "notes;add;",
+          id: actions.notes.add,
           context,
           hash: crypto.randomUUID(),
         }),
