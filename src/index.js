@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { Client, GatewayIntentBits, Partials } from "discord.js";
-import eventHandler from "./handlers/eventHandler.js";
+import eventHandler from "./handlers/main.js";
 import mongoose from "mongoose";
 import { Player } from "discord-player";
 import { DefaultExtractors } from "@discord-player/extractor";

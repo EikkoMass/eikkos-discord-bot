@@ -1,19 +1,13 @@
-import config from "../../../../config.json" with { type: "json" };
-import actionTypes from "../../../configs/actionTypes.json" with { type: "json" };
+import actionTypes from "../configs/actionTypes.json" with { type: "json" };
 
-import getLocal from "../../../utils/importers/getLocal.js";
+import getLocal from "../utils/importers/getLocal.js";
+import { getLocalization, formatMessage } from "../utils/i18n.js";
+import cache from "../utils/cache/commands/input.js";
+
+import config from "../../config.json" with { type: "json" };
 import { MessageFlags, EmbedBuilder, Client } from "discord.js";
 
-import { getLocalization, formatMessage } from "../../../utils/i18n.js";
-import cache from "../../../utils/cache/commands/input.js";
-
-/**
- *  @param {Client} client
- *  @param  interaction
- */
-export default async (client, interaction) => {
-  if (!interaction.isChatInputCommand()) return;
-
+const handler = async (client, interaction) => {
   const words = await getLocalization(
     interaction.locale,
     `handlers/chatInputCommands`,
@@ -49,6 +43,8 @@ export default async (client, interaction) => {
     console.log(formatMessage(words.Error, [error]));
   }
 };
+
+export default handler;
 
 function checkDevOnly(interaction, commandObject, words) {
   return (
