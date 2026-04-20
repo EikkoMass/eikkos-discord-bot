@@ -1,16 +1,8 @@
-import getLocal from "../../../utils/importers/getLocal.js";
-import cache from "../../../utils/cache/autocomplete.js";
-import { Client } from "discord.js";
+import actionTypes from "../configs/actionTypes.json" with { type: "json" };
+import getLocal from "../utils/importers/getLocal.js";
+import cache from "../utils/cache/autocomplete.js";
 
-import actionTypes from "../../../configs/actionTypes.json" with { type: "json" };
-
-/**
- *  @param {Client} client
- *  @param  interaction
- */
-export default async (client, interaction) => {
-  if (!interaction.isAutocomplete()) return;
-
+const handler = async (client, interaction) => {
   let autocomplete = cache.get(interaction.commandName);
 
   if (!autocomplete) {
@@ -36,3 +28,5 @@ export default async (client, interaction) => {
 
   await autocomplete.callback(client, interaction);
 };
+
+export default handler;
