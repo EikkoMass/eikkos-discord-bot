@@ -1,19 +1,16 @@
-import getLocal from "../../../utils/importers/getLocal.js";
-import actionTypes from "../../../configs/actionTypes.json" with { type: "json" };
+import getLocal from "../utils/importers/getLocal.js";
+import actionTypes from "../configs/actionTypes.json" with { type: "json" };
 
 import { Client, EmbedBuilder, MessageFlags } from "discord.js";
-import cache from "../../../utils/cache/actions.js";
+import cache from "../utils/cache/actions.js";
 import path from "path";
 
 /**
  *  @param {Client} client
  *  @param  interaction
+ *  @param  context
  */
-export default async (client, interaction) => {
-  let context = getContext(interaction);
-
-  if (!context) return;
-
+const handler = async function (client, interaction, context) {
   let actions = await getLocal(path.join(actionTypes.actions, context), []);
 
   if (!interaction.customId) return reply(interaction, `No custom ID found`);
@@ -40,11 +37,7 @@ export default async (client, interaction) => {
   await action.callback(client, interaction);
 };
 
-function getContext(interaction) {
-  if (interaction.isButton()) return `buttons`;
-  else if (interaction.isModalSubmit()) return `modals`;
-  else return null;
-}
+export default handler;
 
 function reply(interaction, message) {
   interaction.reply({
