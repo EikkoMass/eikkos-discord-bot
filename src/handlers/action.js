@@ -14,16 +14,16 @@ const handler = async function (client, interaction, context) {
   let actions = await getLocal(path.join(actionTypes.actions, context), []);
 
   if (!interaction.customId) return reply(interaction, `No custom ID found`);
-
+  const SEPARATOR = ";";
   const customId = JSON.parse(interaction.customId);
   const cacheBase = `${context}_${customId.id}`;
-  const splittedId = customId.id.split(";");
+  const splittedId = customId.id.split(SEPARATOR);
 
   let action = cache.get(cacheBase);
 
   if (!action && !cache.searched(cacheBase)) {
     action = actions.find((cmd) => {
-      if (!customId.id.startsWith(cmd.name + ";")) return false;
+      if (!customId.id.startsWith(cmd.name + SEPARATOR)) return false;
       if (cmd.tags && !cmd.tags.every((tag) => splittedId.includes(tag)))
         return false;
 

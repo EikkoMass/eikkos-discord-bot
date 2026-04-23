@@ -3,9 +3,9 @@ import actionTypes from "../configs/actionTypes.json" with { type: "json" };
 import getLocal from "../utils/importers/getLocal.js";
 import { getLocalization, formatMessage } from "../utils/i18n.js";
 import cache from "../utils/cache/commands/input.js";
+import replies from "../utils/core/replies.js";
 
 import config from "../../config.json" with { type: "json" };
-import { MessageFlags, EmbedBuilder, Client } from "discord.js";
 
 const handler = async (client, interaction) => {
   const words = await getLocalization(
@@ -35,7 +35,9 @@ const handler = async (client, interaction) => {
     ];
 
     if (
-      checkers.every((checker) => checker(interaction, commandObject, words))
+      checkers.every(
+        async (checker) => await checker(interaction, commandObject, words),
+      )
     ) {
       await commandObject.callback(client, interaction);
     }
@@ -46,49 +48,48 @@ const handler = async (client, interaction) => {
 
 export default handler;
 
-function checkDevOnly(interaction, commandObject, words) {
+async function checkDevOnly(interaction, commandObject, words) {
   return (
     !commandObject.devOnly ||
     config.devs.includes(interaction.member.id) ||
-    reply(interaction, words.DevOnly)
+    (await replies.message.info(interaction, words.DevOnly))
   );
 }
 
-function checkTestOnly(interaction, commandObject, words) {
+async function checkTestOnly(interaction, commandObject, words) {
   return (
     !commandObject.testOnly ||
     interaction.guild.id === config.testServer ||
-    reply(interaction, words.TestOnly)
+    (await replies.message.info(interaction, words.TestOnly))
   );
 }
 
-function checkUserPermissions(interaction, commandObject, words) {
+async function checkUserPermissions(interaction, commandObject, words) {
   if (commandObject.permissionsRequired?.length) {
     for (const permission of commandObject.permissionsRequired) {
       if (!interaction.member.permissions.has(permission))
-        return reply(interaction, words.MissingPermissions);
+        return await replies.message.error(
+          interaction,
+          words.MissingPermissions,
+        );
     }
   }
 
   return true;
 }
 
-function checkBotPermissions(interaction, commandObject, words) {
+async function checkBotPermissions(interaction, commandObject, words) {
   if (commandObject.botPermissions?.length) {
     const bot = interaction.guild.members.me;
 
     for (const permission of commandObject.botPermissions) {
       if (!bot.permissions.has(permission))
-        return reply(interaction, words.MissingBotPermissions);
+        return await replies.message.error(
+          interaction,
+          words.MissingBotPermissions,
+        );
     }
   }
 
   return true;
-}
-
-function reply(interaction, message) {
-  interaction.reply({
-    embeds: [new EmbedBuilder().setDescription(message)],
-    flags: [MessageFlags.Ephemeral],
-  });
 }
