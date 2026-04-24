@@ -3,6 +3,8 @@ export default {
   getToken,
 };
 
+const MAX_SAFE_INTEGER = 2147483647;
+
 let tokenObj = {};
 
 export function getToken() {
@@ -21,5 +23,10 @@ export async function authenticate() {
   const json = await igdb.json();
 
   tokenObj = json;
-  setTimeout(authenticate, 604800 * 1000); // 7 days
+
+  const expiration = tokenObj.expires_in * 1000;
+  setTimeout(
+    authenticate,
+    expiration > MAX_SAFE_INTEGER ? MAX_SAFE_INTEGER : expiration,
+  );
 }
