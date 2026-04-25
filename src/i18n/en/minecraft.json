@@ -12,5 +12,7 @@
   "ServerCommandNotFound": "Minecraft server command not found!",
   "PlayerCommandNotFound": "Minecraft player command not found!",
   "ErrorFetching": "Error on fetching player info!",
-  "PlayerNotFound": "Could not find the player requested!"
+  "PlayerNotFound": "Could not find the player requested!",
+  "JavaEdition": "Java Edition",
+  "BedrockEdition": "Bedrock Edition"
 }

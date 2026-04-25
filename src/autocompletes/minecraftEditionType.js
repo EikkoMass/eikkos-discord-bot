@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import editions from "../utils/autocompletes/minecraft/editions.js";
+import getTypes from "../utils/autocompletes/minecraft/editions.js";
 
 /**
  *  @param {Client} client
@@ -13,6 +13,6 @@ export default {
    *  @param {Client} client
    *  @param  interaction
    */
-  callback: (client, interaction) =>
-    interaction.respond(editions).catch(() => {}),
+  callback: async (client, interaction) =>
+    interaction.respond(await getTypes(interaction)).catch(() => {}),
 };
