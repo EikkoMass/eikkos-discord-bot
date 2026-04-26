@@ -10,5 +10,6 @@
   "Quantity": "Quantidade",
   "Target": "Direcionamento",
   "Minimum": "Mínimo",
-  "MissingValidChannel": "Não foi possível ativar porque o canal especificado não foi encontrado."
+  "MissingValidChannel": "Não foi possível ativar porque o canal especificado não foi encontrado.",
+  "File": "Arquivo"
 }

@@ -1,11 +1,14 @@
 import { User, EmbedBuilder, Colors } from "discord.js";
 import discord from "../../configs/discord.json" with { type: "json" };
+import { getLocalization } from "../../utils/i18n.js";
 
 /**
  *  @param  {Highlight} highlight
  *  @param {User} user
  */
-async function getHighlightEmbed(highlight, user) {
+async function getHighlightEmbed(guild, highlight, user) {
+  const words = await getLocalization(guild.preferredLocale, "highlight");
+
   const embed = new EmbedBuilder()
     .setAuthor({
       name: `${user.username} (${user.id})`,
@@ -20,7 +23,7 @@ async function getHighlightEmbed(highlight, user) {
   if (highlight.attachment) {
     embed.setFields([
       {
-        name: "📁 File",
+        name: `📁 ${words.File}`,
         value: `[${highlight.fileName}](${highlight.attachment})`,
       },
     ]);
