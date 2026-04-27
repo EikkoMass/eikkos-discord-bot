@@ -1,4 +1,5 @@
 import config from "../../../config.json" with { type: "json" };
+import masks from "./mask.js";
 
 const emojis = (config || {}).emojis || {};
 
@@ -10,7 +11,7 @@ function get(key, alternative) {
     return alternative ?? "❓";
   }
 
-  return `<:${emoji.name}:${emoji.id}>`;
+  return masks.emoji(emoji.name, emoji.id);
 }
 
 export default { get };

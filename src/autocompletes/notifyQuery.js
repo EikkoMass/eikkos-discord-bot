@@ -16,9 +16,7 @@ export default {
 
       var notifications = await Notify.find({
         guildId: interaction.guild.id,
-        $or: [
-          { title: { $regex: `.*${search}.*`, $options: "i" } }
-        ],
+        $or: [{ title: { $regex: `.*${search}.*`, $options: "i" } }],
       }).limit(discord.autocompletes.max);
 
       if (notifications) {
@@ -28,9 +26,8 @@ export default {
             value: notification._id.toString(),
           };
         });
-        interaction
-          .respond(options)
-          .catch(() => {});
+
+        interaction.respond(options).catch(() => {});
       }
     } catch (err) {
       console.log(err);
