@@ -1,6 +1,8 @@
 import HighlightGuild from "../../../models/highlightGuild.js";
 import Highlight from "../../../models/highlight.js";
 
+import masks from "../../../utils/core/mask.js";
+
 import highlightGuildCache from "../../../utils/cache/highlight-guild.js";
 import highlightCache from "../../../utils/cache/highlight.js";
 
@@ -112,7 +114,7 @@ export default async (client, reaction, user) => {
 
   if (channel && channel.isTextBased()) {
     channel.send({
-      content: `⭐ ${newHighlight.count} - <#${newHighlight.channelId}>`,
+      content: `⭐ ${newHighlight.count} - ${masks.channel(newHighlight.channelId)}`,
       embeds: [
         await getHighlightEmbed(
           channel.guild,

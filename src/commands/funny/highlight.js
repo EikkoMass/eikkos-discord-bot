@@ -10,6 +10,7 @@ import {
 import reply from "../../utils/core/replies.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
+import masks from "../../utils/core/mask.js";
 
 import HighlightGuild from "../../models/highlightGuild.js";
 import Highlight from "../../models/highlight.js";
@@ -210,7 +211,7 @@ async function status(client, interaction) {
     },
     {
       name: words.Target,
-      value: guild ? `<#${guild.channelId}>` : words.None,
+      value: guild ? masks.channel(guild.channelId) : words.None,
       inline: true,
     },
     {

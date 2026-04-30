@@ -3,6 +3,9 @@ import { Client, ApplicationCommandOptionType, ChannelType } from "discord.js";
 import { useMainPlayer, useQueue } from "discord-player";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
+
+import masks from "../../utils/core/mask.js";
+
 import replies from "../../utils/core/replies.js";
 import Enum from "../../enums/player/contexts.js";
 
@@ -139,9 +142,14 @@ async function join(client, interaction) {
     sessionCache.addUser(CACHE_REF, interaction.user.id);
   }
 
+  console.log(interaction.member.voice);
+
   return await replies.message.success(
     interaction,
-    formatMessage(words.Joined, [tts.channelId]),
+    formatMessage(words.Joined, [
+      masks.channel(tts.channelId),
+      masks.channel(interaction.member.voice.channel.id),
+    ]),
   );
 }
 
@@ -243,7 +251,7 @@ async function channel(client, interaction) {
   ttsCache.set(CACHE_REF, tts);
   return await replies.message.success(
     interaction,
-    formatMessage(words.ChangedChannel, [channel]),
+    formatMessage(words.ChangedChannel, [masks.channel(channel)]),
   );
 }
 
