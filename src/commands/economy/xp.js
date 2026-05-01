@@ -4,6 +4,7 @@ import {
   PermissionFlagsBits,
 } from "discord.js";
 import xp from "../../utils/xp.js";
+import masks from "../../utils/core/mask.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
@@ -87,7 +88,7 @@ async function give(client, interaction) {
 
   await replies.message.success(
     interaction,
-    formatMessage(words.SuccessfullyXP, [amount, userId]),
+    formatMessage(words.SuccessfullyXP, [amount, masks.user(userId)]),
   );
 }
 
@@ -115,6 +116,6 @@ async function show(client, interaction) {
 
   await replies.message.success(
     interaction,
-    formatMessage(words.CurrentXP, [userId, userXp]),
+    formatMessage(words.CurrentXP, [masks.user(userId), userXp]),
   );
 }

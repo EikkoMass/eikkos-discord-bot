@@ -2,6 +2,7 @@ import { EmbedBuilder, Guild } from "discord.js";
 import Reminder from "../../models/reminder.js";
 import cache from "../cache/reminder.js";
 import { formatMessage, getLocalization } from "../i18n.js";
+import masks from "../core/mask.js";
 import prettyMs from "pretty-ms";
 
 import discord from "../../configs/discord.json" with { type: "json" };
@@ -53,7 +54,7 @@ export default async (guild, reminder) => {
 
   if (dynDuration <= 0) {
     channel.send({
-      content: `<@${reminder.receiverId || reminder.userId}>`,
+      content: masks.user(reminder.receiverId || reminder.userId),
       embeds: [embed],
     });
     const res = await Reminder.findByIdAndDelete({ _id: reminder._id }).catch(
@@ -65,7 +66,7 @@ export default async (guild, reminder) => {
   (function () {
     const timeout = setTimeout(async () => {
       channel.send({
-        content: `<@${reminder.receiverId || reminder.userId}>`,
+        content: masks.user(reminder.receiverId || reminder.userId),
         embeds: [embed],
       });
 

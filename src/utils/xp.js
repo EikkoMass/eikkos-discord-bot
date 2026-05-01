@@ -1,6 +1,7 @@
 import { EmbedBuilder } from "@discordjs/builders";
 import Level from "../models/level.js";
 import cache from "./cache/level.js";
+import masks from "./core/mask.js";
 
 export function calc(level) {
   return 100 * level || 1;
@@ -71,7 +72,7 @@ export async function give(
       channel.send({
         embeds: [
           new EmbedBuilder().setDescription(
-            `<@${userId}> you have leveled up to **level ${level.level}**`,
+            `${masks.user(userId)} you have leveled up to **level ${level.level}**`,
           ),
         ],
       });
