@@ -2,6 +2,7 @@ import { Client, ApplicationCommandOptionType } from "discord.js";
 import Description from "../../models/description.js";
 
 import reply from "../../utils/core/replies.js";
+import masks from "../../utils/core/mask.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
@@ -78,7 +79,7 @@ async function use(client, interaction) {
   if (description?.message) {
     return await reply.message.base(
       interaction,
-      description.message.replace("{user}", `<@${targetUserId}>`),
+      description.message.replace("{user}", masks.user(targetUserId)),
     );
   }
 
@@ -111,6 +112,9 @@ async function register(client, interaction) {
 
   return await reply.message.success(
     interaction,
-    formatMessage(words.Created, [interaction.member.id, targetUserId]),
+    formatMessage(words.Created, [
+      masks.user(interaction.member.id),
+      masks.user(targetUserId),
+    ]),
   );
 }

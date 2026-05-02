@@ -10,6 +10,7 @@ import xp from "../../utils/xp.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
+import masks from "../../utils/core/mask.js";
 
 import discord from "../../configs/discord.json" with { type: "json" };
 
@@ -165,6 +166,6 @@ async function give(client, interaction) {
 
   await replies.message.success(
     interaction,
-    formatMessage(words.SuccessfullyLevel, [amount, userId]),
+    formatMessage(words.SuccessfullyLevel, [amount, masks.user(userId)]),
   );
 }

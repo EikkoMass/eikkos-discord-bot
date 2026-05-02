@@ -1,5 +1,6 @@
 import { Client, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
 import replies from "../../utils/core/replies.js";
+import masks from "../../utils/core/mask.js";
 
 import discord from "../../configs/discord.json" with { type: "json" };
 
@@ -68,7 +69,7 @@ async function info(client, interaction) {
         inline: true,
       },
       { name: " ", value: ` ` },
-      { name: words.Owner, value: `<@${guild.ownerId}>`, inline: true },
+      { name: words.Owner, value: masks.user(guild.ownerId), inline: true },
       { name: words.Locale, value: `${guild.preferredLocale}`, inline: true },
     ])
     .setThumbnail(guild.iconURL({ size: discord.avatar.size.large }));

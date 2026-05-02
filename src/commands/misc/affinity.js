@@ -2,6 +2,7 @@ import { Client, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import { getSeeded } from "../../utils/core/randomizer.js";
+import masks from "../../utils/core/mask.js";
 
 import replies from "../../utils/core/replies.js";
 
@@ -86,8 +87,8 @@ async function love(client, interaction) {
     .setTitle(words.LovePercentage)
     .setDescription(
       formatMessage(words.LoveLevel, [
-        user1,
-        user2,
+        masks.user(user1),
+        masks.user(user2),
         results.percentage,
         results.level,
       ]),
@@ -119,8 +120,8 @@ async function hate(client, interaction) {
     .setTitle(words.HatePercentage)
     .setDescription(
       formatMessage(words.HateLevel, [
-        user1,
-        user2,
+        masks.user(user1),
+        masks.user(user2),
         results.percentage,
         results.level,
       ]),

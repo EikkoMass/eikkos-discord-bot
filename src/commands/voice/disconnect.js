@@ -7,6 +7,7 @@ import ms from "ms";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
+import masks from "../../utils/core/mask.js";
 
 export default {
   name: "disconnect",
@@ -75,9 +76,9 @@ export default {
     await reply.message.error(
       interaction,
       timer === INSTANT
-        ? formatMessage(words.DisconnectingUser, [member.id])
+        ? formatMessage(words.DisconnectingUser, [masks.user(member.id)])
         : formatMessage(words.DisconnectingUserWithDuration, [
-            member.id,
+            masks.user(member.id),
             timer,
           ]),
     );

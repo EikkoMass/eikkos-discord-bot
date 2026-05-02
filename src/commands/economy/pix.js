@@ -9,6 +9,7 @@ import Pix from "../../models/pix.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
+import masks from "../../utils/core/mask.js";
 
 const OPTS = {
   register: {
@@ -191,7 +192,7 @@ async function request(client, interaction) {
     if (optUser) {
       infoFields.push({
         name: words.Target,
-        value: `<@${optUser}>`,
+        value: masks.user(optUser),
       });
     }
 

@@ -2,6 +2,7 @@ import { ApplicationCommandOptionType, Client } from "discord.js";
 import User from "../../models/user.js";
 
 import replies from "../../utils/core/replies.js";
+import masks from "../../utils/core/mask.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 
@@ -38,7 +39,7 @@ export default {
     if (!user) {
       return await replies.message.error(
         interaction,
-        formatMessage(words.UserNoProfile, [targetUserId]),
+        formatMessage(words.UserNoProfile, [masks.user(targetUserId)]),
       );
     }
 
@@ -46,7 +47,10 @@ export default {
       interaction,
       targetUserId === interaction.member.id
         ? formatMessage(words.Balance, [user.balance])
-        : formatMessage(words.UserBalance, [targetUserId, user.balance]),
+        : formatMessage(words.UserBalance, [
+            masks.user(targetUserId),
+            user.balance,
+          ]),
     );
   },
 };

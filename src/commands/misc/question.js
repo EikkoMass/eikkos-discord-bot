@@ -2,6 +2,7 @@ import { Client, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
 
 import { getLocalization } from "../../utils/i18n.js";
 import emojis from "../../utils/core/emojis.js";
+import masks from "../../utils/core/mask.js";
 
 export default {
   name: "question",
@@ -23,7 +24,7 @@ export default {
       embeds: [
         new EmbedBuilder()
           .setFields([
-            { name: words.Requester, value: `<@${interaction.member.id}>` },
+            { name: words.Requester, value: masks.user(interaction.member.id) },
           ])
           .setTitle(text),
       ],

@@ -2,6 +2,7 @@ import { PermissionFlagsBits, ApplicationCommandOptionType } from "discord.js";
 
 import reply from "../../utils/core/replies.js";
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
+import masks from "../../utils/core/mask.js";
 
 export default {
   name: "nickname",
@@ -23,13 +24,13 @@ export default {
       await member.setNickname(nickname);
       return reply.message.success(
         interaction,
-        formatMessage(words.Success, [member.user.id, nickname]),
+        formatMessage(words.Success, [masks.user(member.user.id), nickname]),
       );
     } catch (error) {
       console.log(error);
       return reply.message.error(
         interaction,
-        formatMessage(words.Error, [member.user.id]),
+        formatMessage(words.Error, [masks.user(member.user.id)]),
       );
     }
   },
