@@ -22,8 +22,10 @@ const handler = async (client, interaction) => {
     autocomplete = autocompletes.find((cmd) => {
       if (cmd.name !== commandName) return false;
 
-      const singleContext = cmd.contexts.filter((el) => !Array.isArray(el));
-      const subContexts = cmd.contexts.filter((el) => Array.isArray(el));
+      const contexts = cmd.contexts || [];
+
+      const singleContext = contexts.filter((el) => !Array.isArray(el));
+      const subContexts = contexts.filter((el) => Array.isArray(el));
 
       if (
         isInvalidAutoCompletePath(singleContext, { sub, focused, group }) &&

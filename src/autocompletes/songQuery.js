@@ -7,7 +7,7 @@ const player = useMainPlayer();
 
 export default {
   name: "play",
-
+  contexts: ["song"],
   /**
    *  @param {Client} client
    *  @param  interaction

@@ -43,6 +43,7 @@ const OPTS = {
         name: "context",
         description: "What's the button context",
         type: ApplicationCommandOptionType.String,
+        autocomplete: true,
       },
     ],
   },

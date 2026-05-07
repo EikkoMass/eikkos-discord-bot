@@ -4,7 +4,11 @@ import { getLocalization } from "../utils/i18n.js";
 
 export default {
   name: "role",
-  contexts: ["remove", "choose"],
+  contexts: [
+    ["remove", "context"],
+    ["choose", "context"],
+    ["add", "context"],
+  ],
 
   /**
    *  @param {Client} client

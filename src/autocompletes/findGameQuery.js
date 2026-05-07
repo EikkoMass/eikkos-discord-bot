@@ -4,7 +4,7 @@ import discord from "../configs/discord.json" with { type: "json" };
 
 export default {
   name: "game",
-  contexts: ["search"],
+  contexts: ["search", "query"],
 
   /**
    *  @param {Client} client

@@ -3,7 +3,10 @@ import discord from "../configs/discord.json" with { type: "json" };
 
 export default {
   name: "anime",
-  contexts: ["search", "character"],
+  contexts: [
+    ["search", "query"],
+    ["character", "query"],
+  ],
 
   /**
    *  @param {Client} client
