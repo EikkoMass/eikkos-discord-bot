@@ -3,7 +3,10 @@ import getTypes from "../utils/autocompletes/notes/contexts.js";
 
 export default {
   name: "notes",
-  contexts: ["add", "show"],
+  contexts: [
+    ["add", "context"],
+    ["show", "context"],
+  ],
 
   /**
    *  @param {Client} client

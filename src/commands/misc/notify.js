@@ -64,12 +64,39 @@ const OPTS = {
       },
     ],
   },
+  alias: {
+    name: "alias",
+    description: "set an predefined alias for media notifications.",
+    type: ApplicationCommandOptionType.Subcommand,
+    options: [
+      {
+        name: "notification",
+        description: "The saved notification you want",
+        type: ApplicationCommandOptionType.String,
+        autocomplete: true,
+        required: true,
+      },
+      {
+        name: "format",
+        description: "The alias type you want",
+        type: ApplicationCommandOptionType.Integer,
+        autocomplete: true,
+        required: true,
+      },
+    ],
+  },
 };
 
 export default {
   name: "notify",
   description: "manage your Notify notifications",
-  options: [OPTS.add, OPTS.send, OPTS.remove, OPTS.show],
+  options: [
+    OPTS.add,
+    OPTS.send,
+    OPTS.remove,
+    OPTS.show,
+    //  OPTS.alias
+  ],
   /**
    *  @param {Client} client
    *  @param  interaction
@@ -84,6 +111,8 @@ export default {
         return await show(client, interaction);
       case OPTS.send.name:
         return await send(client, interaction);
+      case OPTS.alias.name:
+        return await alias(client, interaction);
       default:
         return await replies.message.error(
           interaction,
@@ -201,3 +230,5 @@ async function send(client, interaction) {
 
   interaction.channel.send(notify.message);
 }
+
+async function alias(client, interaction) {}
