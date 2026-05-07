@@ -5,5 +5,8 @@
   "Removed": "Notification `{0}` removed successfully!",
   "ErrorRemoving": "An error occurred while removing the notification `{0}`",
   "RegisterNotFound": "No notification register found!",
-  "ErrorShowing": "An error occurred while trying to show the notifications"
+  "ErrorShowing": "An error occurred while trying to show the notifications",
+  "Twitch": "Twitch",
+  "YouTube": "YouTube",
+  "Kick": "Kick"
 }
