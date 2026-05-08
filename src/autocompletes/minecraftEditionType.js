@@ -7,7 +7,17 @@ import getTypes from "../utils/autocompletes/minecraft/editions.js";
  */
 export default {
   name: "minecraft",
-  contexts: ["register", "edition"],
+  contexts: [
+    {
+      name: "server",
+      contexts: [
+        {
+          name: "register",
+          contexts: ["edition"],
+        },
+      ],
+    },
+  ],
 
   /**
    *  @param {Client} client

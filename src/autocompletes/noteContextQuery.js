@@ -4,8 +4,8 @@ import getTypes from "../utils/autocompletes/notes/contexts.js";
 export default {
   name: "notes",
   contexts: [
-    ["add", "context"],
-    ["show", "context"],
+    { name: "add", contexts: ["context"] },
+    { name: "show", contexts: ["context"] },
   ],
 
   /**

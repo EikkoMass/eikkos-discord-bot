@@ -5,7 +5,7 @@ import discord from "../configs/discord.json" with { type: "json" };
 
 export default {
   name: "playlist",
-  contexts: ["play", "name"],
+  contexts: [{ name: "play", contexts: ["name"] }],
   /**
    *  @param {Client} client
    *  @param  interaction

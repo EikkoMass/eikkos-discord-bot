@@ -22,22 +22,7 @@ const handler = async (client, interaction) => {
     autocomplete = autocompletes.find((cmd) => {
       if (cmd.name !== commandName) return false;
 
-      const contexts = cmd.contexts || [];
-
-      const singleContext = contexts.filter((el) => !Array.isArray(el));
-      const subContexts = contexts.filter((el) => Array.isArray(el));
-
-      if (
-        isInvalidAutoCompletePath(singleContext, { sub, focused, group }) &&
-        (!subContexts ||
-          subContexts.every((el) =>
-            isInvalidAutoCompletePath(el, { sub, focused, group }),
-          ))
-      ) {
-        return false;
-      }
-
-      return true;
+      return isValidAutoComplete(CACHE_REF, cmd.name, cmd);
     });
 
     cache.set(CACHE_REF, autocomplete);
@@ -48,13 +33,25 @@ const handler = async (client, interaction) => {
   await autocomplete.callback(client, interaction);
 };
 
-function isInvalidAutoCompletePath(context, tree) {
-  return (
-    context &&
-    (!context.includes(tree.sub) ||
-      !context.includes(tree.focused) ||
-      (tree.group !== null && !context.includes(tree.group)))
-  );
+function isValidAutoComplete(ref, builder, cmd) {
+  let result = false;
+
+  // /command abc [def] |   {name: command, contexts: [{ name: "abc", contexts: ["def"] }]}
+  // /command [def]     |   {name: command, contexts: ["def"]}
+
+  return (cmd.contexts || []).some((context) => {
+    if (typeof context === "string") {
+      result = `${builder}$${context}` === ref;
+    }
+
+    if (!result && typeof context === "object") {
+      result = isValidAutoComplete(ref, `${builder}$${context.name}`, context);
+    }
+
+    if (result) return true;
+
+    return false;
+  });
 }
 
 export default handler;

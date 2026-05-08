@@ -3,7 +3,7 @@ import getTypes from "../utils/autocompletes/buttons/styles.js";
 
 export default {
   name: "role",
-  contexts: ["add", "style"],
+  contexts: [{ name: "add", contexts: ["style"] }],
 
   /**
    *  @param {Client} client

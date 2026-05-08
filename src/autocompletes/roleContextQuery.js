@@ -5,9 +5,9 @@ import { getLocalization } from "../utils/i18n.js";
 export default {
   name: "role",
   contexts: [
-    ["remove", "context"],
-    ["choose", "context"],
-    ["add", "context"],
+    { name: "remove", contexts: ["context"] },
+    { name: "choose", contexts: ["context"] },
+    { name: "add", contexts: ["context"] },
   ],
 
   /**

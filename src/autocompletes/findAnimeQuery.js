@@ -4,8 +4,8 @@ import discord from "../configs/discord.json" with { type: "json" };
 export default {
   name: "anime",
   contexts: [
-    ["search", "query"],
-    ["character", "query"],
+    { name: "search", contexts: ["query"] },
+    { name: "character", contexts: ["query"] },
   ],
 
   /**

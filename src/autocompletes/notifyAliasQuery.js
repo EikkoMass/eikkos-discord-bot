@@ -5,7 +5,7 @@ import discord from "../configs/discord.json" with { type: "json" };
 
 export default {
   name: "notify",
-  contexts: ["alias", "notification"],
+  contexts: [{ name: "alias", contexts: ["notification"] }],
   /**
    *  @param {Client} client
    *  @param  interaction
