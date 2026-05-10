@@ -2,10 +2,13 @@ import { Client } from "discord.js";
 import Notify from "../models/notify.js";
 
 import discord from "../configs/discord.json" with { type: "json" };
+import contexts from "../enums/player/contexts.js";
 
 export default {
   name: "notify",
-  contexts: [{ name: "alias", contexts: ["notification"] }],
+  contexts: [
+    { name: "alias", contexts: [{ name: "add", contexts: ["notification"] }] },
+  ],
   /**
    *  @param {Client} client
    *  @param  interaction

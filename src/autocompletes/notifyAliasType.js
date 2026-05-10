@@ -7,7 +7,15 @@ import getTypes from "../utils/autocompletes/notify/aliases.js";
  */
 export default {
   name: "notify",
-  contexts: [{ name: "alias", contexts: ["format"] }],
+  contexts: [
+    {
+      name: "alias",
+      contexts: [
+        { name: "add", contexts: ["context"] },
+        { name: "remove", contexts: ["context"] },
+      ],
+    },
+  ],
 
   /**
    *  @param {Client} client
