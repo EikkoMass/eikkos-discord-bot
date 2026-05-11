@@ -109,7 +109,7 @@ export default {
     }
   },
 
-  name: "timeout",
+  name: "timeout-user",
   description: "Timeout a user.",
   options: [
     {

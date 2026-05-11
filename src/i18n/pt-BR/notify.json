@@ -8,5 +8,6 @@
   "ErrorShowing": "Ocorreu um erro ao tentar exibir as notificações",
   "Twitch": "Twitch",
   "YouTube": "YouTube",
-  "Kick": "Kick"
+  "Kick": "Kick",
+  "RemovedWithAliases": "Notificação `{0}` removida com sucesso! Aliases relacionados a esta notificação foram removidos também."
 }

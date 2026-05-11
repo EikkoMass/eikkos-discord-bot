@@ -1,4 +1,4 @@
-import Enum from "../../../enums/notify/eliases.js";
+import Enum from "../../../enums/notify/aliases.js";
 import { getLocalization } from "../../../utils/i18n.js";
 
 export default async function getTypes(interaction) {

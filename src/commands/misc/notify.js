@@ -1,5 +1,6 @@
-import { Client, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
+import { Client, ApplicationCommandOptionType } from "discord.js";
 import Notify from "../../models/notify.js";
+import NotifyAlias from "../../models/notifyAlias.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
@@ -111,18 +112,19 @@ const OPTS = {
 export default {
   name: "notify",
   description: "manage your Notify notifications",
-  options: [
-    OPTS.add,
-    OPTS.send,
-    OPTS.remove,
-    OPTS.show,
-    //  OPTS.alias
-  ],
+  options: [OPTS.add, OPTS.send, OPTS.remove, OPTS.show, OPTS.alias],
   /**
    *  @param {Client} client
    *  @param  interaction
    */
   callback: async (client, interaction) => {
+    switch (interaction.options.getSubcommandGroup()) {
+      case OPTS.alias.name:
+        return await alias(client, interaction);
+      default:
+        break;
+    }
+
     switch (interaction.options.getSubcommand()) {
       case OPTS.add.name:
         return await add(client, interaction);
@@ -132,14 +134,14 @@ export default {
         return await show(client, interaction);
       case OPTS.send.name:
         return await send(client, interaction);
-      case OPTS.alias.name:
-        return await alias(client, interaction);
       default:
-        return await replies.message.error(
-          interaction,
-          `Notify command not found!`,
-        );
+        break;
     }
+
+    return await replies.message.error(
+      interaction,
+      `Notify command not found!`,
+    );
   },
 };
 
@@ -179,15 +181,29 @@ async function remove(client, interaction) {
   try {
     const id = interaction.options.get("id")?.value;
 
-    const notify = await Notify.findOneAndDelete({ _id: id });
+    const notify = await Notify.findOneAndDelete({
+      _id: id,
+      guildId: interaction.guild.id,
+    });
 
     if (!notify) {
       return await replies.message.error(interaction, words.NotFound);
     }
 
+    var aliases = await NotifyAlias.find({
+      guildId: interaction.guild.id,
+      notifyId: notify._id,
+    });
+
+    if (aliases.length) {
+      aliases.map(async (x) => await x.deleteOne());
+    }
+
     return await replies.message.success(
       interaction,
-      formatMessage(words.Removed, [notify.title]),
+      formatMessage(aliases.length ? words.RemovedWithAliases : words.Removed, [
+        notify.title,
+      ]),
     );
   } catch (e) {
     return await replies.message.error(
@@ -252,4 +268,62 @@ async function send(client, interaction) {
   interaction.channel.send(notify.message);
 }
 
-async function alias(client, interaction) {}
+async function alias(client, interaction) {
+  switch (interaction.options.getSubcommand()) {
+    case "add":
+      return await aliasAdd(client, interaction);
+    case "remove":
+      return await aliasRemove(client, interaction);
+    default:
+      return await replies.message.error(
+        interaction,
+        words.ServerCommandNotFound,
+      );
+  }
+}
+
+async function aliasAdd(client, interaction) {
+  const words = await getLocalization(interaction.locale, "notify");
+
+  const notification = interaction.options.get("notification")?.value;
+  const context = interaction.options.get("context")?.value;
+
+  const alias = await NotifyAlias.findOne({
+    guildId: interaction.guild.id,
+    type: context,
+  });
+
+  if (alias) {
+    alias.notificationId = notification;
+    await alias.save();
+    await replies.message.success(interaction, "Alias replaced successfully");
+  } else {
+    var notifyAlias = await NotifyAlias.create({
+      guildId: interaction.guild.id,
+      userId: interaction.user.id,
+      creationDate: new Date(),
+      type: context,
+      notificationId: notification,
+    });
+
+    await notifyAlias.save();
+    await replies.message.success(interaction, "Alias created successfully");
+  }
+}
+
+async function aliasRemove(client, interaction) {
+  const words = await getLocalization(interaction.locale, "notify");
+  const context = interaction.options.get("context")?.value;
+
+  const alias = await NotifyAlias.findOne({
+    guildId: interaction.guild.id,
+    type: context,
+  });
+
+  if (alias) {
+    await NotifyAlias.deleteOne({ _id: alias._id });
+    await replies.message.success(interaction, "Alias removed successfully");
+  } else {
+    await replies.message.error(interaction, "Alias not found");
+  }
+}

@@ -73,7 +73,7 @@ export default {
     }
   },
 
-  name: "kick",
+  name: "kick-user",
   description: "kicks a member from this server..",
   // devOnly: Boolean,
   // testOnly: Boolean,

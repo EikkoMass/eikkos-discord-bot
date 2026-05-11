@@ -81,7 +81,7 @@ export default {
     }
   },
 
-  name: "ban",
+  name: "ban-user",
   description: "bans a member from this server.",
   // devOnly: Boolean,
   // testOnly: Boolean,
