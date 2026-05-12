@@ -4,10 +4,8 @@ import {
   PermissionFlagsBits,
 } from "discord.js";
 
+import { getLocalization } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
-
-import { getLocalization, formatMessage } from "../../utils/i18n.js";
-
 import discord from "../../configs/discord.json" with { type: "json" };
 
 export default {
@@ -18,25 +16,24 @@ export default {
    */
 
   callback: async (client, interaction) => {
-    const words = await getLocalization(interaction.locale, `ban`);
+    const words = await getLocalization(interaction.locale, `kick-user`);
 
     const targetUserId = interaction.options.get("target").value;
-    const reason =
-      interaction.options.get("reason")?.value || words.NoReasonProvided;
+    const reason = interaction.options.get("reason")?.value || words.NoReason;
 
     await interaction.deferReply();
 
     const targetUser = await interaction.guild.members.fetch(targetUserId);
 
     if (!targetUser) {
-      await reply.message.error(interaction, words.UserNotExists, {
+      await reply.message.error(interaction, words.UserDontExist, {
         context: discord.replies.edit,
       });
       return;
     }
 
     if (targetUser.id === interaction.guild.ownerId) {
-      await reply.message.info(interaction, words.CannotBanOwner, {
+      await reply.message.info(interaction, words.CantKickOwner, {
         context: discord.replies.edit,
       });
       return;
@@ -47,14 +44,14 @@ export default {
     const botRolePosition = interaction.guild.members.me.roles.highest.position; // Highest role of the bot;
 
     if (targetUserRolePosition >= requestUserRolePosition) {
-      await reply.message.info(interaction, words.BanHigherRole, {
+      await reply.message.info(interaction, words.CantKickSameHigher, {
         context: discord.replies.edit,
       });
       return;
     }
 
     if (targetUserRolePosition >= botRolePosition) {
-      await reply.message.info(interaction, words.BanHigherRoleBot, {
+      await reply.message.info(interaction, words.CantKickSameHigherBot, {
         context: discord.replies.edit,
       });
       return;
@@ -62,42 +59,37 @@ export default {
 
     //Ban the targetUser
     try {
-      await targetUser.ban({ reason });
-      await reply.message.success(
-        interaction,
-        formatMessage(words.Banned, [targetUser, reason]),
-        {
-          context: discord.replies.edit,
-          embed: {
-            emoji: ":page_facing_up:",
-          },
-        },
-      );
-    } catch (e) {
-      await reply.message.error(interaction, words.Error, {
+      await targetUser.kick(reason);
+
+      await reply.message.success(interaction, words.Kicked, {
         context: discord.replies.edit,
       });
-      console.log(`There was an error when banning: ${e}`);
+    } catch (e) {
+      console.log(`There was an error when kicking: ${e}`);
+
+      await reply.message.error(interaction, words.KickFailed, {
+        context: discord.replies.edit,
+      });
     }
   },
 
-  name: "ban-user",
-  description: "bans a member from this server.",
+  name: "kick-user",
+  description: "kicks a member from this server..",
   // devOnly: Boolean,
   // testOnly: Boolean,
   options: [
     {
       name: "target",
-      description: "The user you want to ban.",
+      description: "The user you want to kick.",
       required: true,
       type: ApplicationCommandOptionType.User,
     },
     {
       name: "reason",
-      description: "The reason you want for ban1",
+      description: "The reason you want for kick.",
       type: ApplicationCommandOptionType.String,
     },
   ],
-  permissionsRequired: [PermissionFlagsBits.BanMembers],
-  botPermissions: [PermissionFlagsBits.BanMembers],
+  permissionsRequired: [PermissionFlagsBits.KickMembers],
+  botPermissions: [PermissionFlagsBits.KickMembers],
 };

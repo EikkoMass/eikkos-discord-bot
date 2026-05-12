@@ -19,7 +19,7 @@ export default {
    */
   callback: async (client, interaction) => {
     const embed = new EmbedBuilder();
-    const words = await getLocalization(interaction.locale, `timeout`);
+    const words = await getLocalization(interaction.locale, `timeout-user`);
 
     const mentionable = interaction.options.get("target").value;
     const duration = interaction.options.get("duration").value;
