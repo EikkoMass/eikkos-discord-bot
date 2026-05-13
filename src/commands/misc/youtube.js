@@ -9,13 +9,15 @@ export default {
   description: "Sends the YouTube alias notification",
 
   callback: async (client, interaction) => {
+    const words = await getLocalization(interaction.locale, "youtube");
+
     const alias = await NotifyAlias.findOne({
       guildId: interaction.guild.id,
       type: Enum.YOUTUBE,
     });
 
     if (!alias) {
-      return reply.message.error(interaction, "No YouTube alias found");
+      return reply.message.error(interaction, words.AliasNotFound);
     }
 
     const notify = await Notify.findOne({
@@ -24,7 +26,7 @@ export default {
     });
 
     if (!notify) {
-      return reply.message.error(interaction, "No YouTube notification found");
+      return reply.message.error(interaction, words.NotificationNotFound);
     }
 
     await interaction.deferReply();

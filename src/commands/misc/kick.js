@@ -4,20 +4,20 @@ import Enum from "../../enums/notify/aliases.js";
 import NotifyAlias from "../../models/notifyAlias.js";
 import Notify from "../../models/notify.js";
 
-import { Types } from "mongoose";
-
 export default {
   name: "kick",
   description: "Sends the Kick alias notification",
 
   callback: async (client, interaction) => {
+    const words = await getLocalization(interaction.locale, "kick");
+
     const alias = await NotifyAlias.findOne({
       guildId: interaction.guild.id,
       type: Enum.KICK,
     });
 
     if (!alias) {
-      return reply.message.error(interaction, "No Kick alias found");
+      return reply.message.error(interaction, words.AliasNotFound);
     }
 
     const notify = await Notify.findOne({
@@ -26,7 +26,7 @@ export default {
     });
 
     if (!notify) {
-      return reply.message.error(interaction, "No Kick notification found");
+      return reply.message.error(interaction, words.NotificationNotFound);
     }
 
     await interaction.deferReply();

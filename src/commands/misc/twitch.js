@@ -3,19 +3,22 @@ import Enum from "../../enums/notify/aliases.js";
 
 import NotifyAlias from "../../models/notifyAlias.js";
 import Notify from "../../models/notify.js";
+import { getLocalization } from "../../utils/i18n.js";
 
 export default {
   name: "twitch",
   description: "Sends the Twitch alias notification",
 
   callback: async (client, interaction) => {
+    const words = await getLocalization(interaction.locale, "twitch");
+
     const alias = await NotifyAlias.findOne({
       guildId: interaction.guild.id,
       type: Enum.TWITCH,
     });
 
     if (!alias) {
-      return reply.message.error(interaction, "No Twitch alias found");
+      return reply.message.error(interaction, words.AliasNotFound);
     }
 
     const notify = await Notify.findOne({
@@ -24,7 +27,7 @@ export default {
     });
 
     if (!notify) {
-      return reply.message.error(interaction, "No Twitch notification found");
+      return reply.message.error(interaction, words.NotificationNotFound);
     }
 
     await interaction.deferReply();
