@@ -296,7 +296,7 @@ async function aliasAdd(client, interaction) {
   if (alias) {
     alias.notificationId = notification;
     await alias.save();
-    await replies.message.success(interaction, "Alias replaced successfully");
+    await replies.message.success(interaction, words.AliasReplaced);
   } else {
     var notifyAlias = await NotifyAlias.create({
       guildId: interaction.guild.id,
@@ -307,7 +307,7 @@ async function aliasAdd(client, interaction) {
     });
 
     await notifyAlias.save();
-    await replies.message.success(interaction, "Alias created successfully");
+    await replies.message.success(interaction, words.AliasCreated);
   }
 }
 
@@ -322,8 +322,8 @@ async function aliasRemove(client, interaction) {
 
   if (alias) {
     await NotifyAlias.deleteOne({ _id: alias._id });
-    await replies.message.success(interaction, "Alias removed successfully");
+    await replies.message.success(interaction, words.AliasRemoved);
   } else {
-    await replies.message.error(interaction, "Alias not found");
+    await replies.message.error(interaction, words.AliasNotFound);
   }
 }

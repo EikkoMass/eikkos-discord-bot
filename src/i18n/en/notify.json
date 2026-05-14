@@ -9,5 +9,9 @@
   "Twitch": "Twitch",
   "YouTube": "YouTube",
   "Kick": "Kick",
-  "RemovedWithAliases": "Notification `{0}` removed successfully! Aliases related to this notification have been removed as well."
+  "RemovedWithAliases": "Notification `{0}` removed successfully! Aliases related to this notification have been removed as well.",
+  "AliasCreated": "Alias created successfully.",
+  "AliasReplaced": "Alias replaced successfully.",
+  "AliasRemoved": "Alias removed successfully.",
+  "AliasNotFound": "Alias not found."
 }
