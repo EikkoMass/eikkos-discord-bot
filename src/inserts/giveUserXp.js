@@ -6,6 +6,9 @@ import origins from "../enums/xp/origins.js";
 
 const MESSAGE_COOLDOWN = 6000;
 
+const getCacheRef = (message) =>
+  `${message.guild.id}_${message.author.id}_${origins.COMMENT}`;
+
 export default {
   name: "giveUserXP",
   description: "calculates the user leveling",
@@ -14,9 +17,7 @@ export default {
   match: (message) =>
     !message.author.bot &&
     message.inGuild() &&
-    !cache.searched(
-      `${message.guild.id}_${message.author.id}_${origins.COMMENT}`,
-    ),
+    !cache.searched(getCacheRef(message)),
 
   /**
    *  @param {Client} client
@@ -27,7 +28,7 @@ export default {
 
     await xp.give(message.author, message.guild, message.channel, xpToGive, {
       after: (level) => {
-        const CACHE_REF = `${message.guild.id}_${message.author.id}_${origins.COMMENT}`;
+        const CACHE_REF = getCacheRef(message);
 
         cache.set(CACHE_REF, xpToGive);
         setTimeout(() => {

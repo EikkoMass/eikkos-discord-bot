@@ -26,7 +26,8 @@ const OPTS = {
 
 export default {
   name: "mute-by-game",
-  description: "play a song on the voice channel",
+  description: "Mutes the user if someone opens the specified game",
+  devOnly: true,
   options: [OPTS.game, OPTS.activate],
   botPermissions: [PermissionFlagsBits.MuteMembers],
 
