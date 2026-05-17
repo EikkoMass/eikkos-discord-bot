@@ -9,6 +9,8 @@ import { getRandom } from "../utils/core/randomizer.js";
 import xp from "../utils/xp.js";
 import { getLocalization } from "../utils/i18n.js";
 
+const MIN_SIZE = 3;
+
 export default {
   name: "nerdDetector",
   description: "quote the user with the nerdiest comment possible",
@@ -23,7 +25,7 @@ export default {
     if (message.author.bot) return;
 
     // 1%
-    if (message.content?.length > 3 && getRandom() > 99) {
+    if (message.content?.length > MIN_SIZE && getRandom() > 99) {
       // 20%
       const isFire = getRandom() > 80;
 

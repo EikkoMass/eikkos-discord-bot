@@ -9,6 +9,8 @@ import highlightCache from "../../../utils/cache/highlight.js";
 import getHighlightEmbed from "../../../utils/components/getHighlightEmbed.js";
 import getHighlightMessageButton from "../../../utils/components/getHighlightMessageButton.js";
 
+const DEFAULT_QUANTITY = 4;
+
 export default async (client, reaction, user) => {
   if (reaction.partial) {
     try {
@@ -37,7 +39,7 @@ export default async (client, reaction, user) => {
 
   if (!highlightGuild || !highlightGuild.active) return;
 
-  if (reaction.count < (highlightGuild.count || 4)) return;
+  if (reaction.count < (highlightGuild.count || DEFAULT_QUANTITY)) return;
 
   const guildId = reaction.message.guildId;
   const channelId = reaction.message.channelId;

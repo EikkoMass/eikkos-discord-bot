@@ -142,8 +142,6 @@ async function join(client, interaction) {
     sessionCache.addUser(CACHE_REF, interaction.user.id);
   }
 
-  console.log(interaction.member.voice);
-
   return await replies.message.success(
     interaction,
     formatMessage(words.Joined, [
