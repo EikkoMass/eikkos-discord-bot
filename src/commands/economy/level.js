@@ -12,7 +12,7 @@ import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
 import masks from "../../utils/core/mask.js";
 
-import { validator as flagValidator } from "../../utils/core/flags.js";
+import { validator as hasFlag } from "../../utils/core/flags.js";
 
 import discord from "../../configs/discord.json" with { type: "json" };
 
@@ -136,7 +136,7 @@ async function show(client, interaction) {
 async function give(client, interaction) {
   const words = await getLocalization(interaction.locale, `level`);
 
-  if (!flagValidator([PermissionFlagsBits.Administrator], interaction.member)) {
+  if (!hasFlag(PermissionFlagsBits.Administrator, interaction.member)) {
     return await replies.message.error(
       interaction,
       words.AdminExclusiveCommand,

@@ -12,6 +12,8 @@ import replies from "../../utils/core/replies.js";
 import Level from "../../models/level.js";
 import cache from "../../utils/cache/level.js";
 
+import { validator as hasFlag } from "../../utils/core/flags.js";
+
 const OPTS = {
   give: {
     name: "give",
@@ -73,7 +75,7 @@ async function give(client, interaction) {
   let userId = interaction.options.get("user")?.value || interaction.member.id;
   let amount = interaction.options.get("amount")?.value || 100;
 
-  if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+  if (!hasFlag(PermissionFlagsBits.Administrator, interaction.member)) {
     return await reply.message.error(interaction, words.AdminExclusiveCommand);
   }
 
