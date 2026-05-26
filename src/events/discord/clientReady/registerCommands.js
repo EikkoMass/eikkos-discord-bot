@@ -17,39 +17,47 @@ export default async (client) => {
     for (const localCommand of localCommands) {
       const { name, description, options } = localCommand;
       const existingCommand = applicationCommands.cache.find(
-        (cmd) => cmd.name === name,
+        (cmd) => cmd.name === localCommand.name,
       );
 
       if (existingCommand) {
         if (localCommand.deleted) {
           await applicationCommands.delete(existingCommand.id);
-          console.log(`Deleted command ${name}`);
+          console.log(`Deleted command ${localCommand.name}`);
           continue;
+        }
+
+        if (localCommand.devOnly) {
+          localCommand.description += " (dev only)";
         }
 
         if (areCommandsDifferent(existingCommand, localCommand)) {
           await applicationCommands.edit(existingCommand.id, {
-            description,
-            options,
+            description: localCommand.description,
+            options: localCommand.options,
           });
 
-          console.log(`Edited command ${name}`);
+          console.log(`Edited command ${localCommand.name}`);
         }
       } else {
         if (localCommand.deleted) {
           console.log(
-            `Skipping registering command "${name}" as it's set to delete`,
+            `Skipping registering command "${localCommand.name}" as it's set to delete`,
           );
           continue;
         }
 
+        if (localCommand.devOnly) {
+          localCommand.description += " (dev only)";
+        }
+
         await applicationCommands.create({
-          name,
-          description,
-          options,
+          name: localCommand.name,
+          description: localCommand.description,
+          options: localCommand.options,
         });
 
-        console.log(`Registered command ${name}`);
+        console.log(`Registered command ${localCommand.name}`);
       }
     }
   } catch (error) {
