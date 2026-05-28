@@ -1,54 +1,5 @@
-import getLocal from "../../../utils/importers/getLocal.js";
-import actionTypes from "../../../configs/actionTypes.json" with { type: "json" };
+import handler from "../../../handlers/insert.js";
 
-import { Client, Message } from "discord.js";
-import path from "path";
-
-const comparatorsCache = {};
-
-/**
- *  @param {Client} client
- *  @param {Message} message
- */
 export default async (client, message) => {
-  const localInserts = await getLocal(actionTypes.inserts);
-  try {
-    const insertObjects = await filterAsync.call(localInserts, async (cmd) => {
-      let type = cmd?.type || "equals";
-      let comparator = comparatorsCache[type];
-
-      if (!comparator) {
-        try {
-          comparator = await importComparator(type);
-          comparatorsCache[type] = comparator;
-        } catch (err) {
-          console.log(`error on insert handler: ${err.message}`);
-        }
-      }
-
-      return await comparator(message, cmd.match);
-    });
-
-    if (!insertObjects?.length) return;
-
-    insertObjects.forEach(
-      async (insert) => await insert.callback(client, message),
-    );
-  } catch (error) {
-    console.log(`There was an error running this insert: ${error}`);
-  }
+  await handler(client, message);
 };
-
-async function importComparator(type) {
-  return (await import(path.join('..', '..', '..', 'utils', 'comparators', `${type}.js`))).default;
-}
-
-async function filterAsync(callback) {
-  let filtered = [];
-
-  for (let item of this) {
-    if (await callback(item)) filtered.push(item);
-  }
-
-  return filtered;
-}

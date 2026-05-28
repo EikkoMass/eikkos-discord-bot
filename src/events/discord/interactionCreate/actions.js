@@ -1,4 +1,4 @@
-import { Client, EmbedBuilder, MessageFlags } from "discord.js";
+import { Client } from "discord.js";
 import handler from "../../../handlers/action.js";
 
 /**

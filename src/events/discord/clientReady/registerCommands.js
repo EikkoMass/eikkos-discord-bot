@@ -4,6 +4,8 @@ import getLocal from "../../../utils/importers/getLocal.js";
 import getApplicationCommands from "../../../utils/importers/getApplicationCommands.js";
 import areCommandsDifferent from "../../../utils/validators/areCommandsDifferent.js";
 
+const devOnlyLabel = " (dev only)";
+
 export default async (client) => {
   try {
     const localCommands = await getLocal(actionTypes.commands, []);
@@ -28,7 +30,7 @@ export default async (client) => {
         }
 
         if (localCommand.devOnly) {
-          localCommand.description += " (dev only)";
+          localCommand.description += devOnlyLabel;
         }
 
         if (areCommandsDifferent(existingCommand, localCommand)) {
@@ -48,7 +50,7 @@ export default async (client) => {
         }
 
         if (localCommand.devOnly) {
-          localCommand.description += " (dev only)";
+          localCommand.description += devOnlyLabel;
         }
 
         await applicationCommands.create({
