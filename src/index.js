@@ -4,8 +4,8 @@ import eventHandler from "./handlers/main.js";
 import mongoose from "mongoose";
 import { Player } from "discord-player";
 import { DefaultExtractors } from "@discord-player/extractor";
-// import { YoutubeiExtractor } from "discord-player-youtubei";
-import { YoutubeSabrExtractor } from "discord-player-googlevideo";
+//import { YoutubeiExtractor as YoutubeExtractor } from "discord-player-youtubei";
+import { YoutubeSabrExtractor as YoutubeExtractor } from "discord-player-googlevideo";
 import { TTSExtractor } from "discord-player-tts";
 import igdb from "./utils/authenticators/igdb.js";
 import loadPlayerEvents from "./utils/importers/loadPlayerEvents.js";
@@ -41,7 +41,7 @@ const client = new Client({
 
   const player = new Player(client);
 
-  await player.extractors.register(YoutubeSabrExtractor, {
+  await player.extractors.register(YoutubeExtractor, {
     authentication: process.env.YT_CREDENTIAL,
   });
 
