@@ -17,7 +17,7 @@ export default {
     });
 
     if (!alias) {
-      return reply.message.error(interaction, words.AliasNotFound);
+      return await reply.message.error(interaction, words.AliasNotFound);
     }
 
     const notify = await Notify.findOne({
@@ -26,7 +26,7 @@ export default {
     });
 
     if (!notify) {
-      return reply.message.error(interaction, words.NotificationNotFound);
+      return await reply.message.error(interaction, words.NotificationNotFound);
     }
 
     await interaction.deferReply();
