@@ -29,11 +29,18 @@ export default {
       "playerEvents/playerStart",
     );
 
+    const MIN_EMBED_SIZE = 120;
+
+    let description = `${track.title} - ${queue.currentTrack.author}`;
+    let footer = `${words.Duration}: ${track.duration}`;
+
     const embed = new EmbedBuilder()
       .setTitle(words.Playing)
-      .setDescription(`${track.title} - ${queue.currentTrack.author}`)
+      .setDescription(description)
       .setThumbnail(track.thumbnail)
-      .setFooter({ text: `${words.Duration}: ${track.duration}` })
+      .setFooter({
+        text: footer.padEnd(MIN_EMBED_SIZE - footer.length - 1, " ") + "\u200B",
+      })
       .setColor(Colors.Blurple)
       .setURL(track.url);
 
