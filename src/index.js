@@ -9,6 +9,7 @@ import { YoutubeSabrExtractor as YoutubeExtractor } from "discord-player-googlev
 import { TTSExtractor } from "discord-player-tts";
 import igdb from "./utils/authenticators/igdb.js";
 import loadPlayerEvents from "./utils/importers/loadPlayerEvents.js";
+import valkey from "./utils/authenticators/valkey.js";
 
 dotenv.config({ quiet: true });
 
@@ -34,7 +35,18 @@ const client = new Client({
 
     await mongoose.connect(process.env.MONGODB_URI);
 
-    console.log("Connected to DB");
+    console.log("Connected to MongoDB");
+  } catch (e) {
+    console.log(e);
+  }
+
+  try {
+    if (!process.env.VALKEY_HOST || !process.env.VALKEY_PORT)
+      throw new Error("Missing Valkey host/port, required to use the bot");
+
+    await valkey.actions.connect();
+
+    console.log("Connected to Valkey");
   } catch (e) {
     console.log(e);
   }
