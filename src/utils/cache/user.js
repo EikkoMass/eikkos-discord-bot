@@ -1,42 +1,28 @@
-let userCache = {};
-let search = {};
+import valkey from "../authenticators/valkey.js";
 
-let autoCleanTimeout;
-let CLEAN_INTERVAL = 60 * 1000;
+const TTL = 60;
 
-export function get(id) {
-  return userCache[id];
+export async function get(id) {
+  let result = await valkey.actions.get(id);
+  return result ? JSON.parse(result) : null;
 }
 
-export function set(key, value) {
-  userCache[key] = value;
-  search[key] = true;
+export async function set(key, value) {
+  let found = !!value;
 
-  if (!autoCleanTimeout) {
-    autoCleanTimeout = setTimeout(() => {
-      autoCleanTimeout = null;
-      reset();
-    }, CLEAN_INTERVAL);
-  }
-}
-
-export function reset() {
-  userCache = {};
-}
-
-export function resetOne(key) {
-  userCache[key] = null;
-  search[key] = false;
-}
-
-export function searched(key) {
-  return search[key];
+  await valkey.actions.set(
+    key,
+    JSON.stringify({
+      found,
+      value,
+    }),
+    {
+      count: TTL,
+    },
+  );
 }
 
 export default {
   get,
   set,
-  reset,
-  resetOne,
-  searched,
 };

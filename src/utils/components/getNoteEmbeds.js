@@ -6,8 +6,15 @@ import discord from "../../configs/discord.json" with { type: "json" };
 async function getNoteEmbeds(client, notes) {
   const embeds = [];
 
+  let clientUser = {
+    avatarUrl: client.user.displayAvatarURL({
+      size: discord.avatar.size.medium,
+    }),
+  };
+
   for (let note of notes) {
-    const owner = (await getUser(client, note.userId)) || client.user;
+    const cacheUser = await getUser(client, note.userId);
+    let owner = cacheUser || clientUser;
 
     let embed = new EmbedBuilder()
       .setDescription(note.text)
@@ -15,7 +22,7 @@ async function getNoteEmbeds(client, notes) {
       .setTimestamp(note.creationDate)
       .setFooter({
         text: note._id.toString(),
-        iconURL: owner.displayAvatarURL({ size: discord.avatar.size.medium }),
+        iconURL: owner.avatarUrl,
       });
 
     if (note.title) embed.setTitle(note.title);

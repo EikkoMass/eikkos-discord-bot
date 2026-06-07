@@ -1,4 +1,4 @@
-import { GlideClient } from "@valkey/valkey-glide";
+import { GlideClient, TimeUnit } from "@valkey/valkey-glide";
 import dotenv from "dotenv";
 
 let client;
@@ -16,23 +16,62 @@ async function connect() {
 
 async function ping() {
   try {
-    if (!client) await connect();
+    await connect();
 
-    // Test the connection
     const response = await client.ping();
 
-    // Valkey responds with PONG
     console.log(`Connected! Server responded: ${response}`);
   } catch (error) {
     console.error(`Connection failed: ${error.message}`);
   } finally {
-    // Always close the client
     client.close();
+  }
+}
+
+async function get(key) {
+  try {
+    await connect();
+
+    const value = await client.get(key);
+    return value;
+  } catch (error) {
+    console.error(`Failed to get key: ${key}`);
+    return null;
+  } finally {
+    client.close();
+  }
+}
+
+async function set(key, value, ttl) {
+  try {
+    await connect();
+
+    if (ttl) {
+      await client.set(key, value, {
+        expiry: {
+          type: ttl.type ?? TimeUnit.Seconds,
+          count: ttl.count,
+        },
+      });
+    } else {
+      await client.set(key, value);
+    }
+
+    client.close();
+
+    return true;
+  } catch (error) {
+    console.error(`Failed to set key: ${error}`);
+    client.close();
+
+    return false;
   }
 }
 
 export default {
   actions: {
+    get,
+    set,
     connect,
     ping,
   },

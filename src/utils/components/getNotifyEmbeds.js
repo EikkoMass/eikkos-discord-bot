@@ -6,8 +6,15 @@ import discord from "../../configs/discord.json" with { type: "json" };
 async function getNotifyEmbeds(client, notify) {
   const embeds = [];
 
+  let clientUser = {
+    avatarUrl: client.user.displayAvatarURL({
+      size: discord.avatar.size.medium,
+    }),
+  };
+
   for (const n of notify) {
-    const user = (await getUser(client, n.userId)) || client.user;
+    const cacheUser = await getUser(client, n.userId);
+    const user = cacheUser || clientUser;
 
     const embed = new EmbedBuilder()
       .setTitle(n.title ?? `Notification`)
@@ -15,7 +22,7 @@ async function getNotifyEmbeds(client, notify) {
       .setColor("Random")
       .setFooter({
         text: n._id.toString(),
-        iconURL: user.displayAvatarURL({ size: discord.avatar.size.medium }),
+        iconURL: user.avatarUrl,
       });
 
     if (n.message) {
