@@ -1,1 +1,1 @@
-export default (message, callback) => callback(message);
+export default async (message, callback) => await callback(message);

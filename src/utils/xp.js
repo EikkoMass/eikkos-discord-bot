@@ -52,7 +52,7 @@ export async function give(
 
         await level.save();
         cache.set(CACHE_REF, level);
-        callbacks?.after?.(level);
+        await callbacks?.after?.(level);
         return;
       }
     }
@@ -83,7 +83,7 @@ export async function give(
     });
 
     cache.set(CACHE_REF, level);
-    callbacks?.after?.(level);
+    await callbacks?.after?.(level);
   } catch (e) {
     console.log(`Error giving XP: ${e}`);
   }

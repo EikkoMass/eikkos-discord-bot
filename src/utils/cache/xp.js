@@ -1,33 +1,34 @@
-let cache = {};
-let search = {};
+import valkey from "../authenticators/valkey.js";
 
-function get(key) {
-  return cache[key];
+const DEFAULT_TTL = 6;
+
+async function get(key) {
+  let result = await valkey.actions.get(key);
+  return result ? JSON.parse(result) : null;
 }
 
-function set(key, value) {
-  cache[key] = value;
-  search[key] = true;
+async function set(key, value, ttl) {
+  let found = !!value;
+
+  await valkey.actions.set(
+    key,
+    JSON.stringify({
+      found,
+      value,
+    }),
+    {
+      count: ttl ?? DEFAULT_TTL,
+    },
+  );
 }
 
-function searched(key) {
-  return search[key];
-}
-
-export function reset() {
-  cache = {};
-  search = {};
-}
-
-export function resetOne(id) {
-  cache[id] = null;
-  search[id] = false;
+async function exists(key) {
+  let cache = await get(key);
+  return cache !== null && cache.found;
 }
 
 export default {
   get,
   set,
-  searched,
-  reset,
-  resetOne,
+  exists,
 };
