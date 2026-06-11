@@ -104,18 +104,21 @@ async function join(client, interaction) {
 
   const CACHE_REF = `${interaction.guild.id}`;
   const session = sessionCache.get(CACHE_REF);
-  let tts = ttsCache.get(CACHE_REF);
+  let tts;
 
-  if (!tts && !ttsCache.searched(CACHE_REF)) {
+  if (!(await ttsCache.exists(CACHE_REF))) {
     tts = await Tts.findOne({ guildId: CACHE_REF });
-    ttsCache.set(CACHE_REF, tts);
+    console.log("set");
+    await ttsCache.set(CACHE_REF, tts);
   }
 
-  if (!tts) {
+  tts = await ttsCache.get(CACHE_REF);
+  console.log(tts);
+  if (!tts || !tts.found) {
     return await replies.message.error(interaction, words.ConfigRequired);
   }
 
-  if (!tts.active) {
+  if (!tts.value.active) {
     return await replies.message.error(interaction, words.TtsAreDisabled);
   }
 
@@ -131,7 +134,7 @@ async function join(client, interaction) {
       vc,
       " ",
       interaction.guild.id,
-      interaction.guild.channels.cache.get(tts.channelId),
+      interaction.guild.channels.cache.get(tts.value.channelId),
       interaction.guild.locale,
     );
   } else {
@@ -145,7 +148,7 @@ async function join(client, interaction) {
   return await replies.message.success(
     interaction,
     formatMessage(words.Joined, [
-      masks.channel(tts.channelId),
+      masks.channel(tts.value.channelId),
       masks.channel(interaction.member.voice.channel.id),
     ]),
   );
@@ -176,7 +179,7 @@ async function leave(client, interaction) {
 
 async function play(voice, message, guildId, channel, locale) {
   const player = useMainPlayer();
-
+  console.log("play");
   player.play(voice, `tts:${message}`, {
     nodeOptions: {
       metadata: {
@@ -198,14 +201,16 @@ async function event(client, guild, message) {
 
   const TTS_REF = `${message.guildId}`;
 
-  let tts = ttsCache.get(TTS_REF);
+  let tts;
 
-  if (!tts && !ttsCache.searched(TTS_REF)) {
+  if (!(await ttsCache.exists(TTS_REF))) {
     tts = await Tts.findOne({ guildId: TTS_REF });
-    ttsCache.set(TTS_REF, tts);
+    await ttsCache.set(TTS_REF, tts);
   }
 
-  if (!tts || !tts.active) return;
+  tts = await ttsCache.get(TTS_REF);
+
+  if (!tts || !tts.found || !tts.value.active) return;
 
   const member = guild.members.cache.get(message.author.id);
   const voice = member?.voice?.channel;
@@ -214,14 +219,15 @@ async function event(client, guild, message) {
 
   if (
     !sessionCache.includes(TTS_REF, message.author.id) ||
-    (tts.channelId !== message.channelId && voice.id !== message.channelId)
+    (tts.value.channelId !== message.channelId &&
+      voice.id !== message.channelId)
   )
     return;
 
   play(
     voice,
     message.content,
-    guild.channels.cache.get(tts.channelId),
+    guild.channels.cache.get(tts.value.channelId),
     guild.preferredLocale,
   );
 }
@@ -246,7 +252,7 @@ async function channel(client, interaction) {
 
   await tts.save();
 
-  ttsCache.set(CACHE_REF, tts);
+  await ttsCache.set(CACHE_REF, tts);
   return await replies.message.success(
     interaction,
     formatMessage(words.ChangedChannel, [masks.channel(channel)]),
@@ -279,7 +285,7 @@ async function enable(client, interaction) {
   let tts = await Tts.findOne({ guildId: CACHE_REF });
 
   if (!tts) {
-    ttsCache.resetOne(CACHE_REF);
+    await ttsCache.remove(CACHE_REF);
     return await replies.message.error(interaction, words.MissingConfig);
   }
 
@@ -288,7 +294,7 @@ async function enable(client, interaction) {
   }
 
   tts.active = true;
-  ttsCache.set(CACHE_REF, tts);
+  await ttsCache.set(CACHE_REF, tts);
   await tts.save();
   return await replies.message.success(interaction, words.Enabled);
 }
@@ -300,7 +306,7 @@ async function disable(client, interaction) {
   let tts = await Tts.findOne({ guildId: CACHE_REF });
 
   if (!tts) {
-    ttsCache.resetOne(CACHE_REF);
+    await ttsCache.remove(CACHE_REF);
     return await replies.message.error(interaction, words.MissingConfig);
   }
 
@@ -309,7 +315,7 @@ async function disable(client, interaction) {
   }
 
   tts.active = false;
-  ttsCache.set(CACHE_REF, tts);
+  await ttsCache.set(CACHE_REF, tts);
   await tts.save();
   return await replies.message.success(interaction, words.Disabled);
 }

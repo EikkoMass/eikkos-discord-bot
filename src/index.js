@@ -44,9 +44,13 @@ const client = new Client({
     if (!process.env.VALKEY_HOST || !process.env.VALKEY_PORT)
       throw new Error("Missing Valkey host/port, required to use the bot");
 
-    await valkey.actions.connect();
+    let valkeyRes = await valkey.actions.connect();
 
-    console.log("Connected to Valkey");
+    if (valkeyRes.success) {
+      console.log("Connected to Valkey");
+    } else {
+      throw new Error(`Failed to connect to Valkey: ${valkeyRes.error}`);
+    }
   } catch (e) {
     console.log(e);
   }

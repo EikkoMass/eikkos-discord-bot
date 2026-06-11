@@ -1,10 +1,8 @@
 import { GlideClient, TimeUnit } from "@valkey/valkey-glide";
 import dotenv from "dotenv";
 
-let client;
-
-async function connect() {
-  client = await GlideClient.createClient({
+async function newClient() {
+  return await GlideClient.createClient({
     addresses: [
       {
         host: process.env.VALKEY_HOST,
@@ -14,38 +12,73 @@ async function connect() {
   });
 }
 
-async function ping() {
+async function connect() {
+  const client = await newClient();
+  let res = { success: false, error: null };
   try {
-    await connect();
-
-    const response = await client.ping();
-
-    console.log(`Connected! Server responded: ${response}`);
+    await client.ping();
+    res.success = true;
   } catch (error) {
-    console.error(`Connection failed: ${error.message}`);
+    res.error = error.message;
   } finally {
     client.close();
   }
+
+  return res;
 }
 
 async function get(key) {
-  try {
-    await connect();
+  const client = await newClient();
+  let value = null;
 
-    const value = await client.get(key);
-    return value;
+  try {
+    value = await client.get(key);
   } catch (error) {
+    console.log(error);
     console.error(`Failed to get key: ${key}`);
-    return null;
   } finally {
     client.close();
   }
+
+  return value;
+}
+
+async function remove(key) {
+  const client = await newClient();
+  let count = 0;
+
+  try {
+    await client.del([key]);
+  } catch (error) {
+    console.error(`Failed to delete key: ${key}`);
+  } finally {
+    client.close();
+  }
+
+  return count > 0;
+}
+
+async function exists(key) {
+  const client = await newClient();
+  let count = 0;
+
+  try {
+    console.log(client.exists);
+    count = await client.exists([key]);
+  } catch (error) {
+    console.log(error);
+    console.error(`Failed to find key: ${key}`);
+  } finally {
+    client;
+    client.close();
+  }
+
+  return count > 0;
 }
 
 async function set(key, value, ttl) {
+  const client = await newClient();
   try {
-    await connect();
-
     if (ttl) {
       await client.set(key, value, {
         expiry: {
@@ -72,8 +105,9 @@ export default {
   actions: {
     get,
     set,
+    remove,
+    exists,
     connect,
-    ping,
   },
-  client,
+  newClient,
 };

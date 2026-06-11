@@ -23,8 +23,8 @@ async function set(key, value, ttl) {
 }
 
 async function exists(key) {
-  let cache = await get(key);
-  return cache !== null && cache.found;
+  const res = await valkey.actions.get(key);
+  return res !== null && res.found;
 }
 
 export default {

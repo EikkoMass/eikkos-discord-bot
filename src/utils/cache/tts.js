@@ -1,33 +1,47 @@
-let cache = {};
-let search = {};
+import valkey from "../authenticators/valkey.js";
 
-function get(key) {
-  return cache[key];
+const TTL = 7200;
+const PREFIX = `tts:`;
+
+export async function get(id) {
+  let result = await valkey.actions.get(`${PREFIX}${id}`);
+  return result ? JSON.parse(result) : null;
 }
 
-function set(key, value) {
-  cache[key] = value;
-  search[key] = true;
+export async function set(key, value) {
+  let found = !!value;
+
+  console.log(`Setting TTS cache for ${PREFIX}${key}`);
+  console.log(
+    JSON.stringify({
+      found,
+      value,
+    }),
+  );
+
+  await valkey.actions.set(
+    `${PREFIX}${key}`,
+    JSON.stringify({
+      found,
+      value,
+    }),
+    {
+      count: TTL,
+    },
+  );
 }
 
-function resetOne(key) {
-  cache[key] = null;
-  search[key] = false;
+async function exists(key) {
+  return (await valkey.actions.get(`${PREFIX}${key}`)) !== null;
 }
 
-function reset() {
-  cache = {};
-  search = {};
-}
-
-function searched(key) {
-  return search[key];
+export async function remove(key) {
+  return await valkey.actions.remove(`${PREFIX}${key}`);
 }
 
 export default {
   get,
   set,
-  resetOne,
-  reset,
-  searched,
+  exists,
+  remove,
 };
