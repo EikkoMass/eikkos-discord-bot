@@ -102,16 +102,22 @@ async function show(client, interaction) {
   const guildId = interaction.guild.id;
   const CACHE_REF = `${guildId}-${userId}`;
 
-  let level = cache.get(CACHE_REF);
+  let level;
 
-  if (!level) {
+  if (!(await cache.exists(CACHE_REF))) {
     level = await Level.findOne({ guildId, userId });
 
     if (!level) {
       return await replies.message.error(interaction, words.NoLevelFound);
     }
 
-    cache.set(CACHE_REF, level);
+    await cache.set(CACHE_REF, level);
+  }
+
+  level = await cache.get(CACHE_REF);
+
+  if (!level.found) {
+    return await replies.message.error(interaction, words.NoLevelFound);
   }
 
   const userXp = level.xp;

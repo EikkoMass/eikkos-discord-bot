@@ -1,28 +1,35 @@
-let cache = {};
+import valkey from "../authenticators/valkey.js";
 
-let autoCleanTimeout;
-let CLEAN_INTERVAL = 1000 * 60 * 60 * 24; // 1 day
+const DEFAULT_TTL = 60 * 60 * 24;
 
-function get(id) {
-  return cache[id];
+async function get(key) {
+  let result = await valkey.actions.get(`level:${key}`);
+  return result ? JSON.parse(result) : null;
 }
 
-function set(id, value) {
-  cache[id] = value;
+async function set(key, value, ttl) {
+  let found = !!value;
 
-  if (!autoCleanTimeout) {
-    autoCleanTimeout = setTimeout(() => {
-      autoCleanTimeout = null;
-      clear();
-    }, CLEAN_INTERVAL);
-  }
+  await valkey.actions.set(
+    `level:${key}`,
+    JSON.stringify({
+      found,
+      value,
+    }),
+    {
+      count: ttl ?? DEFAULT_TTL,
+    },
+  );
 }
 
-function clear() {
-  cache = {};
+async function exists(key) {
+  const res = await valkey.actions.get(`level:${key}`);
+  console.log(res);
+  return res !== null && res.found;
 }
 
 export default {
   get,
   set,
+  exists,
 };
