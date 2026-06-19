@@ -4,6 +4,8 @@ import getPlayerActionRow from "../../utils/components/playerActionRow.js";
 
 import cache from "../../utils/cache/queue.js";
 
+import PlayerAnalytics from "../../models/playerAnalytics.js";
+
 import { getLocalization } from "../../utils/i18n.js";
 import Enum from "../../enums/player/contexts.js";
 
@@ -49,6 +51,31 @@ export default {
       flags: [MessageFlags.SuppressNotifications],
       components: [getPlayerActionRow()],
     });
+
+    let playerAnalytics = await PlayerAnalytics.findOne({
+      guildId: queue.metadata.guild,
+      link: track.url,
+    });
+
+    if (playerAnalytics) {
+      playerAnalytics.amount += 1;
+      playerAnalytics.lastPlayed = new Date();
+      playerAnalytics.lastUser = track.requestedBy.id;
+    } else {
+      playerAnalytics = new PlayerAnalytics({
+        guildId: queue.metadata.guild,
+        title: track.title,
+        author: queue.currentTrack.author,
+        link: track.url,
+        amount: 1,
+        firstPlayed: new Date(),
+        lastPlayed: new Date(),
+        lastUser: track.requestedBy.id,
+        thumbnail: track.thumbnail,
+      });
+    }
+
+    await playerAnalytics.save();
 
     if (message) {
       cache.set(
