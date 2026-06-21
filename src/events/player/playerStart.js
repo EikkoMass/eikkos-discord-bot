@@ -1,10 +1,11 @@
 import { EmbedBuilder, MessageFlags, Colors } from "discord.js";
-import { GuildQueue, Track } from "discord-player";
+import { GuildQueue, Track as DpTrack } from "discord-player";
 import getPlayerActionRow from "../../utils/components/playerActionRow.js";
 
 import cache from "../../utils/cache/queue.js";
 
-import PlayerAnalytics from "../../models/playerAnalytics.js";
+import Track from "../../models/track.js";
+import TrackAnalytics from "../../models/trackAnalytics.js";
 
 import { getLocalization } from "../../utils/i18n.js";
 import Enum from "../../enums/player/contexts.js";
@@ -14,7 +15,7 @@ export default {
 
   /**
    * @param {GuildQueue} queue
-   * @param {Track} track
+   * @param {DpTrack} track
    */
   callback: async (queue, track) => {
     if (queue.metadata.context === Enum.TTS) return;
@@ -52,30 +53,42 @@ export default {
       components: [getPlayerActionRow()],
     });
 
-    let playerAnalytics = await PlayerAnalytics.findOne({
-      guildId: queue.metadata.guild,
+    let dbTrack = await Track.findOne({
       link: track.url,
     });
 
-    if (playerAnalytics) {
-      playerAnalytics.amount += 1;
-      playerAnalytics.lastPlayed = new Date();
-      playerAnalytics.lastUser = track.requestedBy.id;
-    } else {
-      playerAnalytics = new PlayerAnalytics({
-        guildId: queue.metadata.guild,
+    if (!dbTrack) {
+      dbTrack = new Track({
         title: track.title,
         author: queue.currentTrack.author,
         link: track.url,
+        thumbnail: track.thumbnail,
+      });
+
+      await dbTrack.save();
+    }
+
+    let trackAnalytics = await TrackAnalytics.findOne({
+      guildId: queue.metadata.guild,
+      link: dbTrack._id,
+    });
+
+    if (trackAnalytics) {
+      trackAnalytics.amount += 1;
+      trackAnalytics.lastPlayed = new Date();
+      trackAnalytics.lastUser = track.requestedBy.id;
+    } else {
+      trackAnalytics = new TrackAnalytics({
+        guildId: queue.metadata.guild,
+        trackId: dbTrack._id,
         amount: 1,
         firstPlayed: new Date(),
         lastPlayed: new Date(),
         lastUser: track.requestedBy.id,
-        thumbnail: track.thumbnail,
       });
     }
 
-    await playerAnalytics.save();
+    await trackAnalytics.save();
 
     if (message) {
       cache.set(

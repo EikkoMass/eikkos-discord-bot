@@ -1,8 +1,8 @@
 import { Schema, model } from "mongoose";
 
-const name = "PlayerAnalytics";
+const name = "TrackAnalytics";
 const schema = new Schema({
-  lastUser: {
+  trackId: {
     type: String,
     required: true,
   },
@@ -19,20 +19,9 @@ const schema = new Schema({
     required: true,
     default: Date.now,
   },
-  title: {
+  lastUser: {
     type: String,
     required: true,
-  },
-  author: {
-    type: String,
-    required: true,
-  },
-  link: {
-    type: String,
-    required: true,
-  },
-  thumbnail: {
-    type: String,
   },
   amount: {
     type: Number,
