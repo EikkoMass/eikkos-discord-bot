@@ -53,42 +53,46 @@ export default {
       components: [getPlayerActionRow()],
     });
 
-    let dbTrack = await Track.findOne({
-      link: track.url,
-    });
-
-    if (!dbTrack) {
-      dbTrack = new Track({
-        title: track.title,
-        author: queue.currentTrack.author,
+    try {
+      let dbTrack = await Track.findOne({
         link: track.url,
-        thumbnail: track.thumbnail,
       });
 
-      await dbTrack.save();
-    }
+      if (!dbTrack) {
+        dbTrack = new Track({
+          title: track.title,
+          author: queue.currentTrack.author,
+          link: track.url,
+          thumbnail: track.thumbnail,
+        });
 
-    let trackAnalytics = await TrackAnalytics.findOne({
-      guildId: queue.metadata.guild,
-      link: dbTrack._id,
-    });
+        await dbTrack.save();
+      }
 
-    if (trackAnalytics) {
-      trackAnalytics.amount += 1;
-      trackAnalytics.lastPlayed = new Date();
-      trackAnalytics.lastUser = track.requestedBy.id;
-    } else {
-      trackAnalytics = new TrackAnalytics({
+      let trackAnalytics = await TrackAnalytics.findOne({
         guildId: queue.metadata.guild,
-        trackId: dbTrack._id,
-        amount: 1,
-        firstPlayed: new Date(),
-        lastPlayed: new Date(),
-        lastUser: track.requestedBy.id,
+        link: dbTrack._id,
       });
-    }
 
-    await trackAnalytics.save();
+      if (trackAnalytics) {
+        trackAnalytics.amount += 1;
+        trackAnalytics.lastPlayed = new Date();
+        trackAnalytics.lastUser = track.requestedBy.id;
+      } else {
+        trackAnalytics = new TrackAnalytics({
+          guildId: queue.metadata.guild,
+          trackId: dbTrack._id,
+          amount: 1,
+          firstPlayed: new Date(),
+          lastPlayed: new Date(),
+          lastUser: track.requestedBy.id,
+        });
+      }
+
+      await trackAnalytics.save();
+    } catch (error) {
+      // ignore
+    }
 
     if (message) {
       cache.set(
