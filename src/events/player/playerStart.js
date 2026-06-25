@@ -71,7 +71,7 @@ export default {
 
       let trackAnalytics = await TrackAnalytics.findOne({
         guildId: queue.metadata.guild,
-        link: dbTrack._id,
+        trackId: dbTrack._id.toString(),
       });
 
       if (trackAnalytics) {
