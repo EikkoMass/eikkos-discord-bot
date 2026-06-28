@@ -1,7 +1,7 @@
 import valkey from "../authenticators/valkey.js";
 
 const TTL = 7200;
-const PREFIX = `tts:`;
+const PREFIX = `track:`;
 
 export async function get(id) {
   let result = await valkey.actions.get(`${PREFIX}${id}`);
@@ -11,8 +11,7 @@ export async function get(id) {
 export async function set(key, value) {
   let found = !!value;
 
-  // console.log(`Setting TTS cache for ${PREFIX}${key}`);
-
+  // console.log(`Setting track info cache for ${PREFIX}${key}`);
   await valkey.actions.set(
     `${PREFIX}${key}`,
     JSON.stringify({

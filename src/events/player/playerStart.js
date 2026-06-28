@@ -7,6 +7,8 @@ import cache from "../../utils/cache/queue.js";
 import Track from "../../models/track.js";
 import TrackAnalytics from "../../models/trackAnalytics.js";
 
+import trackCache from "../../utils/cache/track.js";
+
 import { getLocalization } from "../../utils/i18n.js";
 import Enum from "../../enums/player/contexts.js";
 
@@ -54,24 +56,35 @@ export default {
     });
 
     try {
-      let dbTrack = await Track.findOne({
-        link: track.url,
-      });
+      let cacheRef = `${btoa(track.url)}`;
+      let trackd;
 
-      if (!dbTrack) {
-        dbTrack = new Track({
-          title: track.title,
-          author: queue.currentTrack.author,
+      if (!(await trackCache.exists(cacheRef))) {
+        let dbTrack = await Track.findOne({
           link: track.url,
-          thumbnail: track.thumbnail,
         });
 
-        await dbTrack.save();
+        if (!dbTrack) {
+          dbTrack = new Track({
+            title: track.title,
+            author: queue.currentTrack.author,
+            link: track.url,
+            thumbnail: track.thumbnail,
+          });
+
+          await dbTrack.save();
+        }
+
+        await trackCache.set(cacheRef, dbTrack);
+        trackd = dbTrack;
+      } else {
+        trackd = await trackCache.get(cacheRef);
+        trackd = Track.Hydrate(trackd.value);
       }
 
       let trackAnalytics = await TrackAnalytics.findOne({
         guildId: queue.metadata.guild,
-        trackId: dbTrack._id.toString(),
+        trackId: trackd._id.toString(),
       });
 
       if (trackAnalytics) {
@@ -81,7 +94,7 @@ export default {
       } else {
         trackAnalytics = new TrackAnalytics({
           guildId: queue.metadata.guild,
-          trackId: dbTrack._id,
+          trackId: trackd._id,
           amount: 1,
           firstPlayed: new Date(),
           lastPlayed: new Date(),
