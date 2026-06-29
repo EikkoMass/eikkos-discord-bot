@@ -57,9 +57,9 @@ export default {
 
     try {
       let cacheRef = `${btoa(track.url)}`;
-      let trackd;
+      let trackd = await trackCache.get(cacheRef);
 
-      if (!(await trackCache.exists(cacheRef))) {
+      if (trackd === null) {
         let dbTrack = await Track.findOne({
           link: track.url,
         });
@@ -78,8 +78,7 @@ export default {
         await trackCache.set(cacheRef, dbTrack);
         trackd = dbTrack;
       } else {
-        trackd = await trackCache.get(cacheRef);
-        trackd = Track.Hydrate(trackd.value);
+        trackd = Track.hydrate(trackd.value);
       }
 
       let trackAnalytics = await TrackAnalytics.findOne({

@@ -26,10 +26,9 @@ export async function give(
 
   const CACHE_REF = `${guildId}${userId}`;
   try {
-    let level;
-    let exist = await cache.get(CACHE_REF);
+    let level = await cache.get(CACHE_REF);
 
-    if (!exist || !exist.found) {
+    if (level === null) {
       level = await Level.findOne({
         userId: userId,
         guildId: guildId,
@@ -51,13 +50,12 @@ export async function give(
         }
 
         await level.save();
+        await cache.set(CACHE_REF, level);
+        await callbacks?.after?.(level);
+        return;
       }
-
-      await cache.set(CACHE_REF, level);
-      await callbacks?.after?.(level);
-      return;
     } else {
-      level = Level.hydrate((await cache.get(CACHE_REF)).value);
+      level = Level.hydrate(level.value);
     }
 
     level.xp += amount;

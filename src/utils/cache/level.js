@@ -22,14 +22,7 @@ async function set(key, value, ttl) {
   );
 }
 
-async function exists(key) {
-  const res = await valkey.actions.get(`level:${key}`);
-  console.log(res);
-  return res !== null && res.found;
-}
-
 export default {
   get,
   set,
-  exists,
 };
