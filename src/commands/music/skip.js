@@ -6,7 +6,7 @@ import cache from "../../utils/cache/queue.js";
 import { getLocalization } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
 
-import discord from "../../configs/discord.json" with { type: "json" };;
+import discord from "../../configs/discord.json" with { type: "json" };
 
 export default {
   name: "skip",
@@ -27,6 +27,8 @@ export default {
         context: discord.replies.edit,
       });
     }
+
+    const CACHE_REF = `${queue.metadata.guild}`;
 
     if (cache.get(CACHE_REF)) {
       await cache.get(CACHE_REF)();
