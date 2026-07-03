@@ -2,7 +2,9 @@ import cache from "../cache/user.js";
 import discord from "../../configs/discord.json" with { type: "json" };
 
 export async function getUser(client, userId) {
-  let user = await cache.get(`user:${userId}`);
+  const CACHE_REF = `${userId}`;
+
+  let user = await cache.get(CACHE_REF);
 
   if (!user) {
     try {
@@ -18,7 +20,7 @@ export async function getUser(client, userId) {
         };
       }
 
-      await cache.set(`user:${userId}`, user);
+      await cache.set(CACHE_REF, user);
     } catch (e) {
       console.log(`usuario nao encontrado: ${e}`);
     }

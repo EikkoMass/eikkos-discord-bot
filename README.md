@@ -46,6 +46,7 @@ after that, create a new container with the command:
 your container must be already running, you can manage the bot execution with the commands:
 
 `docker start bot`
+
 `docker stop bot`
 
 ## Building a Slash Command
