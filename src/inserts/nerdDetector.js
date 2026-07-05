@@ -30,7 +30,7 @@ export default {
       const isFire = getRandom() > 80;
 
       const file = new AttachmentBuilder(
-        `src/gifs/${isFire ? "fire" : "nerd"}.gif`,
+        `gifs/${isFire ? "fire" : "nerd"}.gif`,
       );
       await message.reply({
         content: isFire
