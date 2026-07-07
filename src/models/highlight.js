@@ -17,6 +17,14 @@ const scheme = new Schema({
     type: String,
     required: true,
   },
+  highlightChannelId: {
+    type: String,
+    required: true,
+  },
+  highlightMessageId: {
+    type: String,
+    required: true,
+  },
   creationDate: {
     type: Date,
     required: true,

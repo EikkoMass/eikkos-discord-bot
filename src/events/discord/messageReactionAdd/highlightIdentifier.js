@@ -47,32 +47,38 @@ export default async (client, reaction, user) => {
 
   const cacheIdentifier = `${guildId}$${channelId}$${messageId}`;
 
-  let highlight = highlightCache.get(cacheIdentifier);
+  let highlight = await highlightCache.get(cacheIdentifier);
 
-  if (!highlight && !highlightCache.searched(cacheIdentifier)) {
+  if (!highlight) {
     highlight = await Highlight.findOne({
       guildId,
       channelId,
       messageId,
     });
-
-    highlightCache.set(cacheIdentifier, highlight);
+  } else {
+    highlight = Highlight.hydrate(highlight.value);
   }
-
-  const channel = await client.channels.cache.get(highlightGuild.channelId);
-
-  if (!channel) return;
 
   if (highlight) {
     if (highlight.count <= reaction.count) return;
 
-    highlight.count = reaction.count;
-    await highlight.save();
+    const channel = await client.channels.cache.get(
+      highlight.highlightChannelId,
+    );
 
-    const message = await channel.messages.fetch(highlight.messageId);
+    if (!channel) return;
+
+    highlight.count = reaction.count;
+
+    await highlight.save();
+    await highlightCache.set(cacheIdentifier, highlight);
+
+    const message = await channel.messages.fetch(
+      highlight.highlightMessageId.toString(),
+    );
 
     await message.edit({
-      content: `⭐ ${highlight.count} - ${channel.requester.toString()}`,
+      content: `⭐ ${highlight.count} - ${masks.channel(highlight.channelId)}`,
       embeds: [
         await getHighlightEmbed(
           channel.guild,
@@ -85,7 +91,10 @@ export default async (client, reaction, user) => {
     return;
   }
 
-  let message = reaction.message.content;
+  const channel = await client.channels.cache.get(highlightGuild.channelId);
+
+  if (!channel) return;
+
   let attachment;
   let fileName;
 
@@ -101,21 +110,21 @@ export default async (client, reaction, user) => {
     }
   }
 
-  let newHighlight = await Highlight.insertOne({
-    guildId: reaction.message.guildId,
-    userId: reaction.message.author.id,
-    messageId: reaction.message.id,
-    channelId: reaction.message.channelId,
-    emojiId: reaction.emoji.id,
-    message,
-    attachment,
-    fileName,
-    count: reaction.count,
-    creationDate: reaction.message.createdAt,
-  });
-
   if (channel && channel.isTextBased()) {
-    channel.send({
+    let newHighlight = new Highlight({
+      guildId: reaction.message.guildId,
+      userId: reaction.message.author.id,
+      messageId: reaction.message.id,
+      channelId: reaction.message.channelId,
+      emojiId: reaction.emoji.id,
+      message: reaction.message.content,
+      attachment,
+      fileName,
+      count: reaction.count,
+      creationDate: reaction.message.createdAt,
+    });
+
+    const message = await channel.send({
       content: `⭐ ${newHighlight.count} - ${masks.channel(newHighlight.channelId)}`,
       embeds: [
         await getHighlightEmbed(
@@ -126,5 +135,11 @@ export default async (client, reaction, user) => {
       ],
       components: [await getHighlightMessageButton(newHighlight)],
     });
+
+    newHighlight.highlightMessageId = message.id;
+    newHighlight.highlightChannelId = channel.id;
+
+    await newHighlight.save();
+    await highlightCache.set(cacheIdentifier, newHighlight);
   }
 };
