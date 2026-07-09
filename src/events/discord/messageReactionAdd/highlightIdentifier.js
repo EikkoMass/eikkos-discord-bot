@@ -24,17 +24,21 @@ export default async (client, reaction, user) => {
   if (reaction.me) return;
   if (reaction._emoji.name !== "⭐") return;
 
-  let highlightGuild = highlightGuildCache.get(reaction.message.guildId);
+  let highlightGuild = await highlightGuildCache.get(reaction.message.guildId);
 
-  if (
-    !highlightGuild &&
-    !highlightGuildCache.searched(reaction.message.guildId)
-  ) {
+  if(highlightGuild) {
+    if (highlightGuild.found) {
+      highlightGuild = highlightGuild.value;
+    } else {
+      highlightGuild = null;
+    }
+  }
+  else {
     highlightGuild = await HighlightGuild.findOne({
       guildId: reaction.message.guildId,
     });
 
-    highlightGuildCache.set(reaction.message.guildId, highlightGuild);
+    await highlightGuildCache.set(reaction.message.guildId, highlightGuild);
   }
 
   if (!highlightGuild || !highlightGuild.active) return;

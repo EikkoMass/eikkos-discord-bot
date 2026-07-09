@@ -1,43 +1,34 @@
-let cache = {};
-let search = {};
+import valkey from "../authenticators/valkey.js";
 
-let autoCleanTimeout;
-let CLEAN_INTERVAL = 1000 * 60 * 60 * 24; // 1 day
+const TTL = 60 * 60 * 24;
+const PREFIX = `highlightGuid:`;
 
-export function get(id) {
-  return cache[id];
+export async function get(id) {
+  let result = await valkey.actions.get(`${PREFIX}${id}`);
+  return result ? JSON.parse(result) : null;
 }
 
-export function set(id, highlight) {
-  search[id] = true;
-  cache[id] = highlight;
+export async function set(key, value) {
+  let found = !!value;
 
-  if (!autoCleanTimeout) {
-    autoCleanTimeout = setTimeout(() => {
-      autoCleanTimeout = null;
-      reset();
-    }, CLEAN_INTERVAL);
-  }
+  await valkey.actions.set(
+    `${PREFIX}${key}`,
+    JSON.stringify({
+      found,
+      value,
+    }),
+    {
+      count: TTL,
+    },
+  );
 }
 
-export function reset() {
-  cache = {};
-  search = {};
-}
-
-export function resetOne(id) {
-  cache[id] = null;
-  search[id] = false;
-}
-
-export function searched(id) {
-  return search[id];
+export async function remove(key) {
+  return await valkey.actions.remove(`${PREFIX}${key}`);
 }
 
 export default {
   get,
   set,
-  reset,
-  resetOne,
-  searched,
+  remove,
 };

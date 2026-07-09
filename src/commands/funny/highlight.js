@@ -103,7 +103,7 @@ async function disable(client, interaction) {
     return await reply.message.error(interaction, words.NotConfigured);
   }
 
-  highlightGuildCache.set(interaction.guild.id, result);
+  await highlightGuildCache.set(interaction.guild.id, result);
   return await reply.message.success(interaction, words.Disabled);
 }
 
@@ -128,7 +128,7 @@ async function enable(client, interaction) {
   highlightGuild.active = true;
   await highlightGuild.save();
 
-  highlightGuildCache.set(interaction.guild.id, highlightGuild);
+  await highlightGuildCache.set(interaction.guild.id, highlightGuild);
   return await reply.message.success(interaction, words.Enabled);
 }
 
@@ -168,7 +168,7 @@ async function config(client, interaction) {
     );
   }
 
-  highlightGuildCache.set(interaction.guild.id, highlight);
+  await highlightGuildCache.set(interaction.guild.id, highlight);
 
   return await reply.message.success(interaction, words.Enabled);
 }
@@ -176,14 +176,22 @@ async function config(client, interaction) {
 async function status(client, interaction) {
   const words = await getLocalization(interaction.locale, `highlight`);
 
-  let guild = highlightGuildCache.get(interaction.guild.id);
+  let guild = await highlightGuildCache.get(interaction.guild.id);
 
-  if (!guild) {
+  if(guild) {
+    if(guild.found) {
+      guild = guild.value;
+    } else {
+      guild = null;
+    }
+  }
+  else
+  {
     guild = await HighlightGuild.findOne({
       guildId: interaction.guild.id,
     });
 
-    highlightGuildCache.set(interaction.guild.id, guild);
+    await highlightGuildCache.set(interaction.guild.id, guild);
   }
 
   let count = await Highlight.countDocuments({
