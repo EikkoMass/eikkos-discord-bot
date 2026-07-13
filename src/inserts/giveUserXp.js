@@ -7,7 +7,7 @@ import origins from "../enums/xp/origins.js";
 const COOLDOWN_IN_SECONDS = 12;
 
 const getCacheRef = (message) =>
-  `xp:${message.guild.id}_${message.author.id}_${origins.COMMENT}`;
+  `${message.guild.id}_${message.author.id}_${origins.COMMENT}`;
 
 export default {
   name: "giveUserXP",
