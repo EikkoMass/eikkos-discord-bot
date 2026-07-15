@@ -11,6 +11,12 @@ import { getLocalization } from "../utils/i18n.js";
 
 const MIN_SIZE = 3;
 
+// %
+const maxPerc = 100;
+const probPerc = 1;
+const probPercFire = 20;
+const probPercBonus = 3;
+
 export default {
   name: "nerdDetector",
   description: "quote the user with the nerdiest comment possible",
@@ -24,10 +30,8 @@ export default {
   callback: async (client, message) => {
     if (message.author.bot) return;
 
-    // 1%
-    if (message.content?.length > MIN_SIZE && getRandom() > 99) {
-      // 20%
-      const isFire = getRandom() > 80;
+    if (message.content?.length > MIN_SIZE && getRandom() > (maxPerc - probPerc)) {
+      const isFire = getRandom() > (maxPerc - probPercFire);
 
       const file = new AttachmentBuilder(
         `gifs/${isFire ? "fire" : "nerd"}.gif`,
@@ -39,8 +43,7 @@ export default {
         files: [file],
       });
 
-      // 3%
-      if (!isFire && getRandom() > 97) {
+      if (!isFire && getRandom() > (maxPerc - probPercBonus)) {
         const words = await getLocalization(
           message.guild.preferredLocale,
           "nerd-detector",

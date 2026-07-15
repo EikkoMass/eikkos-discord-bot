@@ -1,6 +1,6 @@
 import valkey from "../authenticators/valkey.js";
 
-const DEFAULT_TTL = 60 * 60 * 24;
+const DEFAULT_TTL = 86400;
 
 async function get(key) {
   let result = await valkey.actions.get(`level:${key}`);
