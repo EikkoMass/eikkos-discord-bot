@@ -7,7 +7,7 @@ import {
 import ms from "ms";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
-import cache from "../../utils/cache/reminder.js";
+import cache from "../../cache/reminder.js";
 import Reminder from "../../models/reminder.js";
 
 import reply from "../../utils/core/replies.js";

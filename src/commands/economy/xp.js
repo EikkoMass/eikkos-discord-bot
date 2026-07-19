@@ -10,7 +10,7 @@ import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import replies from "../../utils/core/replies.js";
 
 import Level from "../../models/level.js";
-import cache from "../../utils/cache/level.js";
+import cache from "../../cache/level.js";
 
 import { validator as hasFlag } from "../../utils/core/flags.js";
 

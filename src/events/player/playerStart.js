@@ -2,12 +2,12 @@ import { EmbedBuilder, MessageFlags, Colors } from "discord.js";
 import { GuildQueue, Track as DpTrack } from "discord-player";
 import getPlayerActionRow from "../../utils/components/playerActionRow.js";
 
-import cache from "../../utils/cache/queue.js";
+import cache from "../../cache/queue.js";
 
 import Track from "../../models/track.js";
 import TrackAnalytics from "../../models/trackAnalytics.js";
 
-import trackCache from "../../utils/cache/track.js";
+import trackCache from "../../cache/track.js";
 
 import { getLocalization } from "../../utils/i18n.js";
 import Enum from "../../enums/player/contexts.js";

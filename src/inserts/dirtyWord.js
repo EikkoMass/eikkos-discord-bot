@@ -1,6 +1,6 @@
 import { Client, Message } from "discord.js";
 import DirtyWord from "../models/dirtyword.js";
-import cache from "../utils/cache/dirty-word.js";
+import cache from "../cache/dirty-word.js";
 
 import Enum from "../enums/dirtyWord/types.js";
 

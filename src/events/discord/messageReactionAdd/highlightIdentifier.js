@@ -3,8 +3,8 @@ import Highlight from "../../../models/highlight.js";
 
 import masks from "../../../utils/core/mask.js";
 
-import highlightGuildCache from "../../../utils/cache/highlight-guild.js";
-import highlightCache from "../../../utils/cache/highlight.js";
+import highlightGuildCache from "../../../cache/highlight-guild.js";
+import highlightCache from "../../../cache/highlight.js";
 
 import getHighlightEmbed from "../../../utils/components/getHighlightEmbed.js";
 import getHighlightMessageButton from "../../../utils/components/getHighlightMessageButton.js";

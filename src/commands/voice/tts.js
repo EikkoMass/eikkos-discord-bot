@@ -11,8 +11,8 @@ import Enum from "../../enums/player/contexts.js";
 
 import Tts from "../../models/tts.js";
 
-import sessionCache from "../../utils/cache/ttsSession.js";
-import ttsCache from "../../utils/cache/tts.js";
+import sessionCache from "../../cache/ttsSession.js";
+import ttsCache from "../../cache/tts.js";
 
 const OPTS = {
   join: {

@@ -5,7 +5,7 @@ import getLocal from "../utils/importers/getLocal.js";
 import replies from "../utils/core/replies.js";
 
 import { getLocalization, formatMessage } from "../utils/i18n.js";
-import cache from "../utils/cache/commands/context-menu.js";
+import cache from "../cache/commands/context-menu.js";
 
 const handler = async (client, interaction) => {
   const words = await getLocalization(

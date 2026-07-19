@@ -2,7 +2,7 @@ import actionTypes from "../configs/actionTypes.json" with { type: "json" };
 
 import getLocal from "../utils/importers/getLocal.js";
 import { getLocalization, formatMessage } from "../utils/i18n.js";
-import cache from "../utils/cache/commands/input.js";
+import cache from "../cache/commands/input.js";
 import replies from "../utils/core/replies.js";
 
 import config from "../../config.json" with { type: "json" };

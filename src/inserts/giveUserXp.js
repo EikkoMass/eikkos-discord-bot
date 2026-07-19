@@ -1,7 +1,7 @@
 import { Client, Message } from "discord.js";
 import { getRandom } from "../utils/core/randomizer.js";
 import xp from "../utils/xp.js";
-import cache from "../utils/cache/xp.js";
+import cache from "../cache/xp.js";
 import origins from "../enums/xp/origins.js";
 
 const COOLDOWN_IN_SECONDS = 12;

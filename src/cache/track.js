@@ -1,4 +1,4 @@
-import valkey from "../authenticators/valkey.js";
+import valkey from "../utils/authenticators/valkey.js";
 
 const TTL = 7200;
 const PREFIX = `track:`;

@@ -1,4 +1,4 @@
-import valkey from "../authenticators/valkey.js";
+import valkey from "../utils/authenticators/valkey.js";
 
 const DEFAULT_TTL = 6;
 const PREFIX = `xp:`;

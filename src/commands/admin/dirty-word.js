@@ -4,7 +4,7 @@ import {
   PermissionFlagsBits,
 } from "discord.js";
 import DirtyWord from "../../models/dirtyword.js";
-import cache from "../../utils/cache/dirty-word.js";
+import cache from "../../cache/dirty-word.js";
 
 import reply from "../../utils/core/replies.js";
 import discord from "../../configs/discord.json" with { type: "json" };

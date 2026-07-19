@@ -1,4 +1,4 @@
-import cache from "../cache/user.js";
+import cache from "../../cache/user.js";
 import discord from "../../configs/discord.json" with { type: "json" };
 
 export async function getUser(client, userId) {

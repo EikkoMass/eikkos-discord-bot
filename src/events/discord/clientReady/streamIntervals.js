@@ -1,5 +1,5 @@
 import getRandomStream from "../../../utils/components/getRandomStream.js";
-import cache from "../../../utils/cache/activity.js";
+import cache from "../../../cache/activity.js";
 
 let initStream = true;
 

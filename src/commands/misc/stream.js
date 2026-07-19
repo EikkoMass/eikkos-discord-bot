@@ -3,7 +3,7 @@ import { ApplicationCommandOptionType, Client } from "discord.js";
 import getRandomStream from "../../utils/components/getRandomStream.js";
 import Stream from "../../models/stream.js";
 
-import cache from "../../utils/cache/activity.js";
+import cache from "../../cache/activity.js";
 import reply from "../../utils/core/replies.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";

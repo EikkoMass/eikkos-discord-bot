@@ -1,6 +1,6 @@
 import actionTypes from "../configs/actionTypes.json" with { type: "json" };
 import getLocal from "../utils/importers/getLocal.js";
-import cache from "../utils/cache/autocomplete.js";
+import cache from "../cache/autocomplete.js";
 
 const handler = async (client, interaction) => {
   const commandName = interaction.commandName;

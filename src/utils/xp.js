@@ -1,6 +1,6 @@
 import { EmbedBuilder } from "@discordjs/builders";
 import Level from "../models/level.js";
-import cache from "./cache/level.js";
+import cache from "../cache/level.js";
 import masks from "./core/mask.js";
 
 export function calc(level) {

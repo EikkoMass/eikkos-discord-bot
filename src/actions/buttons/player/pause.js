@@ -2,7 +2,7 @@ import { Client, MessageFlags } from "discord.js";
 import { useQueue } from "discord-player";
 
 import reply from "../../../utils/core/replies.js";
-import cache from "../../../utils/cache/queue.js";
+import cache from "../../../cache/queue.js";
 
 import { getLocalization } from "../../../utils/i18n.js";
 

@@ -15,7 +15,7 @@ import masks from "../../utils/core/mask.js";
 import HighlightGuild from "../../models/highlightGuild.js";
 import Highlight from "../../models/highlight.js";
 
-import highlightGuildCache from "../../utils/cache/highlight-guild.js";
+import highlightGuildCache from "../../cache/highlight-guild.js";
 
 const OPTS = {
   enable: {

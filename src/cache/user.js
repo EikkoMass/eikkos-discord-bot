@@ -1,7 +1,7 @@
-import valkey from "../authenticators/valkey.js";
+import valkey from "../utils/authenticators/valkey.js";
 
-const TTL = 60 * 60 * 24;
-const PREFIX = `highlightGuid:`;
+const TTL = 60;
+const PREFIX = `user:`;
 
 export async function get(id) {
   let result = await valkey.actions.get(`${PREFIX}${id}`);
@@ -23,12 +23,7 @@ export async function set(key, value) {
   );
 }
 
-export async function remove(key) {
-  return await valkey.actions.remove(`${PREFIX}${key}`);
-}
-
 export default {
   get,
   set,
-  remove,
 };

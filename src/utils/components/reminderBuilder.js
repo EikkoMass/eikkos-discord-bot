@@ -1,6 +1,6 @@
 import { EmbedBuilder, Guild } from "discord.js";
 import Reminder from "../../models/reminder.js";
-import cache from "../cache/reminder.js";
+import cache from "../../cache/reminder.js";
 import { formatMessage, getLocalization } from "../i18n.js";
 import masks from "../core/mask.js";
 import prettyMs from "pretty-ms";

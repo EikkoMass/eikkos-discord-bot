@@ -2,7 +2,7 @@ import getLocal from "../utils/importers/getLocal.js";
 import actionTypes from "../configs/actionTypes.json" with { type: "json" };
 
 import { Client, EmbedBuilder, MessageFlags } from "discord.js";
-import cache from "../utils/cache/actions.js";
+import cache from "../cache/actions.js";
 import path from "path";
 
 /**

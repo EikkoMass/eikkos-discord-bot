@@ -1,7 +1,7 @@
-import valkey from "../authenticators/valkey.js";
+import valkey from "../utils/authenticators/valkey.js";
 
-const TTL = 1200;
-const PREFIX = `highlight:`;
+const TTL = 7200;
+const PREFIX = `tts:`;
 
 export async function get(id) {
   let result = await valkey.actions.get(`${PREFIX}${id}`);
@@ -10,6 +10,8 @@ export async function get(id) {
 
 export async function set(key, value) {
   let found = !!value;
+
+  // console.log(`Setting TTS cache for ${PREFIX}${key}`);
 
   await valkey.actions.set(
     `${PREFIX}${key}`,
@@ -23,6 +25,10 @@ export async function set(key, value) {
   );
 }
 
+async function exists(key) {
+  return (await valkey.actions.get(`${PREFIX}${key}`)) !== null;
+}
+
 export async function remove(key) {
   return await valkey.actions.remove(`${PREFIX}${key}`);
 }
@@ -30,5 +36,6 @@ export async function remove(key) {
 export default {
   get,
   set,
+  exists,
   remove,
 };
