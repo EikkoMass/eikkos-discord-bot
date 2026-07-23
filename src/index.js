@@ -70,7 +70,7 @@ const client = new Client({
   if (!process.env.IGDB_CLIENT_ID || !process.env.IGDB_CLIENT_SECRET) {
     console.log(`Missing IGDB credentials, skipping authentication!`);
   } else {
-    await igdb.authenticate();
+    await igdb.getToken();
   }
 
   eventHandler(client);

@@ -12,7 +12,7 @@ export default {
    */
   callback: async (client, interaction) => {
     try {
-      const token = getToken();
+      const token = await getToken();
 
       if (!process.env.IGDB_CLIENT_ID)
         return interaction

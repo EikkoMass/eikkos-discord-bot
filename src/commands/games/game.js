@@ -47,7 +47,7 @@ async function search(client, interaction) {
   const query = interaction.options?.get("query").value;
   const words = await getLocalization(interaction.locale, `game`);
 
-  const token = getToken();
+  const token = await getToken();
 
   if (query === -1 || !process.env.IGDB_CLIENT_ID || !token?.access_token) {
     return await reply.message.info(
@@ -79,10 +79,10 @@ async function search(client, interaction) {
   const fields = [
     {
       name: words.Keywords,
-      value: (games[0].keywords.length > 10
+      value: (((games[0].keywords?.length ?? 0) > 10
         ? games[0].keywords.splice(0, 10)
         : games[0].keywords
-      )
+      ) ?? [{ name: words.None }])
         .map((tag) => tag.name)
         .join(", "),
     },

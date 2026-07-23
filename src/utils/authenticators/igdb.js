@@ -1,14 +1,21 @@
+import cache from "../../cache/igdb.js";
+
 export default {
-  authenticate,
-  getToken,
+  getToken
 };
 
-const MAX_SAFE_INTEGER = 2147483647;
+const CACHE_IGDB_KEY = "token";
 
-let tokenObj = {};
+export async function getToken() {
 
-export function getToken() {
-  return tokenObj;
+  const tokenObj = await cache.get(CACHE_IGDB_KEY);
+  if (!tokenObj || !tokenObj.found) {
+    const token = await authenticate();
+    await cache.set(CACHE_IGDB_KEY, token, token.expires_in);
+    return token;
+  }
+  console.log("log");
+  return tokenObj.value;
 }
 
 export async function authenticate() {
@@ -20,13 +27,5 @@ export async function authenticate() {
     },
   );
 
-  const json = await igdb.json();
-
-  tokenObj = json;
-
-  const expiration = tokenObj.expires_in * 1000;
-  setTimeout(
-    authenticate,
-    expiration > MAX_SAFE_INTEGER ? MAX_SAFE_INTEGER : expiration,
-  );
+  return await igdb.json();
 }

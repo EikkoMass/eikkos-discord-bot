@@ -10,7 +10,7 @@ import reply from "../../utils/core/replies.js";
 import discord from "../../configs/discord.json" with { type: "json" };
 import actions from "../../configs/actions.json" with { type: "json" };
 
-import { getLocalization, formatMessage } from "../../utils/i18n.js";
+import { getLocalization } from "../../utils/i18n.js";
 import getPaginator from "../../utils/components/getPaginator.js";
 import getDirtyWordEmbeds from "../../utils/components/getDirtyWordEmbeds.js";
 
