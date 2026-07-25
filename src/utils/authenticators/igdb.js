@@ -14,7 +14,7 @@ export async function getToken() {
     await cache.set(CACHE_IGDB_KEY, token, token.expires_in);
     return token;
   }
-  console.log("log");
+
   return tokenObj.value;
 }
 

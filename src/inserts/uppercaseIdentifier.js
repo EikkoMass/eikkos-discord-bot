@@ -2,6 +2,8 @@ import { Client, Message } from "discord.js";
 import { getRandom } from "../utils/core/randomizer.js";
 
 const PATTERN = /[a-zA-Z ]+/g;
+const maxPerc = 100;
+const probBlindEye = 40;
 
 export default {
   name: "uppercaseIdentifier",
@@ -19,6 +21,6 @@ export default {
   callback: async (client, message) => {
     if (!message.inGuild() || message.author.bot) return;
 
-    if (getRandom() > 60) await message.reply("Keep your voice down! >_>");
+    if (getRandom() > (maxPerc - probBlindEye)) await message.reply("Keep your voice down! >_>");
   },
 };

@@ -63,10 +63,10 @@ async function exists(key) {
   let count = 0;
 
   try {
-    console.log(client.exists);
+    //console.log(client.exists);
     count = await client.exists([key]);
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     console.error(`Failed to find key: ${key}`);
   } finally {
     client;

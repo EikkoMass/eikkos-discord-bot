@@ -4,7 +4,10 @@ import xp from "../utils/xp.js";
 import cache from "../cache/xp.js";
 import origins from "../enums/xp/origins.js";
 
-const COOLDOWN_IN_SECONDS = 12;
+const COOLDOWN_IN_SECONDS = 15;
+
+const minXp = 5;
+const maxXp = 10;
 
 const getCacheRef = (message) =>
   `${message.guild.id}_${message.author.id}_${origins.COMMENT}`;
@@ -24,7 +27,7 @@ export default {
    *  @param {Message} message
    */
   callback: async (client, message) => {
-    const xpToGive = getRandom(5, 10);
+    const xpToGive = getRandom(minXp, maxXp);
 
     await xp.give(message.author, message.guild, message.channel, xpToGive, {
       after: async (level) => {
