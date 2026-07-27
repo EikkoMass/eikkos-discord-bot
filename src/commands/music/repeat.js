@@ -14,7 +14,7 @@ export default {
    *  @param  interaction
    */
   callback: async (client, interaction) => {
-    const words = await getLocalization(interaction.locale, `autorole`);
+    const words = await getLocalization(interaction.locale, `repeat`);
 
     const repeatOption = interaction.options.get("type")?.value;
 
