@@ -2,11 +2,13 @@ import User from "../../models/user.js";
 import { Client, MessageFlags } from "discord.js";
 
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
+import xp from "../../utils/xp.js";
 
 import replies from "../../utils/core/replies.js";
 import discord from "../../configs/discord.json" with { type: "json" };
 
 const dailyAmount = 1000;
+const xpToGive = 10;
 
 export default {
   name: "daily",
@@ -25,10 +27,6 @@ export default {
     }
 
     try {
-      await interaction.deferReply({
-        flags: [MessageFlags.Ephemeral],
-      });
-
       let query = {
         userId: interaction.member.id,
         guildId: interaction.guild.id,
@@ -41,6 +39,10 @@ export default {
         const currentDate = new Date().toDateString();
 
         if (lastDailyDate === currentDate) {
+          await interaction.deferReply({
+            flags: [MessageFlags.Ephemeral],
+          });
+
           return await replies.message.info(
             interaction,
             words.AlreadyCollected,
@@ -57,6 +59,17 @@ export default {
 
       user.balance += dailyAmount;
       await user.save();
+
+      await xp.give(
+        interaction.user,
+        interaction.guild,
+        interaction.channel,
+        xpToGive,
+      );
+
+      await interaction.deferReply({
+        flags: [MessageFlags.Ephemeral],
+      });
 
       return await replies.message.info(
         interaction,
