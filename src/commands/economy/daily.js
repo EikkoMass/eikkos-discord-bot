@@ -7,6 +7,8 @@ import xp from "../../utils/xp.js";
 import replies from "../../utils/core/replies.js";
 import discord from "../../configs/discord.json" with { type: "json" };
 
+import cache from "../../cache/daily.js";
+
 const dailyAmount = 1000;
 const xpToGive = 10;
 
@@ -21,6 +23,8 @@ export default {
    */
   callback: async (client, interaction) => {
     const words = await getLocalization(interaction.locale, "daily");
+    const CACHE_REF = `${interaction.guild.id}:${interaction.member.id}`;
+    const now = new Date();
 
     if (!interaction.inGuild()) {
       return replies.message.error(interaction, words.OnlyInsideServer);
@@ -32,32 +36,29 @@ export default {
         guildId: interaction.guild.id,
       };
 
-      let user = await User.findOne(query);
+      let dailyHistory = await cache.get(CACHE_REF);
 
-      if (user) {
-        const lastDailyDate = user.lastDaily.toDateString();
-        const currentDate = new Date().toDateString();
+      if (dailyHistory && dailyHistory.found) {
 
-        if (lastDailyDate === currentDate) {
-          await interaction.deferReply({
-            flags: [MessageFlags.Ephemeral],
-          });
+        await interaction.deferReply({
+          flags: [MessageFlags.Ephemeral],
+        });
 
-          return await replies.message.info(
-            interaction,
-            words.AlreadyCollected,
-            {
-              context: discord.replies.edit,
-            },
-          );
-        }
-
-        user.lastDaily = new Date();
-      } else {
-        user = new User({ ...query, lastDaily: new Date() });
+        return await replies.message.info(
+          interaction,
+          words.AlreadyCollected,
+          {
+            context: discord.replies.edit,
+          },
+        );
       }
 
+      let user = await User.findOne(query);
+
+      if(!user) user = new User({ ...query, lastDaily: now });
+
       user.balance += dailyAmount;
+      user.lastDaily = now;
       await user.save();
 
       await xp.give(
@@ -66,6 +67,8 @@ export default {
         interaction.channel,
         xpToGive,
       );
+
+      await cache.set(CACHE_REF, { xp: xpToGive, currentBalance: user.balance, daily: dailyAmount });
 
       await interaction.deferReply({
         flags: [MessageFlags.Ephemeral],
