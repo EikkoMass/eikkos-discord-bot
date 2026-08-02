@@ -8,6 +8,8 @@ import {
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import reply from "../../utils/core/replies.js";
 
+import delay from "../../utils/core/delay.js";
+
 export default {
   name: "drown",
   description: "drown away an user in random voice channels",
@@ -92,7 +94,3 @@ export default {
   ],
   botPermissions: [PermissionFlagsBits.MoveMembers],
 };
-
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
