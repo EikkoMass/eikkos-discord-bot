@@ -8,6 +8,8 @@ import {
 import { getLocalization, formatMessage } from "../../utils/i18n.js";
 import discord from "../../configs/discord.json" with { type: "json" };
 
+import { getRandom } from "../../utils/core/randomizer.js";
+
 const SUSPENSE_TIMEOUT_MS = 3000;
 
 const rolls = [4, 6, 8, 10, 12, 20, 100];
@@ -100,9 +102,7 @@ async function rollCustom(client, interaction) {
   let maxSum = maxFloored * quantity;
 
   for (let i = 0; i < quantity; i++) {
-    let randomized = Math.floor(
-      Math.random() * (maxFloored - minCeiled + 1) + minCeiled,
-    );
+    let randomized = getRandom(minCeiled, maxFloored);
 
     sum += randomized;
 
@@ -153,7 +153,7 @@ async function roll(client, interaction) {
   );
 
   for (let i = 0; i < quantity; i++) {
-    let randomized = Math.floor(Math.random() * maxFloored + 1);
+    let randomized = getRandom(1, maxFloored);
     sum += randomized;
 
     const layout = getLayout(randomized, maxFloored);
