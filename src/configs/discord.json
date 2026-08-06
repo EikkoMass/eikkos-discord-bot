@@ -1,6 +1,7 @@
 {
   "embeds": {
-    "max": 10
+    "max": 10,
+    "size": 120
   },
   "autocompletes": {
     "max": 25

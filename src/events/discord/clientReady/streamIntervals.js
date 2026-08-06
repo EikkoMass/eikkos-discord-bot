@@ -3,12 +3,13 @@ import cache from "../../../cache/activity.js";
 
 let initStream = true;
 
-const TIMEOUT_IN_SEC = 15;
+const ONE_SEC = 1000;
+const TIMEOUT = 15 * ONE_SEC;
 
 export default async (client) => {
   setStream(client);
 
-  setInterval(async () => await setStream(client), TIMEOUT_IN_SEC * 1000);
+  setInterval(async () => await setStream(client), TIMEOUT);
 };
 
 async function setStream(client) {

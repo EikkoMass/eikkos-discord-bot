@@ -12,6 +12,8 @@ import trackCache from "../../cache/track.js";
 import { getLocalization } from "../../utils/i18n.js";
 import Enum from "../../enums/player/contexts.js";
 
+import discord from "../../configs/discord.json" with { type: "json" };
+
 export default {
   name: "playerStart",
 
@@ -34,7 +36,7 @@ export default {
       "playerEvents/playerStart",
     );
 
-    const MIN_EMBED_SIZE = 120;
+    const MIN_EMBED_SIZE = discord.embeds.size;
 
     let description = `${track.title} - ${queue.currentTrack.author}`;
     let footer = `${words.Duration}: ${track.duration}`;
