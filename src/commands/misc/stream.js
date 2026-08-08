@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionType, Client } from "discord.js";
 
-import getRandomStream from "../../utils/components/getRandomStream.js";
-import Stream from "../../models/stream.js";
+import getRandomStatus from "../../utils/components/getRandomStatus.js";
+import Status from "../../models/status.js";
 
 import cache from "../../cache/activity.js";
 import reply from "../../utils/core/replies.js";
@@ -11,43 +11,43 @@ import { getLocalization, formatMessage } from "../../utils/i18n.js";
 const OPTS = {
   register: {
     name: "register",
-    description: "Register an new stream option",
+    description: "Register an new status option",
     type: ApplicationCommandOptionType.Subcommand,
     options: [
       {
         name: "title",
-        description: "Title of the stream",
+        description: "Title of the status",
         type: ApplicationCommandOptionType.String,
         required: true,
       },
       {
         name: "link",
-        description: "Link that you want to stream",
+        description: "Link that you want to status",
         type: ApplicationCommandOptionType.String,
         required: true,
       },
       {
         name: "priority",
         description:
-          "Want to apply now the new stream? (don't work with rotation enabled)",
+          "Want to apply now the new status? (don't work with rotation enabled)",
         type: ApplicationCommandOptionType.Boolean,
       },
     ],
   },
   set: {
     name: "set",
-    description: "Set a new stream (without saving it // disables rotation)",
+    description: "Set a new status (without saving it // disables rotation)",
     type: ApplicationCommandOptionType.Subcommand,
     options: [
       {
         name: "title",
-        description: "Title of the stream",
+        description: "Title of the status",
         type: ApplicationCommandOptionType.String,
         required: true,
       },
       {
         name: "link",
-        description: "Link that you want to stream",
+        description: "Link that you want to show on the status",
         type: ApplicationCommandOptionType.String,
         required: true,
       },
@@ -55,12 +55,12 @@ const OPTS = {
   },
   remove: {
     name: "remove",
-    description: "Remove the stream you want",
+    description: "Remove the status you want",
     type: ApplicationCommandOptionType.Subcommand,
     options: [
       {
         name: "link",
-        description: "the link of the stream you want to remove",
+        description: "the link of the status you want to remove",
         type: ApplicationCommandOptionType.String,
         required: true,
       },
@@ -68,12 +68,12 @@ const OPTS = {
   },
   rotate: {
     name: "rotate",
-    description: "Set the stream rotation state",
+    description: "Set the status rotation state",
     type: ApplicationCommandOptionType.Subcommand,
     options: [
       {
         name: "active",
-        description: "you want to rotate the bot stream?",
+        description: "you want to rotate the bot status?",
         type: ApplicationCommandOptionType.Boolean,
         required: true,
       },
@@ -95,12 +95,12 @@ export default {
       default:
         return await reply.message.error(
           interaction,
-          `Stream command not found!`,
+          `Status command not found!`,
         );
     }
   },
-  name: "stream",
-  description: "Manage links to bot stream",
+  name: "status",
+  description: "Manage links to bot status",
   devOnly: true,
   options: [OPTS.register, OPTS.set, OPTS.remove, OPTS.rotate],
 };
@@ -110,14 +110,14 @@ export default {
  *  @param  interaction
  */
 async function register(client, interaction) {
-  const words = await getLocalization(interaction.locale, `stream`);
+  const words = await getLocalization(interaction.locale, `status`);
 
   try {
     const title = interaction.options.get("title")?.value;
     const link = interaction.options.get("link")?.value;
     const priority = interaction.options.get("priority")?.value || false;
 
-    let streamData = await Stream.findOne({
+    let data = await Status.findOne({
       link,
     });
 
@@ -128,19 +128,19 @@ async function register(client, interaction) {
       });
     }
 
-    if (streamData) {
-      streamData.title = title;
+    if (data) {
+      data.title = title;
 
-      await streamData.save();
+      await data.save();
       return await reply.message.success(interaction, words.Edited);
     }
 
-    streamData = new Stream({
+    data = new Status({
       link,
       title,
     });
 
-    await streamData.save();
+    await data.save();
 
     await reply.message.success(interaction, words.Registered);
   } catch (e) {
@@ -153,7 +153,7 @@ async function register(client, interaction) {
  *  @param  interaction
  */
 async function set(client, interaction) {
-  const words = await getLocalization(interaction.locale, `stream`);
+  const words = await getLocalization(interaction.locale, `status`);
 
   try {
     const title = interaction.options.get("title")?.value;
@@ -175,22 +175,22 @@ async function set(client, interaction) {
  *  @param  interaction
  */
 async function remove(client, interaction) {
-  const words = await getLocalization(interaction.locale, `stream`);
+  const words = await getLocalization(interaction.locale, `status`);
 
   const link = interaction.options.get("link")?.value;
 
-  let result = await Stream.findOneAndDelete({ link });
+  let result = await Status.findOneAndDelete({ link });
 
   if (result) {
     let current = cache.get();
 
     if (current.url === link) {
-      let stream = await getRandomStream();
+      let status = await getRandomStatus();
 
-      if (stream) {
+      if (status) {
         cache.set({
-          name: stream.title,
-          url: stream.link,
+          name: status.title,
+          url: status.link,
         });
       } else {
         cache.set();
@@ -211,7 +211,7 @@ async function remove(client, interaction) {
  *  @param  interaction
  */
 async function rotate(client, interaction) {
-  const words = await getLocalization(interaction.locale, `stream`);
+  const words = await getLocalization(interaction.locale, `status`);
 
   const active = interaction.options.get("active")?.value;
 

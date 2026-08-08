@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const streamScheme = new Schema({
+const scheme = new Schema({
   title: {
     type: String
   },
@@ -13,4 +13,4 @@ const streamScheme = new Schema({
   }
 });
 
-export default model('Stream', streamScheme);
+export default model('Status', scheme);
