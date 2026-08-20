@@ -1,7 +1,8 @@
 import { PermissionFlagsBits, ApplicationCommandOptionType, managerToFetchingStrategyOptions } from "discord.js";
 
 import reply from "../../utils/core/replies.js";
-import ms from "ms";
+
+const DEFAULT_DURATION = 3000;
 
 const setOpts = [
   {
@@ -27,9 +28,9 @@ const scheduleOpts = [
   },
   {
     name: "duration",
-    description: "The duration of the penalty",
-    type: ApplicationCommandOptionType.String,
-    required: true,
+    description: "The duration of the penalty (in seconds)",
+    type: ApplicationCommandOptionType.Integer,
+    required: true
   },
 ];
 
@@ -57,8 +58,6 @@ export default {
    *  @param  interaction
    */
   callback: async (client, interaction) => {
-    // const words = await getLocalization(interaction.locale, `deafen`);
-
     switch (interaction.options.getSubcommand()) {
       case OPTS.set.name:
         return await setDeaf(client, interaction);
@@ -78,19 +77,21 @@ export default {
 
 async function setDeaf(client, interaction) {
 
+  const words = await getLocalization(interaction.locale, `deaf`);
+
   let condition = interaction.options.get("condition")?.value;
   let user = interaction.options.get("user").value;
 
   if (user) user = await interaction.guild.members.fetch(user);
 
-  if(!user) return reply.message.error(interaction, `User not found!`);
-  if (!user.voice?.channel) return reply.message.error(interaction, `User not in voice channel!`);
+  if(!user) return reply.message.error(interaction, words.NotFound);
+  if (!user.voice?.channel) return reply.message.error(interaction, words.NotInVC);
 
   user.voice.setDeaf(condition);
 
   return reply.message.success(
     interaction,
-    "Modified with success"
+    words.UpdatedSuccessfully
   );
 
 }
@@ -100,19 +101,19 @@ async function scheduleDeaf(client, interaction) {
   let user = interaction.options.get("user").value;
 
   if (user) user = await interaction.guild.members.fetch(user);
+  if (duration) duration *= 1000;
 
-  if(!user) return reply.message.error(interaction, `User not found!`);
-  if (!user.voice) return reply.message.error(interaction, `User not in voice channel!`);
+  if(!user) return reply.message.error(interaction, words.NotFound);
+  if (!user.voice) return reply.message.error(interaction, words.NotInVC);
 
   let deaf = user.voice.deaf;
 
   user.voice.setDeaf(!deaf);
-  const msTimeout = ms(duration);
 
-  setTimeout(() => user.voice.setDeaf(deaf), msTimeout || 3000);
+  setTimeout(() => user.voice.setDeaf(deaf), duration || DEFAULT_DURATION);
 
   return reply.message.success(
     interaction,
-    "Modified with success"
+    words.UpdatedSuccessfully
   );
 }
