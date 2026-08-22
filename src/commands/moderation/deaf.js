@@ -1,4 +1,4 @@
-import { PermissionFlagsBits, ApplicationCommandOptionType, managerToFetchingStrategyOptions } from "discord.js";
+import { PermissionFlagsBits, ApplicationCommandOptionType } from "discord.js";
 
 import reply from "../../utils/core/replies.js";
 
