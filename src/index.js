@@ -4,7 +4,7 @@ import eventHandler from "./handlers/main.js";
 import mongoose from "mongoose";
 import { Player } from "discord-player";
 import { DefaultExtractors } from "@discord-player/extractor";
-//import { YoutubeiExtractor as YoutubeExtractor } from "discord-player-youtubei";
+//import { YoutubeExtractor } from "discord-player-youtubei";
 import { YoutubeSabrExtractor as YoutubeExtractor } from "discord-player-googlevideo";
 import { TTSExtractor } from "discord-player-tts";
 import igdb from "./utils/authenticators/igdb.js";
